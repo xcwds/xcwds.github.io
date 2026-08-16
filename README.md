@@ -1,6 +1,6 @@
 # waters.it.com
 
-Personal site for [Chris Waters](https://waters.it.com), hosted on GitHub Pages.
+Personal site for [Chris Waters](https://xcwds.com), hosted on GitHub Pages.
 
 # Tech Stack
 
