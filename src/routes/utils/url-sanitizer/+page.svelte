@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
+	import { readSharedText } from '$lib/utils/share';
 	import { buildLink, parseLink, readParams, type Param } from '$lib/utils/url';
 
 	let input = $state('');
@@ -9,6 +10,7 @@
 	let copied = $state(false);
 	let canPaste = $state(false);
 	let canShare = $state(false);
+	let shortcutPrefix = $state('https://xcwds.com/utils/url-sanitizer#url=');
 
 	let cleaned = $derived(url ? buildLink(url, params) : '');
 	let removed = $derived(params.filter((p) => !p.keep).length);
@@ -18,6 +20,21 @@
 	onMount(() => {
 		canPaste = typeof navigator.clipboard?.readText === 'function';
 		canShare = typeof navigator.share === 'function';
+
+		shortcutPrefix = `${location.origin}${location.pathname}#url=`;
+
+		// A link shared in from the phone (Android share target or the iPhone Shortcut). Safari
+		// may reuse an open tab and only change the hash, so listen for that too.
+		const receive = () => {
+			const shared = readSharedText(new URL(location.href));
+			if (shared === null) return;
+			load(shared);
+			// Don't leave the link in the address bar or browser history.
+			history.replaceState(history.state, '', location.pathname);
+		};
+		receive();
+		window.addEventListener('hashchange', receive);
+		return () => window.removeEventListener('hashchange', receive);
 	});
 
 	function load(text: string) {
@@ -199,6 +216,42 @@
 			<p class="text-sm text-gray-600 dark:text-gray-400">This link has no query params.</p>
 		{/if}
 	{/if}
+
+	<details class="rounded-xl bg-white/60 p-4 text-sm dark:bg-gray-900/60">
+		<summary class="cursor-pointer font-medium">Share links here from other apps</summary>
+		<div class="mt-3 flex flex-col gap-3">
+			<section>
+				<h3 class="font-semibold">Android</h3>
+				<p>
+					Install this site (Chrome menu → <em>Install app</em>). "Waters" then shows up in the
+					share sheet; pick it and the link opens here already cleaned.
+				</p>
+			</section>
+			<section>
+				<h3 class="font-semibold">iPhone</h3>
+				<p>iOS doesn't let web apps into the share sheet, so use a Shortcut instead:</p>
+				<ol class="mt-1 list-decimal pl-5">
+					<li>In the Shortcuts app, tap <strong>+</strong> to make a new shortcut and name it.</li>
+					<li>
+						Open its settings (ⓘ) and turn on <strong>Show in Share Sheet</strong>. Set it to
+						receive <strong>URLs</strong> and <strong>Text</strong>.
+					</li>
+					<li>
+						Add the <strong>URL Encode</strong> action with <strong>Shortcut Input</strong> as its input.
+					</li>
+					<li>
+						Add <strong>Open URLs</strong> and set the URL to
+						<code class="break-all">{shortcutPrefix}</code> followed by the
+						<strong>URL Encoded Text</strong> variable.
+					</li>
+				</ol>
+				<p class="mt-1">
+					Then share any link to that shortcut. The link stays on your phone — everything after
+					<code>#</code> is never sent to a server.
+				</p>
+			</section>
+		</div>
+	</details>
 
 	<p class="text-sm text-gray-600 dark:text-gray-400">
 		Known tracking params are removed automatically; tap a checkbox to put one back. Edit a name or

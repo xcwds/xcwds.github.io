@@ -12,3 +12,8 @@ Package manager: pnpm.
   wall-clock end times so they stay correct when a phone backgrounds the tab).
 - e2e tests that type into inputs must navigate with `gotoHydrated` from `e2e/helpers.ts`; input sent
   before hydration gets lost or doubled.
+- The site is an installable PWA: `static/manifest.webmanifest`, icons in `static/icons/` (regenerate with
+  `node scripts/generate-icons.mjs`), and `src/service-worker.ts`, which precaches every prerendered page for
+  offline use. The manifest's `share_target` sends Android shares to `/utils/url-sanitizer`; the service
+  worker moves the shared link from `?query` to `#url=` so it never reaches the server. The iPhone
+  Shortcut opens `#url=<encoded link>` directly. Keep shared links out of query strings.
