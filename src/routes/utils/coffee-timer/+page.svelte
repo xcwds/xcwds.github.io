@@ -1,0 +1,128 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import { resolve } from '$app/paths';
+	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
+	import { formatDuration } from '$lib/utils/time';
+	import { Timer } from '$lib/utils/timer.svelte';
+
+	const DEFAULT_MS = 90_000;
+	const STORAGE_KEY = 'coffee-timer-duration';
+
+	let base = $state(DEFAULT_MS);
+	const timer = new Timer(DEFAULT_MS, () => beep(3));
+	let over = $derived(timer.running && timer.done);
+
+	const awake = browser ? keepAwake(() => timer.running) : undefined;
+	$effect(() => {
+		void timer.running;
+		void awake?.sync();
+	});
+
+	onMount(() => {
+		try {
+			const saved = Number(localStorage.getItem(STORAGE_KEY));
+			if (saved > 0) {
+				base = saved;
+				timer.reset(saved);
+			}
+		} catch {
+			// Storage unavailable; keep the default.
+		}
+		return () => {
+			awake?.destroy();
+			timer.destroy();
+		};
+	});
+
+	function setBase(ms: number) {
+		base = ms;
+		try {
+			localStorage.setItem(STORAGE_KEY, String(ms));
+		} catch {
+			// Not persisted; fine.
+		}
+	}
+
+	function adjust(ms: number) {
+		timer.add(ms);
+		if (!timer.running) setBase(timer.duration);
+	}
+
+	function toggle() {
+		primeAudio();
+		if (timer.running) timer.pause();
+		else timer.start();
+	}
+</script>
+
+<svelte:head>
+	<title>Coffee Timer</title>
+</svelte:head>
+
+<main
+	class="mx-auto flex min-h-svh max-w-md flex-col gap-6 p-4 text-gray-800 sm:p-8 dark:text-gray-200"
+>
+	<a href={resolve('/utils')} class="text-sm text-gray-600 hover:underline dark:text-gray-400">
+		← Utils
+	</a>
+	<h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">☕ Coffee Timer</h1>
+
+	<div
+		class="rounded-2xl py-10 text-center transition-colors {over
+			? 'bg-amber-300 dark:bg-amber-700'
+			: 'bg-white/80 dark:bg-gray-900'}"
+	>
+		<p
+			class="text-8xl font-semibold tabular-nums"
+			role="timer"
+			aria-live="off"
+			data-testid="display"
+		>
+			{over ? `+${formatDuration(-timer.remaining)}` : formatDuration(timer.remaining)}
+		</p>
+		{#if over}<p class="mt-2 text-lg font-medium">Done!</p>{/if}
+	</div>
+
+	<div class="grid grid-cols-4 gap-2">
+		{#each [-10_000, 10_000, 30_000, 60_000] as ms (ms)}
+			<button
+				type="button"
+				onclick={() => adjust(ms)}
+				class="rounded-xl bg-white/70 py-4 text-lg font-medium active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
+			>
+				{ms < 0 ? '−' : '+'}{Math.abs(ms) / 1000}s
+			</button>
+		{/each}
+	</div>
+
+	<div class="grid grid-cols-2 gap-2">
+		<button
+			type="button"
+			onclick={toggle}
+			class="rounded-xl bg-blue-600 py-6 text-2xl font-semibold text-white active:bg-blue-700"
+		>
+			{timer.running ? (over ? 'Stop' : 'Pause') : 'Start'}
+		</button>
+		<button
+			type="button"
+			onclick={() => timer.reset(base)}
+			class="rounded-xl bg-white/70 py-6 text-2xl font-semibold active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
+		>
+			Reset
+		</button>
+	</div>
+
+	<p class="text-center text-sm text-gray-600 dark:text-gray-400">
+		Resets to {formatDuration(base)}.
+		{#if base !== DEFAULT_MS}
+			<button
+				type="button"
+				class="underline"
+				onclick={() => (setBase(DEFAULT_MS), timer.reset(DEFAULT_MS))}
+			>
+				Back to 1:30
+			</button>
+		{/if}
+	</p>
+</main>
