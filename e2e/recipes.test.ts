@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { gotoHydrated } from './helpers';
 
 test('recipes index filters by search and links to a recipe', async ({ page }) => {
-	await page.goto('/recipes');
+	await gotoHydrated(page, '/recipes');
 	await expect(page.getByRole('heading', { level: 1, name: 'Recipes' })).toBeVisible();
 
 	await page.getByRole('searchbox').fill('pizza');

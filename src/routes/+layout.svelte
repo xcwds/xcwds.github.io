@@ -1,8 +1,14 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import favicon from '$lib/assets/favicon.ico';
 	import '../app.css';
 
 	let { children } = $props();
+
+	// Lets e2e tests wait until inputs are interactive (see e2e/helpers.ts).
+	onMount(() => {
+		document.documentElement.dataset.hydrated = '';
+	});
 </script>
 
 <svelte:head>

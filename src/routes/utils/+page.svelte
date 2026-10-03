@@ -1,26 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-
-	const tools = [
-		{
-			path: '/utils/pizza-dough',
-			emoji: '🍕',
-			name: 'Pizza Dough Calculator',
-			blurb: 'Ingredient weights from dough balls and hydration.'
-		},
-		{
-			path: '/utils/coffee-timer',
-			emoji: '☕',
-			name: 'Coffee Timer',
-			blurb: '90-second countdown with quick adjustments.'
-		},
-		{
-			path: '/utils/cooking-timer',
-			emoji: '⏲️',
-			name: 'Cooking Timer',
-			blurb: 'Several labeled timers at once.'
-		}
-	] as const;
+	import { tools } from '$lib/utils/tools';
 </script>
 
 <svelte:head>

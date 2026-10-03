@@ -1,16 +1,17 @@
 import { expect, test } from '@playwright/test';
+import { gotoHydrated } from './helpers';
 
 test.use({ viewport: { width: 390, height: 844 } });
 
 test('utils index links to each tool', async ({ page }) => {
-	await page.goto('/utils');
+	await gotoHydrated(page, '/utils');
 	for (const name of ['Pizza Dough Calculator', 'Coffee Timer', 'Cooking Timer']) {
 		await expect(page.getByRole('link', { name: new RegExp(name) })).toBeVisible();
 	}
 });
 
 test('pizza dough calculator updates weights', async ({ page }) => {
-	await page.goto('/utils/pizza-dough');
+	await gotoHydrated(page, '/utils/pizza-dough');
 	const result = page.getByTestId('dough-result');
 	await expect(result).toContainText('Total 1120 g');
 	await page.getByLabel('Dough balls').fill('2');
@@ -20,7 +21,7 @@ test('pizza dough calculator updates weights', async ({ page }) => {
 test('coffee timer counts down from 1:30 and adjusts', async ({ page }) => {
 	// Freeze the clock so only runFor() moves time; otherwise real seconds leak in under load.
 	await page.clock.install({ time: new Date('2026-01-01T08:00:00') });
-	await page.goto('/utils/coffee-timer');
+	await gotoHydrated(page, '/utils/coffee-timer');
 	await page.clock.pauseAt(new Date('2026-01-01T08:00:01'));
 	const display = page.getByTestId('display');
 	await expect(display).toHaveText('1:30');
@@ -40,7 +41,7 @@ test('coffee timer counts down from 1:30 and adjusts', async ({ page }) => {
 
 test('cooking timer runs, rings, and survives a reload', async ({ page }) => {
 	await page.clock.install();
-	await page.goto('/utils/cooking-timer');
+	await gotoHydrated(page, '/utils/cooking-timer');
 	await page.getByLabel('Label').fill('Rice');
 	await page.getByLabel('Minutes').fill('2');
 	await page.getByRole('button', { name: 'Start timer' }).click();
