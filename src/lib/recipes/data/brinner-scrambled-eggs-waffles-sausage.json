@@ -1,0 +1,39 @@
+{
+	"slug": "brinner-scrambled-eggs-waffles-sausage",
+	"name": "Brinner — Scrambled Eggs, Waffles, and Sausage",
+	"emoji": "🍳",
+	"tags": [],
+	"description": "The reliable low-effort weeknight. Soft-scrambled eggs, waffles, sausage links, and whatever fruit is in the house.",
+	"servings": "4",
+	"time": "About 25 minutes",
+	"ingredients": [
+		"10 large eggs",
+		"1/4 cup milk or cream",
+		"3 Tbsp butter, divided",
+		"1 tsp kosher salt",
+		"1/2 tsp black pepper",
+		"1 lb breakfast sausage links",
+		"8 frozen waffles (or your waffle batter)",
+		"Maple syrup",
+		"Berries or melon, cut up"
+	],
+	"instructions": [
+		"Start the sausage in a cold skillet over medium heat with a splash of water. Cover and cook 5 minutes, then uncover and brown all sides, about 8 minutes total.",
+		"Toast the waffles and hold them on a sheet pan in a 200°F oven so nothing has to be eaten cold.",
+		"Whisk the eggs, milk, salt, and pepper until completely uniform — no streaks of white left.",
+		"Melt 2 Tbsp butter in a nonstick skillet over medium-LOW. Pour in the eggs and wait until the edges just start to set.",
+		"Push the eggs slowly from the edges toward the center with a rubber spatula, forming big soft folds. Keep the heat low and keep moving.",
+		"Pull them off the heat when they still look slightly underdone — they finish cooking in the pan. Stir in the last Tbsp of butter.",
+		"Serve immediately with the waffles, sausage, syrup, and fruit."
+	],
+	"tips": [
+		"Low and slow is the only trick to scrambled eggs. High heat makes them squeaky and weeping.",
+		"Taking them off underdone feels wrong the first few times and is right every time.",
+		"Cut the fruit while the sausage cooks — it's the only step that has to happen and gets forgotten."
+	],
+	"notion": {
+		"id": "3cb5c75f-eaa8-8113-86d0-d53bdb11c292",
+		"url": "https://www.notion.so/3cb5c75feaa8811386d0d53bdb11c292",
+		"lastEditedTime": "2026-08-29T15:11:05.440Z"
+	}
+}
