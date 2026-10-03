@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { recipes } from '$lib/recipes';
+	import { tools } from '$lib/utils/tools';
 
 	const sections = [
 		{
@@ -13,7 +14,7 @@
 			path: '/utils',
 			emoji: '🧰',
 			name: 'Utils',
-			blurb: 'Pizza dough calculator, coffee and cooking timers.'
+			blurb: tools.map((tool) => tool.name).join(', ')
 		}
 	] as const;
 </script>
