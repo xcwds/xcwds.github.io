@@ -1,4 +1,4 @@
-# waters.it.com
+# xcwds.com
 
 Personal site for [Chris Waters](https://xcwds.com), hosted on GitHub Pages.
 
