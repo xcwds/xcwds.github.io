@@ -1,7 +1,9 @@
 # Agent notes
 
 Brand: **xcwds**, "a cyber-web Swiss Army knife". Use xcwds for the app name, titles and file names; no
-personal names. The app icon is the xcwds GitHub avatar.
+personal names. The app icon is the xcwds GitHub avatar. xcwds stands for "eXecutes Client-side, Without Data
+Servers" (shown on Home and Settings → About; brand strings live in `src/lib/brand.ts`). Tapping it three times
+on About reveals the Easter egg "eXtra Crispy Waffles, Deadlifts & Sanitizers".
 
 SvelteKit static site (adapter-static, Tailwind, Skeleton) deployed to GitHub Pages from `main`.
 Package manager: pnpm.

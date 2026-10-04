@@ -2,6 +2,8 @@
 
 **A cyber-web Swiss Army knife.** Live at [xcwds.com](https://xcwds.com).
 
+**xcwds**: e**X**ecutes **C**lient-side, **W**ithout **D**ata **S**ervers.
+
 A static site that installs as an app (PWA) and works offline. Everything runs in the browser: no
 accounts, no server, and your data stays on your device (back it up from Settings).
 
