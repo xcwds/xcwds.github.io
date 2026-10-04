@@ -4,6 +4,8 @@ export type Param = {
 	value: string;
 	keep: boolean;
 	tracking: boolean;
+	/** The `key=value` segment exactly as shared; kept byte-for-byte unless the param is edited. */
+	raw: string;
 };
 
 const TRACKING_KEYS = new Set(
@@ -95,8 +97,12 @@ const TRACKING_PREFIXES = [
 	'pf_rd_'
 ];
 
-/** Twitter/X uses `s` and `t` for share tracking; elsewhere they are often meaningful. */
+/**
+ * Keys that are only share tracking on some sites (e.g. Twitter/X's `s` and `t`); elsewhere they
+ * are often meaningful. An entry ending in `.` matches that domain under any TLD (`amazon.co.uk`).
+ */
 const HOST_SPECIFIC = new Map<string, string[]>([
+	['si', ['youtube.com', 'youtu.be', 'spotify.com']],
 	['s', ['twitter.com', 'x.com']],
 	['t', ['twitter.com', 'x.com']],
 	['feature', ['youtube.com', 'youtu.be']],
@@ -114,11 +120,37 @@ export function isTrackingParam(key: string, hostname = ''): boolean {
 	if (hosts) {
 		const host = hostname.toLowerCase();
 		return hosts.some((h) =>
-			h.endsWith('.') ? host.includes(h) : host === h || host.endsWith(`.${h}`)
+			h.endsWith('.')
+				? host.startsWith(h) || host.includes(`.${h}`)
+				: host === h || host.endsWith(`.${h}`)
 		);
 	}
 	return TRACKING_KEYS.has(k) || TRACKING_PREFIXES.some((prefix) => k.startsWith(prefix));
 }
+
+const TRAILING_PUNCTUATION = '.,;:!?”’»›';
+const BRACKETS: Record<string, string> = { ')': '(', ']': '[', '}': '{' };
+
+const count = (text: string, char: string) => text.split(char).length - 1;
+
+/**
+ * Drops punctuation that belongs to the surrounding prose, like linkifiers do: trailing `.,;:!?`
+ * and closing quotes, and closing brackets without a match inside the link (so Wikipedia's
+ * `Foo_(bar)` keeps its `)`).
+ */
+function trimTrailing(link: string): string {
+	for (;;) {
+		const last = link.at(-1) ?? '';
+		const open = BRACKETS[last];
+		if (TRAILING_PUNCTUATION.includes(last) || (open && count(link, last) > count(link, open)))
+			link = link.slice(0, -1);
+		else return link;
+	}
+}
+
+/** A real-looking host: a TLD of at least two letters (so "e.g." isn't a domain) or an IPv4. */
+const isPlausibleHost = (host: string) =>
+	/\.(?:[a-z]{2,}|xn--[a-z0-9-]+)$/i.test(host) || /^\d+(?:\.\d+){3}$/.test(host);
 
 /**
  * Finds a link in pasted text (share sheets often add a title around it) and parses it.
@@ -127,33 +159,50 @@ export function isTrackingParam(key: string, hostname = ''): boolean {
 export function parseLink(input: string): URL | null {
 	const text = input.trim();
 	if (!text) return null;
-	const candidate =
-		text.match(/https?:\/\/[^\s<>"']+/i)?.[0] ??
-		(/^[^\s/]+\.[^\s]+$/.test(text) ? `https://${text}` : null);
-	if (!candidate) return null;
+	const found = text.match(/https?:\/\/[^\s<>"']+/i)?.[0];
+	const bare = !found && /^[^\s/]+\.[^\s]+$/.test(text);
+	if (!found && !bare) return null;
+	const candidate = trimTrailing(found ?? `https://${text}`);
 	try {
 		const url = new URL(candidate);
-		return url.protocol === 'http:' || url.protocol === 'https:' ? url : null;
+		if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+		return bare && !isPlausibleHost(url.hostname) ? null : url;
 	} catch {
 		return null;
 	}
 }
 
+/** Decodes one `key=value` query segment the way the browser does. */
+function decodeSegment(raw: string): [string, string] {
+	return [...new URLSearchParams(raw)][0] ?? ['', ''];
+}
+
 /** Lists query params in order (duplicates included), flagging known trackers. */
 export function readParams(url: URL, removeTracking = true): Param[] {
-	return [...url.searchParams].map(([key, value], id) => {
+	const segments = url.search.slice(1).split('&').filter(Boolean);
+	return segments.map((raw, id) => {
+		const [key, value] = decodeSegment(raw);
 		const tracking = isTrackingParam(key, url.hostname);
-		return { id, key, value, tracking, keep: !(removeTracking && tracking) };
+		return { id, key, value, tracking, keep: !(removeTracking && tracking), raw };
 	});
 }
 
-/** Rebuilds the link from the kept (and possibly edited) params; the #fragment is kept. */
+/**
+ * Rebuilds the link from the kept params; the #fragment is kept. Unedited params come through
+ * exactly as shared (no `%20` → `+`, no `flag` → `flag=`); only edited ones are re-encoded.
+ */
 export function buildLink(url: URL, params: Param[]): string {
 	const next = new URL(url.href);
-	const search = new URLSearchParams();
+	const kept: string[] = [];
 	for (const param of params) {
-		if (param.keep && param.key !== '') search.append(param.key, param.value);
+		if (!param.keep || param.key === '') continue;
+		const [key, value] = decodeSegment(param.raw);
+		kept.push(
+			key === param.key && value === param.value
+				? param.raw
+				: new URLSearchParams([[param.key, param.value]]).toString()
+		);
 	}
-	next.search = search.toString();
+	next.search = kept.join('&');
 	return next.href;
 }
