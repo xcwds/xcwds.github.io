@@ -82,7 +82,10 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 			(p) => p.getByLabel('Paste a link').fill('https://a.com/?utm_source=x&b=1')
 		],
 		['/utils/weightlifting'],
-		['/settings']
+		['/settings'],
+		[
+			'/the-best-apple-cider-glazed-pork-chops-a-journey-home-nana-birdie-the-orchard-tyler-the-didgeridoo-kevin-ate-a-garden-hose-jump-to-recipe-this-link-does-not-work'
+		]
 	];
 	const problems: string[] = [];
 	for (const [path, setup] of pages) {

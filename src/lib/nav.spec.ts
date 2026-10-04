@@ -30,6 +30,14 @@ describe('routeInfo', () => {
 		}
 	});
 
+	it('titles the pork chop parody page', () => {
+		expect(
+			routeInfo(
+				'/the-best-apple-cider-glazed-pork-chops-a-journey-home-nana-birdie-the-orchard-tyler-the-didgeridoo-kevin-ate-a-garden-hose-jump-to-recipe-this-link-does-not-work/'
+			)
+		).toEqual({ title: 'Pork Chops', emoji: '🍂', parent: '/' });
+	});
+
 	it('falls back to home for unknown pages', () => {
 		expect(routeInfo('/nope')).toEqual({ title: 'xcwds', parent: '/' });
 		expect(routeInfo('/recipes/not-a-recipe').parent).toBe('/');

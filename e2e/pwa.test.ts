@@ -68,3 +68,28 @@ test('service worker keeps shared links off the network and works offline', asyn
 	}
 	await context.setOffline(false);
 });
+
+test('the pork chop parody page stays on this origin and keeps the app shell heading', async ({
+	page,
+	baseURL
+}) => {
+	const origin = new URL(baseURL!).origin;
+	const external: string[] = [];
+	const fonts: string[] = [];
+	page.on('request', (request) => {
+		const url = new URL(request.url());
+		if (url.protocol.startsWith('http') && url.origin !== origin) external.push(request.url());
+		if (request.resourceType() === 'font') fonts.push(url.pathname);
+	});
+	await gotoHydrated(
+		page,
+		'/the-best-apple-cider-glazed-pork-chops-a-journey-home-nana-birdie-the-orchard-tyler-the-didgeridoo-kevin-ate-a-garden-hose-jump-to-recipe-this-link-does-not-work'
+	);
+	await page.evaluate(() => document.fonts.ready);
+	await expect(page.locator('h1')).toHaveCount(1);
+	await expect(page.locator('h1')).toHaveText(/Pork Chops/);
+	expect(await page.evaluate(() => document.fonts.check("700 1em 'Playfair Display'"))).toBe(true);
+	expect(fonts.length).toBeGreaterThan(0);
+	expect(fonts.every((path) => path.startsWith('/fonts/'))).toBe(true);
+	expect(external).toEqual([]);
+});
