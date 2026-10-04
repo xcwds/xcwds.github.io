@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { porkChopsPath } from '../src/lib/parody';
 import { gotoHydrated } from './helpers';
 
 const shared = 'https://shop.example.com/item?id=9&utm_source=app&fbclid=zz';
@@ -81,14 +82,23 @@ test('the pork chop parody page stays on this origin and keeps the app shell hea
 		if (url.protocol.startsWith('http') && url.origin !== origin) external.push(request.url());
 		if (request.resourceType() === 'font') fonts.push(url.pathname);
 	});
-	await gotoHydrated(
-		page,
-		'/the-best-apple-cider-glazed-pork-chops-a-journey-home-nana-birdie-the-orchard-tyler-the-didgeridoo-kevin-ate-a-garden-hose-jump-to-recipe-this-link-does-not-work'
-	);
+	await gotoHydrated(page, porkChopsPath);
 	await page.evaluate(() => document.fonts.ready);
 	await expect(page.locator('h1')).toHaveCount(1);
 	await expect(page.locator('h1')).toHaveText(/Pork Chops/);
-	expect(await page.evaluate(() => document.fonts.check("700 1em 'Playfair Display'"))).toBe(true);
+	const faces = await page.evaluate(() =>
+		[...document.fonts].map((f) => `${f.family} ${f.weight} ${f.style} ${f.status}`)
+	);
+	expect(faces).toEqual(
+		expect.arrayContaining([
+			'Lora 400 normal loaded',
+			'Lora 400 italic loaded',
+			'Lora 600 normal loaded',
+			'Playfair Display 700 normal loaded',
+			'Playfair Display 900 normal loaded',
+			'Dancing Script 600 normal loaded'
+		])
+	);
 	expect(fonts.length).toBeGreaterThan(0);
 	expect(fonts.every((path) => path.startsWith('/fonts/'))).toBe(true);
 	expect(external).toEqual([]);

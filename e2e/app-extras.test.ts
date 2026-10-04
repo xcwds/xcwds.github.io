@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { porkChopsPath } from '../src/lib/parody';
 import { gotoHydrated } from './helpers';
 
 test.use({ viewport: { width: 390, height: 844 } });
@@ -83,9 +84,7 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 		],
 		['/utils/weightlifting'],
 		['/settings'],
-		[
-			'/the-best-apple-cider-glazed-pork-chops-a-journey-home-nana-birdie-the-orchard-tyler-the-didgeridoo-kevin-ate-a-garden-hose-jump-to-recipe-this-link-does-not-work'
-		]
+		[porkChopsPath]
 	];
 	const problems: string[] = [];
 	for (const [path, setup] of pages) {

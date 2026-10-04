@@ -1,3 +1,4 @@
+import { porkChopsPath } from '$lib/parody';
 import { getRecipe } from '$lib/recipes';
 import { tools } from '$lib/utils/tools';
 
@@ -20,8 +21,7 @@ export type RouteInfo = {
 
 /** Standalone pages outside the sections, tools and recipes. */
 const pages: Record<string, RouteInfo> = {
-	'/the-best-apple-cider-glazed-pork-chops-a-journey-home-nana-birdie-the-orchard-tyler-the-didgeridoo-kevin-ate-a-garden-hose-jump-to-recipe-this-link-does-not-work':
-		{ title: 'Pork Chops', emoji: '🍂', parent: '/' }
+	[porkChopsPath]: { title: 'Pork Chops', emoji: '🍂', parent: '/' }
 };
 
 const normalize = (pathname: string) => pathname.replace(/\/+$/, '') || '/';

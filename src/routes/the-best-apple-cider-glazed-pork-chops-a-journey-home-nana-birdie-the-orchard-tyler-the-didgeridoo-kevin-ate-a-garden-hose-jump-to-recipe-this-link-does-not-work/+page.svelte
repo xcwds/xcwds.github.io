@@ -125,7 +125,7 @@
 				Home › Recipes › Autumn › Pork › Feelings
 			</p>
 			<!-- The app shell renders the page's only <h1>, so the blog headline is an <h2>. -->
-			<h2 class="headline mt-3! text-center text-4xl! leading-tight! font-black! sm:text-5xl!">
+			<h2 class="headline blog-title mt-3 text-center text-4xl leading-tight sm:text-5xl">
 				🍂 The BEST Apple-Cider Glazed Pork Chops (A Journey Home) 🍂✨
 			</h2>
 			<p class="mt-3 text-center text-sm text-[#8a6a52]">
@@ -504,7 +504,8 @@
 	.script {
 		font-family: 'Dancing Script', cursive;
 	}
-	.prose-blog :global(h2) {
+	/* The blog title is an <h2> too (the app shell owns the <h1>) but keeps its own sizing. */
+	.prose-blog :global(h2:not(.blog-title)) {
 		font-size: 1.75rem;
 		font-weight: 700;
 		line-height: 1.25;

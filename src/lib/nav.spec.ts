@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { activeSection, routeInfo } from './nav';
+import { porkChopsPath } from './parody';
 import { recipes } from './recipes';
 import { tools } from './utils/tools';
 
@@ -31,11 +32,11 @@ describe('routeInfo', () => {
 	});
 
 	it('titles the pork chop parody page', () => {
-		expect(
-			routeInfo(
-				'/the-best-apple-cider-glazed-pork-chops-a-journey-home-nana-birdie-the-orchard-tyler-the-didgeridoo-kevin-ate-a-garden-hose-jump-to-recipe-this-link-does-not-work/'
-			)
-		).toEqual({ title: 'Pork Chops', emoji: '🍂', parent: '/' });
+		expect(routeInfo(`${porkChopsPath}/`)).toEqual({
+			title: 'Pork Chops',
+			emoji: '🍂',
+			parent: '/'
+		});
 	});
 
 	it('falls back to home for unknown pages', () => {
