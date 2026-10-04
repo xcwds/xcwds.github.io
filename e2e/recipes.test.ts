@@ -104,6 +104,11 @@ test('ingredients switch between US and metric, and the choice is kept', async (
 	const units = page.getByRole('radiogroup', { name: 'Recipe units' });
 	await expect(units.getByRole('radio', { name: 'US' })).toHaveAttribute('aria-checked', 'true');
 	await expect(page.getByTestId('units-note')).toHaveCount(0);
+	// Tapping what's already shown saves nothing, so other recipes stay as written.
+	await units.getByRole('radio', { name: 'US' }).click();
+	expect(
+		await page.evaluate(() => JSON.parse(localStorage.getItem('app:settings') ?? '{}').recipeUnits)
+	).toBeUndefined();
 
 	await units.getByRole('radio', { name: 'Metric' }).click();
 	await expect(list).toContainText('280 g all-purpose flour');
@@ -135,5 +140,7 @@ test('roast chicken scales by whole chickens', async ({ page }) => {
 	await gotoHydrated(page, '/recipes/roast-chicken');
 	await page.getByRole('button', { name: 'More servings' }).click();
 	await expect(page.getByTestId('servings-target')).toHaveText('8 servings');
-	await expect(page.getByTestId('ingredients')).toContainText('2 whole chickens (4–5 lb / 1.8–2.3 kg each)');
+	await expect(page.getByTestId('ingredients')).toContainText(
+		'2 whole chickens (4–5 lb / 1.8–2.3 kg each)'
+	);
 });

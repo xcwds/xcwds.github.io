@@ -16,6 +16,13 @@
 	};
 	let options = $derived<(UnitSystem | null)[]>(native ? ['us', 'metric'] : [null, 'us', 'metric']);
 	let selected = $derived(settings.recipeUnits ?? native ?? null);
+
+	function choose(option: UnitSystem | null) {
+		// Tapping what a recipe already shows isn't a choice: saving it would convert every recipe
+		// written in the other system.
+		if (native && settings.recipeUnits === null && option === native) return;
+		settings.recipeUnits = option;
+	}
 </script>
 
 <div
@@ -31,7 +38,7 @@
 			class="min-h-11 rounded-xl px-3 py-2 text-sm font-medium {selected === option
 				? 'bg-blue-600 text-white'
 				: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
-			onclick={() => (settings.recipeUnits = option)}
+			onclick={() => choose(option)}
 		>
 			{labels[option ?? 'written']}
 		</button>
