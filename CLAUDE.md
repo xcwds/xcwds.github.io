@@ -55,3 +55,6 @@ Package manager: pnpm.
   when `get` returns `undefined`. Keep "nothing saved" meaningful: a tool default applies until the user
   makes their own choice, and changing the default in Settings clears that choice. Workouts store their
   own `unit`; never label logged weights with the calculator's current unit.
+- Workout history: "Finish workout" moves the current workout into `app:workout-history` (its own storage
+  group, so clearing the calculator never wipes it); the weightlifting page owns the history state and
+  passes it to `History.svelte`. Copy reactive state with `$state.snapshot`, not `structuredClone`.

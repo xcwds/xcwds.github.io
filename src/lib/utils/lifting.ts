@@ -175,3 +175,29 @@ export function workoutToText(workout: Workout): string {
 	}
 	return lines.join('\n');
 }
+
+/** True once anything worth keeping was entered (an exercise name, weight or reps). */
+export function workoutHasContent(workout: Workout): boolean {
+	return workout.exercises.some(
+		(e) => e.name.trim() !== '' || e.sets.some((s) => s.weight || s.reps)
+	);
+}
+
+/** One-line summary for lists, e.g. "Squat, Bench Press · 6 sets". */
+export function workoutSummary(workout: Workout): string {
+	const names = workout.exercises.map((e) => e.name.trim()).filter(Boolean);
+	const sets = workout.exercises.reduce(
+		(n, e) => n + e.sets.filter((s) => s.weight || s.reps).length,
+		0
+	);
+	const what = names.length ? names.join(', ') : 'Workout';
+	return `${what} · ${sets} ${sets === 1 ? 'set' : 'sets'}`;
+}
+
+/** A finished workout kept in the history. */
+export type HistoryEntry = { id: number; finishedAt: string; workout: Workout };
+
+/** All of the history as text, newest first, for pasting into notes. */
+export function historyToText(history: HistoryEntry[]): string {
+	return history.map((h) => workoutToText(h.workout)).join('\n\n');
+}

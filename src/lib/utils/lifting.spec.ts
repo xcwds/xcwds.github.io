@@ -3,9 +3,12 @@ import {
 	UNITS,
 	findEquipment,
 	formatWeight,
+	historyToText,
 	platesForTarget,
 	sumPlates,
 	totalWeight,
+	workoutHasContent,
+	workoutSummary,
 	workoutToText
 } from './lifting';
 
@@ -154,5 +157,43 @@ describe('kg', () => {
 			exercises: [{ id: 1, name: 'Squat', sets: [{ id: 2, weight: 100, reps: 5 }] }]
 		};
 		expect(workoutToText(workout)).toContain('@ 100 kg');
+	});
+});
+
+describe('history helpers', () => {
+	const make = (name: string, sets: { weight: number | null; reps: number | null }[]) => ({
+		date: 'Sat',
+		unit: 'lb' as const,
+		exercises: [{ id: 1, name, sets: sets.map((s, i) => ({ id: i + 2, ...s })) }]
+	});
+
+	it('knows when a workout has anything worth keeping', () => {
+		expect(workoutHasContent(make('', [{ weight: null, reps: null }]))).toBe(false);
+		expect(workoutHasContent(make('Squat', [{ weight: null, reps: null }]))).toBe(true);
+		expect(workoutHasContent(make('', [{ weight: null, reps: 5 }]))).toBe(true);
+	});
+
+	it('summarizes exercises and counts logged sets', () => {
+		expect(
+			workoutSummary(
+				make('Squat', [
+					{ weight: 225, reps: 5 },
+					{ weight: 225, reps: 5 },
+					{ weight: null, reps: null }
+				])
+			)
+		).toBe('Squat · 2 sets');
+		expect(workoutSummary(make('', [{ weight: 10, reps: 1 }]))).toBe('Workout · 1 set');
+	});
+
+	it('joins all workouts as text', () => {
+		const a = make('Squat', [{ weight: 225, reps: 5 }]);
+		const b = { ...make('Row', [{ weight: 40, reps: 8 }]), unit: 'kg' as const };
+		const text = historyToText([
+			{ id: 2, finishedAt: '', workout: b },
+			{ id: 1, finishedAt: '', workout: a }
+		]);
+		expect(text).toContain('Row\n  1 set × 8 reps @ 40 kg');
+		expect(text.indexOf('Row')).toBeLessThan(text.indexOf('Squat'));
 	});
 });
