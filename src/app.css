@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+/* Dark mode follows the Theme setting (System/Light/Dark), applied to <html> by
+   src/lib/settings.svelte.ts and, before first paint, by the inline script in app.html. */
+@custom-variant dark (&:where([data-color-scheme='dark'], [data-color-scheme='dark'] *));
+
+html[data-color-scheme='dark'] {
+	color-scheme: dark;
+}
+
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton/themes/wintry';

@@ -1,3 +1,5 @@
+import { settings } from '$lib/settings.svelte';
+
 let context: AudioContext | undefined;
 
 /**
@@ -13,14 +15,16 @@ export function primeAudio() {
 	}
 }
 
-/** Plays `count` short beeps and vibrates where supported. */
+/** Plays `count` short beeps and vibrates where supported, per the alarm settings. */
 export function beep(count = 3) {
-	try {
-		navigator.vibrate?.(Array.from({ length: count * 2 - 1 }, (_, i) => (i % 2 ? 150 : 300)));
-	} catch {
-		// Vibration unsupported (e.g. iOS Safari).
+	if (settings.vibration) {
+		try {
+			navigator.vibrate?.(Array.from({ length: count * 2 - 1 }, (_, i) => (i % 2 ? 150 : 300)));
+		} catch {
+			// Vibration unsupported (e.g. iOS Safari).
+		}
 	}
-	if (!context) return;
+	if (!context || !settings.sound) return;
 	const start = context.currentTime + 0.05;
 	for (let i = 0; i < count; i++) {
 		const t = start + i * 0.45;
@@ -41,7 +45,7 @@ export function keepAwake(active: () => boolean) {
 	let sentinel: WakeLockSentinel | undefined;
 
 	async function sync() {
-		const want = active() && document.visibilityState === 'visible';
+		const want = settings.keepAwake && active() && document.visibilityState === 'visible';
 		try {
 			if (want && !sentinel && 'wakeLock' in navigator) {
 				sentinel = await navigator.wakeLock.request('screen');

@@ -88,6 +88,38 @@ function parseWorkout(v: unknown): Workout | undefined {
 	return valid ? (v as Workout) : undefined;
 }
 
+export type Theme = 'system' | 'light' | 'dark';
+
+export type Settings = {
+	theme: Theme;
+	/** Alarm beeps for the coffee and cooking timers. */
+	sound: boolean;
+	/** Alarm vibration, where the device supports it. */
+	vibration: boolean;
+	/** Keep the screen on while a timer runs. */
+	keepAwake: boolean;
+};
+
+export const defaultSettings: Settings = {
+	theme: 'system',
+	sound: true,
+	vibration: true,
+	keepAwake: true
+};
+
+/** Invalid or missing fields fall back to their defaults, so new settings need no migration. */
+function parseSettings(v: unknown): Settings | undefined {
+	if (!isRecord(v)) return undefined;
+	const bool = (key: 'sound' | 'vibration' | 'keepAwake') =>
+		typeof v[key] === 'boolean' ? (v[key] as boolean) : defaultSettings[key];
+	return {
+		theme: v.theme === 'light' || v.theme === 'dark' ? v.theme : 'system',
+		sound: bool('sound'),
+		vibration: bool('vibration'),
+		keepAwake: bool('keepAwake')
+	};
+}
+
 function entry<T>(
 	key: string,
 	label: string,
@@ -128,10 +160,31 @@ export const entries = {
 		'Weightlifting last tab',
 		(v) => (v === 'plates' || v === 'workout' ? v : undefined),
 		'lifting-tab'
-	)
+	),
+	settings: entry<Settings>('settings', 'Settings', parseSettings)
 } satisfies Record<string, Entry<unknown>>;
 
 export const allEntries: Entry<unknown>[] = Object.values(entries);
+
+/** Entries are grouped by the first segment of their key (`app:<group>:...`). */
+const GROUP_LABELS: Record<string, string> = {
+	'coffee-timer': 'Coffee Timer',
+	'cooking-timer': 'Cooking Timer',
+	weightlifting: 'Weightlifting Calculator',
+	settings: 'Settings'
+};
+
+export type Group = { id: string; label: string; entries: Entry<unknown>[] };
+
+export function groupOf(e: Entry<unknown>): string {
+	return e.key.slice(PREFIX.length).split(':')[0];
+}
+
+export const groups: Group[] = [...new Set(allEntries.map(groupOf))].map((id) => ({
+	id,
+	label: GROUP_LABELS[id] ?? id,
+	entries: allEntries.filter((e) => groupOf(e) === id)
+}));
 
 function storage(): Storage | null {
 	try {
@@ -219,6 +272,99 @@ export function remove(e: Entry<unknown>): void {
 	} catch {
 		// Nothing to do.
 	}
+}
+
+/** Removes the given entries (default: everything the app saves). */
+export function clear(list: Entry<unknown>[] = allEntries): void {
+	for (const e of list) remove(e);
+}
+
+// --- Backups -----------------------------------------------------------------------------
+
+export const BACKUP_APP = 'xcwds.com';
+
+export type Backup = {
+	app: typeof BACKUP_APP;
+	schemaVersion: number;
+	exportedAt: string;
+	/** Saved values keyed by storage key. */
+	data: Record<string, unknown>;
+};
+
+/** Everything currently saved, as a backup object. Invalid values are left out. */
+export function exportData(now = new Date()): Backup {
+	const data: Record<string, unknown> = {};
+	for (const e of allEntries) {
+		const value = read(e);
+		if (value !== undefined) data[e.key] = value;
+	}
+	return { app: BACKUP_APP, schemaVersion: SCHEMA_VERSION, exportedAt: now.toISOString(), data };
+}
+
+export type ParsedBackup =
+	| {
+			ok: true;
+			backup: Backup;
+			/** Entries the backup has valid data for. */
+			found: Entry<unknown>[];
+			/** Keys in the backup that are unknown or failed validation; they won't be imported. */
+			skipped: string[];
+	  }
+	| { ok: false; error: string };
+
+export function parseBackup(text: string): ParsedBackup {
+	let raw: unknown;
+	try {
+		raw = JSON.parse(text);
+	} catch {
+		return { ok: false, error: "This file isn't a backup (it's not valid JSON)." };
+	}
+	if (!isRecord(raw) || raw.app !== BACKUP_APP || !isRecord(raw.data)) {
+		return { ok: false, error: "This file isn't a backup from this site." };
+	}
+	const version = raw.schemaVersion;
+	if (typeof version !== 'number' || !Number.isInteger(version) || version < 1) {
+		return { ok: false, error: 'This backup has an unknown format version.' };
+	}
+	if (version > SCHEMA_VERSION) {
+		return {
+			ok: false,
+			error: 'This backup is from a newer version of the app. Update the app and try again.'
+		};
+	}
+	const data: Record<string, unknown> = {};
+	const found: Entry<unknown>[] = [];
+	const skipped: string[] = [];
+	for (const [key, value] of Object.entries(raw.data)) {
+		const e = allEntries.find((x) => x.key === key);
+		const parsed = e?.parse(value);
+		if (e && parsed !== undefined) {
+			data[key] = parsed;
+			found.push(e);
+		} else {
+			skipped.push(key);
+		}
+	}
+	const backup: Backup = {
+		app: BACKUP_APP,
+		schemaVersion: version,
+		exportedAt: typeof raw.exportedAt === 'string' ? raw.exportedAt : '',
+		data
+	};
+	return { ok: true, backup, found, skipped };
+}
+
+/**
+ * Applies a parsed backup. `replace` clears everything first; `merge` only overwrites the
+ * entries the backup contains and keeps the rest. Returns false if anything failed to save.
+ */
+export function importData(backup: Backup, mode: 'replace' | 'merge'): boolean {
+	if (mode === 'replace') clear();
+	let ok = true;
+	for (const e of allEntries) {
+		if (e.key in backup.data) ok = write(e, backup.data[e.key]) && ok;
+	}
+	return ok;
 }
 
 /** For tests: forget that migrations already ran. */

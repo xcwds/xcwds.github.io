@@ -5,7 +5,8 @@ import { tools } from '$lib/utils/tools';
 export const sections = [
 	{ path: '/', label: 'Home', emoji: '🏠' },
 	{ path: '/recipes', label: 'Recipes', emoji: '📖' },
-	{ path: '/utils', label: 'Utils', emoji: '🧰' }
+	{ path: '/utils', label: 'Utils', emoji: '🧰' },
+	{ path: '/settings', label: 'Settings', emoji: '⚙️' }
 ] as const;
 
 export type SectionPath = (typeof sections)[number]['path'];

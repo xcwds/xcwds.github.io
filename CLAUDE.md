@@ -24,3 +24,8 @@ Package manager: pnpm.
 - Never touch `localStorage` directly. Register saved data in `entries` in `src/lib/storage.ts` (an `app:`
   key, a label and a validator) and use `persist()` from `src/lib/persist.svelte.ts` in components, or
   `read`/`write` elsewhere. Changing a saved shape or key needs a new migration and a `SCHEMA_VERSION` bump.
+- `/settings` holds app-wide settings (`settings` in `src/lib/settings.svelte.ts`, saved as `app:settings`;
+  new fields just need a default in `defaultSettings`), backups (export/import/clear via `storage.ts`) and
+  About. Dark mode uses `data-color-scheme` on `<html>` (custom `dark` variant in `app.css`), set before
+  first paint by the inline script in `app.html` — keep that script in sync with `settings.svelte.ts`.
+  Don't use `data-theme`; Skeleton owns it.

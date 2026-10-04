@@ -5,8 +5,22 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<link rel="manifest" href="%sveltekit.assets%/manifest.webmanifest" />
 		<link rel="apple-touch-icon" href="%sveltekit.assets%/icons/apple-touch-icon.png" />
-		<meta name="theme-color" content="#bfdbfe" media="(prefers-color-scheme: light)" />
-		<meta name="theme-color" content="#030712" media="(prefers-color-scheme: dark)" />
+		<meta name="theme-color" content="#bfdbfe" />
+		<script>
+			// Apply the saved theme before first paint so dark mode doesn't flash light.
+			// Keep in sync with src/lib/settings.svelte.ts.
+			(function () {
+				var theme = 'system';
+				try {
+					theme = JSON.parse(localStorage.getItem('app:settings') || '{}').theme || 'system';
+				} catch (e) {}
+				var dark =
+					theme === 'dark' ||
+					(theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+				document.documentElement.dataset.colorScheme = dark ? 'dark' : 'light';
+				if (dark) document.querySelector('meta[name="theme-color"]').content = '#030712';
+			})();
+		</script>
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-title" content="Waters" />
 		%sveltekit.head%
