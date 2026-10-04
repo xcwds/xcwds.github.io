@@ -101,3 +101,23 @@ test('clearing Home shortcuts in Settings clears them for good', async ({ page }
 	await page.getByRole('link', { name: 'Home' }).first().click();
 	await expect(pinned(page)).toHaveText([/Cooking Timer$/]);
 });
+
+test('with storage blocked, opening a tool shows no save-failure toast', async ({ page }) => {
+	await page.addInitScript(() => {
+		Object.defineProperty(window, 'localStorage', {
+			get() {
+				throw new DOMException('blocked', 'SecurityError');
+			}
+		});
+	});
+	await gotoHydrated(page, '/utils/oven-time');
+	await gotoHydrated(page, '/utils/pizza-dough');
+	// Recording "Recently used" failed, but the user didn't save anything, so nothing to report.
+	await page.waitForTimeout(300);
+	await expect(page.getByTestId('toast')).toHaveCount(0);
+
+	// Pinning is the user's own action, so its failure is still reported.
+	await gotoHydrated(page, '/utils');
+	await page.getByRole('button', { name: 'Pin Coffee Timer to Home' }).click();
+	await expect(page.getByTestId('toast')).toContainText("Couldn't save");
+});

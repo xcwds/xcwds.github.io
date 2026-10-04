@@ -36,11 +36,12 @@ export function startShortcuts() {
 
 /**
  * Applies `change` to the latest saved shortcuts (so another tab's changes aren't lost) and saves
- * the result, unless nothing changed. Returns whether the result is saved.
+ * the result, unless nothing changed. Returns whether the result is saved. A failed save is
+ * reported (once, see `saveResult`) unless `quiet`: for writes the user didn't ask for.
  */
 function apply(
 	change: (latest: HomeShortcuts) => HomeShortcuts,
-	{ explicit = false } = {}
+	{ explicit = false, quiet = false } = {}
 ): boolean {
 	const unsaved = hasUnsavedChanges(entry);
 	const current = $state.snapshot(shortcuts);
@@ -54,14 +55,17 @@ function apply(
 		unsaved
 	});
 	Object.assign(shortcuts, value);
-	return saveResult(entry, saved, { explicit });
+	return quiet ? saved : saveResult(entry, saved, { explicit });
 }
 
-/** Records opening a page; only tools that allow it become "Recently used". */
+/**
+ * Records opening a page; only tools that allow it become "Recently used". Quiet: if storage is
+ * blocked, opening a tool shouldn't warn about a save the user never made.
+ */
 export function recordVisit(pathname: string) {
 	const path = pathname.replace(/\/+$/, '') || '/';
 	if (!tools.some((t) => t.path === path)) return;
-	apply((s) => withVisit(s, path, tools));
+	apply((s) => withVisit(s, path, tools), { quiet: true });
 }
 
 export function togglePin(path: string) {
