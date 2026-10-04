@@ -1,4 +1,5 @@
 import { doughDefaults, type DoughInput } from '$lib/utils/dough';
+import type { TempUnit } from '$lib/utils/oven';
 import {
 	EQUIPMENT_IDS,
 	UNITS,
@@ -147,6 +148,8 @@ export type Settings = {
 	/** Pizza dough calculator starting values (grams and baker's percentages). */
 	pizzaDefaults: DoughInput;
 	lifting: LiftingSettings;
+	/** °F or °C, for the oven time converter (and its panel on recipes). */
+	ovenUnit: TempUnit;
 };
 
 export const defaultSettings: Settings = {
@@ -161,7 +164,8 @@ export const defaultSettings: Settings = {
 		unit: 'lb',
 		equipment: 'barbell',
 		plates: { lb: [...UNITS.lb.plates], kg: [...UNITS.kg.plates] }
-	}
+	},
+	ovenUnit: 'F'
 };
 
 export const COFFEE_SECONDS = { min: 5, max: 3600 };
@@ -219,7 +223,8 @@ function parseSettings(v: unknown): Settings | undefined {
 			: defaultSettings.coffeeDefaultSeconds,
 		cookingPresets: parseCookingPresets(v.cookingPresets) ?? [...defaultSettings.cookingPresets],
 		pizzaDefaults: parsePizzaDefaults(v.pizzaDefaults),
-		lifting: parseLiftingSettings(v.lifting)
+		lifting: parseLiftingSettings(v.lifting),
+		ovenUnit: v.ovenUnit === 'C' ? 'C' : 'F'
 	};
 }
 

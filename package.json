@@ -14,8 +14,7 @@
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
-		"test:e2e": "playwright test",
-		"recipes:notion-ids": "node scripts/notion-recipe-ids.js"
+		"test:e2e": "playwright test"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
