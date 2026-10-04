@@ -21,14 +21,16 @@ Package manager: pnpm.
 - Always open a pull request for work you push (against `main`, linking the issues it addresses),
   unless the user explicitly says not to. Pushing a branch alone is not done.
 - After opening a PR, review it yourself adversarially (look for what's broken, unsafe or missing, not
-  just style), and post that review following "Reviewing a PR" below. Then fix the findings, push,
-  reply to each thread with the fixing commit and resolve it, and review again. Do at most 3
-  review-and-fix cycles. If findings remain after the third, stop and report them to the user rather
-  than continuing or merging.
-- When a review passes (nothing left that needs a change) and the PR is mergeable (no conflicts, the
-  pre-push checks and `pnpm test:e2e` pass on its head), merge it with a squash merge, unless the
-  user said not to merge. Until CI runs on PRs (#34), those local runs are the only verification.
-  GitHub won't let you approve your own PR, so post the passing review as a comment review.
+  just style), and post that review following "Reviewing a PR" below. If it finds anything, fix it,
+  push, reply to each thread with the fixing commit, resolve it, and review again. Allow at most 3
+  rounds of fixes: a review always follows the last fix push, and if that review still finds
+  something, stop, leave the PR open and report the remaining findings to the user.
+- Merging your own PR (one you opened, or one the user asked you to take over or get merged): when a
+  review passes (nothing left that needs a change) and the PR is mergeable (no conflicts, the pre-push
+  checks and `pnpm test:e2e` pass on its head), squash-merge it, unless the user said not to merge.
+  Until CI runs on PRs (#34), those local runs are the only verification. GitHub won't let you
+  approve your own PR, so post the passing review as a comment review. Reviewing anyone else's PR
+  only posts the review; never merge it unless asked.
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
   home page render from that list). New tools arrive as GitHub issues. The site is static with no server or
   auth, so tools must be fully client-side; shared logic lives in `src/lib/utils/` (timers count against
