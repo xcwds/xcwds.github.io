@@ -48,11 +48,19 @@
 		entries.cookingTimers,
 		() => items.map(({ id, label, timer }) => ({ id, label, state: timer.toJSON() })),
 		(saved) => {
+			// Also runs when another tab changes the timers; stop the ones being replaced.
+			for (const item of items) item.timer.destroy();
 			items = saved.map(({ id, label, state }) => {
 				const timer = new Timer(state.duration);
 				timer.restore(state);
 				return { id, label, timer };
 			});
+		},
+		{
+			cleared: () => {
+				for (const item of items) item.timer.destroy();
+				items = [];
+			}
 		}
 	);
 

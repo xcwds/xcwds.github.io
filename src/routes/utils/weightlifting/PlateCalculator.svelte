@@ -73,6 +73,11 @@
 			if (saved.equipmentId) {
 				hadSavedEquipment = true;
 				equipmentId = saved.equipmentId;
+			} else if (hadSavedEquipment) {
+				// Another tab cleared the choice (Settings forgets it when the default changes):
+				// go back to the default instead of saving this tab's old choice over it.
+				hadSavedEquipment = false;
+				if (settingsStatus.ready) equipmentId = settings.lifting.equipment;
 			}
 			mode = saved.mode ?? mode;
 			symmetric = saved.symmetric ?? symmetric;
@@ -84,13 +89,19 @@
 	);
 
 	// Settings load after this page mounts: then apply the default equipment (if nothing was
-	// saved) and clear plate counts saved in the other unit.
-	let seeded = false;
+	// saved) and clear plate counts saved in the other unit. A default changed later (in another
+	// tab) applies too: changing it clears the choice, and that tab's settings can arrive after
+	// the cleared choice does.
+	let appliedDefault: EquipmentId | undefined;
 	$effect(() => {
 		if (!settingsStatus.ready) return;
-		if (!seeded) {
-			seeded = true;
-			if (!hadSavedEquipment) equipmentId = settings.lifting.equipment;
+		const fallback = settings.lifting.equipment;
+		if (fallback !== appliedDefault) {
+			if (appliedDefault !== undefined || !hadSavedEquipment) {
+				hadSavedEquipment = false;
+				equipmentId = fallback;
+			}
+			appliedDefault = fallback;
 		}
 		if (sidesUnit !== unit) {
 			sides = [{}, {}];

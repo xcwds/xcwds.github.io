@@ -10,9 +10,15 @@
 	import { button, card } from './styles';
 
 	let {
-		history = $bindable([]),
-		onRepeat
-	}: { history?: HistoryEntry[]; onRepeat: (entry: HistoryEntry) => void } = $props();
+		history = [],
+		onRepeat,
+		onDelete
+	}: {
+		history?: HistoryEntry[];
+		onRepeat: (entry: HistoryEntry) => void;
+		/** Deletes the entry from the saved history; returns whether that was saved. */
+		onDelete: (entry: HistoryEntry) => boolean;
+	} = $props();
 
 	let canShare = $state(false);
 	onMount(() => {
@@ -38,8 +44,8 @@
 
 	function remove(entry: HistoryEntry) {
 		if (!confirm(`Delete the workout from ${entry.workout.date}? This can't be undone.`)) return;
-		history = history.filter((h) => h.id !== entry.id);
-		toast('Workout deleted.');
+		// A failed save is reported by onDelete.
+		if (onDelete(entry)) toast('Workout deleted.');
 	}
 </script>
 

@@ -23,6 +23,7 @@
 		parseCookingPresets,
 		read,
 		remove,
+		storageWritable,
 		type Group,
 		type ParsedBackup,
 		type Theme
@@ -119,7 +120,11 @@
 			})
 		: version;
 
+	/** False when this browser won't let the app save (blocked or full storage). */
+	let writable = $state(true);
+
 	onMount(() => {
+		writable = storageWritable();
 		try {
 			canShareFiles = navigator.canShare?.({ files: [backupFile()] }) ?? false;
 		} catch {
@@ -382,6 +387,13 @@
 			Everything is saved only on this device. Back it up to move it to another phone or keep a
 			copy.
 		</p>
+		{#if !writable}
+			<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="storage-warning">
+				This browser isn't letting xcwds save anything right now (storage is full, or site data is
+				blocked). Changes last only until you close the app. If storage is full, download a backup,
+				then clear data you don't need.
+			</p>
+		{/if}
 
 		<div class="grid gap-2 {canShareFiles ? 'grid-cols-2' : 'grid-cols-1'}">
 			<button type="button" class={primary} onclick={download}>Download backup</button>

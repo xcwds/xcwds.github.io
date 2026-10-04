@@ -1,3 +1,4 @@
+import { saveResult } from './persist.svelte';
 import { defaultSettings, entries, read, write, type Settings, type Theme } from './storage';
 
 /** App-wide settings. Reactive: read it anywhere, assign to change it (saved automatically). */
@@ -28,13 +29,33 @@ export function reloadSettings() {
 }
 
 let started = false;
+/** JSON of the settings as last loaded or saved, so the same settings aren't written twice. */
+let lastSaved: string | undefined;
+
+/**
+ * Saves the settings now rather than in the effect below, for actions that confirm a save
+ * (e.g. Save as my defaults). Returns whether it was saved; a failure is reported once.
+ */
+export function saveSettings(): boolean {
+	const snapshot = $state.snapshot(settings);
+	lastSaved = JSON.stringify(snapshot);
+	return saveResult(entries.settings, write(entries.settings, snapshot), { explicit: true });
+}
 
 /** Call once in the browser (root layout): loads settings, applies the theme, saves changes. */
 export function startSettings() {
 	if (started) return;
 	started = true;
 	reloadSettings();
+	lastSaved = JSON.stringify(settings);
 	settingsStatus.ready = true;
+	// Another tab changed the settings (or cleared all data): load them, so a stale copy here
+	// isn't saved over them. `key` is null when storage is cleared.
+	window.addEventListener('storage', (event) => {
+		if (event.key !== null && event.key !== entries.settings.key) return;
+		reloadSettings();
+		lastSaved = JSON.stringify(settings);
+	});
 	matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () =>
 		applyTheme(settings.theme)
 	);
@@ -44,8 +65,12 @@ export function startSettings() {
 			const snapshot = $state.snapshot(settings);
 			applyTheme(snapshot.theme);
 			// Don't recreate saved data just by visiting: only save once something differs.
-			const untouched = JSON.stringify(snapshot) === JSON.stringify(defaultSettings);
-			if (!untouched || read(entries.settings) !== undefined) write(entries.settings, snapshot);
+			const json = JSON.stringify(snapshot);
+			if (json === lastSaved) return;
+			const untouched = json === JSON.stringify(defaultSettings);
+			if (untouched && read(entries.settings) === undefined) return;
+			lastSaved = json;
+			saveResult(entries.settings, write(entries.settings, snapshot));
 		});
 	});
 }
