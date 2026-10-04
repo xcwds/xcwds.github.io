@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { activeSection, routeInfo } from './nav';
+import { activeSection, errorInfo, routeInfo } from './nav';
 import { porkChopsPath } from './parody';
 import { recipes } from './recipes';
 import { tools } from './utils/tools';
@@ -37,6 +37,11 @@ describe('routeInfo', () => {
 			emoji: '🍂',
 			parent: '/'
 		});
+	});
+
+	it('titles error pages, going back home', () => {
+		expect(errorInfo(404)).toEqual({ title: 'Page not found', parent: '/' });
+		expect(errorInfo(500)).toEqual({ title: 'Something went wrong', parent: '/' });
 	});
 
 	it('falls back to home for unknown pages', () => {

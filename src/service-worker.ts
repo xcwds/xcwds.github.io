@@ -9,12 +9,21 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 const CACHE = `cache-${version}`;
 // The whole site is prerendered, so everything can be cached for offline use.
 const ASSETS = [...build, ...files, ...prerendered];
+// The adapter's fallback page (svelte.config.js): it boots the app on any URL, so offline
+// navigations to pages that aren't cached still get the app shell and its error page.
+const FALLBACK = '/404.html';
 
 // A new version installs and then waits, so it never swaps code out from under a running
 // timer. The app shows an "Update available" banner and sends SKIP_WAITING when the user taps
 // Update (src/lib/app-update.svelte.ts). The very first install activates right away.
 sw.addEventListener('install', (event) => {
-	event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
+	event.waitUntil(
+		caches.open(CACHE).then(async (cache) => {
+			await cache.addAll(ASSETS);
+			// Only exists in builds (not `vite dev`), so a missing file mustn't fail the install.
+			await cache.add(FALLBACK).catch(() => {});
+		})
+	);
 });
 
 sw.addEventListener('message', (event) => {
@@ -60,7 +69,10 @@ sw.addEventListener('fetch', (event) => {
 				if (response.ok && response.type === 'basic') void cache.put(request, response.clone());
 				return response;
 			} catch (error) {
-				const cached = (await cache.match(request)) ?? (await cache.match(url.pathname));
+				const cached =
+					(await cache.match(request)) ??
+					(await cache.match(url.pathname)) ??
+					(request.mode === 'navigate' ? await cache.match(FALLBACK) : undefined);
 				if (cached) return cached;
 				throw error;
 			}

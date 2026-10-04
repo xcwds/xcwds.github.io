@@ -1,62 +1,26 @@
-import { cp, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
-import { createServer, type Server } from 'node:http';
+import { cp, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { extname, join } from 'node:path';
+import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { gotoHydrated } from './helpers';
+import { serveStatic } from './static-server';
 
 test.use({ viewport: { width: 390, height: 844 } });
 
 // This test "deploys" a new version by editing the service worker, so it serves its own copy of
 // the build instead of the shared preview server other tests use.
 let dir: string;
-let server: Server;
 let origin: string;
-
-const TYPES: Record<string, string> = {
-	'.html': 'text/html',
-	'.js': 'text/javascript',
-	'.css': 'text/css',
-	'.json': 'application/json',
-	'.webmanifest': 'application/manifest+json',
-	'.png': 'image/png',
-	'.jpg': 'image/jpeg',
-	'.ico': 'image/x-icon',
-	'.svg': 'image/svg+xml',
-	'.txt': 'text/plain'
-};
-
-async function resolveFile(pathname: string): Promise<string | null> {
-	const base = join(dir, decodeURIComponent(pathname));
-	for (const candidate of [base, `${base}.html`, join(base, 'index.html')]) {
-		try {
-			if ((await stat(candidate)).isFile()) return candidate;
-		} catch {
-			// Try the next candidate.
-		}
-	}
-	return null;
-}
+let close: (() => Promise<void>) | undefined;
 
 test.beforeAll(async () => {
 	dir = await mkdtemp(join(tmpdir(), 'update-test-'));
 	await cp('build', dir, { recursive: true });
-	server = createServer(async (req, res) => {
-		const file = await resolveFile(new URL(req.url ?? '/', 'http://x').pathname);
-		if (!file) return res.writeHead(404).end();
-		res.writeHead(200, {
-			'content-type': TYPES[extname(file)] ?? 'application/octet-stream',
-			'cache-control': 'no-cache'
-		});
-		res.end(await readFile(file));
-	});
-	await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
-	const address = server.address();
-	origin = `http://127.0.0.1:${typeof address === 'object' && address ? address.port : 0}`;
+	({ origin, close } = await serveStatic(dir));
 });
 
 test.afterAll(async () => {
-	await new Promise((resolve) => server?.close(resolve));
+	await close?.();
 	if (dir) await rm(dir, { recursive: true, force: true });
 });
 

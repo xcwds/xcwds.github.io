@@ -46,6 +46,11 @@ export function routeInfo(pathname: string): RouteInfo {
 	return { title: 'xcwds', parent: '/' };
 }
 
+/** Header title for the error page (src/routes/+error.svelte), with a way back home. */
+export function errorInfo(status: number): RouteInfo {
+	return { title: status === 404 ? 'Page not found' : 'Something went wrong', parent: '/' };
+}
+
 /** The section a path belongs to, for highlighting the current tab. */
 export function activeSection(pathname: string): SectionPath {
 	const path = normalize(pathname);
