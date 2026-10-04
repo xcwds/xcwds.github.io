@@ -3,6 +3,7 @@ import { readdirSync } from 'node:fs';
 import { FOOD_PRESETS, foodPreset } from '$lib/utils/oven';
 import { MAX_STEP_TIMER_MINUTES, recipes, searchRecipes, stepText, stepTimer } from './index';
 import { isScalable } from './scale';
+import { systemOf } from './units';
 
 describe('recipes', () => {
 	it('loads every data file', () => {
@@ -43,6 +44,21 @@ describe('recipes', () => {
 			expect(lo).toBeGreaterThan(0);
 			expect(hi).toBeGreaterThanOrEqual(lo);
 			expect(oven.temp).toBeGreaterThan(foodPreset(oven.food).doneF);
+		}
+	});
+});
+
+describe('alt measures', () => {
+	it('give the same amount in the other system (or spoons), for a convertible unit', () => {
+		for (const recipe of recipes) {
+			for (const ingredient of recipe.ingredients.filter(isScalable)) {
+				const { alt, unit } = ingredient;
+				if (!alt) continue;
+				const from = systemOf(unit);
+				expect(from, `${recipe.slug}: ${ingredient.item}`).toBeDefined();
+				expect(systemOf(alt.unit), `${recipe.slug}: ${ingredient.item}`).not.toBe(from);
+				expect(alt.amount).toBeGreaterThan(0);
+			}
 		}
 	});
 });

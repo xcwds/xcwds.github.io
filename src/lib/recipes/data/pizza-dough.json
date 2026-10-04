@@ -10,17 +10,34 @@
 		"60% hydration. For other ball sizes or hydration, use the Pizza Dough Calculator in Utils."
 	],
 	"ingredients": [
-		{ "amount": 650, "unit": "g", "item": "bread flour or 00 flour" },
-		{ "amount": 395, "unit": "g", "item": "water", "note": "room temperature" },
-		{ "amount": 35, "unit": "g", "item": "olive oil" },
-		{ "amount": 21, "unit": "g", "item": "honey", "note": "or about half that weight of sugar" },
-		{ "amount": 6, "unit": "g", "item": "active dry yeast" },
-		{ "amount": 12, "unit": "g", "item": "salt" }
+		{
+			"amount": 650,
+			"unit": "g",
+			"item": "bread flour or 00 flour",
+			"alt": { "amount": 23, "unit": "oz" }
+		},
+		{
+			"amount": 395,
+			"unit": "g",
+			"item": "water",
+			"note": "room temperature",
+			"alt": { "amount": 14, "unit": "oz" }
+		},
+		{ "amount": 35, "unit": "g", "item": "olive oil", "alt": { "amount": 2.5, "unit": "Tbsp" } },
+		{
+			"amount": 21,
+			"unit": "g",
+			"item": "honey",
+			"note": "or about half that weight of sugar",
+			"alt": { "amount": 1, "unit": "Tbsp" }
+		},
+		{ "amount": 6, "unit": "g", "item": "active dry yeast", "alt": { "amount": 2, "unit": "tsp" } },
+		{ "amount": 12, "unit": "g", "item": "salt", "alt": { "amount": 2, "unit": "tsp" } }
 	],
 	"instructions": [
 		"Weigh the water and stir in the yeast. Let it sit for a couple of minutes, then add a couple of scoops of the flour and mix for 30 seconds.",
 		"Add the olive oil, honey and the rest of the flour and mix for 1 minute. Add the salt and mix for 3–4 minutes more, until the dough is elastic and tacky (not too sticky, not too dry).",
-		"Weigh the dough and divide it into equal balls (about 270 g each for this batch), using a little flour to shape them.",
+		"Weigh the dough and divide it into equal balls (about 270 g (9½ oz) each for this batch), using a little flour to shape them.",
 		"Put each ball in an oiled container and refrigerate for 6–12 hours. Take them out 15–20 minutes before stretching."
 	],
 	"tips": [
