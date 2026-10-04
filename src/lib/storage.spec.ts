@@ -1,10 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
+	BACKUP_APP,
 	SCHEMA_VERSION,
 	VERSION_KEY,
 	allEntries,
+	clear,
+	defaultSettings,
 	entries,
+	exportData,
+	groups,
+	importData,
 	migrate,
+	parseBackup,
 	read,
 	remove,
 	resetMigrationState,
@@ -166,5 +173,121 @@ describe('validators', () => {
 		const good = { id: 1, label: 'Pasta', state: { duration: 1, endsAt: 5, pausedRemaining: 1 } };
 		store.setItem(entries.cookingTimers.key, JSON.stringify([good, { id: 2, label: 'x' }, null]));
 		expect(read(entries.cookingTimers)).toEqual([good]);
+	});
+});
+
+describe('settings entry', () => {
+	it('fills missing or invalid fields with defaults', () => {
+		store.setItem(entries.settings.key, JSON.stringify({ theme: 'dark', sound: 'loud' }));
+		expect(read(entries.settings)).toEqual({ ...defaultSettings, theme: 'dark' });
+		store.setItem(entries.settings.key, JSON.stringify({ theme: 'neon' }));
+		expect(read(entries.settings)?.theme).toBe('system');
+	});
+});
+
+describe('groups and clear', () => {
+	it('groups entries by tool and clears one group at a time', () => {
+		expect(groups.map((g) => g.id)).toEqual([
+			'coffee-timer',
+			'cooking-timer',
+			'weightlifting',
+			'settings'
+		]);
+		write(entries.coffeeDuration, 1000);
+		write(entries.liftingTab, 'workout');
+		clear(groups.find((g) => g.id === 'weightlifting')!.entries);
+		expect(read(entries.liftingTab)).toBeUndefined();
+		expect(read(entries.coffeeDuration)).toBe(1000);
+		clear();
+		expect(read(entries.coffeeDuration)).toBeUndefined();
+	});
+});
+
+describe('backups', () => {
+	const now = new Date('2026-10-04T12:00:00Z');
+
+	it('exports every valid saved value with metadata', () => {
+		write(entries.coffeeDuration, 120_000);
+		write(entries.settings, { ...defaultSettings, theme: 'dark' });
+		store.setItem(entries.liftingTab.key, '"nonsense"');
+		expect(exportData(now)).toEqual({
+			app: BACKUP_APP,
+			schemaVersion: SCHEMA_VERSION,
+			exportedAt: '2026-10-04T12:00:00.000Z',
+			data: {
+				[entries.coffeeDuration.key]: 120_000,
+				[entries.settings.key]: { ...defaultSettings, theme: 'dark' }
+			}
+		});
+	});
+
+	it('round-trips through parse and import', () => {
+		write(entries.coffeeDuration, 120_000);
+		write(entries.liftingTab, 'workout');
+		const text = JSON.stringify(exportData(now));
+		clear();
+		const parsed = parseBackup(text);
+		expect(parsed.ok).toBe(true);
+		if (!parsed.ok) return;
+		expect(parsed.found.map((e) => e.key).sort()).toEqual(
+			[entries.coffeeDuration.key, entries.liftingTab.key].sort()
+		);
+		importData(parsed.backup, 'merge');
+		expect(read(entries.coffeeDuration)).toBe(120_000);
+		expect(read(entries.liftingTab)).toBe('workout');
+	});
+
+	it('merge keeps data missing from the backup; replace clears it', () => {
+		const backup = parseBackup(
+			JSON.stringify({
+				app: BACKUP_APP,
+				schemaVersion: 1,
+				data: { [entries.liftingTab.key]: 'plates' }
+			})
+		);
+		if (!backup.ok) throw new Error('expected a valid backup');
+
+		write(entries.coffeeDuration, 5000);
+		write(entries.liftingTab, 'workout');
+		importData(backup.backup, 'merge');
+		expect(read(entries.liftingTab)).toBe('plates');
+		expect(read(entries.coffeeDuration)).toBe(5000);
+
+		importData(backup.backup, 'replace');
+		expect(read(entries.coffeeDuration)).toBeUndefined();
+		expect(read(entries.liftingTab)).toBe('plates');
+	});
+
+	it('skips unknown keys and invalid values', () => {
+		const parsed = parseBackup(
+			JSON.stringify({
+				app: BACKUP_APP,
+				schemaVersion: 1,
+				data: {
+					'app:unknown': 1,
+					[entries.coffeeDuration.key]: -1,
+					[entries.liftingTab.key]: 'plates'
+				}
+			})
+		);
+		expect(parsed.ok && parsed.found.map((e) => e.key)).toEqual([entries.liftingTab.key]);
+		expect(parsed.ok && parsed.skipped).toEqual(['app:unknown', entries.coffeeDuration.key]);
+	});
+
+	it('rejects files that are not usable backups', () => {
+		const error = (text: string) => {
+			const parsed = parseBackup(text);
+			return parsed.ok ? null : parsed.error;
+		};
+		expect(error('not json')).toMatch(/not valid JSON/);
+		expect(error(JSON.stringify({ app: 'other', schemaVersion: 1, data: {} }))).toMatch(
+			/isn't a backup/
+		);
+		expect(error(JSON.stringify({ app: BACKUP_APP, schemaVersion: 'x', data: {} }))).toMatch(
+			/unknown format/
+		);
+		expect(
+			error(JSON.stringify({ app: BACKUP_APP, schemaVersion: SCHEMA_VERSION + 1, data: {} }))
+		).toMatch(/newer version/);
 	});
 });

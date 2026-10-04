@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import favicon from '$lib/assets/favicon.ico';
 	import { activeSection, routeInfo, sections } from '$lib/nav';
+	import { startSettings } from '$lib/settings.svelte';
 	import '../app.css';
 
 	let { children } = $props();
@@ -14,6 +15,7 @@
 
 	// Lets e2e tests wait until inputs are interactive (see e2e/helpers.ts).
 	onMount(() => {
+		startSettings();
 		document.documentElement.dataset.hydrated = '';
 	});
 </script>
@@ -73,7 +75,7 @@
 		aria-label="Main"
 		class="fixed inset-x-0 bottom-0 z-10 border-t border-black/5 bg-blue-100/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden dark:border-white/10 dark:bg-gray-900/95"
 	>
-		<ul class="mx-auto grid max-w-md grid-cols-3">
+		<ul class="mx-auto grid max-w-md" style="grid-template-columns: repeat({sections.length}, 1fr)">
 			{#each sections as section (section.path)}
 				<li>
 					<a
