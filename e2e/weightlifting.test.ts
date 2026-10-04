@@ -64,7 +64,7 @@ test('tracks a workout and copies it as text', async ({ page, context }) => {
 	await expect(page.getByTestId('exercise')).toHaveCount(1);
 
 	await page.getByRole('button', { name: 'Copy workout' }).click();
-	await expect(page.getByRole('button', { name: 'Copied!' })).toBeVisible();
+	await expect(page.getByTestId('toast')).toHaveText('Workout copied.');
 	expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
 		[
 			'Workout – Sat, Oct 4, 2026',

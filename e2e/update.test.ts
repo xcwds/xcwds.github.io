@@ -112,11 +112,12 @@ test('a new version waits for the user, respects running timers, then updates', 
 	await page.getByRole('button', { name: 'Pause' }).click();
 	await banner(page).getByRole('button', { name: 'Update', exact: true }).click();
 	await page.waitForEvent('load');
-	await expect(banner(page)).toContainText('App updated');
+	await expect(page.getByTestId('toast')).toHaveText('App updated to the latest version.');
 	expect(await page.evaluate(async () => !!(await navigator.serviceWorker.ready).waiting)).toBe(
 		false
 	);
-	await expect(banner(page)).toHaveCount(0, { timeout: 8000 });
+	await expect(banner(page)).toHaveCount(0);
+	await expect(page.getByTestId('toast')).toHaveCount(0, { timeout: 8000 });
 });
 
 test('the update banner can be dismissed and comes back on the next launch', async ({ page }) => {

@@ -3,6 +3,10 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { startUpdateChecks } from '$lib/app-update.svelte';
+	import { startInstallSupport } from '$lib/install.svelte';
+	import { startNetworkStatus } from '$lib/network.svelte';
+	import OfflineNotice from '$lib/OfflineNotice.svelte';
+	import Toaster from '$lib/Toaster.svelte';
 	import UpdateBanner from '$lib/UpdateBanner.svelte';
 	import { activeSection, routeInfo, sections } from '$lib/nav';
 	import { startSettings } from '$lib/settings.svelte';
@@ -18,6 +22,8 @@
 	onMount(() => {
 		startSettings();
 		void startUpdateChecks();
+		startNetworkStatus();
+		startInstallSupport();
 		document.documentElement.dataset.hydrated = '';
 	});
 </script>
@@ -30,7 +36,7 @@
 				<a
 					href={resolve(info.parent)}
 					aria-label="Back to {parentLabel}"
-					class="-ml-2 flex size-10 shrink-0 items-center justify-center rounded-full text-gray-700 hover:bg-white/60 dark:text-gray-300 dark:hover:bg-gray-800"
+					class="-ml-2 flex size-11 shrink-0 items-center justify-center rounded-full text-gray-700 hover:bg-white/60 dark:text-gray-300 dark:hover:bg-gray-800"
 				>
 					<svg
 						viewBox="0 0 24 24"
@@ -69,7 +75,14 @@
 		{@render children()}
 	</div>
 
-	<UpdateBanner />
+	<!-- Toasts, the update banner and the offline notice stack above the tab bar (top on desktop). -->
+	<div
+		class="pointer-events-none fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-2 px-4 md:top-4 md:bottom-auto"
+	>
+		<Toaster />
+		<UpdateBanner />
+		<OfflineNotice />
+	</div>
 
 	<nav
 		aria-label="Main"

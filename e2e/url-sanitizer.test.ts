@@ -47,7 +47,7 @@ test('unwraps redirect links and copies the result', async ({ page, context }) =
 	const cleaned = page.getByTestId('cleaned');
 	await expect(cleaned).toHaveText('https://news.example.org/story?id=7');
 	await page.getByRole('button', { name: 'Copy' }).click();
-	await expect(page.getByRole('button', { name: 'Copied!' })).toBeVisible();
+	await expect(page.getByTestId('toast')).toHaveText('Link copied.');
 	expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
 		'https://news.example.org/story?id=7'
 	);
