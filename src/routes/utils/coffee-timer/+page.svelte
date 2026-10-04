@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	import { resolve } from '$app/paths';
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
 	import { formatDuration } from '$lib/utils/time';
 	import { Timer } from '$lib/utils/timer.svelte';
@@ -61,13 +60,8 @@
 </svelte:head>
 
 <main
-	class="mx-auto flex min-h-svh max-w-md flex-col gap-6 p-4 text-gray-800 sm:p-8 dark:text-gray-200"
+	class="mx-auto flex max-w-md flex-col gap-6 px-4 pt-2 pb-4 text-gray-800 sm:px-8 sm:pb-8 dark:text-gray-200"
 >
-	<a href={resolve('/utils')} class="text-sm text-gray-600 hover:underline dark:text-gray-400">
-		← Utils
-	</a>
-	<h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">☕ Coffee Timer</h1>
-
 	<div
 		class="rounded-2xl py-10 text-center transition-colors {over
 			? 'bg-amber-300 dark:bg-amber-700'
