@@ -121,3 +121,50 @@ test('deleting, clearing and backing up the history', async ({ page }) => {
 	await expect(page.getByTestId('history-empty')).toBeVisible();
 	expect(await page.evaluate(() => localStorage.getItem('app:workout-history'))).toBeNull();
 });
+
+test('an empty workout left from an earlier day is dated today', async ({ page }) => {
+	await page.addInitScript(() => {
+		if (sessionStorage.getItem('seeded')) return;
+		sessionStorage.setItem('seeded', '1');
+		localStorage.setItem('app:version', '2');
+		localStorage.setItem(
+			'app:weightlifting:workout',
+			JSON.stringify({ date: 'Mon, Jan 1, 2024', unit: 'lb', exercises: [] })
+		);
+	});
+	await gotoHydrated(page, '/utils/weightlifting');
+	await tab(page, 'Workout').click();
+	const today = await page.evaluate(() =>
+		new Date().toLocaleDateString(undefined, {
+			weekday: 'short',
+			month: 'short',
+			day: 'numeric',
+			year: 'numeric'
+		})
+	);
+	await expect(page.getByLabel('Date')).toHaveValue(today);
+});
+
+test('repeating twice does not save an untouched copy as a workout', async ({ page }) => {
+	await gotoHydrated(page, '/utils/weightlifting');
+	await tab(page, 'Workout').click();
+	await logExercise(page, 'Squat', '225', '5');
+	await page.getByRole('button', { name: 'Finish workout' }).click();
+	await logExercise(page, 'Bench Press', '135', '8');
+	await page.getByRole('button', { name: 'Finish workout' }).click();
+
+	await tab(page, 'History').click();
+	await entries(page).nth(0).getByRole('button', { name: 'Repeat' }).click();
+	await tab(page, 'History').click();
+	await entries(page).nth(1).getByRole('button', { name: 'Repeat' }).click();
+	await tab(page, 'History').click();
+	await expect(entries(page)).toHaveCount(2);
+
+	// Once the copy is actually used, it's kept.
+	await tab(page, 'Workout').click();
+	await page.getByLabel('Squat set 1 reps').fill('6');
+	await tab(page, 'History').click();
+	await entries(page).nth(0).getByRole('button', { name: 'Repeat' }).click();
+	await tab(page, 'History').click();
+	await expect(entries(page)).toHaveCount(3);
+});

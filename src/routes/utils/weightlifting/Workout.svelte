@@ -70,7 +70,16 @@
 		nextId = 1 + Math.max(0, ...next.exercises.flatMap((e) => [e.id, ...e.sets.map((s) => s.id)]));
 	};
 
-	persist(entries.liftingWorkout, () => workout, useWorkout);
+	// An empty workout saved on an earlier day (e.g. right after "Finish workout") is dated today;
+	// "Finish workout" is disabled until something is logged, so it can't refresh the date.
+	persist(
+		entries.liftingWorkout,
+		() => workout,
+		(saved) => useWorkout(workoutHasContent(saved) ? saved : { ...saved, date: today() })
+	);
+
+	/** JSON of the workout as Repeat filled it; an untouched copy isn't saved again by Repeat. */
+	let repeated: string | undefined;
 
 	let hasContent = $derived(workoutHasContent(workout));
 
@@ -102,12 +111,13 @@
 
 	/** Starts a new workout with the same exercises and sets as `source` (dated today). */
 	export function repeat(source: Workout) {
-		if (workoutHasContent(workout)) {
+		if (workoutHasContent(workout) && JSON.stringify(workout) !== repeated) {
 			onFinish?.($state.snapshot(workout));
 			toast('Your current workout was saved to history.');
 		}
 		// A plain copy: `source` comes from reactive state, which structuredClone can't copy.
 		useWorkout({ ...$state.snapshot(source), date: today() });
+		repeated = JSON.stringify(workout);
 	}
 
 	async function copy() {
