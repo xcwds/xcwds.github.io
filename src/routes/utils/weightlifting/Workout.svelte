@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { lb, workoutToText, type Exercise, type Workout } from '$lib/utils/lifting';
+	import { persist } from '$lib/persist.svelte';
+	import { entries } from '$lib/storage';
 	import { button, card, field, primary } from './styles';
 
 	let { calculatorWeight = 0 }: { calculatorWeight?: number } = $props();
 
-	const STORAGE_KEY = 'lifting-workout';
 	const SUGGESTIONS = [
 		'Bench Press',
 		'Squat',
@@ -34,33 +35,21 @@
 	let workout = $state<Workout>({ date: today(), exercises: [] });
 	let copied = $state(false);
 	let canShare = $state(false);
-	let loaded = false;
 	let nextId = 1;
 	const id = () => nextId++;
 
+	persist(
+		entries.liftingWorkout,
+		() => workout,
+		(saved) => {
+			workout = saved;
+			nextId =
+				1 + Math.max(0, ...saved.exercises.flatMap((e) => [e.id, ...e.sets.map((s) => s.id)]));
+		}
+	);
+
 	onMount(() => {
 		canShare = typeof navigator.share === 'function';
-		try {
-			const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null') as Workout | null;
-			if (saved?.exercises) {
-				workout = saved;
-				nextId =
-					1 + Math.max(0, ...saved.exercises.flatMap((e) => [e.id, ...e.sets.map((s) => s.id)]));
-			}
-		} catch {
-			// Ignore unreadable storage.
-		}
-		loaded = true;
-	});
-
-	$effect(() => {
-		const snapshot = JSON.stringify(workout);
-		if (!loaded) return;
-		try {
-			localStorage.setItem(STORAGE_KEY, snapshot);
-		} catch {
-			// Not persisted; the workout still works while the page is open.
-		}
 	});
 
 	function addExercise() {

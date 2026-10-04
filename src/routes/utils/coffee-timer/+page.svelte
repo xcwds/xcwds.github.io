@@ -2,15 +2,25 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
+	import { persist } from '$lib/persist.svelte';
+	import { entries } from '$lib/storage';
 	import { formatDuration } from '$lib/utils/time';
 	import { Timer } from '$lib/utils/timer.svelte';
 
 	const DEFAULT_MS = 90_000;
-	const STORAGE_KEY = 'coffee-timer-duration';
 
 	let base = $state(DEFAULT_MS);
 	const timer = new Timer(DEFAULT_MS, () => beep(3));
 	let over = $derived(timer.running && timer.done);
+
+	persist(
+		entries.coffeeDuration,
+		() => base,
+		(saved) => {
+			base = saved;
+			timer.reset(saved);
+		}
+	);
 
 	const awake = browser ? keepAwake(() => timer.running) : undefined;
 	$effect(() => {
@@ -19,15 +29,6 @@
 	});
 
 	onMount(() => {
-		try {
-			const saved = Number(localStorage.getItem(STORAGE_KEY));
-			if (saved > 0) {
-				base = saved;
-				timer.reset(saved);
-			}
-		} catch {
-			// Storage unavailable; keep the default.
-		}
 		return () => {
 			awake?.destroy();
 			timer.destroy();
@@ -36,11 +37,6 @@
 
 	function setBase(ms: number) {
 		base = ms;
-		try {
-			localStorage.setItem(STORAGE_KEY, String(ms));
-		} catch {
-			// Not persisted; fine.
-		}
 	}
 
 	function adjust(ms: number) {

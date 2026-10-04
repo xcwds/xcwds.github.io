@@ -1,28 +1,21 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { persist } from '$lib/persist.svelte';
+	import { entries } from '$lib/storage';
 	import PlateCalculator from './PlateCalculator.svelte';
 	import WorkoutTracker from './Workout.svelte';
 	import { toggle } from './styles';
 
-	const TAB_KEY = 'lifting-tab';
 	let tab = $state<'plates' | 'workout'>('plates');
 	let total = $state(0);
 
-	onMount(() => {
-		try {
-			if (localStorage.getItem(TAB_KEY) === 'workout') tab = 'workout';
-		} catch {
-			// Default tab.
-		}
-	});
+	persist(
+		entries.liftingTab,
+		() => tab,
+		(saved) => (tab = saved)
+	);
 
 	function show(next: 'plates' | 'workout') {
 		tab = next;
-		try {
-			localStorage.setItem(TAB_KEY, next);
-		} catch {
-			// Not remembered; fine.
-		}
 	}
 </script>
 
