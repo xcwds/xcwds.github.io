@@ -17,3 +17,7 @@ Package manager: pnpm.
   offline use. The manifest's `share_target` sends Android shares to `/utils/url-sanitizer`; the service
   worker moves the shared link from `?query` to `#url=` so it never reaches the server. The iPhone
   Shortcut opens `#url=<encoded link>` directly. Keep shared links out of query strings.
+- The root layout is the app shell: a header (back arrow + page title as the page's only `<h1>`), a bottom tab
+  bar on phones and header links on desktop. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
+  which reads `tools.ts` and the recipe data, so new tools/recipes need no nav changes. Pages must not render
+  their own `<h1>` or back links. Roadmap for further app features: issue #17.

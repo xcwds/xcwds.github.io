@@ -23,11 +23,7 @@
 	<title>Chris Waters</title>
 </svelte:head>
 
-<main class="mx-auto flex min-h-svh max-w-2xl flex-col justify-center gap-8 p-6 sm:p-12">
-	<header class="text-center">
-		<h1 class="text-3xl font-semibold text-gray-900 dark:text-gray-100">Chris Waters</h1>
-	</header>
-
+<main class="mx-auto flex max-w-2xl flex-col gap-8 px-6 pt-2 pb-6 sm:px-12 sm:pb-12">
 	<nav aria-label="Sections">
 		<ul class="grid gap-3 sm:grid-cols-2">
 			{#each sections as section (section.path)}

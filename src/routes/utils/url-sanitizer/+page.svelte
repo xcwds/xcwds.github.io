@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { resolve } from '$app/paths';
 	import { readSharedText } from '$lib/utils/share';
 	import { buildLink, parseLink, readParams, type Param } from '$lib/utils/url';
 
@@ -88,12 +87,9 @@
 	<title>URL Sanitizer</title>
 </svelte:head>
 
-<main class="mx-auto flex max-w-xl flex-col gap-6 p-4 text-gray-800 sm:p-8 dark:text-gray-200">
-	<a href={resolve('/utils')} class="text-sm text-gray-600 hover:underline dark:text-gray-400">
-		← Utils
-	</a>
-	<h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">🧼 URL Sanitizer</h1>
-
+<main
+	class="mx-auto flex max-w-xl flex-col gap-6 px-4 pt-2 pb-4 text-gray-800 sm:px-8 sm:pb-8 dark:text-gray-200"
+>
 	<section class="flex flex-col gap-2">
 		<label for="link" class="text-sm">Paste a link</label>
 		<textarea

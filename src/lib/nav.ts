@@ -1,0 +1,47 @@
+import { getRecipe } from '$lib/recipes';
+import { tools } from '$lib/utils/tools';
+
+/** Top-level sections shown in the tab bar (phones) and header (desktop). */
+export const sections = [
+	{ path: '/', label: 'Home', emoji: '🏠' },
+	{ path: '/recipes', label: 'Recipes', emoji: '📖' },
+	{ path: '/utils', label: 'Utils', emoji: '🧰' }
+] as const;
+
+export type SectionPath = (typeof sections)[number]['path'];
+
+export type RouteInfo = {
+	title: string;
+	emoji?: string;
+	/** Where the header's back arrow goes; top-level sections have none. */
+	parent?: SectionPath;
+};
+
+const normalize = (pathname: string) => pathname.replace(/\/+$/, '') || '/';
+
+/** Header title and back target for a path. New tools and recipes are picked up automatically. */
+export function routeInfo(pathname: string): RouteInfo {
+	const path = normalize(pathname);
+	if (path === '/') return { title: 'Chris Waters' };
+
+	const section = sections.find((s) => s.path === path);
+	if (section) return { title: section.label };
+
+	const tool = tools.find((t) => t.path === path);
+	if (tool) return { title: tool.name, emoji: tool.emoji, parent: '/utils' };
+
+	const recipeSlug = path.match(/^\/recipes\/([^/]+)$/)?.[1];
+	const recipe = recipeSlug ? getRecipe(recipeSlug) : undefined;
+	if (recipe) return { title: recipe.name, emoji: recipe.emoji, parent: '/recipes' };
+
+	return { title: 'Chris Waters', parent: '/' };
+}
+
+/** The section a path belongs to, for highlighting the current tab. */
+export function activeSection(pathname: string): SectionPath {
+	const path = normalize(pathname);
+	const match = sections
+		.filter((s) => s.path !== '/')
+		.find((s) => path === s.path || path.startsWith(`${s.path}/`));
+	return match?.path ?? '/';
+}
