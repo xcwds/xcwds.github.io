@@ -136,6 +136,34 @@ test('ingredients switch between US and metric, and the choice is kept', async (
 	await expect(page.getByRole('radio', { name: 'Metric' })).toHaveAttribute('aria-checked', 'true');
 });
 
+test('choosing another pan scales the recipe by capacity', async ({ page }) => {
+	await gotoHydrated(page, '/recipes/banana-bread');
+	const list = page.getByTestId('ingredients');
+	const pan = page.getByLabel('Your pan');
+	await expect(pan).toHaveValue('loaf-9');
+	await expect(list).toContainText('1 ½ cups all-purpose flour');
+	await expect(page.getByTestId('scaled-note')).toHaveCount(0);
+
+	// A 9×9 square holds 10 cups to the loaf's 8.
+	await pan.selectOption('square-9');
+	await expect(list).toContainText('1 ⅞ cups all-purpose flour');
+	await expect(page.getByTestId('scaled-note')).toContainText(
+		'Quantities scaled ×1.25 for a 9×9-inch square pan.'
+	);
+	await expect(page.getByTestId('scaled-note')).toContainText('Bake time changes with the pan');
+
+	// Pans and loaf count combine: two 8½×4½ loaves.
+	await pan.selectOption('loaf-8');
+	await page.getByRole('button', { name: 'More loaves' }).click();
+	await expect(page.getByTestId('servings-target')).toHaveText('2 loaves');
+	await expect(list).toContainText('2 ¼ cups all-purpose flour');
+
+	await page.getByRole('button', { name: 'Reset to 1 loaf, 9×5-inch loaf' }).click();
+	await expect(pan).toHaveValue('loaf-9');
+	await expect(list).toContainText('1 ½ cups all-purpose flour');
+	await expect(page.getByTestId('scaled-note')).toHaveCount(0);
+});
+
 test('roast chicken scales by whole chickens', async ({ page }) => {
 	await gotoHydrated(page, '/recipes/roast-chicken');
 	await page.getByRole('button', { name: 'More servings' }).click();

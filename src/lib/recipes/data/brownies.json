@@ -1,0 +1,57 @@
+{
+	"slug": "brownies",
+	"name": "Fudgy Brownies",
+	"emoji": "🍫",
+	"tags": ["Baking", "Dessert"],
+	"description": "One bowl of pantry staples, fudgy middles and a crackly top. Cut them small; they're rich.",
+	"yield": { "amount": 1, "unit": "pans", "singular": "pan" },
+	"time": "45 min",
+	"oven": { "temp": 350, "minutes": [25, 30], "food": "baked" },
+	"pan": "square-8",
+	"notes": ["Makes 16 squares in an 8×8-inch (20×20 cm) pan."],
+	"ingredients": [
+		{
+			"amount": 0.5,
+			"unit": "cup",
+			"item": "butter",
+			"note": "melted",
+			"alt": { "amount": 113, "unit": "g" }
+		},
+		{ "amount": 1, "unit": "cup", "item": "sugar", "alt": { "amount": 200, "unit": "g" } },
+		{ "amount": 2, "item": "large egg", "plural": "large eggs" },
+		{ "amount": 1, "unit": "tsp", "item": "vanilla extract" },
+		{
+			"amount": 0.333,
+			"unit": "cup",
+			"item": "unsweetened cocoa powder",
+			"alt": { "amount": 28, "unit": "g" }
+		},
+		{
+			"amount": 0.5,
+			"unit": "cup",
+			"item": "all-purpose flour",
+			"alt": { "amount": 65, "unit": "g" }
+		},
+		{ "amount": 0.25, "unit": "tsp", "item": "salt" },
+		{ "amount": 0.25, "unit": "tsp", "item": "baking powder" }
+	],
+	"instructions": [
+		"Heat the oven to 350°F (175°C). Line an 8×8-inch (20×20 cm) pan with parchment, leaving some overhang to lift the brownies out.",
+		"Stir the melted butter and sugar together in a large bowl. Beat in the eggs one at a time, then the vanilla, until glossy.",
+		"Sift in the cocoa, flour, salt and baking powder and fold until just combined.",
+		"Spread the batter evenly in the pan.",
+		{
+			"text": "Bake until the edges are set and a toothpick in the center comes out with a few moist crumbs, 25–30 minutes.",
+			"timer": { "minutes": [25, 30], "label": "Brownies", "oven": true }
+		},
+		{
+			"text": "Cool completely in the pan, at least 1 hour, before lifting out and cutting into squares.",
+			"timer": { "minutes": 60, "label": "Brownies cooling" }
+		}
+	],
+	"tips": [
+		"For a crackly top, beat the eggs and sugar hard for a minute before adding the rest.",
+		"Stir in ½ cup (85 g) chocolate chips or chopped nuts with the flour.",
+		"Underbaked is better than overbaked: they firm up as they cool."
+	]
+}

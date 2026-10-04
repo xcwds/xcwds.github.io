@@ -27,6 +27,10 @@ re-import from Notion.
     volume (flour, sugar, butter, chocolate chips) and small metric weights better measured with
     spoons. Without it, the page converts by unit (`src/lib/recipes/units.ts`): cups ↔ ml,
     oz/lb ↔ g/kg. Spoons and counts are never converted.
+- `pan` — an id from `PANS` in `src/lib/recipes/pans.ts`, only for recipes whose yield counts pans
+  (`"unit": "pans"` or `"loaves"`), so each pan in the yield is that pan. The page offers other
+  pans and scales by capacity (cups the pan holds), on top of the servings count, with a note that
+  bake time changes with the pan. Add pans to `PANS` with their standard capacity.
 - Units: the page shows ingredients in the reader's choice of US or metric
   (`settings.recipeUnits`, set on any recipe or in Settings → Tool defaults; `null` = as written).
   A recipe's own system is the one most of its measured ingredients use. Quantities in step text

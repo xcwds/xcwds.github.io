@@ -4,6 +4,7 @@ import { FOOD_PRESETS, foodPreset } from '$lib/utils/oven';
 import { MAX_STEP_TIMER_MINUTES, recipes, searchRecipes, stepText, stepTimer } from './index';
 import { isScalable } from './scale';
 import { systemOf } from './units';
+import { getPan } from './pans';
 
 describe('recipes', () => {
 	it('loads every data file', () => {
@@ -44,6 +45,15 @@ describe('recipes', () => {
 			expect(lo).toBeGreaterThan(0);
 			expect(hi).toBeGreaterThanOrEqual(lo);
 			expect(oven.temp).toBeGreaterThan(foodPreset(oven.food).doneF);
+		}
+	});
+});
+
+describe('pans', () => {
+	it('name a known pan, on recipes whose yield counts pans or loaves', () => {
+		for (const recipe of recipes.filter((r) => r.pan)) {
+			expect(getPan(recipe.pan!), recipe.slug).toBeDefined();
+			expect(['pans', 'loaves'], recipe.slug).toContain(recipe.yield.unit);
 		}
 	});
 });

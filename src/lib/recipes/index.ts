@@ -1,4 +1,5 @@
 import type { FoodId } from '$lib/utils/oven';
+import type { PanId } from './pans';
 import type { Ingredient, RecipeYield } from './scale';
 
 export type { Ingredient, RecipeYield } from './scale';
@@ -46,6 +47,11 @@ export type Recipe = {
 	yield: RecipeYield;
 	time?: string;
 	oven?: RecipeOven;
+	/**
+	 * The pan it's baked in, for recipes whose yield counts pans (loaves, pans). The page can
+	 * scale it to another pan; each pan in the yield is then that pan.
+	 */
+	pan?: PanId;
 	notes?: string[];
 	ingredients: Ingredient[];
 	instructions: Instruction[];

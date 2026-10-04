@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { stepText, stepTimer, type StepTimer } from '$lib/recipes';
+	import { getPan, PANS, panRatio, type PanId } from '$lib/recipes/pans';
 	import { formatIngredient, formatYield, isScalable } from '$lib/recipes/scale';
 	import { nativeSystem, systemOf } from '$lib/recipes/units';
 	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
@@ -25,7 +26,19 @@
 	let scalable = $derived(recipe.ingredients.some(isScalable));
 	let stepSize = $derived(base.step ?? 1);
 	let target = $derived(base.amount);
-	let factor = $derived(target / base.amount);
+	// Pan: starts at the recipe's; another pan scales each one by capacity.
+	let panId = $derived<PanId | undefined>(recipe.pan);
+	let panChanged = $derived(panId !== recipe.pan);
+	let factor = $derived(
+		(target / base.amount) * (recipe.pan && panId ? panRatio(recipe.pan, panId) : 1)
+	);
+	let changed = $derived(target !== base.amount || panChanged);
+	/** "9×5-inch loaf" from "9×5-inch loaf (23×13 cm)". */
+	const panName = (id: PanId | undefined) => getPan(id ?? '')?.label.replace(/ \(.*\)$/, '') ?? '';
+	function resetScale() {
+		target = base.amount;
+		panId = recipe.pan;
+	}
 	// US or metric: your choice (Settings → Tool defaults, or the toggle here), else as written.
 	let measured = $derived(recipe.ingredients.filter(isScalable));
 	let native = $derived(nativeSystem(measured.map((i) => i.unit)));
@@ -139,20 +152,38 @@
 					aria-label="More {base.unit}"
 					onclick={() => stepTarget(1)}>+</button
 				>
-				{#if factor !== 1}
+				{#if changed}
 					<button
 						type="button"
-						class="rounded-md bg-white/70 px-3 py-2 text-sm hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
-						onclick={() => (target = base.amount)}
+						class="min-h-11 rounded-md bg-white/70 px-3 py-2 text-sm hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
+						onclick={resetScale}
 					>
-						Reset to {formatYield(base.amount, base)}
+						Reset to {formatYield(base.amount, base)}{recipe.pan ? `, ${panName(recipe.pan)}` : ''}
 					</button>
 				{/if}
 			</div>
-			{#if factor !== 1}
+			{#if recipe.pan}
+				<label class="flex flex-col gap-1 text-sm">
+					<span>Your pan</span>
+					<select
+						value={panId}
+						onchange={(e) => (panId = e.currentTarget.value as PanId)}
+						class="min-h-11 rounded-md border border-gray-300 bg-white px-3 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+					>
+						{#each PANS as pan (pan.id)}
+							<option value={pan.id}>{pan.label}{pan.id === recipe.pan ? ' · recipe' : ''}</option>
+						{/each}
+					</select>
+				</label>
+			{/if}
+			{#if changed}
 				<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="scaled-note">
-					Quantities scaled ×{Math.round(factor * 100) / 100}. Times and pan sizes are not; check
-					doneness as you go.
+					Quantities scaled ×{Math.round(factor * 100) / 100}{panChanged
+						? ` for a ${panName(panId)} pan`
+						: ''}.
+					{panChanged
+						? 'Bake time changes with the pan: deeper takes longer, shallower less. Start checking early.'
+						: 'Times and pan sizes are not; check doneness as you go.'}
 				</p>
 			{/if}
 		{/if}

@@ -75,6 +75,14 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 		['/recipes'],
 		['/recipes/pizza-dough'],
 		[
+			'/recipes/banana-bread',
+			(p) =>
+				p
+					.getByLabel('Your pan')
+					.selectOption('square-9')
+					.then(() => {})
+		],
+		[
 			'/recipes/chocolate-chip-cookies',
 			async (p) => {
 				await p.getByRole('button', { name: 'More cookies' }).click();

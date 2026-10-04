@@ -6,6 +6,7 @@
 	"description": "One bowl, no mixer, and the best use for bananas that have gone brown and spotty.",
 	"yield": { "amount": 1, "unit": "loaves", "singular": "loaf" },
 	"time": "1 h 15 min",
+	"pan": "loaf-9",
 	"oven": { "temp": 350, "minutes": [55, 65], "food": "baked" },
 	"notes": [
 		"Bake in a 9×5-inch (23×13 cm) loaf pan. Making more than one loaf? Use one pan per loaf."
