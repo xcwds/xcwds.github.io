@@ -1,26 +1,29 @@
 import { describe, expect, it } from 'vitest';
 import {
-	EQUIPMENT,
-	lb,
+	UNITS,
+	findEquipment,
+	formatWeight,
 	platesForTarget,
 	sumPlates,
 	totalWeight,
-	workoutToText,
-	type Equipment
+	workoutToText
 } from './lifting';
 
-const eq = (id: string) => EQUIPMENT.find((e) => e.id === id) as Equipment;
+const eq = (id: string) => findEquipment('lb', id);
+const kg = (id: string) => findEquipment('kg', id);
+const LB = UNITS.lb.plates;
+const KG = UNITS.kg.plates;
 
 describe('totalWeight', () => {
 	it('adds the bar and plates on both sides', () => {
 		const side = { 45: 1, 25: 1, 2.5: 1 };
 		expect(sumPlates(side)).toBe(72.5);
-		expect(totalWeight(eq('barbell-45'), [side, side])).toBe(190);
-		expect(totalWeight(eq('barbell-25'), [{}, {}])).toBe(25);
+		expect(totalWeight(eq('barbell'), [side, side])).toBe(190);
+		expect(totalWeight(eq('barbell-light'), [{}, {}])).toBe(25);
 	});
 
 	it('supports uneven sides', () => {
-		expect(totalWeight(eq('barbell-45'), [{ 45: 1 }, { 25: 1 }])).toBe(115);
+		expect(totalWeight(eq('barbell'), [{ 45: 1 }, { 25: 1 }])).toBe(115);
 	});
 
 	it('counts both dumbbells of a pair and one post on a kettlebell', () => {
@@ -32,41 +35,45 @@ describe('totalWeight', () => {
 
 describe('platesForTarget', () => {
 	it('uses the fewest plates per side', () => {
-		expect(platesForTarget(eq('barbell-45'), 225)).toEqual({
+		expect(platesForTarget(eq('barbell'), 225, LB)).toEqual({
 			perSide: { 45: 2 },
 			total: 225,
 			exact: true
 		});
 		// 60 per side: 35 + 25 beats 45 + 10 + 5.
-		expect(platesForTarget(eq('barbell-45'), 165)?.perSide).toEqual({ 35: 1, 25: 1 });
-		expect(platesForTarget(eq('barbell-45'), 47.5)?.perSide).toEqual({ 1.25: 1 });
+		expect(platesForTarget(eq('barbell'), 165, LB)?.perSide).toEqual({ 35: 1, 25: 1 });
+		expect(platesForTarget(eq('barbell'), 47.5, LB)?.perSide).toEqual({ 1.25: 1 });
 	});
 
 	it('splits a dumbbell pair target across both dumbbells', () => {
 		// 55 total → 27.5 each → 10 per side on a 7.5 handle.
-		expect(platesForTarget(eq('dumbbells'), 55)).toEqual({
+		expect(platesForTarget(eq('dumbbells'), 55, LB)).toEqual({
 			perSide: { 10: 1 },
 			total: 55,
 			exact: true
 		});
-		expect(platesForTarget(eq('dumbbell'), 27.5)?.perSide).toEqual({ 10: 1 });
+		expect(platesForTarget(eq('dumbbell'), 27.5, LB)?.perSide).toEqual({ 10: 1 });
 	});
 
 	it('loads a kettlebell on one side only', () => {
-		expect(platesForTarget(eq('kettlebell'), 40)?.perSide).toEqual({ 35: 1 });
+		expect(platesForTarget(eq('kettlebell'), 40, LB)?.perSide).toEqual({ 35: 1 });
 	});
 
 	it('falls back to the closest weight under the target', () => {
-		expect(platesForTarget(eq('barbell-45'), 46)).toEqual({ perSide: {}, total: 45, exact: false });
-		expect(platesForTarget(eq('barbell-45'), 136)?.total).toBe(135);
+		expect(platesForTarget(eq('barbell'), 46, LB)).toEqual({
+			perSide: {},
+			total: 45,
+			exact: false
+		});
+		expect(platesForTarget(eq('barbell'), 136, LB)?.total).toBe(135);
 	});
 
 	it('respects which plates are available', () => {
-		expect(platesForTarget(eq('barbell-45'), 115, [45, 25, 10, 5])?.perSide).toEqual({
+		expect(platesForTarget(eq('barbell'), 115, [45, 25, 10, 5])?.perSide).toEqual({
 			25: 1,
 			10: 1
 		});
-		expect(platesForTarget(eq('barbell-45'), 50, [45])).toEqual({
+		expect(platesForTarget(eq('barbell'), 50, [45])).toEqual({
 			perSide: {},
 			total: 45,
 			exact: false
@@ -74,39 +81,42 @@ describe('platesForTarget', () => {
 	});
 
 	it('rejects targets lighter than the bar', () => {
-		expect(platesForTarget(eq('barbell-45'), 40)).toBeNull();
-		expect(platesForTarget(eq('dumbbells'), 10)).toBeNull();
-		expect(platesForTarget(eq('barbell-45'), Number.NaN)).toBeNull();
+		expect(platesForTarget(eq('barbell'), 40, LB)).toBeNull();
+		expect(platesForTarget(eq('dumbbells'), 10, LB)).toBeNull();
+		expect(platesForTarget(eq('barbell'), Number.NaN, LB)).toBeNull();
 	});
 });
 
-describe('lb', () => {
+describe('formatWeight', () => {
 	it('drops trailing zeros', () => {
-		expect(lb(135)).toBe('135 lb');
-		expect(lb(52.5)).toBe('52.5 lb');
-		expect(lb(1.25)).toBe('1.25 lb');
+		expect(formatWeight(135, 'lb')).toBe('135 lb');
+		expect(formatWeight(52.5, 'lb')).toBe('52.5 lb');
+		expect(formatWeight(1.25, 'lb')).toBe('1.25 lb');
 	});
 });
 
 describe('workoutToText', () => {
 	it('groups identical consecutive sets and skips empty ones', () => {
-		const text = workoutToText({
-			date: 'Sat, Oct 4, 2026',
-			exercises: [
-				{
-					id: 1,
-					name: 'Bench Press',
-					sets: [
-						{ id: 1, weight: 135, reps: 5 },
-						{ id: 2, weight: 135, reps: 5 },
-						{ id: 3, weight: 155, reps: 3 },
-						{ id: 4, weight: null, reps: null }
-					]
-				},
-				{ id: 2, name: 'Push-ups', sets: [{ id: 1, weight: null, reps: 1 }] },
-				{ id: 3, name: '', sets: [] }
-			]
-		});
+		const text = workoutToText(
+			{
+				date: 'Sat, Oct 4, 2026',
+				exercises: [
+					{
+						id: 1,
+						name: 'Bench Press',
+						sets: [
+							{ id: 1, weight: 135, reps: 5 },
+							{ id: 2, weight: 135, reps: 5 },
+							{ id: 3, weight: 155, reps: 3 },
+							{ id: 4, weight: null, reps: null }
+						]
+					},
+					{ id: 2, name: 'Push-ups', sets: [{ id: 1, weight: null, reps: 1 }] },
+					{ id: 3, name: '', sets: [] }
+				]
+			},
+			'lb'
+		);
 		expect(text).toBe(
 			[
 				'Workout – Sat, Oct 4, 2026',
@@ -119,5 +129,31 @@ describe('workoutToText', () => {
 				'  1 set × 1 rep'
 			].join('\n')
 		);
+	});
+});
+
+describe('kg', () => {
+	it('uses kg bars, handles and plates', () => {
+		expect(UNITS.kg.equipment.map((e) => e.name)).toContain('Barbell (20 kg)');
+		expect(totalWeight(kg('barbell'), [{ 20: 1 }, { 20: 1 }])).toBe(60);
+		expect(totalWeight(kg('barbell-light'), [{}, {}])).toBe(15);
+	});
+
+	it('finds the fewest kg plates for a target', () => {
+		// 100 kg on a 20 kg bar: 40 kg per side = 25 + 15.
+		expect(platesForTarget(kg('barbell'), 100, KG)).toEqual({
+			perSide: { 25: 1, 15: 1 },
+			total: 100,
+			exact: true
+		});
+		expect(formatWeight(102.5, 'kg')).toBe('102.5 kg');
+	});
+
+	it('labels workout weights with the unit', () => {
+		const workout = {
+			date: 'Sun',
+			exercises: [{ id: 1, name: 'Squat', sets: [{ id: 2, weight: 100, reps: 5 }] }]
+		};
+		expect(workoutToText(workout, 'kg')).toContain('@ 100 kg');
 	});
 });

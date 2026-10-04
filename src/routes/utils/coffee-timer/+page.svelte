@@ -4,23 +4,38 @@
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
 	import { markBusy } from '$lib/app-update.svelte';
 	import { persist } from '$lib/persist.svelte';
+	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { entries } from '$lib/storage';
 	import { formatDuration } from '$lib/utils/time';
 	import { Timer } from '$lib/utils/timer.svelte';
 
-	const DEFAULT_MS = 90_000;
+	/** Settings → Tool defaults (90 s unless changed). */
+	let defaultMs = $derived(settings.coffeeDefaultSeconds * 1000);
 
-	let base = $state(DEFAULT_MS);
-	const timer = new Timer(DEFAULT_MS, () => beep(3));
+	let base = $state(90_000);
+	const timer = new Timer(90_000, () => beep(3));
 	let over = $derived(timer.running && timer.done);
 
 	// The countdown itself isn't saved, so an app update (reload) would reset it.
 	markBusy('coffee timer', () => timer.running);
 
+	let hadSaved = false;
+	// With no saved duration, start from the default once settings have loaded.
+	let seeded = false;
+	$effect(() => {
+		if (!settingsStatus.ready || seeded) return;
+		seeded = true;
+		if (!hadSaved && !timer.running) {
+			base = defaultMs;
+			timer.reset(defaultMs);
+		}
+	});
+
 	persist(
 		entries.coffeeDuration,
 		() => base,
 		(saved) => {
+			hadSaved = true;
 			base = saved;
 			timer.reset(saved);
 		}
@@ -109,13 +124,13 @@
 
 	<p class="text-center text-sm text-gray-600 dark:text-gray-400">
 		Resets to {formatDuration(base)}.
-		{#if base !== DEFAULT_MS}
+		{#if base !== defaultMs}
 			<button
 				type="button"
 				class="underline"
-				onclick={() => (setBase(DEFAULT_MS), timer.reset(DEFAULT_MS))}
+				onclick={() => (setBase(defaultMs), timer.reset(defaultMs))}
 			>
-				Back to 1:30
+				Back to {formatDuration(defaultMs)}
 			</button>
 		{/if}
 	</p>

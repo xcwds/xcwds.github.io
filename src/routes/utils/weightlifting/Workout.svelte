@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { lb, workoutToText, type Exercise, type Workout } from '$lib/utils/lifting';
+	import { formatWeight, workoutToText, type Exercise, type Workout } from '$lib/utils/lifting';
 	import { persist } from '$lib/persist.svelte';
+	import { settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { entries } from '$lib/storage';
 	import { button, card, field, primary } from './styles';
 
 	let { calculatorWeight = 0 }: { calculatorWeight?: number } = $props();
+
+	// Weights are logged in the calculator's unit (switching units doesn't convert them).
+	let unit = $derived(settings.lifting.unit);
 
 	const SUGGESTIONS = [
 		'Bench Press',
@@ -72,7 +76,7 @@
 
 	async function copy() {
 		try {
-			await navigator.clipboard.writeText(workoutToText(workout));
+			await navigator.clipboard.writeText(workoutToText(workout, unit));
 			toast('Workout copied.');
 		} catch {
 			toast("Couldn't copy the workout.");
@@ -81,7 +85,7 @@
 
 	async function share() {
 		try {
-			await navigator.share({ text: workoutToText(workout) });
+			await navigator.share({ text: workoutToText(workout, unit) });
 		} catch {
 			// Share sheet dismissed.
 		}
@@ -118,7 +122,7 @@
 				<thead class="text-gray-600 dark:text-gray-400">
 					<tr>
 						<th class="w-8 text-left font-normal">Set</th>
-						<th class="text-left font-normal">Weight (lb)</th>
+						<th class="text-left font-normal">Weight ({unit})</th>
 						<th class="text-left font-normal">Reps</th>
 						<th class="w-10"><span class="sr-only">Remove</span></th>
 					</tr>
@@ -169,7 +173,7 @@
 					disabled={!calculatorWeight}
 					onclick={() => addSet(exercise, calculatorWeight)}
 				>
-					+ Set @ {lb(calculatorWeight)}
+					+ Set @ {formatWeight(calculatorWeight, unit)}
 				</button>
 			</div>
 		</div>

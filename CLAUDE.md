@@ -47,3 +47,7 @@ Package manager: pnpm.
   Install button / iPhone steps in Settings and hides once installed.
 - Accessibility baseline lives in `app.css`: 44px minimum controls, a visible `:focus-visible` ring and
   reduced-motion support. `e2e/app-extras.test.ts` audits tap targets on every page; add new pages to it.
+- Units are per tool, never app-wide: the weightlifting calculator has lb/kg (`settings.lifting.unit`, unit
+  systems in `src/lib/utils/lifting.ts`); the pizza dough calculator is always grams. Tool defaults live in
+  `settings` (coffee length, cooking presets, pizza defaults, lifting equipment and owned plates). Settings
+  load after pages mount, so seed page state from them in an effect gated on `settingsStatus.ready`.

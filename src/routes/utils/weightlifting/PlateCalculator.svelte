@@ -1,38 +1,61 @@
 <script lang="ts">
+	import { persist } from '$lib/persist.svelte';
+	import { settings, settingsStatus } from '$lib/settings.svelte';
+	import { entries } from '$lib/storage';
 	import {
-		EQUIPMENT,
-		PLATES,
+		UNITS,
+		WEIGHT_UNITS,
+		findEquipment,
+		formatWeight,
 		implementWeight,
-		lb,
 		platesForTarget,
 		totalWeight,
-		type Plate,
-		type PlateCounts
+		type EquipmentId,
+		type PlateCounts,
+		type WeightUnit
 	} from '$lib/utils/lifting';
-	import { persist } from '$lib/persist.svelte';
-	import { entries } from '$lib/storage';
 	import { button, card, field, primary, toggle } from './styles';
 
 	let { total = $bindable(0) }: { total?: number } = $props();
 
-	const PLATE_STYLE: Record<Plate, { height: string; color: string }> = {
-		45: { height: 'h-24', color: 'bg-blue-700' },
-		35: { height: 'h-21', color: 'bg-yellow-500' },
-		25: { height: 'h-18', color: 'bg-green-600' },
-		10: { height: 'h-14', color: 'bg-gray-100 border border-gray-400' },
-		5: { height: 'h-11', color: 'bg-red-600' },
-		2.5: { height: 'h-9', color: 'bg-gray-600' },
-		1.25: { height: 'h-7', color: 'bg-gray-400' }
+	type PlateStyle = { height: string; color: string };
+	const WHITE = 'bg-gray-100 border border-gray-400';
+	const PLATE_STYLE: Record<WeightUnit, Record<number, PlateStyle>> = {
+		lb: {
+			45: { height: 'h-24', color: 'bg-blue-700' },
+			35: { height: 'h-21', color: 'bg-yellow-500' },
+			25: { height: 'h-18', color: 'bg-green-600' },
+			10: { height: 'h-14', color: WHITE },
+			5: { height: 'h-11', color: 'bg-red-600' },
+			2.5: { height: 'h-9', color: 'bg-gray-600' },
+			1.25: { height: 'h-7', color: 'bg-gray-400' }
+		},
+		// Competition (IWF) colors.
+		kg: {
+			25: { height: 'h-24', color: 'bg-red-600' },
+			20: { height: 'h-24', color: 'bg-blue-700' },
+			15: { height: 'h-21', color: 'bg-yellow-500' },
+			10: { height: 'h-18', color: 'bg-green-600' },
+			5: { height: 'h-14', color: WHITE },
+			2.5: { height: 'h-11', color: 'bg-red-400' },
+			1.25: { height: 'h-9', color: 'bg-gray-400' }
+		}
 	};
 
-	let equipmentId = $state(EQUIPMENT[0].id);
+	let unit = $derived(settings.lifting.unit);
+	let system = $derived(UNITS[unit]);
+	/** The plates you have, per unit (Settings → Tool defaults, or the toggles in target mode). */
+	let available = $derived(settings.lifting.plates[unit]);
+
+	let equipmentId = $state<EquipmentId>('barbell');
 	let mode = $state<'load' | 'target'>('load');
 	let symmetric = $state(true);
 	let sides = $state<PlateCounts[]>([{}, {}]);
+	/** Unit the plate counts in `sides` are in; they're cleared when the unit changes. */
+	let sidesUnit = $state<WeightUnit>('lb');
 	let target = $state<number | null>(null);
-	let available = $state<Plate[]>([...PLATES]);
 
-	let equipment = $derived(EQUIPMENT.find((e) => e.id === equipmentId) ?? EQUIPMENT[0]);
+	let equipment = $derived(findEquipment(unit, equipmentId));
 	let oneSided = $derived(equipment.sides === 1);
 	let effectiveSides = $derived(symmetric || oneSided ? [sides[0], sides[0]] : sides);
 	let result = $derived(target === null ? null : platesForTarget(equipment, target, available));
@@ -41,19 +64,43 @@
 		total = totalWeight(equipment, effectiveSides);
 	});
 
+	let hadSaved = false;
 	persist(
 		entries.liftingCalculator,
-		() => ({ equipmentId, mode, symmetric, sides, available }),
+		() => ({ unit: sidesUnit, equipmentId, mode, symmetric, sides }),
 		(saved) => {
+			hadSaved = true;
 			equipmentId = saved.equipmentId ?? equipmentId;
 			mode = saved.mode ?? mode;
 			symmetric = saved.symmetric ?? symmetric;
-			sides = saved.sides ?? sides;
-			available = saved.available ?? available;
+			if (saved.unit && saved.sides) {
+				sidesUnit = saved.unit;
+				sides = saved.sides;
+			}
 		}
 	);
 
-	function change(side: number, plate: Plate, delta: number) {
+	// Settings load after this page mounts: then apply the default equipment (if nothing was
+	// saved) and clear plate counts saved in the other unit.
+	let seeded = false;
+	$effect(() => {
+		if (!settingsStatus.ready) return;
+		if (!seeded) {
+			seeded = true;
+			if (!hadSaved) equipmentId = settings.lifting.equipment;
+		}
+		if (sidesUnit !== unit) {
+			sides = [{}, {}];
+			sidesUnit = unit;
+			target = null;
+		}
+	});
+
+	function setUnit(next: WeightUnit) {
+		settings.lifting.unit = next;
+	}
+
+	function change(side: number, plate: number, delta: number) {
 		sides[side][plate] = Math.max(0, (sides[side][plate] ?? 0) + delta);
 	}
 
@@ -69,24 +116,39 @@
 		mode = 'load';
 	}
 
-	function toggleAvailable(plate: Plate) {
-		available = available.includes(plate)
+	function toggleAvailable(plate: number) {
+		settings.lifting.plates[unit] = available.includes(plate)
 			? available.filter((p) => p !== plate)
-			: PLATES.filter((p) => p === plate || available.includes(p));
+			: system.plates.filter((p) => p === plate || available.includes(p));
 	}
+
+	const weight = (w: number) => formatWeight(w, unit);
 
 	/** Plates for the diagram, heaviest nearest the bar. */
 	const stack = (counts: PlateCounts) =>
-		PLATES.flatMap((plate) => Array.from({ length: counts[plate] ?? 0 }, () => plate));
+		system.plates.flatMap((plate) => Array.from({ length: counts[plate] ?? 0 }, () => plate));
 	const plateList = (counts: PlateCounts) =>
-		PLATES.filter((p) => counts[p])
+		system.plates
+			.filter((p) => counts[p])
 			.map((p) => `${p}${(counts[p] ?? 0) > 1 ? ` × ${counts[p]}` : ''}`)
 			.join(', ') || 'no plates';
 </script>
 
 <section class="flex flex-col gap-4">
+	<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Units">
+		{#each WEIGHT_UNITS as u (u)}
+			<button
+				type="button"
+				role="radio"
+				aria-checked={unit === u}
+				class={toggle(unit === u)}
+				onclick={() => setUnit(u)}>{u === 'lb' ? 'Pounds (lb)' : 'Kilograms (kg)'}</button
+			>
+		{/each}
+	</div>
+
 	<div class="grid grid-cols-2 gap-2 sm:grid-cols-3" role="group" aria-label="Equipment">
-		{#each EQUIPMENT as item (item.id)}
+		{#each system.equipment as item (item.id)}
 			<button
 				type="button"
 				aria-pressed={equipmentId === item.id}
@@ -99,26 +161,30 @@
 	</div>
 
 	<div class="{card} flex flex-col items-center gap-3 text-center">
-		<p class="text-5xl font-semibold tabular-nums" data-testid="total">{lb(total)}</p>
+		<p class="text-5xl font-semibold tabular-nums" data-testid="total">{weight(total)}</p>
 		<p class="text-sm text-gray-600 dark:text-gray-400">
 			{#if equipment.count === 2}
-				2 dumbbells × {lb(implementWeight(equipment, effectiveSides))} each
+				2 dumbbells × {weight(implementWeight(equipment, effectiveSides))} each
 			{:else}
-				{lb(equipment.bar)}
-				{equipment.bar < 25 ? 'handle' : 'bar'} + {lb(total - equipment.bar)} plates
+				{weight(equipment.bar)}
+				{equipment.id.startsWith('barbell') ? 'bar' : 'handle'} + {weight(total - equipment.bar)} plates
 			{/if}
 		</p>
 		<div class="flex h-24 items-center justify-center" aria-hidden="true">
 			{#if !oneSided}
 				{#each stack(effectiveSides[0]).toReversed() as plate, i (i)}
 					<span
-						class="mx-px w-2.5 rounded-sm {PLATE_STYLE[plate].height} {PLATE_STYLE[plate].color}"
+						class="mx-px w-2.5 rounded-sm {PLATE_STYLE[unit][plate].height} {PLATE_STYLE[unit][
+							plate
+						].color}"
 					></span>
 				{/each}
 			{/if}
 			<span class="h-2 rounded-full bg-gray-500 {equipment.bar >= 25 ? 'w-24' : 'w-10'}"></span>
 			{#each stack(effectiveSides[oneSided ? 0 : 1]) as plate, i (i)}
-				<span class="mx-px w-2.5 rounded-sm {PLATE_STYLE[plate].height} {PLATE_STYLE[plate].color}"
+				<span
+					class="mx-px w-2.5 rounded-sm {PLATE_STYLE[unit][plate].height} {PLATE_STYLE[unit][plate]
+						.color}"
 				></span>
 			{/each}
 		</div>
@@ -169,12 +235,14 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each PLATES as plate (plate)}
+					{#each system.plates as plate (plate)}
 						<tr>
-							<th scope="row" class="py-1 text-left font-medium">{lb(plate)}</th>
+							<th scope="row" class="py-1 text-left font-medium">{weight(plate)}</th>
 							{#each symmetric || oneSided ? [0] : [0, 1] as side (side)}
 								{@const label =
-									symmetric || oneSided ? `${plate} lb` : `${plate} lb ${side ? 'right' : 'left'}`}
+									symmetric || oneSided
+										? `${plate} ${unit}`
+										: `${plate} ${unit} ${side ? 'right' : 'left'}`}
 								<td class="py-1">
 									<div class="flex items-center justify-center gap-2">
 										<button
@@ -206,7 +274,10 @@
 	{:else}
 		<div class="{card} flex flex-col gap-3">
 			<label class="flex flex-col gap-1 text-sm">
-				<span>{equipment.count === 2 ? 'Total for both dumbbells (lb)' : 'Target weight (lb)'}</span
+				<span
+					>{equipment.count === 2
+						? `Total for both dumbbells (${unit})`
+						: `Target weight (${unit})`}</span
 				>
 				<input
 					type="number"
@@ -220,7 +291,7 @@
 			<fieldset class="flex flex-col gap-1 text-sm">
 				<legend class="mb-1">Plates available</legend>
 				<div class="flex flex-wrap gap-2">
-					{#each PLATES as plate (plate)}
+					{#each system.plates as plate (plate)}
 						<button
 							type="button"
 							aria-pressed={available.includes(plate)}
@@ -242,7 +313,7 @@
 						{/if}
 						{#if !result.exact}
 							<p class="text-sm text-amber-800 dark:text-amber-300">
-								{lb(target)} can't be loaded exactly; closest under is {lb(result.total)}.
+								{weight(target)} can't be loaded exactly; closest under is {weight(result.total)}.
 							</p>
 						{/if}
 					</div>
@@ -251,7 +322,7 @@
 					</button>
 				{:else}
 					<p class="text-sm text-amber-800 dark:text-amber-300">
-						That's lighter than the empty {equipment.count === 2 ? 'handles' : 'bar'} ({lb(
+						That's lighter than the empty {equipment.count === 2 ? 'handles' : 'bar'} ({weight(
 							equipment.count * equipment.bar
 						)}).
 					</p>

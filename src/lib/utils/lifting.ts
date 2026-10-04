@@ -1,12 +1,23 @@
-export const PLATES = [45, 35, 25, 10, 5, 2.5, 1.25] as const;
-export type Plate = (typeof PLATES)[number];
-/** Plate counts keyed by plate weight. */
-export type PlateCounts = Partial<Record<Plate, number>>;
+export type WeightUnit = 'lb' | 'kg';
+export const WEIGHT_UNITS: WeightUnit[] = ['lb', 'kg'];
+
+/** Plate counts keyed by plate weight (in the unit system's unit). */
+export type PlateCounts = Partial<Record<number, number>>;
+
+/** Stable ids, the same in both unit systems (saved in storage and settings). */
+export const EQUIPMENT_IDS = [
+	'barbell',
+	'barbell-light',
+	'dumbbell',
+	'dumbbells',
+	'kettlebell'
+] as const;
+export type EquipmentId = (typeof EQUIPMENT_IDS)[number];
 
 export type Equipment = {
-	id: string;
+	id: EquipmentId;
 	name: string;
-	/** Weight of one bar or handle, in lb. */
+	/** Weight of one bar or handle. */
 	bar: number;
 	/** 2 for bars and dumbbell handles (plates on both ends), 1 for a kettlebell post. */
 	sides: 1 | 2;
@@ -14,16 +25,58 @@ export type Equipment = {
 	count: 1 | 2;
 };
 
-export const EQUIPMENT: Equipment[] = [
-	{ id: 'barbell-45', name: 'Barbell (45 lb)', bar: 45, sides: 2, count: 1 },
-	{ id: 'barbell-25', name: 'Barbell (25 lb)', bar: 25, sides: 2, count: 1 },
-	{ id: 'dumbbell', name: 'Dumbbell', bar: 7.5, sides: 2, count: 1 },
-	{ id: 'dumbbells', name: 'Dumbbell pair', bar: 7.5, sides: 2, count: 2 },
-	{ id: 'kettlebell', name: 'Kettlebell', bar: 5, sides: 1, count: 1 }
-];
+export type UnitSystem = {
+	unit: WeightUnit;
+	/** Plate sizes, heaviest first. */
+	plates: readonly number[];
+	equipment: Equipment[];
+};
+
+const equipment = (
+	unit: WeightUnit,
+	bar: number,
+	lightBar: number,
+	handle: number,
+	kettlebell: number
+) =>
+	[
+		{ id: 'barbell', name: `Barbell (${bar} ${unit})`, bar, sides: 2, count: 1 },
+		{
+			id: 'barbell-light',
+			name: `Barbell (${lightBar} ${unit})`,
+			bar: lightBar,
+			sides: 2,
+			count: 1
+		},
+		{ id: 'dumbbell', name: 'Dumbbell', bar: handle, sides: 2, count: 1 },
+		{ id: 'dumbbells', name: 'Dumbbell pair', bar: handle, sides: 2, count: 2 },
+		{ id: 'kettlebell', name: 'Kettlebell', bar: kettlebell, sides: 1, count: 1 }
+	] satisfies Equipment[];
+
+export const UNITS: Record<WeightUnit, UnitSystem> = {
+	lb: {
+		unit: 'lb',
+		plates: [45, 35, 25, 10, 5, 2.5, 1.25],
+		equipment: equipment('lb', 45, 25, 7.5, 5)
+	},
+	// Olympic 20/15 kg bars; 2.5 kg is a common adjustable dumbbell and kettlebell handle.
+	kg: {
+		unit: 'kg',
+		plates: [25, 20, 15, 10, 5, 2.5, 1.25],
+		equipment: equipment('kg', 20, 15, 2.5, 2.5)
+	}
+};
+
+export function findEquipment(unit: WeightUnit, id: string): Equipment {
+	const list = UNITS[unit].equipment;
+	return list.find((e) => e.id === id) ?? list[0];
+}
 
 export function sumPlates(counts: PlateCounts): number {
-	return PLATES.reduce((sum, plate) => sum + plate * Math.max(0, counts[plate] ?? 0), 0);
+	return Object.entries(counts).reduce(
+		(sum, [plate, n]) => sum + Number(plate) * Math.max(0, n ?? 0),
+		0
+	);
 }
 
 /** Weight of one implement (bar + plates on each side). */
@@ -45,7 +98,7 @@ export type TargetResult = {
 	exact: boolean;
 };
 
-const UNIT = 1.25; // Smallest plate; every loadable weight is a multiple of it.
+const UNIT = 1.25; // Smallest plate in both systems; every loadable weight is a multiple of it.
 
 /**
  * Fewest plates per side to reach `target` total (or the closest weight under it).
@@ -54,7 +107,7 @@ const UNIT = 1.25; // Smallest plate; every loadable weight is a multiple of it.
 export function platesForTarget(
 	equipment: Equipment,
 	target: number,
-	available: readonly Plate[] = PLATES
+	available: readonly number[]
 ): TargetResult | null {
 	const empty = equipment.count * equipment.bar;
 	if (!(target >= empty)) return null;
@@ -62,9 +115,9 @@ export function platesForTarget(
 	const maxUnits = Math.floor(perSideWeight / UNIT + 1e-9);
 	const plates = [...available].sort((a, b) => b - a);
 
-	// Coin change over 1.25 lb units: fewest plates for every reachable amount up to maxUnits.
+	// Coin change over 1.25 lb/kg units: fewest plates for every reachable amount up to maxUnits.
 	const best = new Array<number>(maxUnits + 1).fill(Infinity);
-	const pick = new Array<Plate | 0>(maxUnits + 1).fill(0);
+	const pick = new Array<number>(maxUnits + 1).fill(0);
 	best[0] = 0;
 	for (let units = 1; units <= maxUnits; units++) {
 		for (const plate of plates) {
@@ -79,17 +132,17 @@ export function platesForTarget(
 	let units = maxUnits;
 	while (units > 0 && best[units] === Infinity) units--;
 	const perSide: PlateCounts = {};
-	for (let left = units; left > 0; left -= (pick[left] as Plate) / UNIT) {
-		const plate = pick[left] as Plate;
+	for (let left = units; left > 0; left -= pick[left] / UNIT) {
+		const plate = pick[left];
 		perSide[plate] = (perSide[plate] ?? 0) + 1;
 	}
 	const total = equipment.count * (equipment.bar + equipment.sides * units * UNIT);
 	return { perSide, total, exact: Math.abs(total - target) < 1e-9 };
 }
 
-/** Formats pounds without trailing zeros: 52.5, 135, 1.25. */
-export function lb(weight: number): string {
-	return `${Number(weight.toFixed(2))} lb`;
+/** Formats a weight without trailing zeros: "52.5 lb", "135 lb", "1.25 kg". */
+export function formatWeight(weight: number, unit: WeightUnit): string {
+	return `${Number(weight.toFixed(2))} ${unit}`;
 }
 
 export type WorkoutSet = { id: number; weight: number | null; reps: number | null };
@@ -97,7 +150,7 @@ export type Exercise = { id: number; name: string; sets: WorkoutSet[] };
 export type Workout = { date: string; exercises: Exercise[] };
 
 /** Plain-text workout for pasting into notes; identical consecutive sets are grouped. */
-export function workoutToText(workout: Workout): string {
+export function workoutToText(workout: Workout, unit: WeightUnit): string {
 	const lines = [`Workout – ${workout.date}`];
 	for (const exercise of workout.exercises) {
 		const sets = exercise.sets.filter((s) => s.reps || s.weight);
@@ -114,7 +167,7 @@ export function workoutToText(workout: Workout): string {
 			const { reps, weight } = sets[i];
 			const parts = [`${n} ${n === 1 ? 'set' : 'sets'}`];
 			if (reps) parts.push(`${reps} ${reps === 1 ? 'rep' : 'reps'}`);
-			lines.push(`  ${parts.join(' × ')}${weight ? ` @ ${lb(weight)}` : ''}`);
+			lines.push(`  ${parts.join(' × ')}${weight ? ` @ ${formatWeight(weight, unit)}` : ''}`);
 			i += n;
 		}
 	}

@@ -6,7 +6,12 @@
 	import { install, promptInstall } from '$lib/install.svelte';
 	import { reloadSettings, settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
+	import { doughDefaults } from '$lib/utils/dough';
+	import { UNITS, WEIGHT_UNITS, type EquipmentId } from '$lib/utils/lifting';
+	import { formatDuration } from '$lib/utils/time';
 	import {
+		COFFEE_SECONDS,
+		COOKING_PRESETS,
 		clear,
 		defaultSettings,
 		exportData,
@@ -24,6 +29,53 @@
 		{ value: 'light', label: 'Light' },
 		{ value: 'dark', label: 'Dark' }
 	];
+
+	// --- Tool defaults ---
+	let lifting = $derived(UNITS[settings.lifting.unit]);
+
+	function adjustCoffee(deltaSeconds: number) {
+		settings.coffeeDefaultSeconds = Math.min(
+			COFFEE_SECONDS.max,
+			Math.max(COFFEE_SECONDS.min, settings.coffeeDefaultSeconds + deltaSeconds)
+		);
+	}
+
+	function toggleOwnedPlate(plate: number) {
+		const unit = settings.lifting.unit;
+		const owned = settings.lifting.plates[unit];
+		settings.lifting.plates[unit] = owned.includes(plate)
+			? owned.filter((p) => p !== plate)
+			: UNITS[unit].plates.filter((p) => p === plate || owned.includes(p));
+	}
+
+	// Editable copy of the presets; resets whenever the saved presets change.
+	let presetsText = $derived(settings.cookingPresets.join(', '));
+	let presetsError = $state('');
+
+	function savePresets() {
+		const parts = presetsText
+			.split(/[\s,]+/)
+			.filter(Boolean)
+			.map(Number);
+		if (
+			parts.length === 0 ||
+			parts.length > COOKING_PRESETS.max ||
+			parts.some((m) => !(m > 0 && m <= COOKING_PRESETS.maxMinutes))
+		) {
+			presetsError = `Enter 1–${COOKING_PRESETS.max} numbers of minutes (up to ${COOKING_PRESETS.maxMinutes}), separated by commas.`;
+			return;
+		}
+		presetsError = '';
+		settings.cookingPresets = [...new Set(parts)].sort((a, b) => a - b);
+		presetsText = settings.cookingPresets.join(', ');
+	}
+
+	let pizza = $derived(settings.pizzaDefaults);
+	let pizzaIsBuiltIn = $derived(
+		(Object.keys(doughDefaults) as (keyof typeof doughDefaults)[]).every(
+			(k) => pizza[k] === doughDefaults[k]
+		)
+	);
 
 	const toggles = [
 		{ key: 'sound', label: 'Alarm sound', hint: 'Beep when a timer finishes.' },
@@ -201,6 +253,110 @@
 				<input type="checkbox" class="size-6 shrink-0" bind:checked={settings[toggle.key]} />
 			</label>
 		{/each}
+	</section>
+
+	<section class={card} aria-labelledby="tool-defaults" data-testid="tool-defaults">
+		<h2 id="tool-defaults" class="text-lg font-semibold">Tool defaults</h2>
+
+		<h3 class="font-semibold">Weightlifting Calculator</h3>
+		<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Weightlifting units">
+			{#each WEIGHT_UNITS as unit (unit)}
+				<button
+					type="button"
+					role="radio"
+					aria-checked={settings.lifting.unit === unit}
+					class="rounded-xl px-3 py-2 text-sm font-medium {settings.lifting.unit === unit
+						? 'bg-blue-600 text-white'
+						: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+					onclick={() => (settings.lifting.unit = unit)}
+				>
+					{unit === 'lb' ? 'Pounds (lb)' : 'Kilograms (kg)'}
+				</button>
+			{/each}
+		</div>
+		<label class="flex flex-col gap-1 text-sm">
+			<span>Default equipment</span>
+			<select
+				class="rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
+				value={settings.lifting.equipment}
+				onchange={(e) => (settings.lifting.equipment = e.currentTarget.value as EquipmentId)}
+			>
+				{#each lifting.equipment as item (item.id)}
+					<option value={item.id}>{item.name}</option>
+				{/each}
+			</select>
+		</label>
+		<fieldset class="flex flex-col gap-1 text-sm">
+			<legend class="mb-1">Plates you have ({settings.lifting.unit})</legend>
+			<div class="flex flex-wrap gap-2">
+				{#each lifting.plates as plate (plate)}
+					{@const owned = settings.lifting.plates[settings.lifting.unit].includes(plate)}
+					<button
+						type="button"
+						aria-pressed={owned}
+						class="rounded-xl px-3 py-2 text-sm font-medium {owned
+							? 'bg-blue-600 text-white'
+							: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+						onclick={() => toggleOwnedPlate(plate)}>{plate}</button
+					>
+				{/each}
+			</div>
+		</fieldset>
+
+		<h3 class="mt-2 font-semibold">Coffee Timer</h3>
+		<div class="flex items-center justify-between gap-3">
+			<span>Default length</span>
+			<div class="flex items-center gap-2">
+				<button
+					type="button"
+					class={button}
+					aria-label="15 seconds shorter"
+					disabled={settings.coffeeDefaultSeconds <= COFFEE_SECONDS.min}
+					onclick={() => adjustCoffee(-15)}>−15s</button
+				>
+				<span class="w-14 text-center text-lg tabular-nums" data-testid="coffee-default"
+					>{formatDuration(settings.coffeeDefaultSeconds * 1000)}</span
+				>
+				<button
+					type="button"
+					class={button}
+					aria-label="15 seconds longer"
+					disabled={settings.coffeeDefaultSeconds >= COFFEE_SECONDS.max}
+					onclick={() => adjustCoffee(15)}>+15s</button
+				>
+			</div>
+		</div>
+
+		<h3 class="mt-2 font-semibold">Cooking Timer</h3>
+		<label class="flex flex-col gap-1 text-sm">
+			<span>Quick-start buttons (minutes, separated by commas)</span>
+			<input
+				class="rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
+				inputmode="decimal"
+				bind:value={presetsText}
+				onchange={savePresets}
+			/>
+		</label>
+		{#if presetsError}
+			<p class="text-sm text-red-700 dark:text-red-400" role="alert">{presetsError}</p>
+		{/if}
+
+		<h3 class="mt-2 font-semibold">Pizza Dough Calculator</h3>
+		<p class="text-sm" data-testid="pizza-defaults">
+			{pizza.balls} × {pizza.ballWeight} g · {pizza.hydration}% hydration · {pizza.salt}% salt ·
+			{pizza.yeast}% yeast · {pizza.oil}% oil · {pizza.sugar}% sugar
+		</p>
+		<p class="text-sm text-gray-600 dark:text-gray-400">
+			Always in grams. Change these with <strong>Save as my defaults</strong> in the calculator.
+		</p>
+		<button
+			type="button"
+			class="{button} text-sm"
+			disabled={pizzaIsBuiltIn}
+			onclick={() => (settings.pizzaDefaults = { ...doughDefaults })}
+		>
+			Restore built-in pizza defaults
+		</button>
 	</section>
 
 	<section class={card} aria-labelledby="data">
