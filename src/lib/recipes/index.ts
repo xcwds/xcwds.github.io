@@ -24,6 +24,12 @@ export type StepTimer = {
 	oven?: boolean;
 };
 
+/**
+ * Step timers ring only while a page showing them is open, and keep the screen awake while they
+ * run, so they're for waits you'd watch, not fridge rests or slow cookers measured in hours.
+ */
+export const MAX_STEP_TIMER_MINUTES = 180;
+
 /** A step: plain text, or text with a timer. */
 export type Instruction = string | { text: string; timer?: StepTimer };
 

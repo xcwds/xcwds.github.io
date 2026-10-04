@@ -21,10 +21,7 @@
 		"Weigh the water and stir in the yeast. Let it sit for a couple of minutes, then add a couple of scoops of the flour and mix for 30 seconds.",
 		"Add the olive oil, honey and the rest of the flour and mix for 1 minute. Add the salt and mix for 3–4 minutes more, until the dough is elastic and tacky (not too sticky, not too dry).",
 		"Weigh the dough and divide it into equal balls (about 270 g each for this batch), using a little flour to shape them.",
-		{
-			"text": "Put each ball in an oiled container and refrigerate for 6–12 hours. Take them out 15–20 minutes before stretching.",
-			"timer": { "minutes": [360, 720], "label": "Pizza dough" }
-		}
+		"Put each ball in an oiled container and refrigerate for 6–12 hours. Take them out 15–20 minutes before stretching."
 	],
 	"tips": [
 		"Dust the peel with a generous mix of cornmeal and flour (or semolina) so the pizza slides off.",

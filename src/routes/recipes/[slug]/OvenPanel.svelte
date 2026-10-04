@@ -18,12 +18,14 @@
 
 	/**
 	 * `activeF` reports the oven temperature to use for the recipe's oven step timers: the one
-	 * entered here while the panel is open and gives an estimate, otherwise undefined.
+	 * the user entered here, while the panel is open and gives an estimate; otherwise undefined.
+	 * The pre-filled suggestion doesn't count until it's edited.
 	 */
 	let { oven, activeF = $bindable() }: { oven: RecipeOven; activeF?: number | undefined } =
 		$props();
 
 	let open = $state(false);
+	let edited = $state(false);
 
 	// °F, shown in the oven converter's unit. Starts 25°F under the recipe: the common case is an
 	// oven that's already busy with something cooler, or a dish that's browning too fast. The
@@ -46,7 +48,7 @@
 			: ([adjustOvenTime(input(range[0]))!, adjustOvenTime(input(range[1]))!] as const)
 	);
 	$effect(() => {
-		activeF = open && !problem && yourF !== oven.temp ? yourF : undefined;
+		activeF = open && edited && !problem && yourF !== oven.temp ? yourF : undefined;
 	});
 </script>
 
@@ -59,7 +61,7 @@
 		</p>
 		<TempUnitToggle />
 		<div class="grid grid-cols-2 items-end gap-3">
-			<TempInput label="Your oven" bind:valueF={yourF} {unit} />
+			<TempInput label="Your oven" bind:valueF={yourF} {unit} onedit={() => (edited = true)} />
 			<p aria-live="polite" class="pb-2 text-lg font-semibold" data-testid="oven-panel-time">
 				{#if adjusted}
 					about {formatMinutesRange(adjusted)}
@@ -71,8 +73,8 @@
 		{/if}
 		<OvenWarnings {warnings} />
 		<p class="text-sm text-gray-600 dark:text-gray-400">
-			An estimate: start checking early and go by the doneness cues in the steps. While this panel
-			is open, the steps' oven timers use your temperature. More options in the
+			An estimate: start checking early and go by the doneness cues in the steps. Once you enter
+			your temperature, the steps' oven timers use it while this panel is open. More options in the
 			<a class="underline" href={resolve('/utils/oven-time')}>Oven Time Converter</a>.
 		</p>
 	</div>

@@ -90,7 +90,9 @@ test('oven step timers follow the different-temperature panel while it is open',
 	await gotoHydrated(page, '/recipes/chocolate-chip-cookies');
 	await expect(page.getByRole('button', { name: 'Start 9 min timer' })).toBeVisible();
 	await page.getByText('Cooking at a different temperature?').click();
-	// The panel starts 25°F under the recipe (350°F): 9 min becomes 10.
+	// The pre-filled suggestion (350°F) isn't applied until you enter a temperature.
+	await expect(page.getByRole('button', { name: 'Start 9 min timer' })).toBeVisible();
+	await page.getByTestId('oven-panel').getByLabel('Your oven (°F)').fill('350');
 	await expect(page.getByRole('button', { name: 'Start 10 min timer (at 350°F)' })).toBeVisible();
 	await page.getByText('Cooking at a different temperature?').click();
 	await expect(page.getByRole('button', { name: 'Start 9 min timer' })).toBeVisible();

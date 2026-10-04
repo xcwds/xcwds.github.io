@@ -6,8 +6,15 @@
 	let {
 		label,
 		valueF = $bindable(),
-		unit
-	}: { label: string; valueF: number; unit: TempUnit } = $props();
+		unit,
+		onedit
+	}: {
+		label: string;
+		valueF: number;
+		unit: TempUnit;
+		/** Called when the user types in the field (not when the value changes from outside). */
+		onedit?: () => void;
+	} = $props();
 
 	const display = () => (Number.isFinite(valueF) ? String(Math.round(fromF(valueF, unit))) : '');
 
@@ -33,6 +40,7 @@
 		oninput={(e) => {
 			text = e.currentTarget.value;
 			valueF = text === '' ? NaN : toF(Number(text), unit);
+			onedit?.();
 		}}
 		class="rounded-md border border-gray-300 bg-white px-3 py-2 text-lg text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
 	/>
