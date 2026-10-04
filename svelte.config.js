@@ -8,8 +8,10 @@ const config = {
 	// for more information about preprocessors
 	preprocess: [vitePreprocess(), mdsvex()],
 
-	kit: { 
-		adapter: adapter(),
+	kit: {
+		// GitHub Pages serves 404.html for unknown URLs; it boots the app, which shows
+		// src/routes/+error.svelte. The service worker also uses it offline.
+		adapter: adapter({ fallback: '404.html' }),
 		alias: {
 			$components: 'src/components'
 		}

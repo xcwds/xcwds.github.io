@@ -8,13 +8,13 @@
 	import OfflineNotice from '$lib/OfflineNotice.svelte';
 	import Toaster from '$lib/Toaster.svelte';
 	import UpdateBanner from '$lib/UpdateBanner.svelte';
-	import { activeSection, routeInfo, sections } from '$lib/nav';
+	import { activeSection, errorInfo, routeInfo, sections } from '$lib/nav';
 	import { startSettings } from '$lib/settings.svelte';
 	import '../app.css';
 
 	let { children } = $props();
 
-	let info = $derived(routeInfo(page.url.pathname));
+	let info = $derived(page.error ? errorInfo(page.status) : routeInfo(page.url.pathname));
 	let active = $derived(activeSection(page.url.pathname));
 	let parentLabel = $derived(sections.find((s) => s.path === info.parent)?.label ?? 'Home');
 

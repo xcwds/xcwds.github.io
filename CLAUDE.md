@@ -13,7 +13,6 @@ Package manager: pnpm.
 
 - Recipes at `/recipes` are imported from Notion — follow [docs/notion-recipes.md](docs/notion-recipes.md).
 - Before pushing: `pnpm check && pnpm lint && pnpm test:unit -- --run --project server && pnpm build`.
-  (`pnpm lint` already flags a Prettier issue in `svelte.config.js` on `main`.)
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
   home page render from that list). New tools arrive as GitHub issues. The site is static with no server or
   auth, so tools must be fully client-side; shared logic lives in `src/lib/utils/` (timers count against
@@ -25,6 +24,11 @@ Package manager: pnpm.
   offline use. The manifest's `share_target` sends Android shares to `/utils/url-sanitizer`; the service
   worker moves the shared link from `?query` to `#url=` so it never reaches the server. The iPhone
   Shortcut opens `#url=<encoded link>` directly. Keep shared links out of query strings.
+- Unknown URLs: the adapter writes `build/404.html` (a `fallback` that boots the app), GitHub Pages serves
+  it for any missing path, and the service worker serves it for offline navigations it has no cache for.
+  The app then renders `src/routes/+error.svelte`, titled by `errorInfo` in `src/lib/nav.ts`.
+  `vite preview` renders errors on the server instead, so `e2e/errors.test.ts` serves `build/` like Pages
+  does (`e2e/static-server.ts`).
 - The root layout is the app shell: a header (back arrow + page title as the page's only `<h1>`), a bottom tab
   bar on phones and header links on desktop. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
   which reads `tools.ts` and the recipe data, so new tools/recipes need no nav changes. Pages must not render

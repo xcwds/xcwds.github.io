@@ -84,6 +84,7 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 		],
 		['/utils/weightlifting'],
 		['/settings'],
+		['/no-such-page'],
 		[porkChopsPath]
 	];
 	const problems: string[] = [];
