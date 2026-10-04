@@ -9,9 +9,13 @@
 		{#if t.action}
 			<div
 				data-testid="toast"
-				class="pointer-events-auto flex items-center gap-1 rounded-full bg-gray-900 py-1 pr-1 pl-4 text-sm font-medium text-white shadow-lg dark:bg-white dark:text-gray-900"
+				class="pointer-events-auto flex items-center gap-1 rounded-full bg-gray-900 py-1 pr-1 pl-1 text-sm font-medium text-white shadow-lg dark:bg-white dark:text-gray-900"
 			>
-				<button type="button" onclick={() => dismissToast(t.id)}>{t.message}</button>
+				<button
+					type="button"
+					class="min-h-11 rounded-full pr-1 pl-3"
+					onclick={() => dismissToast(t.id)}>{t.message}</button
+				>
 				<!-- The path is resolved; the lint rule just can't see through the appended #hash. -->
 				<!-- eslint-disable svelte/no-navigation-without-resolve -->
 				<a

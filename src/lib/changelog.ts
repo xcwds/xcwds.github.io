@@ -1,18 +1,29 @@
 /**
  * What's new, in user-facing words, newest first. Add an entry (next `id`, today's date) in every
  * PR that changes something people will notice; the app shows entries newer than the last one
- * the user saw after an update, and lists recent ones in Settings → About.
+ * the user saw after an update, and lists recent ones in Settings → What's new.
  */
 export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
-		id: 5,
+		id: 6,
 		date: '2026-10-04',
 		items: [
 			'See what changed after an update, here and in the update message.',
 			'Relaunching the app before tapping Update keeps the version you have.',
 			'Other open tabs now offer to reload after one of them updates.'
+		]
+	},
+	{
+		id: 5,
+		date: '2026-10-04',
+		items: [
+			'Recipes are now a set of classics, and you can scale them to the servings you need.',
+			'New Oven Time Converter: how long to cook at a different oven temperature, also built into recipes.',
+			"Changes you save in one tab now show up in your other open tabs, and you're told if something couldn't be saved.",
+			"Pages that don't exist show a proper not-found page, even offline.",
+			'The URL sanitizer ignores punctuation around a pasted link and leaves the rest of the link exactly as it was.'
 		]
 	},
 	{

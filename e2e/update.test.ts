@@ -206,6 +206,14 @@ test("after an update, the toast links to What's new with only the newer entries
 	]);
 	const updated = page.getByTestId('toast').first();
 	await expect(updated).toContainText('App updated.');
+	// Both controls in an action toast meet the 44px tap-target baseline (it's not on the audited pages).
+	for (const control of [
+		updated.getByRole('button', { name: 'App updated.' }),
+		updated.getByRole('link', { name: "See what's new" })
+	]) {
+		const box = (await control.boundingBox())!;
+		expect(Math.min(box.width, box.height)).toBeGreaterThanOrEqual(44);
+	}
 	await updated.getByRole('link', { name: "See what's new" }).click();
 	await expect(page).toHaveURL(/\/settings#whats-new$/);
 	await expect(page.getByTestId('whats-new')).toBeInViewport();
