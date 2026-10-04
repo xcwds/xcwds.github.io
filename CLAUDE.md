@@ -1,11 +1,14 @@
 # Agent notes
 
+Brand: **xcwds**, "a cyber-web Swiss Army knife". Use xcwds for the app name, titles and file names; no
+personal names. The app icon is the xcwds GitHub avatar.
+
 SvelteKit static site (adapter-static, Tailwind, Skeleton) deployed to GitHub Pages from `main`.
 Package manager: pnpm.
 
 - Recipes at `/recipes` are imported from Notion — follow [docs/notion-recipes.md](docs/notion-recipes.md).
 - Before pushing: `pnpm check && pnpm lint && pnpm test:unit -- --run --project server && pnpm build`.
-  (`pnpm lint` already flags Prettier issues in `README.md` and `svelte.config.js` on `main`.)
+  (`pnpm lint` already flags a Prettier issue in `svelte.config.js` on `main`.)
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
   home page render from that list). New tools arrive as GitHub issues. The site is static with no server or
   auth, so tools must be fully client-side; shared logic lives in `src/lib/utils/` (timers count against

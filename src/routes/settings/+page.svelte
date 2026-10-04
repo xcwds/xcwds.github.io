@@ -64,7 +64,7 @@
 		const date = [now.getFullYear(), now.getMonth() + 1, now.getDate()]
 			.map((n) => String(n).padStart(2, '0'))
 			.join('-');
-		return new File([JSON.stringify(exportData(now), null, '\t')], `waters-backup-${date}.json`, {
+		return new File([JSON.stringify(exportData(now), null, '\t')], `xcwds-backup-${date}.json`, {
 			type: 'application/json'
 		});
 	}
@@ -80,7 +80,7 @@
 
 	async function share() {
 		try {
-			await navigator.share({ files: [backupFile()], title: 'Waters backup' });
+			await navigator.share({ files: [backupFile()], title: 'xcwds backup' });
 			message = 'Backup shared.';
 		} catch {
 			// Share sheet dismissed.

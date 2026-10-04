@@ -1,7 +1,7 @@
 {
-	"name": "Chris Waters",
-	"short_name": "Waters",
-	"description": "Recipes and handy tools: pizza dough calculator, coffee and cooking timers, URL sanitizer.",
+	"name": "xcwds",
+	"short_name": "xcwds",
+	"description": "A cyber-web Swiss Army knife: recipes, kitchen and gym tools, and a URL sanitizer.",
 	"id": "/",
 	"start_url": "/",
 	"scope": "/",
@@ -9,20 +9,49 @@
 	"background_color": "#bfdbfe",
 	"theme_color": "#bfdbfe",
 	"icons": [
-		{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-		{ "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-		{ "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+		{
+			"src": "/icons/icon-192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/icons/icon-512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+		{
+			"src": "/icons/maskable-512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
 	],
 	"shortcuts": [
-		{ "name": "URL Sanitizer", "url": "/utils/url-sanitizer" },
-		{ "name": "Coffee Timer", "url": "/utils/coffee-timer" },
-		{ "name": "Cooking Timer", "url": "/utils/cooking-timer" },
-		{ "name": "Recipes", "url": "/recipes" }
+		{
+			"name": "URL Sanitizer",
+			"url": "/utils/url-sanitizer"
+		},
+		{
+			"name": "Coffee Timer",
+			"url": "/utils/coffee-timer"
+		},
+		{
+			"name": "Cooking Timer",
+			"url": "/utils/cooking-timer"
+		},
+		{
+			"name": "Recipes",
+			"url": "/recipes"
+		}
 	],
 	"share_target": {
 		"action": "/utils/url-sanitizer",
 		"method": "GET",
 		"enctype": "application/x-www-form-urlencoded",
-		"params": { "title": "title", "text": "text", "url": "url" }
+		"params": {
+			"title": "title",
+			"text": "text",
+			"url": "url"
+		}
 	}
 }

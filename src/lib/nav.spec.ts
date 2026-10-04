@@ -5,7 +5,7 @@ import { tools } from './utils/tools';
 
 describe('routeInfo', () => {
 	it('titles the top-level sections without a back target', () => {
-		expect(routeInfo('/')).toEqual({ title: 'Chris Waters' });
+		expect(routeInfo('/')).toEqual({ title: 'xcwds' });
 		expect(routeInfo('/recipes')).toEqual({ title: 'Recipes' });
 		expect(routeInfo('/utils/')).toEqual({ title: 'Utils' });
 	});
@@ -31,7 +31,7 @@ describe('routeInfo', () => {
 	});
 
 	it('falls back to home for unknown pages', () => {
-		expect(routeInfo('/nope')).toEqual({ title: 'Chris Waters', parent: '/' });
+		expect(routeInfo('/nope')).toEqual({ title: 'xcwds', parent: '/' });
 		expect(routeInfo('/recipes/not-a-recipe').parent).toBe('/');
 	});
 });

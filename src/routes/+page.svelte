@@ -20,10 +20,13 @@
 </script>
 
 <svelte:head>
-	<title>Chris Waters</title>
+	<title>xcwds</title>
+	<meta name="description" content="xcwds: a cyber-web Swiss Army knife." />
 </svelte:head>
 
 <main class="mx-auto flex max-w-2xl flex-col gap-8 px-6 pt-2 pb-6 sm:px-12 sm:pb-12">
+	<p class="text-gray-700 dark:text-gray-300">A cyber-web Swiss Army knife.</p>
+
 	<nav aria-label="Sections">
 		<ul class="grid gap-3 sm:grid-cols-2">
 			{#each sections as section (section.path)}
