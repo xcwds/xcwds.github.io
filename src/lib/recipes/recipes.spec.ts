@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { readdirSync } from 'node:fs';
-import { recipes, searchRecipes } from './index';
+import { FOOD_PRESETS, foodPreset } from '$lib/utils/oven';
+import { isClassic, recipes, searchRecipes } from './index';
+import { isScalable } from './scale';
 import skipped from './notion-skipped.json';
 
 describe('recipes', () => {
@@ -20,7 +22,7 @@ describe('recipes', () => {
 	});
 
 	it('has unique Notion ids that are not also marked skipped', () => {
-		const ids = recipes.map((r) => r.notion.id);
+		const ids = recipes.flatMap((r) => (r.notion ? [r.notion.id] : []));
 		expect(new Set(ids).size).toBe(ids.length);
 		for (const s of skipped.skipped) expect(ids).not.toContain(s.id);
 	});
@@ -34,6 +36,25 @@ describe('recipes', () => {
 			expect(recipe.name).not.toBe('');
 			expect(recipe.ingredients.length).toBeGreaterThan(0);
 			expect(recipe.instructions.length).toBeGreaterThan(0);
+		}
+	});
+
+	it('gives classics a scalable yield, and valid oven data', () => {
+		const classics = recipes.filter(isClassic);
+		expect(classics.length).toBeGreaterThan(0);
+		for (const recipe of classics) {
+			expect(recipe.notion).toBeUndefined();
+			expect(recipe.yield?.amount).toBeGreaterThan(0);
+			expect(recipe.ingredients.some(isScalable)).toBe(true);
+		}
+		for (const recipe of recipes.filter((r) => r.oven)) {
+			const oven = recipe.oven!;
+			expect(FOOD_PRESETS.map((p) => p.id)).toContain(oven.food);
+			const [lo, hi] =
+				typeof oven.minutes === 'number' ? [oven.minutes, oven.minutes] : oven.minutes;
+			expect(lo).toBeGreaterThan(0);
+			expect(hi).toBeGreaterThanOrEqual(lo);
+			expect(oven.temp).toBeGreaterThan(foodPreset(oven.food).doneF);
 		}
 	});
 });

@@ -1,0 +1,28 @@
+{
+	"slug": "vinaigrette",
+	"name": "Basic Vinaigrette",
+	"emoji": "🥗",
+	"tags": ["Classic", "Basics", "Sauce"],
+	"description": "The everyday salad dressing: shake it up in a jar in two minutes, and it keeps for a week.",
+	"yield": { "amount": 6, "unit": "servings", "singular": "serving" },
+	"time": "5 min",
+	"notes": ["Makes about ¾ cup."],
+	"ingredients": [
+		{
+			"amount": 3,
+			"unit": "Tbsp",
+			"item": "vinegar",
+			"note": "red wine, white wine, sherry or cider"
+		},
+		{ "amount": 1, "unit": "tsp", "item": "Dijon mustard" },
+		{ "amount": 1, "item": "small shallot", "plural": "small shallots", "note": "finely minced" },
+		{ "amount": 0.25, "unit": "tsp", "item": "salt" },
+		{ "amount": 0.5, "unit": "cup", "item": "extra-virgin olive oil" },
+		"Black pepper, to taste"
+	],
+	"instructions": [
+		"Put the vinegar, mustard, shallot and salt in a jar and let it sit for 5 minutes; the vinegar mellows the shallot.",
+		"Add the olive oil and a few grinds of pepper, close the jar and shake hard until thick and combined.",
+		"Taste on a leaf of the salad and adjust: more salt if it tastes flat, more oil if it's too sharp."
+	]
+}

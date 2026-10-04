@@ -11,7 +11,9 @@ home screens and in app switchers.
 SvelteKit static site (adapter-static, Tailwind, Skeleton) deployed to GitHub Pages from `main`.
 Package manager: pnpm.
 
-- Recipes at `/recipes` are imported from Notion — follow [docs/notion-recipes.md](docs/notion-recipes.md).
+- Recipes at `/recipes` are classic back-pocket recipes (tagged `Classic`, written here with structured,
+  scalable ingredients, see [docs/classic-recipes.md](docs/classic-recipes.md)) plus older imports from
+  Notion ([docs/notion-recipes.md](docs/notion-recipes.md)). Tracking issue: #49.
 - Before pushing: `pnpm check && pnpm lint && pnpm test:unit -- --run --project server && pnpm build`.
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
   home page render from that list). New tools arrive as GitHub issues. The site is static with no server or

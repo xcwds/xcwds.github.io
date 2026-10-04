@@ -1,0 +1,35 @@
+{
+	"slug": "roast-chicken",
+	"name": "Roast Chicken",
+	"emoji": "🍗",
+	"tags": ["Classic", "Dinner"],
+	"description": "A whole chicken with crisp, salty skin and juicy meat. Little hands-on time, and the leftovers make the week's sandwiches, soups and salads.",
+	"yield": { "amount": 4, "unit": "servings", "singular": "serving" },
+	"time": "1 h 40 min",
+	"oven": { "temp": 425, "minutes": [70, 90], "food": "meat" },
+	"notes": [
+		"Times are for a 4–5 lb chicken. Cooking more than one? Roast them side by side; the time stays about the same."
+	],
+	"ingredients": [
+		{ "amount": 1, "item": "whole chicken (4–5 lb)", "plural": "whole chickens (4–5 lb each)" },
+		{ "amount": 2, "unit": "tsp", "item": "kosher salt" },
+		{ "amount": 0.5, "unit": "tsp", "item": "black pepper", "note": "freshly ground" },
+		{ "amount": 2, "unit": "Tbsp", "item": "butter", "note": "softened, or olive oil" },
+		{ "amount": 1, "item": "lemon", "plural": "lemons", "note": "halved" },
+		{ "amount": 1, "unit": "head", "item": "garlic", "note": "halved crosswise" },
+		{ "amount": 4, "unit": "sprig", "item": "thyme or rosemary" }
+	],
+	"instructions": [
+		"Pat the chicken very dry with paper towels and season all over, inside and out, with the salt and pepper. If you have time, leave it uncovered in the fridge for a few hours or overnight; the skin dries out and crisps better.",
+		"Heat the oven to 425°F (220°C). Take the chicken out of the fridge while the oven heats.",
+		"Rub the butter over the skin. Put the lemon, garlic and herbs in the cavity, tie the legs together with string and tuck the wing tips under the body.",
+		"Roast breast side up in a cast-iron skillet or roasting pan until the thickest part of the thigh reads 165°F (74°C) and the juices run clear, 70–90 minutes.",
+		"Rest for 15 minutes before carving. Squeeze the roasted lemon over the meat and spoon over the pan juices."
+	],
+	"tips": [
+		"No thermometer? Pierce the thigh where it meets the body: the juices should run clear, not pink, and the leg should wiggle loosely.",
+		"For extra-crisp skin, roast at 450°F for the first 20 minutes, then turn it down to 400°F.",
+		"Roast halved potatoes, carrots or onions in the pan around the chicken for an easy one-pan dinner.",
+		"Save the carcass for stock: cover with water, add an onion, carrot and celery, and simmer for 3–4 hours."
+	]
+}

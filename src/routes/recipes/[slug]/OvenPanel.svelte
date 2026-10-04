@@ -1,0 +1,64 @@
+<script lang="ts">
+	import { untrack } from 'svelte';
+	import { resolve } from '$app/paths';
+	import type { RecipeOven } from '$lib/recipes';
+	import TempInput from '$lib/TempInput.svelte';
+	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
+	import { settings } from '$lib/settings.svelte';
+	import {
+		adjustOvenTime,
+		asRange,
+		foodPreset,
+		formatMinutesRange,
+		formatTemp,
+		ovenProblem
+	} from '$lib/utils/oven';
+
+	let { oven }: { oven: RecipeOven } = $props();
+
+	// °F, shown in the oven converter's unit. Starts 25°F under the recipe: the common case is an
+	// oven that's already busy with something cooler, or a dish that's browning too fast. The
+	// page re-creates this panel per recipe, so the starting value is read once.
+	let yourF = $state(untrack(() => oven.temp) - 25);
+
+	let unit = $derived(settings.ovenUnit);
+	let range = $derived(asRange(oven.minutes));
+	let input = $derived((minutes: number) => ({
+		fromF: oven.temp,
+		toF: yourF,
+		minutes,
+		...foodPreset(oven.food)
+	}));
+	let problem = $derived(ovenProblem(input(range[0])));
+	let adjusted = $derived(
+		problem
+			? undefined
+			: ([adjustOvenTime(input(range[0]))!, adjustOvenTime(input(range[1]))!] as const)
+	);
+</script>
+
+<details class="rounded-lg bg-white/70 dark:bg-gray-900" data-testid="oven-panel">
+	<summary class="cursor-pointer px-4 py-3 font-medium">Cooking at a different temperature?</summary
+	>
+	<div class="flex flex-col gap-3 px-4 pb-4">
+		<p class="text-sm">
+			The recipe says {formatTemp(oven.temp, unit)} for {formatMinutesRange(range)}.
+		</p>
+		<TempUnitToggle />
+		<div class="grid grid-cols-2 items-end gap-3">
+			<TempInput label="Your oven" bind:valueF={yourF} {unit} />
+			<p aria-live="polite" class="pb-2 text-lg font-semibold" data-testid="oven-panel-time">
+				{#if adjusted}
+					about {formatMinutesRange(adjusted)}
+				{/if}
+			</p>
+		</div>
+		{#if problem}
+			<p class="text-sm text-red-700 dark:text-red-400" role="alert">{problem}</p>
+		{/if}
+		<p class="text-sm text-gray-600 dark:text-gray-400">
+			An estimate: start checking early and go by the doneness cues in the steps. More options in
+			the <a class="underline" href={resolve('/utils/oven-time')}>Oven Time Converter</a>.
+		</p>
+	</div>
+</details>

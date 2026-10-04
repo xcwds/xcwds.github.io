@@ -9,6 +9,8 @@ const skippedFile = new URL('../src/lib/recipes/notion-skipped.json', import.met
 const rows = readdirSync(dataDir)
 	.filter((file) => file.endsWith('.json'))
 	.map((file) => JSON.parse(readFileSync(new URL(file, dataDir), 'utf8')))
+	// Classic recipes are written here, not imported, and have no Notion page.
+	.filter((r) => r.notion)
 	.map((r) => ({
 		status: 'imported',
 		id: r.notion.id,

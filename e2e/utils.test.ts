@@ -103,3 +103,20 @@ test('cooking timer runs, rings, and survives a reload', async ({ page }) => {
 	await page.getByRole('button', { name: 'Stop' }).click();
 	await expect(timers).toHaveCount(1);
 });
+
+test('oven time converter estimates a new time, in °F or °C', async ({ page }) => {
+	await gotoHydrated(page, '/utils/oven-time');
+	await expect(page.getByTestId('oven-time')).toHaveText('50 min');
+	await expect(page.getByTestId('oven-change')).toHaveText('10 min less than the recipe');
+
+	await page.getByLabel('Your oven (°F)').fill('350');
+	await expect(page.getByTestId('oven-change')).toHaveText('Same as the recipe');
+
+	await page.getByRole('radio', { name: 'Celsius (°C)' }).click();
+	await expect(page.getByLabel('Recipe oven (°C)')).toHaveValue('177');
+	await page.getByLabel('Your oven (°C)').fill('200');
+	await expect(page.getByTestId('oven-change')).toContainText('less than the recipe');
+
+	await page.getByLabel('Your oven (°C)').fill('60');
+	await expect(page.getByRole('alert')).toContainText('hotter');
+});
