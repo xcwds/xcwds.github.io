@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
+	import { startUpdateChecks } from '$lib/app-update.svelte';
+	import UpdateBanner from '$lib/UpdateBanner.svelte';
 	import favicon from '$lib/assets/favicon.ico';
 	import { activeSection, routeInfo, sections } from '$lib/nav';
 	import { startSettings } from '$lib/settings.svelte';
@@ -16,6 +18,7 @@
 	// Lets e2e tests wait until inputs are interactive (see e2e/helpers.ts).
 	onMount(() => {
 		startSettings();
+		void startUpdateChecks();
 		document.documentElement.dataset.hydrated = '';
 	});
 </script>
@@ -70,6 +73,8 @@
 	<div class="pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
 		{@render children()}
 	</div>
+
+	<UpdateBanner />
 
 	<nav
 		aria-label="Main"
