@@ -103,3 +103,37 @@ test('cooking timer runs, rings, and survives a reload', async ({ page }) => {
 	await page.getByRole('button', { name: 'Stop' }).click();
 	await expect(timers).toHaveCount(1);
 });
+
+test('oven time converter estimates a new time, in °F or °C', async ({ page }) => {
+	await gotoHydrated(page, '/utils/oven-time');
+	await expect(page.getByTestId('oven-time')).toHaveText('50 min');
+	await expect(page.getByTestId('oven-change')).toHaveText('10 min less than the recipe');
+
+	await page.getByLabel('Your oven (°F)').fill('350');
+	await expect(page.getByTestId('oven-change')).toHaveText('Same as the recipe');
+
+	// Decimals aren't rounded away while typing; the field shows a rounded value after blur.
+	await page.getByLabel('Your oven (°F)').fill('300.5');
+	await expect(page.getByLabel('Your oven (°F)')).toHaveValue('300.5');
+	await expect(page.getByTestId('oven-warnings')).toContainText('Food safety');
+	await page.getByLabel('Recipe time (min)').focus();
+	await expect(page.getByLabel('Your oven (°F)')).toHaveValue('301');
+	await page.getByLabel('Your oven (°F)').fill('400');
+
+	// Custom values starting at fridge temperature still get the food-safety warning.
+	await page.getByLabel("What's cooking").selectOption('custom');
+	await page.getByLabel('Your oven (°F)').fill('300');
+	await expect(page.getByTestId('oven-warnings')).toContainText('Food safety');
+	await page.getByLabel('Your oven (°F)').fill('400');
+
+	await page.getByRole('radio', { name: 'Celsius (°C)' }).click();
+	await expect(page.getByLabel('Recipe oven (°C)')).toHaveValue('177');
+	await page.getByLabel('Your oven (°C)').fill('200');
+	await page.getByLabel('Your oven (°C)').fill('150');
+	await expect(page.getByTestId('oven-warnings')).toContainText('cook this at 163°C (325°F)');
+	await page.getByLabel('Your oven (°C)').fill('200');
+	await expect(page.getByTestId('oven-change')).toContainText('less than the recipe');
+
+	await page.getByLabel('Your oven (°C)').fill('60');
+	await expect(page.getByRole('alert')).toContainText('hotter');
+});

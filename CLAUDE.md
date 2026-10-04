@@ -11,8 +11,11 @@ home screens and in app switchers.
 SvelteKit static site (adapter-static, Tailwind, Skeleton) deployed to GitHub Pages from `main`.
 Package manager: pnpm.
 
-- Recipes at `/recipes` are imported from Notion — follow [docs/notion-recipes.md](docs/notion-recipes.md).
+- Recipes at `/recipes` are classic back-pocket recipes written here with structured, scalable
+  ingredients — follow [docs/classic-recipes.md](docs/classic-recipes.md). Tracking issue: #49.
 - Before pushing: `pnpm check && pnpm lint && pnpm test:unit -- --run --project server && pnpm build`.
+- Always open a pull request for work you push (against `main`, linking the issues it addresses),
+  unless the user explicitly says not to. Pushing a branch alone is not done.
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
   home page render from that list). New tools arrive as GitHub issues. The site is static with no server or
   auth, so tools must be fully client-side; shared logic lives in `src/lib/utils/` (timers count against
@@ -62,7 +65,13 @@ Package manager: pnpm.
   `settings` (coffee length, cooking presets, pizza defaults, lifting equipment and owned plates). Settings
   load after pages mount, so seed page state from them in an effect gated on `settingsStatus.ready`.
 - `persist()` only writes when a value changes (never just because a page opened), and removes the entry
-  when `get` returns `undefined`. Keep "nothing saved" meaningful: a tool default applies until the user
+  when `get` returns `undefined`. It loads changes other tabs save (`storage` event; pass `cleared` to
+  handle removal, `sync: false` for per-window UI state) and reports failed writes with one toast
+  (`reportSaveFailure`). Actions that confirm a save must check the real result: apply list changes with
+  `update()` from `storage.ts` (it starts from the latest saved value) then `markSaved()` and
+  `saveResult(..., { explicit: true })`, or call `saveSettings()`, and only toast "saved" when it returns
+  true. A synced value can lack fields another tab dropped: in `set`, treat a missing field as "back to the
+  default", never "keep mine". Keep "nothing saved" meaningful: a tool default applies until the user
   makes their own choice, and changing the default in Settings clears that choice. Workouts store their
   own `unit`; never label logged weights with the calculator's current unit.
 - Workout history: "Finish workout" moves the current workout into `app:workout-history` (its own storage

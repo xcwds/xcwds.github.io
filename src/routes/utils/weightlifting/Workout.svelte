@@ -18,8 +18,8 @@
 		onFinish
 	}: {
 		calculatorWeight?: number;
-		/** Receives a finished workout to keep in the history. */
-		onFinish?: (workout: Workout) => void;
+		/** Saves a finished workout to the history; returns whether it was saved. */
+		onFinish?: (workout: Workout) => boolean;
 	} = $props();
 
 	/** The calculator's unit. A workout keeps the unit it was logged in (see below). */
@@ -103,8 +103,8 @@
 	/** Saves the current workout to the history (if it has anything in it) and starts a new one. */
 	function finishWorkout() {
 		if (workoutHasContent(workout)) {
-			onFinish?.($state.snapshot(workout));
-			toast('Workout saved to history.');
+			// A failed save is reported by onFinish, so only confirm a real one.
+			if (onFinish?.($state.snapshot(workout))) toast('Workout saved to history.');
 		}
 		workout = { date: today(), unit: calculatorUnit, exercises: [] };
 	}
@@ -112,8 +112,7 @@
 	/** Starts a new workout with the same exercises and sets as `source` (dated today). */
 	export function repeat(source: Workout) {
 		if (workoutHasContent(workout) && JSON.stringify(workout) !== repeated) {
-			onFinish?.($state.snapshot(workout));
-			toast('Your current workout was saved to history.');
+			if (onFinish?.($state.snapshot(workout))) toast('Your current workout was saved to history.');
 		}
 		// A plain copy: `source` comes from reactive state, which structuredClone can't copy.
 		useWorkout({ ...$state.snapshot(source), date: today() });

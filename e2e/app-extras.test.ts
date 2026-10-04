@@ -74,9 +74,17 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 		['/'],
 		['/recipes'],
 		['/recipes/pizza-dough'],
+		[
+			'/recipes/chocolate-chip-cookies',
+			async (p) => {
+				await p.getByRole('button', { name: 'More cookies' }).click();
+				await p.getByText('Cooking at a different temperature?').click();
+			}
+		],
 		['/utils'],
 		['/utils/pizza-dough'],
 		['/utils/coffee-timer'],
+		['/utils/oven-time'],
 		['/utils/cooking-timer', (p) => p.getByRole('button', { name: '5 min', exact: true }).click()],
 		[
 			'/utils/url-sanitizer',

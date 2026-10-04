@@ -19,6 +19,12 @@ export const tools = [
 		blurb: 'Several labeled timers at once.'
 	},
 	{
+		path: '/utils/oven-time',
+		emoji: '🌡️',
+		name: 'Oven Time Converter',
+		blurb: 'New cook time when the oven has to be hotter or cooler.'
+	},
+	{
 		path: '/utils/url-sanitizer',
 		emoji: '🧼',
 		name: 'URL Sanitizer',

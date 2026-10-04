@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { version } from '$app/environment';
 	import Acronym from '$lib/Acronym.svelte';
+	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
 	import { changelog, latestChangelogId } from '$lib/changelog';
 	import { install, promptInstall } from '$lib/install.svelte';
@@ -24,6 +25,7 @@
 		parseCookingPresets,
 		read,
 		remove,
+		storageWritable,
 		write,
 		type Group,
 		type ParsedBackup,
@@ -126,7 +128,11 @@
 	let seenBefore = $state(latestChangelogId);
 	const RECENT = 10;
 
+	/** False when this browser won't let the app save (blocked or full storage). */
+	let writable = $state(true);
+
 	onMount(() => {
+		writable = storageWritable();
 		seenBefore = read(entries.whatsNewSeen) ?? latestChangelogId;
 		if (seenBefore < latestChangelogId) write(entries.whatsNewSeen, latestChangelogId);
 		try {
@@ -383,6 +389,12 @@
 		>
 			Restore built-in pizza defaults
 		</button>
+
+		<h3 class="mt-2 font-semibold">Oven Time Converter</h3>
+		<TempUnitToggle />
+		<p class="text-sm text-gray-600 dark:text-gray-400">
+			Also used by the “different temperature” panel on recipes.
+		</p>
 	</section>
 
 	<section class={card} aria-labelledby="data">
@@ -391,6 +403,13 @@
 			Everything is saved only on this device. Back it up to move it to another phone or keep a
 			copy.
 		</p>
+		{#if !writable}
+			<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="storage-warning">
+				This browser isn't letting xcwds save anything right now (storage is full, or site data is
+				blocked). Changes last only until you close the app. If storage is full, download a backup,
+				then clear data you don't need.
+			</p>
+		{/if}
 
 		<div class="grid gap-2 {canShareFiles ? 'grid-cols-2' : 'grid-cols-1'}">
 			<button type="button" class={primary} onclick={download}>Download backup</button>

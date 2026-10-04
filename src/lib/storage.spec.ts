@@ -17,6 +17,8 @@ import {
 	read,
 	remove,
 	resetMigrationState,
+	storageWritable,
+	update,
 	write
 } from './storage';
 
@@ -92,14 +94,61 @@ describe('read / write / remove', () => {
 		});
 		expect(read(entries.coffeeDuration)).toBeUndefined();
 		expect(write(entries.coffeeDuration, 1)).toBe(false);
-		expect(() => remove(entries.coffeeDuration)).not.toThrow();
+		expect(remove(entries.coffeeDuration)).toBe(false);
+		expect(storageWritable()).toBe(false);
 	});
 
 	it('reports a failed write when storage is full', () => {
+		expect(storageWritable()).toBe(true);
 		store.setItem = () => {
 			throw new Error('QuotaExceededError');
 		};
 		expect(write(entries.coffeeDuration, 1)).toBe(false);
+		expect(storageWritable()).toBe(false);
+	});
+});
+
+describe('update', () => {
+	const e = { key: 'app:test', label: 'Test', parse: (v: unknown) => v as number[] };
+	const push = (n: number) => (latest: number[] | undefined) => [...(latest ?? []), n];
+
+	it('changes the latest saved value, not a stale copy', () => {
+		// Another tab saved [1] after this tab last read []; this tab's stale copy is [].
+		write(e, [1]);
+		expect(update(e, [], push(2))).toEqual({ value: [1, 2], saved: true });
+		expect(read(e)).toEqual([1, 2]);
+	});
+
+	it('removes the entry when the change returns undefined', () => {
+		write(e, [1]);
+		expect(update(e, [1], () => undefined)).toEqual({ value: undefined, saved: true });
+		expect(store.getItem('app:test')).toBeNull();
+	});
+
+	it("changes this tab's copy when storage can't be read, and says it wasn't saved", () => {
+		Object.defineProperty(globalThis, 'localStorage', {
+			get() {
+				throw new Error('SecurityError');
+			},
+			configurable: true
+		});
+		expect(update(e, [1], push(2))).toEqual({ value: [1, 2], saved: false });
+	});
+
+	it("starts from this tab's copy when it holds changes storage doesn't have", () => {
+		write(e, [1]);
+		expect(update(e, [1, 5], push(2), { unsaved: true })).toEqual({
+			value: [1, 5, 2],
+			saved: true
+		});
+	});
+
+	it('keeps the new value but reports a failed save when storage is full', () => {
+		write(e, [1]);
+		store.setItem = () => {
+			throw new Error('QuotaExceededError');
+		};
+		expect(update(e, [], push(2))).toEqual({ value: [1, 2], saved: false });
 	});
 });
 
@@ -202,6 +251,16 @@ describe('settings entry', () => {
 		expect(read(entries.settings)).toEqual({ ...defaultSettings, theme: 'dark' });
 		store.setItem(entries.settings.key, JSON.stringify({ theme: 'neon' }));
 		expect(read(entries.settings)?.theme).toBe('system');
+	});
+
+	it('loads the oven unit, defaulting to °F', () => {
+		// Saved before the oven converter existed.
+		store.setItem(entries.settings.key, JSON.stringify({ theme: 'dark' }));
+		expect(read(entries.settings)?.ovenUnit).toBe('F');
+		write(entries.settings, { ...defaultSettings, ovenUnit: 'C' });
+		expect(read(entries.settings)?.ovenUnit).toBe('C');
+		store.setItem(entries.settings.key, JSON.stringify({ ovenUnit: 'K' }));
+		expect(read(entries.settings)?.ovenUnit).toBe('F');
 	});
 });
 

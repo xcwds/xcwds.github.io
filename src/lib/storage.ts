@@ -1,4 +1,5 @@
 import { doughDefaults, type DoughInput } from '$lib/utils/dough';
+import type { TempUnit } from '$lib/utils/oven';
 import {
 	EQUIPMENT_IDS,
 	UNITS,
@@ -147,6 +148,8 @@ export type Settings = {
 	/** Pizza dough calculator starting values (grams and baker's percentages). */
 	pizzaDefaults: DoughInput;
 	lifting: LiftingSettings;
+	/** °F or °C, for the oven time converter (and its panel on recipes). */
+	ovenUnit: TempUnit;
 };
 
 export const defaultSettings: Settings = {
@@ -161,7 +164,8 @@ export const defaultSettings: Settings = {
 		unit: 'lb',
 		equipment: 'barbell',
 		plates: { lb: [...UNITS.lb.plates], kg: [...UNITS.kg.plates] }
-	}
+	},
+	ovenUnit: 'F'
 };
 
 export const COFFEE_SECONDS = { min: 5, max: 3600 };
@@ -219,7 +223,8 @@ function parseSettings(v: unknown): Settings | undefined {
 			: defaultSettings.coffeeDefaultSeconds,
 		cookingPresets: parseCookingPresets(v.cookingPresets) ?? [...defaultSettings.cookingPresets],
 		pizzaDefaults: parsePizzaDefaults(v.pizzaDefaults),
-		lifting: parseLiftingSettings(v.lifting)
+		lifting: parseLiftingSettings(v.lifting),
+		ovenUnit: v.ovenUnit === 'C' ? 'C' : 'F'
 	};
 }
 
@@ -432,11 +437,48 @@ export function write<T>(e: Entry<T>, value: T): boolean {
 	}
 }
 
-export function remove(e: Entry<unknown>): void {
+/** Removes a value; returns false if storage is unavailable. */
+export function remove(e: Entry<unknown>): boolean {
 	try {
-		storage()?.removeItem(e.key);
+		const store = storage();
+		if (!store) return false;
+		store.removeItem(e.key);
+		return true;
 	} catch {
-		// Nothing to do.
+		return false;
+	}
+}
+
+/**
+ * Applies `change` to the latest saved value and saves the result, so a change made in one tab
+ * never overwrites what another tab saved meanwhile. `current` (this tab's copy) is changed
+ * instead when storage can't be read, or when `unsaved` says this tab holds changes storage
+ * doesn't have (its last write failed), which starting from storage would lose. `undefined`
+ * removes the entry. Returns the new value and whether it was saved.
+ */
+export function update<T>(
+	e: Entry<T>,
+	current: T | undefined,
+	change: (latest: T | undefined) => T | undefined,
+	{ unsaved = false }: { unsaved?: boolean } = {}
+): { value: T | undefined; saved: boolean } {
+	const value = change(storage() && !unsaved ? read(e) : current);
+	const saved = value === undefined ? remove(e) : write(e, value);
+	return { value, saved };
+}
+
+const PROBE_KEY = `${PREFIX}probe`;
+
+/** Whether this browser lets the app save at all (false in blocked or full storage). */
+export function storageWritable(): boolean {
+	try {
+		const store = storage();
+		if (!store) return false;
+		store.setItem(PROBE_KEY, '1');
+		store.removeItem(PROBE_KEY);
+		return true;
+	} catch {
+		return false;
 	}
 }
 

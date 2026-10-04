@@ -1,0 +1,40 @@
+{
+	"slug": "banana-bread",
+	"name": "Banana Bread",
+	"emoji": "🍌",
+	"tags": ["Baking", "Breakfast"],
+	"description": "One bowl, no mixer, and the best use for bananas that have gone brown and spotty.",
+	"yield": { "amount": 1, "unit": "loaves", "singular": "loaf" },
+	"time": "1 h 15 min",
+	"oven": { "temp": 350, "minutes": [55, 65], "food": "baked" },
+	"notes": ["Bake in a 9×5-inch loaf pan. Making more than one loaf? Use one pan per loaf."],
+	"ingredients": [
+		{ "amount": 3, "item": "very ripe banana", "plural": "very ripe bananas" },
+		{ "amount": 0.333, "unit": "cup", "item": "butter", "note": "melted" },
+		{ "amount": 0.75, "unit": "cup", "item": "sugar", "note": "white or brown" },
+		{ "amount": 1, "item": "large egg", "plural": "large eggs", "note": "beaten" },
+		{ "amount": 1, "unit": "tsp", "item": "vanilla extract" },
+		{ "amount": 1, "unit": "tsp", "item": "baking soda" },
+		{ "amount": 0.25, "unit": "tsp", "item": "salt" },
+		{ "amount": 1.5, "unit": "cup", "item": "all-purpose flour" },
+		{
+			"amount": 0.5,
+			"unit": "cup",
+			"item": "chopped walnuts or chocolate chips",
+			"note": "optional"
+		}
+	],
+	"instructions": [
+		"Heat the oven to 350°F (175°C) and butter a 9×5-inch loaf pan.",
+		"Mash the bananas in a large bowl with a fork until mostly smooth.",
+		"Stir in the melted butter, then the sugar, egg and vanilla.",
+		"Sprinkle the baking soda and salt over the batter and stir in. Add the flour and stir until just combined; a few streaks are fine. Fold in nuts or chocolate chips, if using.",
+		"Pour into the pan and bake until a skewer in the center comes out clean, 55–65 minutes.",
+		"Cool in the pan for 10 minutes, then turn out onto a rack."
+	],
+	"tips": [
+		"The browner the bananas, the sweeter and more banana-y the bread. Freeze overripe bananas in their peels until you have enough.",
+		"If the top browns before the middle is done, lay a sheet of foil loosely over the pan.",
+		"Muffins: bake the batter in a lined 12-cup muffin tin for 20–25 minutes."
+	]
+}
