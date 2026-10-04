@@ -9,6 +9,7 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 const CACHE = `cache-${version}`;
 // The whole site is prerendered, so everything can be cached for offline use.
 const ASSETS = [...build, ...files, ...prerendered];
+const PRECACHED = new Set(ASSETS);
 // The adapter's fallback page (svelte.config.js): it boots the app on any URL, so offline
 // navigations to pages that aren't cached still get the app shell and its error page.
 const FALLBACK = '/404.html';
@@ -19,7 +20,9 @@ const FALLBACK = '/404.html';
 sw.addEventListener('install', (event) => {
 	event.waitUntil(
 		caches.open(CACHE).then(async (cache) => {
-			await cache.addAll(ASSETS);
+			// Bypass the HTTP cache: GitHub Pages lets browsers keep pages for 10 minutes, and a new
+			// version must not precache the previous version's HTML.
+			await cache.addAll(ASSETS.map((asset) => new Request(asset, { cache: 'reload' })));
 			// Best-effort: `vite dev` and `vite preview` don't serve 404.html, and $app/environment
 			// can't be imported here to tell them apart. A failure only costs the offline not-found
 			// page, so log it rather than fail the install (e2e/errors.test.ts covers the real build).
@@ -62,15 +65,19 @@ sw.addEventListener('fetch', (event) => {
 	event.respondWith(
 		(async () => {
 			const cache = await caches.open(CACHE);
-			// Hashed build assets never change: serve from cache first.
-			if (build.includes(url.pathname)) {
+			// Everything this version precached (pages, build assets, static files) is served from
+			// its own cache first. That keeps the active version consistent, and makes the waiting
+			// worker the only way new code arrives: nothing changes until the user taps Update.
+			if (PRECACHED.has(url.pathname)) {
 				const cached = await cache.match(url.pathname);
 				if (cached) return cached;
 			}
-			// Everything else: network first so content stays fresh, cache when offline.
+			// Anything else (e.g. a URL that isn't a page): network, then cache, then the offline
+			// fallback page for navigations.
 			try {
 				const response = await fetch(request);
-				if (response.ok && response.type === 'basic') void cache.put(request, response.clone());
+				if (response.ok && response.type === 'basic' && !PRECACHED.has(url.pathname))
+					void cache.put(request, response.clone());
 				return response;
 			} catch (error) {
 				const cached =

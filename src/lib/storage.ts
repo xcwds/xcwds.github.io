@@ -271,7 +271,12 @@ export const entries = {
 	),
 	// Its own group, so clearing the calculator's data in Settings never wipes past workouts.
 	workoutHistory: entry<HistoryEntry[]>('workout-history', 'Workout history', parseHistory),
-	settings: entry<Settings>('settings', 'Settings', parseSettings)
+	settings: entry<Settings>('settings', 'Settings', parseSettings),
+	// Newest changelog entry seen in Settings → What's new. Only written after an update, so a
+	// fresh install stores nothing (and sees no "New" badges).
+	whatsNewSeen: entry<number>('settings:whats-new-seen', "What's new last seen", (v) =>
+		Number.isInteger(v) && (v as number) >= 0 ? (v as number) : undefined
+	)
 } satisfies Record<string, Entry<unknown>>;
 
 export const allEntries: Entry<unknown>[] = Object.values(entries);

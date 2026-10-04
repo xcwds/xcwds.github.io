@@ -18,7 +18,7 @@ export function reportSaveFailure(entry?: Entry<unknown>, { explicit = false } =
 		if (failing[entry.key] && !explicit) return;
 		failing[entry.key] = true;
 	}
-	if (!toasts.some((t) => t.message === SAVE_FAILED)) toast(SAVE_FAILED, 6000);
+	if (!toasts.some((t) => t.message === SAVE_FAILED)) toast(SAVE_FAILED, { durationMs: 6000 });
 }
 
 /** Whether the last write of `entry` failed, so this tab holds changes storage doesn't have. */
