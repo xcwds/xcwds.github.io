@@ -11,3 +11,45 @@ html[data-color-scheme='dark'] {
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton/themes/wintry';
+
+/* Accessibility baseline (issue #17). Tap targets: at least 44×44px for controls. Utilities can
+   still set a larger size; checkboxes get their 44px hit area from their <label>. */
+@layer base {
+	button,
+	select,
+	input:not([type='checkbox'], [type='radio'], [type='file'], [type='hidden']),
+	textarea {
+		min-height: 2.75rem;
+	}
+
+	button {
+		min-width: 2.75rem;
+	}
+
+	summary {
+		padding-block: 0.75rem;
+	}
+
+	input[type='checkbox'] {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	/* A clear focus ring for keyboard users only (mouse/touch clicks don't show it). */
+	:focus-visible {
+		outline: 3px solid var(--color-blue-500);
+		outline-offset: 2px;
+	}
+}
+
+/* Respect the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	::before,
+	::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

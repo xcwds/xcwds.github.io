@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { lb, workoutToText, type Exercise, type Workout } from '$lib/utils/lifting';
 	import { persist } from '$lib/persist.svelte';
+	import { toast } from '$lib/toast.svelte';
 	import { entries } from '$lib/storage';
 	import { button, card, field, primary } from './styles';
 
@@ -33,7 +34,6 @@
 		});
 
 	let workout = $state<Workout>({ date: today(), exercises: [] });
-	let copied = $state(false);
 	let canShare = $state(false);
 	let nextId = 1;
 	const id = () => nextId++;
@@ -73,10 +73,9 @@
 	async function copy() {
 		try {
 			await navigator.clipboard.writeText(workoutToText(workout));
-			copied = true;
-			setTimeout(() => (copied = false), 2000);
+			toast('Workout copied.');
 		} catch {
-			// Clipboard blocked.
+			toast("Couldn't copy the workout.");
 		}
 	}
 
@@ -185,7 +184,7 @@
 			disabled={!workout.exercises.length}
 			onclick={copy}
 		>
-			{copied ? 'Copied!' : 'Copy workout'}
+			Copy workout
 		</button>
 		{#if canShare}
 			<button

@@ -146,10 +146,10 @@
 	{#if mode === 'load'}
 		<div class="{card} flex flex-col gap-3">
 			{#if !oneSided}
-				<label class="flex items-center gap-2">
+				<label class="flex min-h-11 items-center gap-2">
 					<input
 						type="checkbox"
-						class="size-5"
+						class="size-6"
 						checked={symmetric}
 						onchange={(e) => setSymmetric(e.currentTarget.checked)}
 					/>
@@ -180,7 +180,7 @@
 										<button
 											type="button"
 											aria-label="Remove {label}"
-											class="{button} size-10 p-0 text-xl"
+											class="{button} size-11 p-0 text-xl"
 											disabled={!sides[side][plate]}
 											onclick={() => change(side, plate, -1)}>−</button
 										>
@@ -191,7 +191,7 @@
 										<button
 											type="button"
 											aria-label="Add {label}"
-											class="{button} size-10 p-0 text-xl"
+											class="{button} size-11 p-0 text-xl"
 											onclick={() => change(side, plate, 1)}>+</button
 										>
 									</div>

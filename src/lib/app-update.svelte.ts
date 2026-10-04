@@ -7,14 +7,14 @@
  * `markBusy`, and the banner asks the user to finish first.
  */
 
+import { toast } from './toast.svelte';
+
 const JUST_UPDATED = 'app:just-updated';
 const CHECK_EVERY_MS = 60 * 60 * 1000;
 
 export const appUpdate = $state({
 	/** A new version is installed and waiting. */
-	available: false,
-	/** The page was just reloaded into a new version. */
-	updated: false
+	available: false
 });
 
 const busy = $state<Record<string, boolean>>({});
@@ -63,7 +63,7 @@ export async function startUpdateChecks(): Promise<void> {
 	try {
 		if (sessionStorage.getItem(JUST_UPDATED)) {
 			sessionStorage.removeItem(JUST_UPDATED);
-			appUpdate.updated = true;
+			toast('App updated to the latest version.');
 		}
 	} catch {
 		// sessionStorage blocked; skip the "updated" note.

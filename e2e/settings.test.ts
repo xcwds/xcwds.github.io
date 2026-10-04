@@ -69,14 +69,16 @@ test('export, clear and import a backup', async ({ page }) => {
 	expect(backup.data['app:coffee-timer:duration']).toBe(120_000);
 
 	await page.getByRole('button', { name: 'Clear all data' }).click();
-	await expect(page.getByRole('status')).toHaveText('All data cleared.');
+	await expect(page.getByTestId('toast').filter({ hasText: 'All data cleared.' })).toBeVisible();
 	await expect(page.getByRole('button', { name: 'Clear Coffee Timer' })).toBeDisabled();
 
 	await page.getByLabel('Backup file').setInputFiles(file);
 	const preview = page.getByTestId('import-preview');
 	await expect(preview).toContainText('Coffee timer duration');
 	await preview.getByRole('button', { name: 'Merge' }).click();
-	await expect(page.getByRole('status')).toHaveText(/^Imported \d+ items?\.$/);
+	await expect(
+		page.getByTestId('toast').filter({ hasText: /^Imported \d+ items?\.$/ })
+	).toBeVisible();
 	await expect(page.getByRole('button', { name: 'Clear Coffee Timer' })).toBeEnabled();
 
 	await gotoHydrated(page, '/utils/coffee-timer');

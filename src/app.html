@@ -9,6 +9,14 @@
 		<link rel="apple-touch-icon" href="%sveltekit.assets%/icons/apple-touch-icon.png" />
 		<meta name="theme-color" content="#bfdbfe" />
 		<script>
+			// Hold on to Chrome's install prompt if it fires before the app starts
+			// (src/lib/install.svelte.ts picks it up).
+			window.addEventListener('beforeinstallprompt', function (event) {
+				event.preventDefault();
+				window.__installPrompt = event;
+			});
+		</script>
+		<script>
 			// Apply the saved theme before first paint so dark mode doesn't flash light.
 			// Keep in sync with src/lib/settings.svelte.ts.
 			(function () {

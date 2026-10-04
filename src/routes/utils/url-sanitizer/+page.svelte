@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { toast } from '$lib/toast.svelte';
 	import { readSharedText } from '$lib/utils/share';
 	import { buildLink, parseLink, readParams, type Param } from '$lib/utils/url';
 
 	let input = $state('');
 	let url = $state<URL | null>(null);
 	let params = $state<Param[]>([]);
-	let copied = $state(false);
 	let canPaste = $state(false);
 	let canShare = $state(false);
 	let shortcutPrefix = $state('https://xcwds.com/utils/url-sanitizer#url=');
@@ -40,7 +40,6 @@
 		input = text;
 		url = parseLink(text);
 		params = url ? readParams(url) : [];
-		copied = false;
 	}
 
 	async function paste() {
@@ -58,10 +57,9 @@
 	async function copy() {
 		try {
 			await navigator.clipboard.writeText(cleaned);
-			copied = true;
-			setTimeout(() => (copied = false), 2000);
+			toast('Link copied.');
 		} catch {
-			// Clipboard blocked; the link is selectable below.
+			toast("Couldn't copy. Select the link and copy it instead.");
 		}
 	}
 
@@ -126,7 +124,7 @@
 			<h2 class="text-lg font-semibold">Clean link</h2>
 			<p class="text-base break-all" data-testid="cleaned">{cleaned}</p>
 			<div class="grid gap-2 {canShare ? 'grid-cols-3' : 'grid-cols-2'}">
-				<button type="button" class={primary} onclick={copy}>{copied ? 'Copied!' : 'Copy'}</button>
+				<button type="button" class={primary} onclick={copy}>Copy</button>
 				{#if canShare}
 					<button type="button" class={primary} onclick={share}>Share</button>
 				{/if}
@@ -173,8 +171,8 @@
 							data-testid="param"
 						>
 							<div class="flex items-center gap-2">
-								<label class="flex items-center gap-2">
-									<input type="checkbox" bind:checked={param.keep} class="size-5" />
+								<label class="flex min-h-11 min-w-11 shrink-0 items-center justify-center">
+									<input type="checkbox" bind:checked={param.keep} class="size-6" />
 									<span class="sr-only">Keep {param.key}</span>
 								</label>
 								<input

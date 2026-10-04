@@ -3,7 +3,9 @@
 	import { version } from '$app/environment';
 	import Acronym from '$lib/Acronym.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
+	import { install, promptInstall } from '$lib/install.svelte';
 	import { reloadSettings, settings } from '$lib/settings.svelte';
+	import { toast } from '$lib/toast.svelte';
 	import {
 		clear,
 		defaultSettings,
@@ -29,7 +31,6 @@
 		{ key: 'keepAwake', label: 'Keep screen on', hint: 'While a timer is running.' }
 	] as const;
 
-	let message = $state('');
 	let pending = $state<Extract<ParsedBackup, { ok: true }> | null>(null);
 	let importError = $state('');
 	let canShareFiles = $state(false);
@@ -80,13 +81,13 @@
 		const a = Object.assign(document.createElement('a'), { href: url, download: file.name });
 		a.click();
 		setTimeout(() => URL.revokeObjectURL(url), 1000);
-		message = 'Backup downloaded.';
+		toast('Backup downloaded.');
 	}
 
 	async function share() {
 		try {
 			await navigator.share({ files: [backupFile()], title: 'xcwds backup' });
-			message = 'Backup shared.';
+			toast('Backup shared.');
 		} catch {
 			// Share sheet dismissed.
 		}
@@ -97,7 +98,6 @@
 		event.currentTarget.value = '';
 		importError = '';
 		pending = null;
-		message = '';
 		if (!file) return;
 		const parsed = parseBackup(await file.text());
 		if (parsed.ok) pending = parsed;
@@ -111,9 +111,11 @@
 		pending = null;
 		reloadSettings();
 		dataVersion++;
-		message = ok
-			? `Imported ${count} ${count === 1 ? 'item' : 'items'}.`
-			: 'Some data could not be saved (storage may be full or blocked).';
+		toast(
+			ok
+				? `Imported ${count} ${count === 1 ? 'item' : 'items'}.`
+				: 'Some data could not be saved (storage may be full or blocked).'
+		);
 	}
 
 	function clearGroup(group: Group) {
@@ -121,7 +123,7 @@
 		clear(group.entries);
 		if (group.id === 'settings') reloadSettings();
 		dataVersion++;
-		message = `Cleared ${group.label}.`;
+		toast(`Cleared ${group.label}.`);
 	}
 
 	function clearAll() {
@@ -129,7 +131,7 @@
 		clear();
 		reloadSettings();
 		dataVersion++;
-		message = 'All data cleared.';
+		toast('All data cleared.');
 	}
 
 	const card = 'flex flex-col gap-3 rounded-2xl bg-white/80 p-4 dark:bg-gray-900';
@@ -146,6 +148,29 @@
 <main
 	class="mx-auto flex max-w-md flex-col gap-6 px-4 pt-2 pb-4 text-gray-800 sm:px-8 sm:pb-8 dark:text-gray-200"
 >
+	{#if install.checked && !install.installed}
+		<section class={card} aria-labelledby="install" data-testid="install">
+			<h2 id="install" class="text-lg font-semibold">Install the app</h2>
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				Get xcwds on your home screen. It opens full-screen and works offline.
+			</p>
+			{#if install.canPrompt}
+				<button type="button" class={primary} onclick={promptInstall}>Install xcwds</button>
+			{:else if install.ios}
+				<ol class="list-decimal pl-5 text-sm">
+					<li>Open this page in <strong>Safari</strong>.</li>
+					<li>Tap <strong>Share</strong> (the square with an arrow).</li>
+					<li>Choose <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
+				</ol>
+			{:else}
+				<p class="text-sm">
+					Use your browser's menu and choose <strong>Install app</strong> or
+					<strong>Add to Home screen</strong>.
+				</p>
+			{/if}
+		</section>
+	{/if}
+
 	<section class={card} aria-labelledby="appearance">
 		<h2 id="appearance" class="text-lg font-semibold">Appearance</h2>
 		<div class="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Theme">
@@ -168,7 +193,7 @@
 	<section class={card} aria-labelledby="timers">
 		<h2 id="timers" class="text-lg font-semibold">Timers</h2>
 		{#each toggles as toggle (toggle.key)}
-			<label class="flex items-center justify-between gap-3">
+			<label class="flex min-h-11 items-center justify-between gap-3">
 				<span class="flex flex-col">
 					<span class="font-medium">{toggle.label}</span>
 					<span class="text-sm text-gray-600 dark:text-gray-400">{toggle.hint}</span>
@@ -282,10 +307,6 @@
 		>
 			Clear all data
 		</button>
-
-		<p class="min-h-5 text-sm font-medium text-green-800 dark:text-green-400" role="status">
-			{message}
-		</p>
 	</section>
 
 	<section class={card} aria-labelledby="about">

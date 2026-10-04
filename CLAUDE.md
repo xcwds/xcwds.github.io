@@ -41,3 +41,9 @@ Package manager: pnpm.
   user taps Update in the banner (`src/lib/app-update.svelte.ts`, `UpdateBanner.svelte`). Anything a reload
   would interrupt must call `markBusy(name, () => isBusy)` (the coffee and cooking timers do). The e2e test
   `e2e/update.test.ts` deploys a fake new version against its own copy of `build/`.
+- Feedback and app chrome: show confirmations with `toast()` from `src/lib/toast.svelte.ts` (not per-tool
+  button text); keep validation errors inline next to their control. Toasts, the update banner and the
+  offline notice share one stack in the root layout. Install support (`install.svelte.ts`) shows an
+  Install button / iPhone steps in Settings and hides once installed.
+- Accessibility baseline lives in `app.css`: 44px minimum controls, a visible `:focus-visible` ring and
+  reduced-motion support. `e2e/app-extras.test.ts` audits tap targets on every page; add new pages to it.
