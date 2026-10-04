@@ -240,6 +240,16 @@ describe('settings entry', () => {
 		store.setItem(entries.settings.key, JSON.stringify({ theme: 'neon' }));
 		expect(read(entries.settings)?.theme).toBe('system');
 	});
+
+	it('loads the oven unit, defaulting to °F', () => {
+		// Saved before the oven converter existed.
+		store.setItem(entries.settings.key, JSON.stringify({ theme: 'dark' }));
+		expect(read(entries.settings)?.ovenUnit).toBe('F');
+		write(entries.settings, { ...defaultSettings, ovenUnit: 'C' });
+		expect(read(entries.settings)?.ovenUnit).toBe('C');
+		store.setItem(entries.settings.key, JSON.stringify({ ovenUnit: 'K' }));
+		expect(read(entries.settings)?.ovenUnit).toBe('F');
+	});
 });
 
 describe('groups and clear', () => {

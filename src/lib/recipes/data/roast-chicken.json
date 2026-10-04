@@ -4,11 +4,11 @@
 	"emoji": "🍗",
 	"tags": ["Dinner"],
 	"description": "A whole chicken with crisp, salty skin and juicy meat. Little hands-on time, and the leftovers make the week's sandwiches, soups and salads.",
-	"yield": { "amount": 4, "unit": "servings", "singular": "serving" },
+	"yield": { "amount": 4, "unit": "servings", "singular": "serving", "step": 4 },
 	"time": "1 h 40 min",
 	"oven": { "temp": 425, "minutes": [70, 90], "food": "meat" },
 	"notes": [
-		"Times are for a 4–5 lb chicken. Cooking more than one? Roast them side by side; the time stays about the same."
+		"Times are for a 4–5 lb chicken. Cooking more than one? The servings stepper adds a whole chicken at a time; roast them side by side and the time stays about the same."
 	],
 	"ingredients": [
 		{ "amount": 1, "item": "whole chicken (4–5 lb)", "plural": "whole chickens (4–5 lb each)" },

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import OvenWarnings from '$lib/OvenWarnings.svelte';
 	import TempInput from '$lib/TempInput.svelte';
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import { settings } from '$lib/settings.svelte';
@@ -10,6 +11,7 @@
 		formatMinutes,
 		fromF as inUnit,
 		ovenProblem,
+		ovenWarnings,
 		type FoodId
 	} from '$lib/utils/oven';
 
@@ -31,6 +33,7 @@
 		doneF: preset?.doneF ?? customDoneF
 	});
 	let problem = $derived(ovenProblem(input));
+	let warnings = $derived(ovenWarnings({ ...input, minOvenF: preset?.minOvenF }));
 	let result = $derived(adjustOvenTime(input));
 	const deg = (f: number) => `${Math.round(inUnit(f, unit))}°${unit}`;
 	let change = $derived(result === undefined ? 0 : Math.round(result) - Math.round(minutes));
@@ -63,6 +66,8 @@
 			<p class="text-sm text-red-700 dark:text-red-400" role="alert">{problem}</p>
 		{/if}
 	</section>
+
+	<OvenWarnings {warnings} />
 
 	<form class="flex flex-col gap-4" onsubmit={(e) => e.preventDefault()}>
 		<TempUnitToggle />

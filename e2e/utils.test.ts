@@ -112,6 +112,14 @@ test('oven time converter estimates a new time, in °F or °C', async ({ page })
 	await page.getByLabel('Your oven (°F)').fill('350');
 	await expect(page.getByTestId('oven-change')).toHaveText('Same as the recipe');
 
+	// Decimals aren't rounded away while typing; the field shows a rounded value after blur.
+	await page.getByLabel('Your oven (°F)').fill('300.5');
+	await expect(page.getByLabel('Your oven (°F)')).toHaveValue('300.5');
+	await expect(page.getByTestId('oven-warnings')).toContainText('Food safety');
+	await page.getByLabel('Recipe time (min)').focus();
+	await expect(page.getByLabel('Your oven (°F)')).toHaveValue('301');
+	await page.getByLabel('Your oven (°F)').fill('400');
+
 	await page.getByRole('radio', { name: 'Celsius (°C)' }).click();
 	await expect(page.getByLabel('Recipe oven (°C)')).toHaveValue('177');
 	await page.getByLabel('Your oven (°C)').fill('200');

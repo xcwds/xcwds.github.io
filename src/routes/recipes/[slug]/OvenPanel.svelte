@@ -2,6 +2,7 @@
 	import { untrack } from 'svelte';
 	import { resolve } from '$app/paths';
 	import type { RecipeOven } from '$lib/recipes';
+	import OvenWarnings from '$lib/OvenWarnings.svelte';
 	import TempInput from '$lib/TempInput.svelte';
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import { settings } from '$lib/settings.svelte';
@@ -11,7 +12,8 @@
 		foodPreset,
 		formatMinutesRange,
 		formatTemp,
-		ovenProblem
+		ovenProblem,
+		ovenWarnings
 	} from '$lib/utils/oven';
 
 	let { oven }: { oven: RecipeOven } = $props();
@@ -30,6 +32,7 @@
 		...foodPreset(oven.food)
 	}));
 	let problem = $derived(ovenProblem(input(range[0])));
+	let warnings = $derived(ovenWarnings(input(range[0])));
 	let adjusted = $derived(
 		problem
 			? undefined
@@ -56,6 +59,7 @@
 		{#if problem}
 			<p class="text-sm text-red-700 dark:text-red-400" role="alert">{problem}</p>
 		{/if}
+		<OvenWarnings {warnings} />
 		<p class="text-sm text-gray-600 dark:text-gray-400">
 			An estimate: start checking early and go by the doneness cues in the steps. More options in
 			the <a class="underline" href={resolve('/utils/oven-time')}>Oven Time Converter</a>.

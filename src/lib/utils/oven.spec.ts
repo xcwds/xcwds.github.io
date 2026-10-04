@@ -7,6 +7,8 @@ import {
 	formatTemp,
 	fromF,
 	ovenProblem,
+	ovenWarnings,
+	SAFE_MIN_OVEN_F,
 	toF
 } from './oven';
 
@@ -53,6 +55,37 @@ describe('adjustOvenTime', () => {
 		expect(ovenProblem({ fromF: 350, toF: NaN, minutes: 60, startF: 40, doneF: 165 })).toBe(
 			'Enter every number.'
 		);
+	});
+});
+
+describe('ovenWarnings', () => {
+	const input = (fromF: number, to: number, food = meat) => ({
+		fromF,
+		toF: to,
+		minutes: 60,
+		...food
+	});
+
+	it('warns when meat would cook below the safe minimum oven temperature', () => {
+		expect(meat.minOvenF).toBe(SAFE_MIN_OVEN_F);
+		expect(ovenWarnings(input(350, 325))).toEqual([]);
+		const [warning] = ovenWarnings(input(350, 300));
+		expect(warning).toMatch(/^Food safety: cook this at 325°F \(163°C\) or hotter/);
+	});
+
+	it('has no minimum for baked goods', () => {
+		expect(ovenWarnings(input(350, 300, foodPreset('baked')))).toEqual([]);
+	});
+
+	it('warns when the change is too big to trust the estimate', () => {
+		expect(ovenWarnings(input(350, 425))).toEqual([]);
+		expect(ovenWarnings(input(350, 450))).toEqual([expect.stringMatching(/big change/)]);
+		// The recipe-panel example from the review: roast chicken at 250°F gets both warnings.
+		expect(ovenWarnings(input(425, 250))).toHaveLength(2);
+	});
+
+	it('says nothing when there is no estimate anyway', () => {
+		expect(ovenWarnings(input(350, 150))).toEqual([]);
 	});
 });
 

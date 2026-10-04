@@ -41,6 +41,28 @@ test('the oven panel estimates the time at another temperature', async ({ page }
 	await expect(panel.getByLabel('Your oven (°F)')).toHaveValue('350');
 	await expect(page.getByTestId('oven-panel-time')).toHaveText('about 10–12 min');
 
+	await expect(panel.getByTestId('oven-warnings')).toHaveCount(0);
+
 	await panel.getByLabel('Your oven (°F)').fill('150');
 	await expect(panel.getByRole('alert')).toContainText('hotter');
+});
+
+test('the oven panel warns about unsafe temperatures for meat', async ({ page }) => {
+	await gotoHydrated(page, '/recipes/roast-chicken');
+	await page.getByText('Cooking at a different temperature?').click();
+	const panel = page.getByTestId('oven-panel');
+	await expect(panel.getByLabel('Your oven (°F)')).toHaveValue('400');
+	await expect(panel.getByTestId('oven-warnings')).toHaveCount(0);
+
+	await panel.getByLabel('Your oven (°F)').fill('250');
+	const warnings = panel.getByTestId('oven-warnings');
+	await expect(warnings).toContainText('Food safety: cook this at 325°F (163°C) or hotter.');
+	await expect(warnings).toContainText('big change');
+});
+
+test('roast chicken scales by whole chickens', async ({ page }) => {
+	await gotoHydrated(page, '/recipes/roast-chicken');
+	await page.getByRole('button', { name: 'More servings' }).click();
+	await expect(page.getByTestId('servings-target')).toHaveText('8 servings');
+	await expect(page.getByTestId('ingredients')).toContainText('2 whole chickens (4–5 lb each)');
 });

@@ -10,7 +10,7 @@
 			path: '/recipes',
 			emoji: '📖',
 			name: 'Recipes',
-			blurb: `${recipes.length} recipes from our kitchen.`
+			blurb: `${recipes.length} classic back-pocket recipes.`
 		},
 		{
 			path: '/utils',
