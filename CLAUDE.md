@@ -13,9 +13,24 @@ Package manager: pnpm.
 
 - Recipes at `/recipes` are classic back-pocket recipes written here with structured, scalable
   ingredients — follow [docs/classic-recipes.md](docs/classic-recipes.md). Tracking issue: #49.
-- Before pushing: `pnpm check && pnpm lint && pnpm test:unit -- --run --project server && pnpm build`.
+- Before pushing: `pnpm check && pnpm lint && pnpm test:unit --run --project server && pnpm build`
+  (no `--` before `--run`: with it, vitest ignores `--project` and also starts the browser project).
+- `pnpm test:e2e` needs a Playwright browser. In Claude Code cloud containers don't run
+  `playwright install`; use a config (kept out of the repo) that sets
+  `use.launchOptions.executablePath` to the Chromium under `/opt/pw-browsers/chromium-*/chrome-linux/chrome`.
 - Always open a pull request for work you push (against `main`, linking the issues it addresses),
   unless the user explicitly says not to. Pushing a branch alone is not done.
+- After opening a PR, review it yourself adversarially (look for what's broken, unsafe or missing, not
+  just style), and post that review following "Reviewing a PR" below. If it finds anything, fix it,
+  push, reply to each thread with the fixing commit, resolve it, and review again. Allow at most 3
+  rounds of fixes: a review always follows the last fix push, and if that review still finds
+  something, stop, leave the PR open and report the remaining findings to the user.
+- Merging your own PR (one you opened, or one the user asked you to take over or get merged): when a
+  review passes (nothing left that needs a change) and the PR is mergeable (no conflicts, the pre-push
+  checks and `pnpm test:e2e` pass on its head), squash-merge it, unless the user said not to merge.
+  Until CI runs on PRs (#34), those local runs are the only verification. GitHub won't let you
+  approve your own PR, so post the passing review as a comment review. Reviewing anyone else's PR
+  only posts the review; never merge it unless asked.
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
   home page render from that list). New tools arrive as GitHub issues. The site is static with no server or
   auth, so tools must be fully client-side; shared logic lives in `src/lib/utils/` (timers count against
