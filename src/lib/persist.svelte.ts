@@ -9,21 +9,34 @@ export const SAVE_FAILED =
 const failing: Record<string, boolean> = {};
 
 /**
- * Tells the user a save failed. Repeated failures of the same entry stay quiet, and the toast
- * is never shown twice at once (one action can fail to save several entries).
+ * Tells the user a save failed. Repeated background (autosave) failures of the same entry stay
+ * quiet; a failed `explicit` action (one the user tapped, like Finish workout) always reports.
+ * The toast is never shown twice at once (one action can fail to save several entries).
  */
-export function reportSaveFailure(entry?: Entry<unknown>): void {
+export function reportSaveFailure(entry?: Entry<unknown>, { explicit = false } = {}): void {
 	if (entry) {
-		if (failing[entry.key]) return;
+		if (failing[entry.key] && !explicit) return;
 		failing[entry.key] = true;
 	}
 	if (!toasts.some((t) => t.message === SAVE_FAILED)) toast(SAVE_FAILED, 6000);
 }
 
-/** Records the outcome of a write of `entry`, reporting a failure. Returns `saved`. */
-export function saveResult(entry: Entry<unknown>, saved: boolean): boolean {
+/** Whether the last write of `entry` failed, so this tab holds changes storage doesn't have. */
+export function hasUnsavedChanges(entry: Entry<unknown>): boolean {
+	return failing[entry.key] ?? false;
+}
+
+/**
+ * Records the outcome of a write of `entry`, reporting a failure. Pass `explicit` for actions
+ * that confirm a save, so every failure is reported. Returns `saved`.
+ */
+export function saveResult(
+	entry: Entry<unknown>,
+	saved: boolean,
+	options: { explicit?: boolean } = {}
+): boolean {
 	if (saved) delete failing[entry.key];
-	else reportSaveFailure(entry);
+	else reportSaveFailure(entry, options);
 	return saved;
 }
 
@@ -34,7 +47,10 @@ export function saveResult(entry: Entry<unknown>, saved: boolean): boolean {
  * Returning `undefined` from `get` removes the entry. Call during component init.
  *
  * Changes saved by another tab are loaded as they happen, so a stale copy here never
- * overwrites them; `cleared` runs when another tab removes the entry. Pass `sync: false` for
+ * overwrites them; `cleared` runs when another tab removes the entry. `set` may then receive a
+ * value with fields missing (another tab dropped them, e.g. Settings forgetting a choice):
+ * treat a missing field as "back to the default", not "keep what I have", or the next save here
+ * writes the old value back. Pass `sync: false` for
  * per-window UI state (e.g. the open tab) that shouldn't follow other windows. A failed save
  * shows a toast once (see `reportSaveFailure`).
  *

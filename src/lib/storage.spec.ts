@@ -123,6 +123,14 @@ describe('update', () => {
 		expect(update(e, [1], push(2))).toEqual({ value: [1, 2], saved: false });
 	});
 
+	it("starts from this tab's copy when it holds changes storage doesn't have", () => {
+		write(e, [1]);
+		expect(update(e, [1, 5], push(2), { unsaved: true })).toEqual({
+			value: [1, 5, 2],
+			saved: true
+		});
+	});
+
 	it('keeps the new value but reports a failed save when storage is full', () => {
 		write(e, [1]);
 		store.setItem = () => {

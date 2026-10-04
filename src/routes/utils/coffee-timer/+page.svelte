@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { browser } from '$app/environment';
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
 	import { markBusy } from '$lib/app-update.svelte';
@@ -33,12 +33,14 @@
 		{ cleared: () => (custom = null) }
 	);
 
-	// Settings load after this page mounts; then show the starting length.
-	let seeded = false;
+	// Show the starting length once settings load (after this page mounts), and again whenever
+	// it changes before a brew starts, e.g. when another tab changes or clears it.
 	$effect(() => {
-		if (!settingsStatus.ready || seeded) return;
-		seeded = true;
-		if (!timer.running) timer.reset(base);
+		if (!settingsStatus.ready) return;
+		const ms = base;
+		untrack(() => {
+			if (!started && !timer.running) timer.reset(ms);
+		});
 	});
 
 	const awake = browser ? keepAwake(() => timer.running) : undefined;

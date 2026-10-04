@@ -441,16 +441,18 @@ export function remove(e: Entry<unknown>): boolean {
 
 /**
  * Applies `change` to the latest saved value and saves the result, so a change made in one tab
- * never overwrites what another tab saved meanwhile. When storage can't be read, `current` (this
- * tab's copy) is changed instead. `undefined` removes the entry. Returns the new value and
- * whether it was saved.
+ * never overwrites what another tab saved meanwhile. `current` (this tab's copy) is changed
+ * instead when storage can't be read, or when `unsaved` says this tab holds changes storage
+ * doesn't have (its last write failed), which starting from storage would lose. `undefined`
+ * removes the entry. Returns the new value and whether it was saved.
  */
 export function update<T>(
 	e: Entry<T>,
 	current: T | undefined,
-	change: (latest: T | undefined) => T | undefined
+	change: (latest: T | undefined) => T | undefined,
+	{ unsaved = false }: { unsaved?: boolean } = {}
 ): { value: T | undefined; saved: boolean } {
-	const value = change(storage() ? read(e) : current);
+	const value = change(storage() && !unsaved ? read(e) : current);
 	const saved = value === undefined ? remove(e) : write(e, value);
 	return { value, saved };
 }

@@ -54,6 +54,39 @@ test('two open tabs never overwrite each other’s workout history (#42)', async
 	await expect(entries(a).nth(1)).toContainText('Squat');
 });
 
+test('a new default equipment from another tab is not undone by an open calculator', async ({
+	context
+}) => {
+	const a = await context.newPage();
+	const b = await context.newPage();
+	const equipment = (page: Page, name: string) =>
+		page.getByRole('group', { name: 'Equipment' }).getByRole('button', { name, exact: true });
+	await gotoHydrated(b, '/utils/weightlifting');
+	await equipment(b, 'Dumbbell').click();
+	await expect(equipment(b, 'Dumbbell')).toHaveAttribute('aria-pressed', 'true');
+
+	// Changing the default in Settings clears the choice, so tab B switches to the new default
+	// and doesn't save its old choice back on its next change.
+	await gotoHydrated(a, '/settings');
+	await a.getByLabel('Default equipment').selectOption({ label: 'Kettlebell' });
+	await expect(equipment(b, 'Kettlebell')).toHaveAttribute('aria-pressed', 'true');
+	await b.getByRole('button', { name: 'Add 5 lb', exact: true }).click();
+	await b.reload();
+	await b.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(equipment(b, 'Kettlebell')).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('an idle coffee timer shows a length changed in another tab', async ({ context }) => {
+	const a = await context.newPage();
+	const b = await context.newPage();
+	await gotoHydrated(a, '/utils/coffee-timer');
+	await gotoHydrated(b, '/utils/coffee-timer');
+	await a.getByRole('button', { name: '+30s' }).click();
+	await expect(b.getByTestId('display')).toHaveText('2:00');
+	await a.getByRole('button', { name: 'Back to 1:30' }).click();
+	await expect(b.getByTestId('display')).toHaveText('1:30');
+});
+
 test('the open weightlifting tab is per window, but settings follow other tabs', async ({
 	context
 }) => {
@@ -91,17 +124,30 @@ test.describe('when storage is full (#43)', () => {
 		// One error, however many entries failed to save along the way.
 		await expect(toasts).toHaveText([SAVE_FAILED]);
 		await expect(page.getByText('Workout saved to history.')).toHaveCount(0);
-		// The workout is still kept in this tab's history until the app closes.
+		// Every failed Finish is reported, not just the first one.
+		await toasts.click();
+		await expect(toasts).toHaveCount(0);
+		await finishWorkout(page, 'Bench Press');
+		await expect(toasts).toHaveText([SAVE_FAILED]);
+		await expect(page.getByText('Workout saved to history.')).toHaveCount(0);
+		// The workouts are still kept in this tab's history until the app closes.
 		await tab(page, 'History').click();
-		await expect(entries(page)).toHaveCount(1);
+		await expect(entries(page)).toHaveCount(2);
 	});
 
 	test('Save as my defaults says it could not save', async ({ page }) => {
 		await gotoHydrated(page, '/utils/pizza-dough');
 		await page.getByLabel('Dough balls').fill('6');
-		await page.getByRole('button', { name: 'Save as my defaults' }).click();
-		await expect(page.getByTestId('toast')).toHaveText([SAVE_FAILED]);
+		const save = page.getByRole('button', { name: 'Save as my defaults' });
+		await save.click();
+		const toasts = page.getByTestId('toast');
+		await expect(toasts).toHaveText([SAVE_FAILED]);
 		await expect(page.getByText('Saved as your pizza dough defaults.')).toHaveCount(0);
+		// A second try is reported again.
+		await toasts.click();
+		await page.getByLabel('Dough balls').fill('8');
+		await save.click();
+		await expect(toasts).toHaveText([SAVE_FAILED]);
 	});
 
 	test('Settings warns that nothing can be saved', async ({ page }) => {

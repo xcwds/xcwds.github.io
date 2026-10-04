@@ -59,8 +59,10 @@ Package manager: pnpm.
   when `get` returns `undefined`. It loads changes other tabs save (`storage` event; pass `cleared` to
   handle removal, `sync: false` for per-window UI state) and reports failed writes with one toast
   (`reportSaveFailure`). Actions that confirm a save must check the real result: apply list changes with
-  `update()` from `storage.ts` (it starts from the latest saved value) then `markSaved()`, or call
-  `saveSettings()`, and only toast "saved" when it returns true. Keep "nothing saved" meaningful: a tool default applies until the user
+  `update()` from `storage.ts` (it starts from the latest saved value) then `markSaved()` and
+  `saveResult(..., { explicit: true })`, or call `saveSettings()`, and only toast "saved" when it returns
+  true. A synced value can lack fields another tab dropped: in `set`, treat a missing field as "back to the
+  default", never "keep mine". Keep "nothing saved" meaningful: a tool default applies until the user
   makes their own choice, and changing the default in Settings clears that choice. Workouts store their
   own `unit`; never label logged weights with the calculator's current unit.
 - Workout history: "Finish workout" moves the current workout into `app:workout-history` (its own storage

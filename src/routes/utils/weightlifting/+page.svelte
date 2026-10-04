@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { persist, saveResult } from '$lib/persist.svelte';
+	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
 	import { entries, update } from '$lib/storage';
 	import type { HistoryEntry, Workout } from '$lib/utils/lifting';
 	import History from './History.svelte';
@@ -39,13 +39,19 @@
 	 * tab may have changed since), saves it, and returns whether it was saved.
 	 */
 	function changeHistory(change: (latest: HistoryEntry[]) => HistoryEntry[]): boolean {
-		const result = update(entries.workoutHistory, $state.snapshot(history), (latest) => {
-			const next = change(latest ?? []);
-			return next.length ? next : undefined;
-		});
+		const result = update(
+			entries.workoutHistory,
+			$state.snapshot(history),
+			(latest) => {
+				const next = change(latest ?? []);
+				return next.length ? next : undefined;
+			},
+			// After a failed save this tab's list is ahead of storage; don't drop what it holds.
+			{ unsaved: hasUnsavedChanges(entries.workoutHistory) }
+		);
 		history = result.value ?? [];
 		savedHistory.markSaved();
-		return saveResult(entries.workoutHistory, result.saved);
+		return saveResult(entries.workoutHistory, result.saved, { explicit: true });
 	}
 
 	function finished(workout: Workout): boolean {

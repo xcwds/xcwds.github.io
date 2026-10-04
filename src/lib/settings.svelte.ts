@@ -39,7 +39,7 @@ let lastSaved: string | undefined;
 export function saveSettings(): boolean {
 	const snapshot = $state.snapshot(settings);
 	lastSaved = JSON.stringify(snapshot);
-	return saveResult(entries.settings, write(entries.settings, snapshot));
+	return saveResult(entries.settings, write(entries.settings, snapshot), { explicit: true });
 }
 
 /** Call once in the browser (root layout): loads settings, applies the theme, saves changes. */
