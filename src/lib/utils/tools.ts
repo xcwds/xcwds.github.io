@@ -23,5 +23,11 @@ export const tools = [
 		emoji: '🧼',
 		name: 'URL Sanitizer',
 		blurb: 'Strip tracking params from a link before sharing it.'
+	},
+	{
+		path: '/utils/weightlifting',
+		emoji: '🏋️',
+		name: 'Weightlifting Calculator',
+		blurb: 'Plate math for bars, dumbbells and kettlebells, plus a workout log.'
 	}
 ] as const;
