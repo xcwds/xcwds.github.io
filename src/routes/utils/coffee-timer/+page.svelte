@@ -43,14 +43,18 @@
 		base = ms;
 	}
 
+	/** Adjusting a timer that hasn't started changes the default; mid-brew it only changes this run. */
 	function adjust(ms: number) {
+		const atStart = !timer.running && timer.remaining === base;
 		timer.add(ms);
-		if (!timer.running) setBase(timer.duration);
+		if (atStart) setBase(timer.duration);
 	}
 
 	function toggle() {
 		primeAudio();
-		if (timer.running) timer.pause();
+		// Stopping a finished brew resets it, so the next Start begins a fresh countdown.
+		if (over) timer.reset(base);
+		else if (timer.running) timer.pause();
 		else timer.start();
 	}
 </script>

@@ -37,6 +37,34 @@ test('coffee timer counts down from 1:30 and adjusts', async ({ page }) => {
 	await page.clock.runFor(85_000);
 	await expect(page.getByText('Done!')).toBeVisible();
 	await expect(display).toHaveText('+0:05');
+
+	// Stopping a finished brew resets it, so Start begins a fresh countdown (#25).
+	await page.getByRole('button', { name: 'Stop' }).click();
+	await expect(display).toHaveText('1:30');
+	await page.getByRole('button', { name: 'Start' }).click();
+	await page.clock.runFor(1_000);
+	await expect(display).toHaveText('1:29');
+});
+
+test('coffee timer adjustments mid-brew keep the saved default (#26)', async ({ page }) => {
+	await page.clock.install({ time: new Date('2026-01-01T08:00:00') });
+	await gotoHydrated(page, '/utils/coffee-timer');
+	await page.clock.pauseAt(new Date('2026-01-01T08:00:01'));
+	const display = page.getByTestId('display');
+	await page.getByRole('button', { name: 'Start' }).click();
+	await page.clock.runFor(30_000);
+	await page.getByRole('button', { name: 'Pause' }).click();
+	await page.getByRole('button', { name: '+10s' }).click();
+	await expect(display).toHaveText('1:10');
+	await expect(page.getByText('Resets to 1:30.')).toBeVisible();
+	await page.getByRole('button', { name: 'Reset' }).click();
+	await expect(display).toHaveText('1:30');
+
+	// Adjusting before starting still changes the default, and it's saved.
+	await page.getByRole('button', { name: '+30s' }).click();
+	await expect(page.getByText('Resets to 2:00.')).toBeVisible();
+	await page.reload();
+	await expect(display).toHaveText('2:00');
 });
 
 test('cooking timer runs, rings, and survives a reload', async ({ page }) => {
