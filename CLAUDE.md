@@ -29,3 +29,7 @@ Package manager: pnpm.
   About. Dark mode uses `data-color-scheme` on `<html>` (custom `dark` variant in `app.css`), set before
   first paint by the inline script in `app.html` — keep that script in sync with `settings.svelte.ts`.
   Don't use `data-theme`; Skeleton owns it.
+- App updates: the service worker never calls `skipWaiting()` on install; a new version waits until the
+  user taps Update in the banner (`src/lib/app-update.svelte.ts`, `UpdateBanner.svelte`). Anything a reload
+  would interrupt must call `markBusy(name, () => isBusy)` (the coffee and cooking timers do). The e2e test
+  `e2e/update.test.ts` deploys a fake new version against its own copy of `build/`.

@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
+	import { markBusy } from '$lib/app-update.svelte';
 	import { persist } from '$lib/persist.svelte';
 	import { entries } from '$lib/storage';
 	import { formatDuration } from '$lib/utils/time';
@@ -12,6 +13,9 @@
 	let base = $state(DEFAULT_MS);
 	const timer = new Timer(DEFAULT_MS, () => beep(3));
 	let over = $derived(timer.running && timer.done);
+
+	// The countdown itself isn't saved, so an app update (reload) would reset it.
+	markBusy('coffee timer', () => timer.running);
 
 	persist(
 		entries.coffeeDuration,

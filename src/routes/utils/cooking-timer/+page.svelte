@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
+	import { markBusy } from '$lib/app-update.svelte';
 	import { persist } from '$lib/persist.svelte';
 	import { entries } from '$lib/storage';
 	import { formatDuration } from '$lib/utils/time';
@@ -19,6 +20,10 @@
 	const ringing = (item: Item) => item.timer.running && item.timer.done;
 	let anyRinging = $derived(items.some(ringing));
 	let anyRunning = $derived(items.some((item) => item.timer.running));
+
+	// Timers survive a reload, but the alarm stays silent until the next tap (browsers need a
+	// gesture to play sound), so hold app updates while any are running.
+	markBusy('cooking timers', () => anyRunning);
 
 	const awake = browser ? keepAwake(() => anyRunning) : undefined;
 	$effect(() => {

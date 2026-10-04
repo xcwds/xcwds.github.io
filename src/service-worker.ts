@@ -10,13 +10,15 @@ const CACHE = `cache-${version}`;
 // The whole site is prerendered, so everything can be cached for offline use.
 const ASSETS = [...build, ...files, ...prerendered];
 
+// A new version installs and then waits, so it never swaps code out from under a running
+// timer. The app shows an "Update available" banner and sends SKIP_WAITING when the user taps
+// Update (src/lib/app-update.svelte.ts). The very first install activates right away.
 sw.addEventListener('install', (event) => {
-	event.waitUntil(
-		caches
-			.open(CACHE)
-			.then((cache) => cache.addAll(ASSETS))
-			.then(() => sw.skipWaiting())
-	);
+	event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
+});
+
+sw.addEventListener('message', (event) => {
+	if (event.data?.type === 'SKIP_WAITING') void sw.skipWaiting();
 });
 
 sw.addEventListener('activate', (event) => {
