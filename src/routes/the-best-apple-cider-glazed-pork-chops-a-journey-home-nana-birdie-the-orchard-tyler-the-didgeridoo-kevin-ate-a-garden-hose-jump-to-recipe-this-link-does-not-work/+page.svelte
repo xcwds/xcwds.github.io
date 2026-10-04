@@ -95,12 +95,6 @@
 		name="description"
 		content="A cozy autumn recipe and also my entire life story. Jump to recipe (it doesn't work)."
 	/>
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link
-		href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@700;900&display=swap"
-		rel="stylesheet"
-	/>
 </svelte:head>
 
 <div class="blog min-h-svh bg-[#fbf3e6] text-[#3b2a1e]">
@@ -130,9 +124,10 @@
 			<p class="mt-8 text-center text-sm text-[#8a6a52]">
 				Home › Recipes › Autumn › Pork › Feelings
 			</p>
-			<h1 class="headline mt-3 text-center text-4xl leading-tight sm:text-5xl">
+			<!-- The app shell renders the page's only <h1>, so the blog headline is an <h2>. -->
+			<h2 class="headline blog-title mt-3 text-center text-4xl leading-tight sm:text-5xl">
 				🍂 The BEST Apple-Cider Glazed Pork Chops (A Journey Home) 🍂✨
-			</h1>
+			</h2>
 			<p class="mt-3 text-center text-sm text-[#8a6a52]">
 				Posted October 1 · Updated every time Nana calls · 47 min read
 			</p>
@@ -449,6 +444,49 @@
 </div>
 
 <style>
+	/* Self-hosted (static/fonts, OFL) so the page makes no third-party requests and works offline. */
+	@font-face {
+		font-family: 'Lora';
+		font-style: normal;
+		font-weight: 400;
+		font-display: swap;
+		src: url('/fonts/lora-latin-400-normal.woff2') format('woff2');
+	}
+	@font-face {
+		font-family: 'Lora';
+		font-style: italic;
+		font-weight: 400;
+		font-display: swap;
+		src: url('/fonts/lora-latin-400-italic.woff2') format('woff2');
+	}
+	@font-face {
+		font-family: 'Lora';
+		font-style: normal;
+		font-weight: 600;
+		font-display: swap;
+		src: url('/fonts/lora-latin-600-normal.woff2') format('woff2');
+	}
+	@font-face {
+		font-family: 'Playfair Display';
+		font-style: normal;
+		font-weight: 700;
+		font-display: swap;
+		src: url('/fonts/playfair-display-latin-700-normal.woff2') format('woff2');
+	}
+	@font-face {
+		font-family: 'Playfair Display';
+		font-style: normal;
+		font-weight: 900;
+		font-display: swap;
+		src: url('/fonts/playfair-display-latin-900-normal.woff2') format('woff2');
+	}
+	@font-face {
+		font-family: 'Dancing Script';
+		font-style: normal;
+		font-weight: 600;
+		font-display: swap;
+		src: url('/fonts/dancing-script-latin-600-normal.woff2') format('woff2');
+	}
 	.blog {
 		font-family: 'Lora', Georgia, serif;
 		font-size: 1.075rem;
@@ -466,7 +504,8 @@
 	.script {
 		font-family: 'Dancing Script', cursive;
 	}
-	.prose-blog :global(h2) {
+	/* The blog title is an <h2> too (the app shell owns the <h1>) but keeps its own sizing. */
+	.prose-blog :global(h2:not(.blog-title)) {
 		font-size: 1.75rem;
 		font-weight: 700;
 		line-height: 1.25;
@@ -596,7 +635,8 @@
 	.checklist label {
 		display: flex;
 		gap: 0.6rem;
-		align-items: baseline;
+		align-items: center;
+		min-height: 44px;
 		cursor: pointer;
 	}
 	.checklist input {

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { porkChopsPath } from '../src/lib/parody';
 import { gotoHydrated } from './helpers';
 
 test.use({ viewport: { width: 390, height: 844 } });
@@ -82,7 +83,8 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 			(p) => p.getByLabel('Paste a link').fill('https://a.com/?utm_source=x&b=1')
 		],
 		['/utils/weightlifting'],
-		['/settings']
+		['/settings'],
+		[porkChopsPath]
 	];
 	const problems: string[] = [];
 	for (const [path, setup] of pages) {

@@ -1,3 +1,4 @@
+import { porkChopsPath } from '$lib/parody';
 import { getRecipe } from '$lib/recipes';
 import { tools } from '$lib/utils/tools';
 
@@ -18,6 +19,11 @@ export type RouteInfo = {
 	parent?: SectionPath;
 };
 
+/** Standalone pages outside the sections, tools and recipes. */
+const pages: Record<string, RouteInfo> = {
+	[porkChopsPath]: { title: 'Pork Chops', emoji: '🍂', parent: '/' }
+};
+
 const normalize = (pathname: string) => pathname.replace(/\/+$/, '') || '/';
 
 /** Header title and back target for a path. New tools and recipes are picked up automatically. */
@@ -27,6 +33,8 @@ export function routeInfo(pathname: string): RouteInfo {
 
 	const section = sections.find((s) => s.path === path);
 	if (section) return { title: section.label };
+
+	if (pages[path]) return pages[path];
 
 	const tool = tools.find((t) => t.path === path);
 	if (tool) return { title: tool.name, emoji: tool.emoji, parent: '/utils' };

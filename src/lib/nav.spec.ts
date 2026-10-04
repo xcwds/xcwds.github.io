@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { activeSection, routeInfo } from './nav';
+import { porkChopsPath } from './parody';
 import { recipes } from './recipes';
 import { tools } from './utils/tools';
 
@@ -28,6 +29,14 @@ describe('routeInfo', () => {
 				parent: '/recipes'
 			});
 		}
+	});
+
+	it('titles the pork chop parody page', () => {
+		expect(routeInfo(`${porkChopsPath}/`)).toEqual({
+			title: 'Pork Chops',
+			emoji: '🍂',
+			parent: '/'
+		});
 	});
 
 	it('falls back to home for unknown pages', () => {
