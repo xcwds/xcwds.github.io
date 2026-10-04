@@ -20,9 +20,15 @@
 	"instructions": [
 		"Whisk the flour, sugar, baking powder, baking soda and salt in a large bowl.",
 		"In another bowl, whisk the buttermilk and eggs, then whisk in the melted butter.",
-		"Pour the wet ingredients into the dry and stir gently until just combined. Lumps are good; overmixing makes tough pancakes. Let the batter rest for 5 minutes.",
+		{
+			"text": "Pour the wet ingredients into the dry and stir gently until just combined. Lumps are good; overmixing makes tough pancakes. Let the batter rest for 5 minutes.",
+			"timer": { "minutes": 5, "label": "Pancake batter" }
+		},
 		"Heat a skillet or griddle over medium heat and brush with butter. Pour ¼ cup of batter per pancake.",
-		"Cook until bubbles form on top and the edges look set, 2–3 minutes. Flip and cook until golden, 1–2 minutes more."
+		{
+			"text": "Cook until bubbles form on top and the edges look set, 2–3 minutes. Flip and cook until golden, 1–2 minutes more.",
+			"timer": { "minutes": [2, 3], "label": "Pancakes, first side" }
+		}
 	],
 	"tips": [
 		"No buttermilk? Stir 2 Tbsp lemon juice or vinegar into 2 cups of milk and let it sit for 5 minutes.",

@@ -21,7 +21,10 @@
 		"Black pepper, to taste"
 	],
 	"instructions": [
-		"Put the vinegar, mustard, shallot and salt in a jar and let it sit for 5 minutes; the vinegar mellows the shallot.",
+		{
+			"text": "Put the vinegar, mustard, shallot and salt in a jar and let it sit for 5 minutes; the vinegar mellows the shallot.",
+			"timer": { "minutes": 5, "label": "Shallot in vinegar" }
+		},
 		"Add the olive oil and a few grinds of pepper, close the jar and shake hard until thick and combined.",
 		"Taste on a leaf of the salad and adjust: more salt if it tastes flat, more oil if it's too sharp."
 	]

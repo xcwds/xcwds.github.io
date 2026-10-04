@@ -16,7 +16,14 @@
 		ovenWarnings
 	} from '$lib/utils/oven';
 
-	let { oven }: { oven: RecipeOven } = $props();
+	/**
+	 * `activeF` reports the oven temperature to use for the recipe's oven step timers: the one
+	 * entered here while the panel is open and gives an estimate, otherwise undefined.
+	 */
+	let { oven, activeF = $bindable() }: { oven: RecipeOven; activeF?: number | undefined } =
+		$props();
+
+	let open = $state(false);
 
 	// °F, shown in the oven converter's unit. Starts 25°F under the recipe: the common case is an
 	// oven that's already busy with something cooler, or a dish that's browning too fast. The
@@ -38,9 +45,12 @@
 			? undefined
 			: ([adjustOvenTime(input(range[0]))!, adjustOvenTime(input(range[1]))!] as const)
 	);
+	$effect(() => {
+		activeF = open && !problem && yourF !== oven.temp ? yourF : undefined;
+	});
 </script>
 
-<details class="rounded-lg bg-white/70 dark:bg-gray-900" data-testid="oven-panel">
+<details class="rounded-lg bg-white/70 dark:bg-gray-900" data-testid="oven-panel" bind:open>
 	<summary class="cursor-pointer px-4 py-3 font-medium">Cooking at a different temperature?</summary
 	>
 	<div class="flex flex-col gap-3 px-4 pb-4">
@@ -61,8 +71,9 @@
 		{/if}
 		<OvenWarnings {warnings} />
 		<p class="text-sm text-gray-600 dark:text-gray-400">
-			An estimate: start checking early and go by the doneness cues in the steps. More options in
-			the <a class="underline" href={resolve('/utils/oven-time')}>Oven Time Converter</a>.
+			An estimate: start checking early and go by the doneness cues in the steps. While this panel
+			is open, the steps' oven timers use your temperature. More options in the
+			<a class="underline" href={resolve('/utils/oven-time')}>Oven Time Converter</a>.
 		</p>
 	</div>
 </details>

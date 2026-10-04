@@ -29,8 +29,14 @@
 		"Mash the bananas in a large bowl with a fork until mostly smooth.",
 		"Stir in the melted butter, then the sugar, egg and vanilla.",
 		"Sprinkle the baking soda and salt over the batter and stir in. Add the flour and stir until just combined; a few streaks are fine. Fold in nuts or chocolate chips, if using.",
-		"Pour into the pan and bake until a skewer in the center comes out clean, 55–65 minutes.",
-		"Cool in the pan for 10 minutes, then turn out onto a rack."
+		{
+			"text": "Pour into the pan and bake until a skewer in the center comes out clean, 55–65 minutes.",
+			"timer": { "minutes": [55, 65], "label": "Banana bread", "oven": true }
+		},
+		{
+			"text": "Cool in the pan for 10 minutes, then turn out onto a rack.",
+			"timer": { "minutes": 10, "label": "Banana bread cooling" }
+		}
 	],
 	"tips": [
 		"The browner the bananas, the sweeter and more banana-y the bread. Freeze overripe bananas in their peels until you have enough.",

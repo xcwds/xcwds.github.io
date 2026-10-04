@@ -24,7 +24,10 @@
 		"Beat the butter and both sugars until light and creamy, about 2 minutes. Beat in the vanilla, then the eggs one at a time.",
 		"Mix in the flour mixture on low speed until just combined, then stir in the chocolate chips.",
 		"Drop rounded tablespoons of dough about 2 inches apart on the baking sheets.",
-		"Bake until the edges are golden and the centers still look a little soft, 9–11 minutes. Cool on the sheet for 2 minutes, then move to a rack."
+		{
+			"text": "Bake until the edges are golden and the centers still look a little soft, 9–11 minutes. Cool on the sheet for 2 minutes, then move to a rack.",
+			"timer": { "minutes": [9, 11], "label": "Cookies", "oven": true }
+		}
 	],
 	"tips": [
 		"Chill the dough for at least 30 minutes (or up to 3 days) for thicker cookies with a deeper, toffee-like flavor.",
