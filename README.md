@@ -1,6 +1,6 @@
 # xcwds
 
-**A cyber-web Swiss Army knife.** Live at [xcwds.com](https://xcwds.com).
+**Everyday tools that stay on your device.** Live at [xcwds.com](https://xcwds.com).
 
 **xcwds**: e**X**ecutes **C**lient-side, **W**ithout **D**ata **S**ervers.
 
