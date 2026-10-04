@@ -32,7 +32,7 @@
 		...foodPreset(oven.food)
 	}));
 	let problem = $derived(ovenProblem(input(range[0])));
-	let warnings = $derived(ovenWarnings(input(range[0])));
+	let warnings = $derived(ovenWarnings(input(range[0]), unit));
 	let adjusted = $derived(
 		problem
 			? undefined

@@ -58,6 +58,8 @@ test('the oven panel warns about unsafe temperatures for meat', async ({ page })
 	const warnings = panel.getByTestId('oven-warnings');
 	await expect(warnings).toContainText('Food safety: cook this at 325°F (163°C) or hotter.');
 	await expect(warnings).toContainText('big change');
+	// Announced through a live region that was already in the page.
+	await expect(panel.getByRole('status')).toContainText('Food safety');
 });
 
 test('roast chicken scales by whole chickens', async ({ page }) => {

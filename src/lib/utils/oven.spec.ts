@@ -9,7 +9,8 @@ import {
 	ovenProblem,
 	ovenWarnings,
 	SAFE_MIN_OVEN_F,
-	toF
+	toF,
+	type FoodPreset
 } from './oven';
 
 const meat = foodPreset('meat');
@@ -59,33 +60,46 @@ describe('adjustOvenTime', () => {
 });
 
 describe('ovenWarnings', () => {
-	const input = (fromF: number, to: number, food = meat) => ({
+	const input = (fromF: number, to: number, food: FoodPreset = meat) => ({
 		fromF,
 		toF: to,
 		minutes: 60,
-		...food
+		startF: food.startF,
+		doneF: food.doneF
 	});
 
-	it('warns when meat would cook below the safe minimum oven temperature', () => {
-		expect(meat.minOvenF).toBe(SAFE_MIN_OVEN_F);
-		expect(ovenWarnings(input(350, 325))).toEqual([]);
-		const [warning] = ovenWarnings(input(350, 300));
+	it('warns when food from the fridge would cook below the safe minimum', () => {
+		expect(ovenWarnings(input(350, SAFE_MIN_OVEN_F), 'F')).toEqual([]);
+		const [warning] = ovenWarnings(input(350, 300), 'F');
 		expect(warning).toMatch(/^Food safety: cook this at 325°F \(163°C\) or hotter/);
+		expect(ovenWarnings(input(350, 300, foodPreset('roast')), 'F')).toHaveLength(1);
+		expect(ovenWarnings(input(350, 300, foodPreset('casserole')), 'F')).toHaveLength(1);
+	});
+
+	it('also warns for custom values that start at fridge temperature', () => {
+		const custom = { id: 'custom', name: 'Custom', startF: 38, doneF: 145 };
+		expect(ovenWarnings(input(350, 300, custom), 'F')).toHaveLength(1);
+		expect(ovenWarnings(input(350, 300, { ...custom, startF: 70 }), 'F')).toEqual([]);
+	});
+
+	it('leads with the chosen unit', () => {
+		const [warning] = ovenWarnings(input(350, 300), 'C');
+		expect(warning).toMatch(/^Food safety: cook this at 163°C \(325°F\) or hotter/);
 	});
 
 	it('has no minimum for baked goods', () => {
-		expect(ovenWarnings(input(350, 300, foodPreset('baked')))).toEqual([]);
+		expect(ovenWarnings(input(350, 300, foodPreset('baked')), 'F')).toEqual([]);
 	});
 
 	it('warns when the change is too big to trust the estimate', () => {
-		expect(ovenWarnings(input(350, 425))).toEqual([]);
-		expect(ovenWarnings(input(350, 450))).toEqual([expect.stringMatching(/big change/)]);
-		// The recipe-panel example from the review: roast chicken at 250°F gets both warnings.
-		expect(ovenWarnings(input(425, 250))).toHaveLength(2);
+		expect(ovenWarnings(input(350, 425), 'F')).toEqual([]);
+		expect(ovenWarnings(input(350, 450), 'F')).toEqual([expect.stringMatching(/big change/)]);
+		// Roast chicken at 250°F gets both warnings.
+		expect(ovenWarnings(input(425, 250), 'F')).toHaveLength(2);
 	});
 
 	it('says nothing when there is no estimate anyway', () => {
-		expect(ovenWarnings(input(350, 150))).toEqual([]);
+		expect(ovenWarnings(input(350, 150), 'F')).toEqual([]);
 	});
 });
 

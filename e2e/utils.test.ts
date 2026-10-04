@@ -120,8 +120,17 @@ test('oven time converter estimates a new time, in °F or °C', async ({ page })
 	await expect(page.getByLabel('Your oven (°F)')).toHaveValue('301');
 	await page.getByLabel('Your oven (°F)').fill('400');
 
+	// Custom values starting at fridge temperature still get the food-safety warning.
+	await page.getByLabel("What's cooking").selectOption('custom');
+	await page.getByLabel('Your oven (°F)').fill('300');
+	await expect(page.getByTestId('oven-warnings')).toContainText('Food safety');
+	await page.getByLabel('Your oven (°F)').fill('400');
+
 	await page.getByRole('radio', { name: 'Celsius (°C)' }).click();
 	await expect(page.getByLabel('Recipe oven (°C)')).toHaveValue('177');
+	await page.getByLabel('Your oven (°C)').fill('200');
+	await page.getByLabel('Your oven (°C)').fill('150');
+	await expect(page.getByTestId('oven-warnings')).toContainText('cook this at 163°C (325°F)');
 	await page.getByLabel('Your oven (°C)').fill('200');
 	await expect(page.getByTestId('oven-change')).toContainText('less than the recipe');
 

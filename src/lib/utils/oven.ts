@@ -13,39 +13,24 @@ export const TEMP_UNITS: TempUnit[] = ['F', 'C'];
 export const toF = (t: number, unit: TempUnit) => (unit === 'F' ? t : (t * 9) / 5 + 32);
 export const fromF = (f: number, unit: TempUnit) => (unit === 'F' ? f : ((f - 32) * 5) / 9);
 
-/**
- * What's in the oven, as the core temperature it starts at and is done at (°F), and the lowest
- * safe oven temperature, if any.
- */
-export type FoodPreset = {
-	id: string;
-	name: string;
-	startF: number;
-	doneF: number;
-	minOvenF?: number;
-};
+/** What's in the oven, as the core temperature it starts at and is done at (°F). */
+export type FoodPreset = { id: string; name: string; startF: number; doneF: number };
+
+export const FOOD_PRESETS = [
+	{ id: 'meat', name: 'Meat & poultry, from the fridge', startF: 40, doneF: 165 },
+	{ id: 'roast', name: 'Roast, cooked medium', startF: 40, doneF: 140 },
+	{ id: 'baked', name: 'Baked goods (cakes, breads, cookies)', startF: 70, doneF: 205 },
+	{ id: 'casserole', name: 'Casserole or reheating', startF: 40, doneF: 165 }
+] as const satisfies readonly FoodPreset[];
 
 /** USDA: roast meat and poultry at no lower than 325°F, so it doesn't linger in the danger zone. */
 export const SAFE_MIN_OVEN_F = 325;
 
-export const FOOD_PRESETS = [
-	{
-		id: 'meat',
-		name: 'Meat & poultry, from the fridge',
-		startF: 40,
-		doneF: 165,
-		minOvenF: SAFE_MIN_OVEN_F
-	},
-	{ id: 'roast', name: 'Roast, cooked medium', startF: 40, doneF: 140, minOvenF: SAFE_MIN_OVEN_F },
-	{ id: 'baked', name: 'Baked goods (cakes, breads, cookies)', startF: 70, doneF: 205 },
-	{
-		id: 'casserole',
-		name: 'Casserole or reheating',
-		startF: 40,
-		doneF: 165,
-		minOvenF: SAFE_MIN_OVEN_F
-	}
-] as const satisfies readonly FoodPreset[];
+/**
+ * Food starting at or below this (°F) is treated as perishable (meat, poultry, casseroles from the
+ * fridge) and gets the SAFE_MIN_OVEN_F warning, whichever preset or custom values it came from.
+ */
+export const FRIDGE_MAX_F = 45;
 
 /** Beyond this change from the recipe (°F), the estimate gets unreliable. */
 export const RELIABLE_CHANGE_F = 75;
@@ -79,12 +64,14 @@ export function ovenProblem(input: OvenInput): string | undefined {
  * Warnings to show next to an estimate: an unsafe oven temperature for the food, and changes
  * too big for the estimate to be trusted (it runs away as the oven nears the done temperature).
  */
-export function ovenWarnings(input: OvenInput & { minOvenF?: number }): string[] {
+export function ovenWarnings(input: OvenInput, unit: TempUnit): string[] {
 	if (ovenProblem(input)) return [];
 	const warnings: string[] = [];
-	if (input.minOvenF !== undefined && input.toF < input.minOvenF) {
+	if (input.startF <= FRIDGE_MAX_F && input.toF < SAFE_MIN_OVEN_F) {
+		const other: TempUnit = unit === 'F' ? 'C' : 'F';
+		const deg = (u: TempUnit) => `${Math.round(fromF(SAFE_MIN_OVEN_F, u))}°${u}`;
 		warnings.push(
-			`Food safety: cook this at ${input.minOvenF}°F (${Math.round(fromF(input.minOvenF, 'C'))}°C) or hotter. ` +
+			`Food safety: cook this at ${deg(unit)} (${deg(other)}) or hotter. ` +
 				'A cooler oven leaves it too long at temperatures where bacteria grow.'
 		);
 	}

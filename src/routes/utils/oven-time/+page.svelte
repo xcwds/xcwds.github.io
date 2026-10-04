@@ -33,7 +33,7 @@
 		doneF: preset?.doneF ?? customDoneF
 	});
 	let problem = $derived(ovenProblem(input));
-	let warnings = $derived(ovenWarnings({ ...input, minOvenF: preset?.minOvenF }));
+	let warnings = $derived(ovenWarnings(input, unit));
 	let result = $derived(adjustOvenTime(input));
 	const deg = (f: number) => `${Math.round(inUnit(f, unit))}°${unit}`;
 	let change = $derived(result === undefined ? 0 : Math.round(result) - Math.round(minutes));
