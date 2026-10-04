@@ -75,3 +75,16 @@ test('tracks a workout and copies it as text', async ({ page, context }) => {
 		].join('\n')
 	);
 });
+
+test('a huge target weight answers right away instead of freezing the page (#32)', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/utils/weightlifting');
+	await page.getByRole('button', { name: 'Target weight' }).click();
+	const started = Date.now();
+	await page.getByLabel('Target weight (lb)').fill('100000001');
+	await expect(page.getByTestId('target-result')).toContainText("can't be loaded exactly", {
+		timeout: 2000
+	});
+	expect(Date.now() - started).toBeLessThan(2000);
+});

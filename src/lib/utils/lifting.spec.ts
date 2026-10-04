@@ -36,6 +36,53 @@ describe('totalWeight', () => {
 	});
 });
 
+/** The original unbounded DP (one array slot per 1.25 units of target), as a reference. */
+function referencePlates(equipment: ReturnType<typeof eq>, target: number, available: number[]) {
+	const empty = equipment.count * equipment.bar;
+	if (!(target >= empty)) return null;
+	const maxUnits = Math.floor((target - empty) / (equipment.count * equipment.sides) / 1.25 + 1e-9);
+	const best = new Array<number>(maxUnits + 1).fill(Infinity);
+	best[0] = 0;
+	for (let u = 1; u <= maxUnits; u++)
+		for (const p of available) {
+			const size = Math.round(p / 1.25);
+			if (size <= u) best[u] = Math.min(best[u], best[u - size] + 1);
+		}
+	let u = maxUnits;
+	while (u > 0 && best[u] === Infinity) u--;
+	return { units: u, plates: best[u] };
+}
+
+const countPlates = (perSide: Partial<Record<number, number>>) =>
+	Object.values(perSide).reduce((sum: number, n) => sum + (n ?? 0), 0);
+
+describe('platesForTarget, bounded (#32)', () => {
+	it('matches the unbounded search for every target and several plate sets', () => {
+		const sets = [[...LB], [45, 25, 10, 5], [45, 35], [25, 10], [10, 2.5], [45], []];
+		for (const available of sets) {
+			for (let target = 45; target <= 6000; target += 2.5) {
+				const got = platesForTarget(eq('barbell'), target, available)!;
+				const want = referencePlates(eq('barbell'), target, available)!;
+				const label = `${target} lb with [${available}]`;
+				expect(got.total, label).toBe(45 + 2 * want.units * 1.25);
+				expect(countPlates(got.perSide), label).toBe(want.plates);
+			}
+		}
+	});
+
+	it('stays fast for absurd targets and rejects non-finite ones', () => {
+		const start = performance.now();
+		const huge = platesForTarget(eq('barbell'), 100_000_000, LB)!;
+		platesForTarget(eq('barbell'), 1e15, LB);
+		platesForTarget(kg('barbell'), 123_456_789, KG);
+		expect(performance.now() - start).toBeLessThan(200);
+		expect(huge).toMatchObject({ total: 100_000_000, exact: true });
+		const odd = platesForTarget(eq('barbell'), 100_000_001, LB)!;
+		expect(odd).toMatchObject({ total: 100_000_000, exact: false });
+		expect(platesForTarget(eq('barbell'), Infinity, LB)).toBeNull();
+	});
+});
+
 describe('platesForTarget', () => {
 	it('uses the fewest plates per side', () => {
 		expect(platesForTarget(eq('barbell'), 225, LB)).toEqual({
