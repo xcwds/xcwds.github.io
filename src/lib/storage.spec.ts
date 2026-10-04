@@ -8,10 +8,12 @@ import {
 	defaultSettings,
 	entries,
 	exportData,
+	forgetLiftingEquipment,
 	groups,
 	importData,
 	migrate,
 	parseBackup,
+	parseCookingPresets,
 	read,
 	remove,
 	resetMigrationState,
@@ -108,11 +110,11 @@ describe('migration v1', () => {
 		migrate();
 		expect(read(entries.coffeeDuration)).toBe(120_000);
 		expect(read(entries.cookingTimers)).toEqual([rice]);
-		expect(read(entries.liftingCalculator)).toEqual({ equipmentId: 'dumbbell' });
-		expect(read(entries.liftingWorkout)).toEqual({ date: 'Sat', exercises: [] });
+		expect(read(entries.liftingCalculator)).toEqual({ unit: 'lb', equipmentId: 'dumbbell' });
+		expect(read(entries.liftingWorkout)).toEqual({ date: 'Sat', unit: 'lb', exercises: [] });
 		expect(read(entries.liftingTab)).toBe('workout');
 		expect([...store.map.keys()].filter((k) => !k.startsWith('app:'))).toEqual([]);
-		expect(store.getItem(VERSION_KEY)).toBe('1');
+		expect(store.getItem(VERSION_KEY)).toBe(String(SCHEMA_VERSION));
 	});
 
 	it('drops invalid legacy data instead of migrating it', () => {
@@ -140,6 +142,7 @@ describe('migration v1', () => {
 
 describe('validators', () => {
 	it('keeps the valid fields of a saved plate calculator', () => {
+		store.setItem(VERSION_KEY, String(SCHEMA_VERSION)); // current data: validation only, no migration
 		store.setItem(
 			entries.liftingCalculator.key,
 			JSON.stringify({
@@ -150,11 +153,16 @@ describe('validators', () => {
 				available: [45, 25]
 			})
 		);
+		// No unit, so the plate counts can't be trusted and are dropped.
 		expect(read(entries.liftingCalculator)).toEqual({
 			equipmentId: 'kettlebell',
-			symmetric: false,
-			available: [45, 25]
+			symmetric: false
 		});
+		store.setItem(
+			entries.liftingCalculator.key,
+			JSON.stringify({ unit: 'kg', sides: [{ 20: 1 }, { 20: 1 }] })
+		);
+		expect(read(entries.liftingCalculator)).toEqual({ unit: 'kg', sides: [{ 20: 1 }, { 20: 1 }] });
 	});
 
 	it('rejects a workout with malformed exercises or sets', () => {
@@ -163,7 +171,7 @@ describe('validators', () => {
 			exercises: [{ id: 1, name: 'Squat', sets: [{ id: 2, weight: null, reps: 5 }] }]
 		};
 		store.setItem(entries.liftingWorkout.key, JSON.stringify(ok));
-		expect(read(entries.liftingWorkout)).toEqual(ok);
+		expect(read(entries.liftingWorkout)).toEqual({ ...ok, unit: 'lb' });
 		ok.exercises[0].sets.push({ id: 3, weight: 'heavy', reps: 1 } as never);
 		store.setItem(entries.liftingWorkout.key, JSON.stringify(ok));
 		expect(read(entries.liftingWorkout)).toBeUndefined();
@@ -289,5 +297,109 @@ describe('backups', () => {
 		expect(
 			error(JSON.stringify({ app: BACKUP_APP, schemaVersion: SCHEMA_VERSION + 1, data: {} }))
 		).toMatch(/newer version/);
+	});
+});
+
+describe('migration v2', () => {
+	it('renames equipment, adds the unit, and moves owned plates into settings', () => {
+		store.setItem(VERSION_KEY, '1');
+		store.setItem(
+			entries.liftingCalculator.key,
+			JSON.stringify({
+				equipmentId: 'barbell-25',
+				mode: 'target',
+				symmetric: true,
+				sides: [{ 45: 1 }, { 45: 1 }],
+				available: [45, 25, 10]
+			})
+		);
+		store.setItem(entries.settings.key, JSON.stringify({ theme: 'dark' }));
+		migrate();
+		expect(read(entries.liftingCalculator)).toEqual({
+			unit: 'lb',
+			equipmentId: 'barbell-light',
+			mode: 'target',
+			symmetric: true,
+			sides: [{ 45: 1 }, { 45: 1 }]
+		});
+		const settings = read(entries.settings)!;
+		expect(settings.theme).toBe('dark');
+		expect(settings.lifting.plates.lb).toEqual([45, 25, 10]);
+		expect(settings.lifting.plates.kg).toEqual(defaultSettings.lifting.plates.kg);
+		expect(store.getItem(VERSION_KEY)).toBe('2');
+	});
+
+	it('upgrades v1 backups on import too', () => {
+		const parsed = parseBackup(
+			JSON.stringify({
+				app: BACKUP_APP,
+				schemaVersion: 1,
+				data: { [entries.liftingCalculator.key]: { equipmentId: 'barbell-45', available: [45] } }
+			})
+		);
+		expect(parsed.ok).toBe(true);
+		if (!parsed.ok) return;
+		expect(parsed.backup.schemaVersion).toBe(SCHEMA_VERSION);
+		expect(parsed.backup.data[entries.liftingCalculator.key]).toEqual({
+			unit: 'lb',
+			equipmentId: 'barbell'
+		});
+		expect(
+			(parsed.backup.data[entries.settings.key] as typeof defaultSettings).lifting.plates.lb
+		).toEqual([45]);
+	});
+});
+
+describe('tool defaults in settings', () => {
+	it('validates each default and falls back per field', () => {
+		store.setItem(
+			entries.settings.key,
+			JSON.stringify({
+				coffeeDefaultSeconds: 2,
+				cookingPresets: [10, 5, 5, 2],
+				pizzaDefaults: { balls: 6, hydration: 'wet' },
+				lifting: { unit: 'kg', equipment: 'dumbbells', plates: { kg: [20, 10], lb: [7] } }
+			})
+		);
+		const s = read(entries.settings)!;
+		expect(s.coffeeDefaultSeconds).toBe(90);
+		expect(s.cookingPresets).toEqual([2, 5, 10]);
+		expect(s.pizzaDefaults).toEqual({ ...defaultSettings.pizzaDefaults, balls: 6 });
+		expect(s.lifting).toEqual({
+			unit: 'kg',
+			equipment: 'dumbbells',
+			plates: { lb: defaultSettings.lifting.plates.lb, kg: [20, 10] }
+		});
+	});
+});
+
+describe('review fixes', () => {
+	it('keeps a workout in the unit it was logged in, and rejects unknown units', () => {
+		store.setItem(VERSION_KEY, String(SCHEMA_VERSION));
+		const kgWorkout = { date: 'Sun', unit: 'kg', exercises: [] };
+		store.setItem(entries.liftingWorkout.key, JSON.stringify(kgWorkout));
+		expect(read(entries.liftingWorkout)).toEqual(kgWorkout);
+		store.setItem(entries.liftingWorkout.key, JSON.stringify({ ...kgWorkout, unit: 'stone' }));
+		expect(read(entries.liftingWorkout)).toBeUndefined();
+	});
+
+	it('v2 labels an existing workout as lb', () => {
+		store.setItem(VERSION_KEY, '1');
+		store.setItem(entries.liftingWorkout.key, JSON.stringify({ date: 'Sat', exercises: [] }));
+		migrate();
+		expect(JSON.parse(store.getItem(entries.liftingWorkout.key)!).unit).toBe('lb');
+	});
+
+	it('forgetLiftingEquipment drops only the remembered equipment', () => {
+		write(entries.liftingCalculator, { unit: 'lb', equipmentId: 'dumbbells', mode: 'target' });
+		forgetLiftingEquipment();
+		expect(read(entries.liftingCalculator)).toEqual({ unit: 'lb', mode: 'target' });
+		expect(() => forgetLiftingEquipment()).not.toThrow();
+	});
+
+	it('the shared preset check accepts exactly what storage keeps', () => {
+		expect(parseCookingPresets([0.05, 5, 10])).toBeUndefined();
+		expect(parseCookingPresets([10, 5, 5, 0.5])).toEqual([0.5, 5, 10]);
+		expect(parseCookingPresets([])).toBeUndefined();
 	});
 });

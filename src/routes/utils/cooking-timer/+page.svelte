@@ -4,6 +4,7 @@
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
 	import { markBusy } from '$lib/app-update.svelte';
 	import { persist } from '$lib/persist.svelte';
+	import { settings } from '$lib/settings.svelte';
 	import { entries } from '$lib/storage';
 	import { formatDuration } from '$lib/utils/time';
 	import { Timer } from '$lib/utils/timer.svelte';
@@ -11,7 +12,10 @@
 	type Item = { id: number; label: string; timer: Timer };
 
 	const MINUTE = 60_000;
-	const presets = [1, 3, 5, 10, 15, 20, 30, 45, 60];
+	/** Quick-start buttons, in minutes (Settings → Tool defaults). */
+	let presets = $derived(settings.cookingPresets);
+	const presetLabel = (m: number) =>
+		m < 60 ? `${m} min` : m % 60 === 0 ? `${m / 60} hr` : `${Math.floor(m / 60)} hr ${m % 60} min`;
 
 	let items = $state<Item[]>([]);
 	let label = $state('');
@@ -159,7 +163,7 @@
 					onclick={() => add(preset * MINUTE, '')}
 					class="rounded-xl bg-white/70 py-3 text-lg font-medium active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
 				>
-					{preset < 60 ? `${preset} min` : `${preset / 60} hr`}
+					{presetLabel(preset)}
 				</button>
 			{/each}
 		</div>

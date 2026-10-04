@@ -1,7 +1,13 @@
 import { defaultSettings, entries, read, write, type Settings, type Theme } from './storage';
 
 /** App-wide settings. Reactive: read it anywhere, assign to change it (saved automatically). */
-export const settings = $state<Settings>({ ...defaultSettings });
+export const settings = $state<Settings>(structuredClone(defaultSettings));
+
+/**
+ * Settings load after the root layout mounts (pages mount first). Pages that seed their state
+ * from settings (tool defaults) wait for `settingsStatus.ready`.
+ */
+export const settingsStatus = $state({ ready: false });
 
 const THEME_COLORS = { light: '#bfdbfe', dark: '#030712' } as const;
 
@@ -18,7 +24,7 @@ function applyTheme(theme: Theme) {
 
 /** Re-reads settings from storage, e.g. after an import or reset. */
 export function reloadSettings() {
-	Object.assign(settings, read(entries.settings) ?? defaultSettings);
+	Object.assign(settings, read(entries.settings) ?? structuredClone(defaultSettings));
 }
 
 let started = false;
@@ -28,12 +34,14 @@ export function startSettings() {
 	if (started) return;
 	started = true;
 	reloadSettings();
+	settingsStatus.ready = true;
 	matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () =>
 		applyTheme(settings.theme)
 	);
 	$effect.root(() => {
 		$effect(() => {
-			const snapshot = { ...settings };
+			// Snapshot reads every nested field, so changes to lists and objects are saved too.
+			const snapshot = $state.snapshot(settings);
 			applyTheme(snapshot.theme);
 			// Don't recreate saved data just by visiting: only save once something differs.
 			const untouched = JSON.stringify(snapshot) === JSON.stringify(defaultSettings);

@@ -4,14 +4,21 @@
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
 	import { markBusy } from '$lib/app-update.svelte';
 	import { persist } from '$lib/persist.svelte';
+	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { entries } from '$lib/storage';
 	import { formatDuration } from '$lib/utils/time';
 	import { Timer } from '$lib/utils/timer.svelte';
 
-	const DEFAULT_MS = 90_000;
+	/** Settings → Tool defaults (90 s unless changed). */
+	let defaultMs = $derived(settings.coffeeDefaultSeconds * 1000);
+	/**
+	 * A length picked with the ± buttons, remembered between visits; null means "use the default".
+	 * Changing the default in Settings clears it, so the new default takes effect.
+	 */
+	let custom = $state<number | null>(null);
+	let base = $derived(custom ?? defaultMs);
 
-	let base = $state(DEFAULT_MS);
-	const timer = new Timer(DEFAULT_MS, () => beep(3));
+	const timer = new Timer(90_000, () => beep(3));
 	let over = $derived(timer.running && timer.done);
 
 	// The countdown itself isn't saved, so an app update (reload) would reset it.
@@ -19,12 +26,17 @@
 
 	persist(
 		entries.coffeeDuration,
-		() => base,
-		(saved) => {
-			base = saved;
-			timer.reset(saved);
-		}
+		() => custom ?? undefined,
+		(saved) => (custom = saved)
 	);
+
+	// Settings load after this page mounts; then show the starting length.
+	let seeded = false;
+	$effect(() => {
+		if (!settingsStatus.ready || seeded) return;
+		seeded = true;
+		if (!timer.running) timer.reset(base);
+	});
 
 	const awake = browser ? keepAwake(() => timer.running) : undefined;
 	$effect(() => {
@@ -39,13 +51,14 @@
 		};
 	});
 
-	function setBase(ms: number) {
-		base = ms;
-	}
-
 	function adjust(ms: number) {
 		timer.add(ms);
-		if (!timer.running) setBase(timer.duration);
+		if (!timer.running) custom = timer.duration;
+	}
+
+	function useDefault() {
+		custom = null;
+		timer.reset(defaultMs);
 	}
 
 	function toggle() {
@@ -109,13 +122,9 @@
 
 	<p class="text-center text-sm text-gray-600 dark:text-gray-400">
 		Resets to {formatDuration(base)}.
-		{#if base !== DEFAULT_MS}
-			<button
-				type="button"
-				class="underline"
-				onclick={() => (setBase(DEFAULT_MS), timer.reset(DEFAULT_MS))}
-			>
-				Back to 1:30
+		{#if base !== defaultMs}
+			<button type="button" class="underline" onclick={useDefault}>
+				Back to {formatDuration(defaultMs)}
 			</button>
 		{/if}
 	</p>
