@@ -39,7 +39,7 @@ pnpm install
 pnpm dev
 ```
 
-Before pushing: `pnpm check && pnpm lint && pnpm test:unit -- --run --project server && pnpm build`.
+Before pushing: `pnpm check && pnpm lint && pnpm test:unit --run --project server && pnpm build`.
 Agent notes live in [CLAUDE.md](CLAUDE.md).
 
 ## Credits
