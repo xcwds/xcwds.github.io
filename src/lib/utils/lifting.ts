@@ -147,10 +147,12 @@ export function formatWeight(weight: number, unit: WeightUnit): string {
 
 export type WorkoutSet = { id: number; weight: number | null; reps: number | null };
 export type Exercise = { id: number; name: string; sets: WorkoutSet[] };
-export type Workout = { date: string; exercises: Exercise[] };
+/** A workout's weights are in the unit it was logged in (switching the calculator doesn't relabel them). */
+export type Workout = { date: string; unit: WeightUnit; exercises: Exercise[] };
 
 /** Plain-text workout for pasting into notes; identical consecutive sets are grouped. */
-export function workoutToText(workout: Workout, unit: WeightUnit): string {
+export function workoutToText(workout: Workout): string {
+	const { unit } = workout;
 	const lines = [`Workout – ${workout.date}`];
 	for (const exercise of workout.exercises) {
 		const sets = exercise.sets.filter((s) => s.reps || s.weight);

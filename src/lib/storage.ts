@@ -94,6 +94,7 @@ const isSet = (v: unknown) =>
 
 function parseWorkout(v: unknown): Workout | undefined {
 	if (!isRecord(v) || typeof v.date !== 'string' || !Array.isArray(v.exercises)) return undefined;
+	if (v.unit !== undefined && !isUnit(v.unit)) return undefined;
 	const valid = v.exercises.every(
 		(e) =>
 			isRecord(e) &&
@@ -102,7 +103,8 @@ function parseWorkout(v: unknown): Workout | undefined {
 			Array.isArray(e.sets) &&
 			e.sets.every(isSet)
 	);
-	return valid ? (v as Workout) : undefined;
+	// Workouts logged before units existed were in lb.
+	return valid ? ({ ...v, unit: v.unit ?? 'lb' } as Workout) : undefined;
 }
 
 export type Theme = 'system' | 'light' | 'dark';
@@ -149,14 +151,16 @@ export const defaultSettings: Settings = {
 };
 
 export const COFFEE_SECONDS = { min: 5, max: 3600 };
-export const COOKING_PRESETS = { max: 12, maxMinutes: 24 * 60 };
+export const COOKING_PRESETS = { max: 12, minMinutes: 0.1, maxMinutes: 24 * 60 };
 
 const isNumberIn = (v: unknown, min: number, max: number): v is number =>
 	typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max;
 
-function parseCookingPresets(v: unknown): number[] | undefined {
+/** Valid presets, de-duplicated and sorted, or undefined. Settings uses this to check input too. */
+export function parseCookingPresets(v: unknown): number[] | undefined {
 	if (!Array.isArray(v) || v.length === 0 || v.length > COOKING_PRESETS.max) return undefined;
-	if (!v.every((m) => isNumberIn(m, 0.1, COOKING_PRESETS.maxMinutes))) return undefined;
+	if (!v.every((m) => isNumberIn(m, COOKING_PRESETS.minMinutes, COOKING_PRESETS.maxMinutes)))
+		return undefined;
 	return [...new Set(v as number[])].sort((a, b) => a - b);
 }
 
@@ -301,6 +305,9 @@ export function upgradeData(data: Record<string, unknown>, from: number): void {
 	if (from < 2) {
 		// v2: the calculator gains a unit, equipment ids stop naming lb weights, and the plates you
 		// have move from the calculator into settings (per unit).
+		const workoutKey = entries.liftingWorkout.key;
+		if (isRecord(data[workoutKey]) && !('unit' in (data[workoutKey] as object)))
+			data[workoutKey] = { ...(data[workoutKey] as object), unit: 'lb' };
 		const calcKey = entries.liftingCalculator.key;
 		const settingsKey = entries.settings.key;
 		const calc = data[calcKey];
@@ -346,7 +353,12 @@ const migrations: Migration[] = [
 		to: 2,
 		run(store) {
 			const data: Record<string, unknown> = {};
-			for (const key of [entries.liftingCalculator.key, entries.settings.key]) {
+			const keys = [
+				entries.liftingCalculator.key,
+				entries.settings.key,
+				entries.liftingWorkout.key
+			];
+			for (const key of keys) {
 				const text = store.getItem(key);
 				if (text !== null) data[key] = decode(text);
 			}
@@ -404,6 +416,18 @@ export function remove(e: Entry<unknown>): void {
 	} catch {
 		// Nothing to do.
 	}
+}
+
+/**
+ * Forgets the equipment last picked in the weightlifting calculator, so it opens with the
+ * default from Settings again. Called when that default changes.
+ */
+export function forgetLiftingEquipment(): void {
+	const calc = read(entries.liftingCalculator);
+	if (calc?.equipmentId === undefined) return;
+	const rest = { ...calc };
+	delete rest.equipmentId;
+	write(entries.liftingCalculator, rest);
 }
 
 /** Removes the given entries (default: everything the app saves). */

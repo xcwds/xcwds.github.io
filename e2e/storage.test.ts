@@ -26,11 +26,11 @@ test('data saved before the storage module is migrated and still shows up', asyn
 	await expect(page.getByRole('tab', { name: 'Workout' })).toHaveAttribute('aria-selected', 'true');
 	await expect(page.getByLabel('Exercise 1 name')).toHaveValue('Deadlift');
 
+	// Opening the calculator saves nothing new (it only saves changes).
 	const keys = await page.evaluate(() => Object.keys(localStorage).sort());
 	expect(keys).toEqual([
 		'app:coffee-timer:duration',
 		'app:version',
-		'app:weightlifting:calculator',
 		'app:weightlifting:tab',
 		'app:weightlifting:workout'
 	]);

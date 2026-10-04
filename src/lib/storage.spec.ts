@@ -8,10 +8,12 @@ import {
 	defaultSettings,
 	entries,
 	exportData,
+	forgetLiftingEquipment,
 	groups,
 	importData,
 	migrate,
 	parseBackup,
+	parseCookingPresets,
 	read,
 	remove,
 	resetMigrationState,
@@ -109,7 +111,7 @@ describe('migration v1', () => {
 		expect(read(entries.coffeeDuration)).toBe(120_000);
 		expect(read(entries.cookingTimers)).toEqual([rice]);
 		expect(read(entries.liftingCalculator)).toEqual({ unit: 'lb', equipmentId: 'dumbbell' });
-		expect(read(entries.liftingWorkout)).toEqual({ date: 'Sat', exercises: [] });
+		expect(read(entries.liftingWorkout)).toEqual({ date: 'Sat', unit: 'lb', exercises: [] });
 		expect(read(entries.liftingTab)).toBe('workout');
 		expect([...store.map.keys()].filter((k) => !k.startsWith('app:'))).toEqual([]);
 		expect(store.getItem(VERSION_KEY)).toBe(String(SCHEMA_VERSION));
@@ -169,7 +171,7 @@ describe('validators', () => {
 			exercises: [{ id: 1, name: 'Squat', sets: [{ id: 2, weight: null, reps: 5 }] }]
 		};
 		store.setItem(entries.liftingWorkout.key, JSON.stringify(ok));
-		expect(read(entries.liftingWorkout)).toEqual(ok);
+		expect(read(entries.liftingWorkout)).toEqual({ ...ok, unit: 'lb' });
 		ok.exercises[0].sets.push({ id: 3, weight: 'heavy', reps: 1 } as never);
 		store.setItem(entries.liftingWorkout.key, JSON.stringify(ok));
 		expect(read(entries.liftingWorkout)).toBeUndefined();
@@ -368,5 +370,36 @@ describe('tool defaults in settings', () => {
 			equipment: 'dumbbells',
 			plates: { lb: defaultSettings.lifting.plates.lb, kg: [20, 10] }
 		});
+	});
+});
+
+describe('review fixes', () => {
+	it('keeps a workout in the unit it was logged in, and rejects unknown units', () => {
+		store.setItem(VERSION_KEY, String(SCHEMA_VERSION));
+		const kgWorkout = { date: 'Sun', unit: 'kg', exercises: [] };
+		store.setItem(entries.liftingWorkout.key, JSON.stringify(kgWorkout));
+		expect(read(entries.liftingWorkout)).toEqual(kgWorkout);
+		store.setItem(entries.liftingWorkout.key, JSON.stringify({ ...kgWorkout, unit: 'stone' }));
+		expect(read(entries.liftingWorkout)).toBeUndefined();
+	});
+
+	it('v2 labels an existing workout as lb', () => {
+		store.setItem(VERSION_KEY, '1');
+		store.setItem(entries.liftingWorkout.key, JSON.stringify({ date: 'Sat', exercises: [] }));
+		migrate();
+		expect(JSON.parse(store.getItem(entries.liftingWorkout.key)!).unit).toBe('lb');
+	});
+
+	it('forgetLiftingEquipment drops only the remembered equipment', () => {
+		write(entries.liftingCalculator, { unit: 'lb', equipmentId: 'dumbbells', mode: 'target' });
+		forgetLiftingEquipment();
+		expect(read(entries.liftingCalculator)).toEqual({ unit: 'lb', mode: 'target' });
+		expect(() => forgetLiftingEquipment()).not.toThrow();
+	});
+
+	it('the shared preset check accepts exactly what storage keeps', () => {
+		expect(parseCookingPresets([0.05, 5, 10])).toBeUndefined();
+		expect(parseCookingPresets([10, 5, 5, 0.5])).toEqual([0.5, 5, 10]);
+		expect(parseCookingPresets([])).toBeUndefined();
 	});
 });

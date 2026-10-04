@@ -14,11 +14,15 @@
 		COOKING_PRESETS,
 		clear,
 		defaultSettings,
+		entries,
 		exportData,
+		forgetLiftingEquipment,
 		groups,
 		importData,
 		parseBackup,
+		parseCookingPresets,
 		read,
+		remove,
 		type Group,
 		type ParsedBackup,
 		type Theme
@@ -34,10 +38,18 @@
 	let lifting = $derived(UNITS[settings.lifting.unit]);
 
 	function adjustCoffee(deltaSeconds: number) {
+		// Forget a length picked in the timer, so the new default is what it opens with.
+		remove(entries.coffeeDuration);
 		settings.coffeeDefaultSeconds = Math.min(
 			COFFEE_SECONDS.max,
 			Math.max(COFFEE_SECONDS.min, settings.coffeeDefaultSeconds + deltaSeconds)
 		);
+	}
+
+	function setDefaultEquipment(id: EquipmentId) {
+		settings.lifting.equipment = id;
+		// Forget the equipment last picked in the calculator, so it opens with the new default.
+		forgetLiftingEquipment();
 	}
 
 	function toggleOwnedPlate(plate: number) {
@@ -57,17 +69,15 @@
 			.split(/[\s,]+/)
 			.filter(Boolean)
 			.map(Number);
-		if (
-			parts.length === 0 ||
-			parts.length > COOKING_PRESETS.max ||
-			parts.some((m) => !(m > 0 && m <= COOKING_PRESETS.maxMinutes))
-		) {
-			presetsError = `Enter 1–${COOKING_PRESETS.max} numbers of minutes (up to ${COOKING_PRESETS.maxMinutes}), separated by commas.`;
+		// The same check storage uses on load, so a saved list is never rejected later.
+		const presets = parseCookingPresets(parts);
+		if (!presets) {
+			presetsError = `Enter 1–${COOKING_PRESETS.max} numbers of minutes, each from ${COOKING_PRESETS.minMinutes} to ${COOKING_PRESETS.maxMinutes}, separated by commas.`;
 			return;
 		}
 		presetsError = '';
-		settings.cookingPresets = [...new Set(parts)].sort((a, b) => a - b);
-		presetsText = settings.cookingPresets.join(', ');
+		settings.cookingPresets = presets;
+		presetsText = presets.join(', ');
 	}
 
 	let pizza = $derived(settings.pizzaDefaults);
@@ -279,13 +289,16 @@
 			<select
 				class="rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
 				value={settings.lifting.equipment}
-				onchange={(e) => (settings.lifting.equipment = e.currentTarget.value as EquipmentId)}
+				onchange={(e) => setDefaultEquipment(e.currentTarget.value as EquipmentId)}
 			>
 				{#each lifting.equipment as item (item.id)}
 					<option value={item.id}>{item.name}</option>
 				{/each}
 			</select>
 		</label>
+		<p class="text-sm text-gray-600 dark:text-gray-400">
+			The calculator remembers the equipment you pick; changing the default resets that.
+		</p>
 		<fieldset class="flex flex-col gap-1 text-sm">
 			<legend class="mb-1">Plates you have ({settings.lifting.unit})</legend>
 			<div class="flex flex-wrap gap-2">
@@ -326,6 +339,10 @@
 				>
 			</div>
 		</div>
+
+		<p class="text-sm text-gray-600 dark:text-gray-400">
+			A length you pick in the timer is remembered; changing the default resets that.
+		</p>
 
 		<h3 class="mt-2 font-semibold">Cooking Timer</h3>
 		<label class="flex flex-col gap-1 text-sm">

@@ -2,15 +2,15 @@
 	import { onMount } from 'svelte';
 	import { formatWeight, workoutToText, type Exercise, type Workout } from '$lib/utils/lifting';
 	import { persist } from '$lib/persist.svelte';
-	import { settings } from '$lib/settings.svelte';
+	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { entries } from '$lib/storage';
 	import { button, card, field, primary } from './styles';
 
 	let { calculatorWeight = 0 }: { calculatorWeight?: number } = $props();
 
-	// Weights are logged in the calculator's unit (switching units doesn't convert them).
-	let unit = $derived(settings.lifting.unit);
+	/** The calculator's unit. A workout keeps the unit it was logged in (see below). */
+	let calculatorUnit = $derived(settings.lifting.unit);
 
 	const SUGGESTIONS = [
 		'Bench Press',
@@ -37,7 +37,17 @@
 			year: 'numeric'
 		});
 
-	let workout = $state<Workout>({ date: today(), exercises: [] });
+	let workout = $state<Workout>({ date: today(), unit: 'lb', exercises: [] });
+
+	const hasWeights = (w: Workout) => w.exercises.some((e) => e.sets.some((s) => s.weight));
+
+	// Until a weight is logged, the workout follows the calculator's unit. After that its unit is
+	// fixed, so switching lb/kg never relabels weights you've already logged.
+	$effect(() => {
+		if (!settingsStatus.ready) return;
+		if (!hasWeights(workout) && workout.unit !== calculatorUnit) workout.unit = calculatorUnit;
+	});
+	let unitsDiffer = $derived(workout.unit !== calculatorUnit);
 	let canShare = $state(false);
 	let nextId = 1;
 	const id = () => nextId++;
@@ -71,12 +81,12 @@
 
 	function newWorkout() {
 		if (workout.exercises.length && !confirm('Clear this workout and start a new one?')) return;
-		workout = { date: today(), exercises: [] };
+		workout = { date: today(), unit: calculatorUnit, exercises: [] };
 	}
 
 	async function copy() {
 		try {
-			await navigator.clipboard.writeText(workoutToText(workout, unit));
+			await navigator.clipboard.writeText(workoutToText(workout));
 			toast('Workout copied.');
 		} catch {
 			toast("Couldn't copy the workout.");
@@ -85,7 +95,7 @@
 
 	async function share() {
 		try {
-			await navigator.share({ text: workoutToText(workout, unit) });
+			await navigator.share({ text: workoutToText(workout) });
 		} catch {
 			// Share sheet dismissed.
 		}
@@ -100,6 +110,13 @@
 		</label>
 		<button type="button" class="{button} self-end" onclick={newWorkout}>New workout</button>
 	</div>
+
+	{#if unitsDiffer}
+		<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="unit-note">
+			This workout is logged in {workout.unit}; the calculator is set to {calculatorUnit}. Start a
+			new workout to log in {calculatorUnit}.
+		</p>
+	{/if}
 
 	{#each workout.exercises as exercise, e (exercise.id)}
 		<div class="{card} flex flex-col gap-3" data-testid="exercise">
@@ -122,7 +139,7 @@
 				<thead class="text-gray-600 dark:text-gray-400">
 					<tr>
 						<th class="w-8 text-left font-normal">Set</th>
-						<th class="text-left font-normal">Weight ({unit})</th>
+						<th class="text-left font-normal">Weight ({workout.unit})</th>
 						<th class="text-left font-normal">Reps</th>
 						<th class="w-10"><span class="sr-only">Remove</span></th>
 					</tr>
@@ -170,10 +187,10 @@
 				<button
 					type="button"
 					class={button}
-					disabled={!calculatorWeight}
+					disabled={!calculatorWeight || unitsDiffer}
 					onclick={() => addSet(exercise, calculatorWeight)}
 				>
-					+ Set @ {formatWeight(calculatorWeight, unit)}
+					+ Set @ {formatWeight(calculatorWeight, calculatorUnit)}
 				</button>
 			</div>
 		</div>

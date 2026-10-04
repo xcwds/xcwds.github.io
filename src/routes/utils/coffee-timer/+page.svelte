@@ -11,35 +11,32 @@
 
 	/** Settings → Tool defaults (90 s unless changed). */
 	let defaultMs = $derived(settings.coffeeDefaultSeconds * 1000);
+	/**
+	 * A length picked with the ± buttons, remembered between visits; null means "use the default".
+	 * Changing the default in Settings clears it, so the new default takes effect.
+	 */
+	let custom = $state<number | null>(null);
+	let base = $derived(custom ?? defaultMs);
 
-	let base = $state(90_000);
 	const timer = new Timer(90_000, () => beep(3));
 	let over = $derived(timer.running && timer.done);
 
 	// The countdown itself isn't saved, so an app update (reload) would reset it.
 	markBusy('coffee timer', () => timer.running);
 
-	let hadSaved = false;
-	// With no saved duration, start from the default once settings have loaded.
+	persist(
+		entries.coffeeDuration,
+		() => custom ?? undefined,
+		(saved) => (custom = saved)
+	);
+
+	// Settings load after this page mounts; then show the starting length.
 	let seeded = false;
 	$effect(() => {
 		if (!settingsStatus.ready || seeded) return;
 		seeded = true;
-		if (!hadSaved && !timer.running) {
-			base = defaultMs;
-			timer.reset(defaultMs);
-		}
+		if (!timer.running) timer.reset(base);
 	});
-
-	persist(
-		entries.coffeeDuration,
-		() => base,
-		(saved) => {
-			hadSaved = true;
-			base = saved;
-			timer.reset(saved);
-		}
-	);
 
 	const awake = browser ? keepAwake(() => timer.running) : undefined;
 	$effect(() => {
@@ -54,13 +51,14 @@
 		};
 	});
 
-	function setBase(ms: number) {
-		base = ms;
-	}
-
 	function adjust(ms: number) {
 		timer.add(ms);
-		if (!timer.running) setBase(timer.duration);
+		if (!timer.running) custom = timer.duration;
+	}
+
+	function useDefault() {
+		custom = null;
+		timer.reset(defaultMs);
 	}
 
 	function toggle() {
@@ -125,11 +123,7 @@
 	<p class="text-center text-sm text-gray-600 dark:text-gray-400">
 		Resets to {formatDuration(base)}.
 		{#if base !== defaultMs}
-			<button
-				type="button"
-				class="underline"
-				onclick={() => (setBase(defaultMs), timer.reset(defaultMs))}
-			>
+			<button type="button" class="underline" onclick={useDefault}>
 				Back to {formatDuration(defaultMs)}
 			</button>
 		{/if}

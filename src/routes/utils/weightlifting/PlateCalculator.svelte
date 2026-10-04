@@ -64,13 +64,16 @@
 		total = totalWeight(equipment, effectiveSides);
 	});
 
-	let hadSaved = false;
+	/** Whether equipment was picked earlier (Settings clears it when the default changes). */
+	let hadSavedEquipment = false;
 	persist(
 		entries.liftingCalculator,
 		() => ({ unit: sidesUnit, equipmentId, mode, symmetric, sides }),
 		(saved) => {
-			hadSaved = true;
-			equipmentId = saved.equipmentId ?? equipmentId;
+			if (saved.equipmentId) {
+				hadSavedEquipment = true;
+				equipmentId = saved.equipmentId;
+			}
 			mode = saved.mode ?? mode;
 			symmetric = saved.symmetric ?? symmetric;
 			if (saved.unit && saved.sides) {
@@ -87,7 +90,7 @@
 		if (!settingsStatus.ready) return;
 		if (!seeded) {
 			seeded = true;
-			if (!hadSaved) equipmentId = settings.lifting.equipment;
+			if (!hadSavedEquipment) equipmentId = settings.lifting.equipment;
 		}
 		if (sidesUnit !== unit) {
 			sides = [{}, {}];
@@ -180,7 +183,10 @@
 					></span>
 				{/each}
 			{/if}
-			<span class="h-2 rounded-full bg-gray-500 {equipment.bar >= 25 ? 'w-24' : 'w-10'}"></span>
+			<span
+				data-testid="bar"
+				class="h-2 rounded-full bg-gray-500 {equipment.id.startsWith('barbell') ? 'w-24' : 'w-10'}"
+			></span>
 			{#each stack(effectiveSides[oneSided ? 0 : 1]) as plate, i (i)}
 				<span
 					class="mx-px w-2.5 rounded-sm {PLATE_STYLE[unit][plate].height} {PLATE_STYLE[unit][plate]

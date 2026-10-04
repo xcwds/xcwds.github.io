@@ -97,26 +97,24 @@ describe('formatWeight', () => {
 
 describe('workoutToText', () => {
 	it('groups identical consecutive sets and skips empty ones', () => {
-		const text = workoutToText(
-			{
-				date: 'Sat, Oct 4, 2026',
-				exercises: [
-					{
-						id: 1,
-						name: 'Bench Press',
-						sets: [
-							{ id: 1, weight: 135, reps: 5 },
-							{ id: 2, weight: 135, reps: 5 },
-							{ id: 3, weight: 155, reps: 3 },
-							{ id: 4, weight: null, reps: null }
-						]
-					},
-					{ id: 2, name: 'Push-ups', sets: [{ id: 1, weight: null, reps: 1 }] },
-					{ id: 3, name: '', sets: [] }
-				]
-			},
-			'lb'
-		);
+		const text = workoutToText({
+			date: 'Sat, Oct 4, 2026',
+			unit: 'lb',
+			exercises: [
+				{
+					id: 1,
+					name: 'Bench Press',
+					sets: [
+						{ id: 1, weight: 135, reps: 5 },
+						{ id: 2, weight: 135, reps: 5 },
+						{ id: 3, weight: 155, reps: 3 },
+						{ id: 4, weight: null, reps: null }
+					]
+				},
+				{ id: 2, name: 'Push-ups', sets: [{ id: 1, weight: null, reps: 1 }] },
+				{ id: 3, name: '', sets: [] }
+			]
+		});
 		expect(text).toBe(
 			[
 				'Workout – Sat, Oct 4, 2026',
@@ -152,8 +150,9 @@ describe('kg', () => {
 	it('labels workout weights with the unit', () => {
 		const workout = {
 			date: 'Sun',
+			unit: 'kg' as const,
 			exercises: [{ id: 1, name: 'Squat', sets: [{ id: 2, weight: 100, reps: 5 }] }]
 		};
-		expect(workoutToText(workout, 'kg')).toContain('@ 100 kg');
+		expect(workoutToText(workout)).toContain('@ 100 kg');
 	});
 });
