@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { startUpdateChecks } from '$lib/app-update.svelte';
@@ -9,6 +10,7 @@
 	import Toaster from '$lib/Toaster.svelte';
 	import UpdateBanner from '$lib/UpdateBanner.svelte';
 	import { activeSection, errorInfo, routeInfo, sections } from '$lib/nav';
+	import { recordVisit, startShortcuts } from '$lib/home.svelte';
 	import { startSettings } from '$lib/settings.svelte';
 	import '../app.css';
 
@@ -17,6 +19,12 @@
 	let info = $derived(page.error ? errorInfo(page.status) : routeInfo(page.url.pathname));
 	let active = $derived(activeSection(page.url.pathname));
 	let parentLabel = $derived(sections.find((s) => s.path === info.parent)?.label ?? 'Home');
+
+	// Tools opened become "Recently used" on Home (error pages and non-tools are ignored).
+	afterNavigate(({ to }) => {
+		startShortcuts();
+		if (to && !page.error) recordVisit(to.url.pathname);
+	});
 
 	// Lets e2e tests wait until inputs are interactive (see e2e/helpers.ts).
 	onMount(() => {

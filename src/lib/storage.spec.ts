@@ -245,6 +245,21 @@ describe('validators', () => {
 	});
 });
 
+describe('home shortcuts entry', () => {
+	it('is backed up, and drops tools that no longer exist', () => {
+		write(entries.homeShortcuts, { pins: ['/utils/coffee-timer'], recent: [] });
+		expect(exportData().data[entries.homeShortcuts.key]).toEqual({
+			pins: ['/utils/coffee-timer'],
+			recent: []
+		});
+		store.setItem(
+			entries.homeShortcuts.key,
+			JSON.stringify({ pins: ['/utils/gone', '/utils/coffee-timer'], recent: ['/utils/gone'] })
+		);
+		expect(read(entries.homeShortcuts)).toEqual({ pins: ['/utils/coffee-timer'], recent: [] });
+	});
+});
+
 describe('settings entry', () => {
 	it('fills missing or invalid fields with defaults', () => {
 		store.setItem(entries.settings.key, JSON.stringify({ theme: 'dark', sound: 'loud' }));
@@ -280,7 +295,8 @@ describe('groups and clear', () => {
 			'cooking-timer',
 			'weightlifting',
 			'workout-history',
-			'settings'
+			'settings',
+			'home'
 		]);
 		write(entries.coffeeDuration, 1000);
 		write(entries.liftingTab, 'workout');

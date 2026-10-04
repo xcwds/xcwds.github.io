@@ -1,6 +1,8 @@
 import { doughDefaults, type DoughInput } from '$lib/utils/dough';
 import type { TempUnit } from '$lib/utils/oven';
 import type { UnitSystem } from '$lib/recipes/units';
+import { parseShortcuts, type HomeShortcuts } from '$lib/home';
+import { tools } from '$lib/utils/tools';
 import {
 	EQUIPMENT_IDS,
 	UNITS,
@@ -277,6 +279,10 @@ export const entries = {
 	// Its own group, so clearing the calculator's data in Settings never wipes past workouts.
 	workoutHistory: entry<HistoryEntry[]>('workout-history', 'Workout history', parseHistory),
 	settings: entry<Settings>('settings', 'Settings', parseSettings),
+	// Tools pinned to Home and the recently opened ones; unknown or private tools are dropped.
+	homeShortcuts: entry<HomeShortcuts>('home:shortcuts', 'Home shortcuts', (v) =>
+		parseShortcuts(v, tools)
+	),
 	// Newest changelog entry seen in Settings → What's new. Only written after an update, so a
 	// fresh install stores nothing (and sees no "New" badges).
 	whatsNewSeen: entry<number>('settings:whats-new-seen', "What's new last seen", (v) =>
@@ -292,6 +298,7 @@ const GROUP_LABELS: Record<string, string> = {
 	'cooking-timer': 'Cooking Timer',
 	weightlifting: 'Weightlifting Calculator',
 	'workout-history': 'Workout History',
+	home: 'Home shortcuts',
 	settings: 'Settings'
 };
 
@@ -454,6 +461,15 @@ export function remove(e: Entry<unknown>): boolean {
 	}
 }
 
+/** The value `update()` starts from: what's saved, or `current` when storage can't be used. */
+export function latest<T>(
+	e: Entry<T>,
+	current: T | undefined,
+	{ unsaved = false }: { unsaved?: boolean } = {}
+): T | undefined {
+	return storage() && !unsaved ? read(e) : current;
+}
+
 /**
  * Applies `change` to the latest saved value and saves the result, so a change made in one tab
  * never overwrites what another tab saved meanwhile. `current` (this tab's copy) is changed
@@ -467,7 +483,7 @@ export function update<T>(
 	change: (latest: T | undefined) => T | undefined,
 	{ unsaved = false }: { unsaved?: boolean } = {}
 ): { value: T | undefined; saved: boolean } {
-	const value = change(storage() && !unsaved ? read(e) : current);
+	const value = change(latest(e, current, { unsaved }));
 	const saved = value === undefined ? remove(e) : write(e, value);
 	return { value, saved };
 }

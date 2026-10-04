@@ -34,7 +34,9 @@ Package manager: pnpm.
   approve your own PR, so post the passing review as a comment review. Reviewing anyone else's PR
   only posts the review; never merge it unless asked.
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
-  home page render from that list). New tools arrive as GitHub issues. The site is static with no server or
+  home page render from that list). Home shows pinned and recently used tools (`src/lib/home.ts` rules,
+  `home.svelte.ts` state, saved as `app:home:shortcuts`; recents are recorded in the root layout). A
+  private tool must set `recents: false` so it never appears under "Recently used". New tools arrive as GitHub issues. The site is static with no server or
   auth, so tools must be fully client-side; shared logic lives in `src/lib/utils/` (timers count against
   wall-clock end times so they stay correct when a phone backgrounds the tab).
 - e2e tests that type into inputs must navigate with `gotoHydrated` from `e2e/helpers.ts`; input sent

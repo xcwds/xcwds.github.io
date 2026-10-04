@@ -1,4 +1,9 @@
-/** Every tool under /utils. The /utils index and the home page both render from this list. */
+import type { ShortcutTool } from '$lib/home';
+
+/**
+ * Every tool under /utils. The /utils index and the home page both render from this list.
+ * A private tool sets `recents: false` so it never shows under "Recently used" on Home.
+ */
 export const tools = [
 	{
 		path: '/utils/pizza-dough',
@@ -36,4 +41,4 @@ export const tools = [
 		name: 'Weightlifting Calculator',
 		blurb: 'Plate math for bars, dumbbells and kettlebells, plus a workout log.'
 	}
-] as const;
+] as const satisfies readonly (ShortcutTool & { name: string; emoji: string; blurb: string })[];
