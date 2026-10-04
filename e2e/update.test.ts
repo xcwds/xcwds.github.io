@@ -62,6 +62,19 @@ test.afterAll(async () => {
 
 const banner = (page: Page) => page.getByTestId('update-banner');
 
+/**
+ * "Deploys" a new version, then returns to the app until it notices. The app runs its own
+ * update check on load; a check requested while that one is still in flight is merged into it
+ * and sees the old file, so one visibilitychange isn't always enough.
+ */
+async function deployNewVersion(page: Page, marker: string) {
+	await writeFile(join(dir, 'service-worker.js'), `\n// ${marker}\n`, { flag: 'a' });
+	await expect(async () => {
+		await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+		await expect(banner(page)).toBeVisible({ timeout: 1000 });
+	}).toPass({ timeout: 15_000 });
+}
+
 const waitForController = (page: Page) =>
 	page.evaluate(async () => {
 		await navigator.serviceWorker.ready;
@@ -80,8 +93,7 @@ test('a new version waits for the user, respects running timers, then updates', 
 	await expect(banner(page)).toHaveCount(0);
 
 	// Deploy a "new version", then come back to the app (which checks for updates).
-	await writeFile(join(dir, 'service-worker.js'), '\n// next version\n', { flag: 'a' });
-	await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+	await deployNewVersion(page, 'next version');
 	await expect(banner(page)).toContainText('A new version is available.');
 	// The new version is waiting, not active.
 	expect(await page.evaluate(async () => !!(await navigator.serviceWorker.ready).waiting)).toBe(
@@ -110,8 +122,7 @@ test('a new version waits for the user, respects running timers, then updates', 
 test('the update banner can be dismissed and comes back on the next launch', async ({ page }) => {
 	await gotoHydrated(page, `${origin}/`);
 	await waitForController(page);
-	await writeFile(join(dir, 'service-worker.js'), '\n// another version\n', { flag: 'a' });
-	await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+	await deployNewVersion(page, 'another version');
 	await banner(page).getByRole('button', { name: 'Dismiss' }).click();
 	await expect(banner(page)).toHaveCount(0);
 
