@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { version } from '$app/environment';
 	import Acronym from '$lib/Acronym.svelte';
+	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
 	import { changelog, latestChangelogId } from '$lib/changelog';
@@ -389,6 +390,12 @@
 		>
 			Restore built-in pizza defaults
 		</button>
+
+		<h3 class="mt-2 font-semibold">Recipes</h3>
+		<RecipeUnitsToggle />
+		<p class="text-sm text-gray-600 dark:text-gray-400">
+			Ingredient units. “As written” shows each recipe in the units it was written in.
+		</p>
 
 		<h3 class="mt-2 font-semibold">Oven Time Converter</h3>
 		<TempUnitToggle />

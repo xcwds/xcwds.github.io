@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { stepText, stepTimer, type StepTimer } from '$lib/recipes';
 	import { formatIngredient, formatYield, isScalable } from '$lib/recipes/scale';
+	import { nativeSystem, systemOf } from '$lib/recipes/units';
+	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
 	import { settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { CookingTimers, MINUTE } from '$lib/utils/cooking-timers.svelte';
@@ -24,7 +26,14 @@
 	let stepSize = $derived(base.step ?? 1);
 	let target = $derived(base.amount);
 	let factor = $derived(target / base.amount);
-	let ingredients = $derived(recipe.ingredients.map((i) => formatIngredient(i, factor)));
+	// US or metric: your choice (Settings → Tool defaults, or the toggle here), else as written.
+	let measured = $derived(recipe.ingredients.filter(isScalable));
+	let native = $derived(nativeSystem(measured.map((i) => i.unit)));
+	let convertible = $derived(measured.some((i) => systemOf(i.unit)));
+	let system = $derived(settings.recipeUnits ?? native);
+	let ingredients = $derived(
+		recipe.ingredients.map((i) => formatIngredient(i, factor, convertible ? system : undefined))
+	);
 
 	/** Steps to the next multiple of the step size, so 24 → 36 → 48 even from an odd yield. */
 	function stepTarget(direction: 1 | -1) {
@@ -144,6 +153,15 @@
 				<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="scaled-note">
 					Quantities scaled ×{Math.round(factor * 100) / 100}. Times and pan sizes are not; check
 					doneness as you go.
+				</p>
+			{/if}
+		{/if}
+		{#if convertible}
+			<RecipeUnitsToggle {native} />
+			{#if system !== native}
+				<p class="text-sm text-gray-600 dark:text-gray-400" data-testid="units-note">
+					Converted from {native === 'us' ? 'US' : 'metric'} measures; amounts in the steps are as written.
+					Spoon measures stay as spoons.
 				</p>
 			{/if}
 		{/if}

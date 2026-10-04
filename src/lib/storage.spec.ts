@@ -253,6 +253,15 @@ describe('settings entry', () => {
 		expect(read(entries.settings)?.theme).toBe('system');
 	});
 
+	it('loads the recipe unit system, defaulting to as written (null)', () => {
+		store.setItem(entries.settings.key, JSON.stringify({ theme: 'dark' }));
+		expect(read(entries.settings)?.recipeUnits).toBeNull();
+		write(entries.settings, { ...defaultSettings, recipeUnits: 'metric' });
+		expect(read(entries.settings)?.recipeUnits).toBe('metric');
+		store.setItem(entries.settings.key, JSON.stringify({ recipeUnits: 'imperial' }));
+		expect(read(entries.settings)?.recipeUnits).toBeNull();
+	});
+
 	it('loads the oven unit, defaulting to °F', () => {
 		// Saved before the oven converter existed.
 		store.setItem(entries.settings.key, JSON.stringify({ theme: 'dark' }));

@@ -8,10 +8,14 @@
 	"time": "1 h 40 min",
 	"oven": { "temp": 425, "minutes": [70, 90], "food": "meat" },
 	"notes": [
-		"Times are for a 4–5 lb chicken. Cooking more than one? The servings stepper adds a whole chicken at a time; roast them side by side and the time stays about the same."
+		"Times are for a 4–5 lb (1.8–2.3 kg) chicken. Cooking more than one? The servings stepper adds a whole chicken at a time; roast them side by side and the time stays about the same."
 	],
 	"ingredients": [
-		{ "amount": 1, "item": "whole chicken (4–5 lb)", "plural": "whole chickens (4–5 lb each)" },
+		{
+			"amount": 1,
+			"item": "whole chicken (4–5 lb / 1.8–2.3 kg)",
+			"plural": "whole chickens (4–5 lb / 1.8–2.3 kg each)"
+		},
 		{ "amount": 2, "unit": "tsp", "item": "kosher salt" },
 		{ "amount": 0.5, "unit": "tsp", "item": "black pepper", "note": "freshly ground" },
 		{ "amount": 2, "unit": "Tbsp", "item": "butter", "note": "softened, or olive oil" },

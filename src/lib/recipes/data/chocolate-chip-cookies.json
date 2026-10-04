@@ -8,22 +8,50 @@
 	"time": "45 min",
 	"oven": { "temp": 375, "minutes": [9, 11], "food": "baked" },
 	"ingredients": [
-		{ "amount": 2.25, "unit": "cup", "item": "all-purpose flour", "note": "spooned and leveled" },
+		{
+			"amount": 2.25,
+			"unit": "cup",
+			"item": "all-purpose flour",
+			"note": "spooned and leveled",
+			"alt": { "amount": 280, "unit": "g" }
+		},
 		{ "amount": 1, "unit": "tsp", "item": "baking soda" },
 		{ "amount": 1, "unit": "tsp", "item": "salt" },
-		{ "amount": 1, "unit": "cup", "item": "unsalted butter", "note": "softened" },
-		{ "amount": 0.75, "unit": "cup", "item": "granulated sugar" },
-		{ "amount": 0.75, "unit": "cup", "item": "brown sugar", "note": "packed" },
+		{
+			"amount": 1,
+			"unit": "cup",
+			"item": "unsalted butter",
+			"note": "softened",
+			"alt": { "amount": 227, "unit": "g" }
+		},
+		{
+			"amount": 0.75,
+			"unit": "cup",
+			"item": "granulated sugar",
+			"alt": { "amount": 150, "unit": "g" }
+		},
+		{
+			"amount": 0.75,
+			"unit": "cup",
+			"item": "brown sugar",
+			"note": "packed",
+			"alt": { "amount": 165, "unit": "g" }
+		},
 		{ "amount": 1, "unit": "tsp", "item": "vanilla extract" },
 		{ "amount": 2, "item": "large egg", "plural": "large eggs", "note": "room temperature" },
-		{ "amount": 2, "unit": "cup", "item": "semisweet chocolate chips" }
+		{
+			"amount": 2,
+			"unit": "cup",
+			"item": "semisweet chocolate chips",
+			"alt": { "amount": 340, "unit": "g" }
+		}
 	],
 	"instructions": [
 		"Heat the oven to 375°F (190°C) and line baking sheets with parchment.",
 		"Whisk the flour, baking soda and salt in a bowl.",
 		"Beat the butter and both sugars until light and creamy, about 2 minutes. Beat in the vanilla, then the eggs one at a time.",
 		"Mix in the flour mixture on low speed until just combined, then stir in the chocolate chips.",
-		"Drop rounded tablespoons of dough about 2 inches apart on the baking sheets.",
+		"Drop rounded tablespoons of dough about 2 inches (5 cm) apart on the baking sheets.",
 		{
 			"text": "Bake until the edges are golden and the centers still look a little soft, 9–11 minutes. Cool on the sheet for 2 minutes, then move to a rack.",
 			"timer": { "minutes": [9, 11], "label": "Cookies", "oven": true }

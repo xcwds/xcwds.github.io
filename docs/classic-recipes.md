@@ -20,7 +20,17 @@ re-import from Notion.
     in `src/lib/recipes/scale.ts`. Metric units (`g`, `kg`, `ml`, `l`) print as decimals, the rest
     as kitchen fractions (`1 ½`, `⅓`).
   - Counts have no unit: give `item` singular and `plural` (`large egg` / `large eggs`).
-  - Keep quantities out of `note`, since notes are never scaled.
+  - Keep quantities out of `note`, since notes are never scaled or converted.
+  - `alt: { amount, unit }` is the same amount in the other unit system, for the written amount
+    (the low end of a range): `2 ¼ cup` flour with `alt` `280 g`, or `6 g` yeast with `alt`
+    `2 tsp`. Give it for anything a unit conversion gets wrong: dry and fat ingredients measured by
+    volume (flour, sugar, butter, chocolate chips) and small metric weights better measured with
+    spoons. Without it, the page converts by unit (`src/lib/recipes/units.ts`): cups ↔ ml,
+    oz/lb ↔ g/kg. Spoons and counts are never converted.
+- Units: the page shows ingredients in the reader's choice of US or metric
+  (`settings.recipeUnits`, set on any recipe or in Settings → Tool defaults; `null` = as written).
+  A recipe's own system is the one most of its measured ingredients use. Quantities in step text
+  aren't converted, so write them in both: `¼ cup (60 ml)`, `9×5-inch (23×13 cm)`.
 - `oven: { temp, minutes, food }` — °F, a time or `[low, high]` range in minutes, and an oven
   converter preset id from `FOOD_PRESETS` in `src/lib/utils/oven.ts`. Adds the "Cooking at a
   different temperature?" panel, which shares its math and unit setting with

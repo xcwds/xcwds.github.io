@@ -98,9 +98,42 @@ test('oven step timers follow the different-temperature panel while it is open',
 	await expect(page.getByRole('button', { name: 'Start 9 min timer' })).toBeVisible();
 });
 
+test('ingredients switch between US and metric, and the choice is kept', async ({ page }) => {
+	await gotoHydrated(page, '/recipes/chocolate-chip-cookies');
+	const list = page.getByTestId('ingredients');
+	const units = page.getByRole('radiogroup', { name: 'Recipe units' });
+	await expect(units.getByRole('radio', { name: 'US' })).toHaveAttribute('aria-checked', 'true');
+	await expect(page.getByTestId('units-note')).toHaveCount(0);
+
+	await units.getByRole('radio', { name: 'Metric' }).click();
+	await expect(list).toContainText('280 g all-purpose flour');
+	await expect(list).toContainText('1 tsp baking soda');
+	await expect(page.getByTestId('units-note')).toContainText('Converted from US measures');
+	// Scaling and units combine.
+	await page.getByRole('button', { name: 'Fewer cookies' }).click();
+	await page.getByRole('button', { name: 'Fewer cookies' }).click();
+	await expect(list).toContainText('140 g all-purpose flour');
+
+	// The choice applies to other recipes: pizza dough (written in grams) stays metric...
+	await gotoHydrated(page, '/recipes/pizza-dough');
+	await expect(page.getByTestId('ingredients')).toContainText('650 g bread flour');
+	// ...and US shows the recipe's own US measures.
+	await page.getByRole('radio', { name: 'US' }).click();
+	await expect(page.getByTestId('ingredients')).toContainText('23 oz bread flour');
+	await expect(page.getByTestId('ingredients')).toContainText('2 tsp active dry yeast');
+	await expect(page.getByTestId('units-note')).toContainText('Converted from metric measures');
+
+	// Settings can go back to each recipe as written.
+	await gotoHydrated(page, '/settings');
+	await page.getByRole('radio', { name: 'As written' }).click();
+	await gotoHydrated(page, '/recipes/pizza-dough');
+	await expect(page.getByTestId('ingredients')).toContainText('650 g bread flour');
+	await expect(page.getByRole('radio', { name: 'Metric' })).toHaveAttribute('aria-checked', 'true');
+});
+
 test('roast chicken scales by whole chickens', async ({ page }) => {
 	await gotoHydrated(page, '/recipes/roast-chicken');
 	await page.getByRole('button', { name: 'More servings' }).click();
 	await expect(page.getByTestId('servings-target')).toHaveText('8 servings');
-	await expect(page.getByTestId('ingredients')).toContainText('2 whole chickens (4–5 lb each)');
+	await expect(page.getByTestId('ingredients')).toContainText('2 whole chickens (4–5 lb / 1.8–2.3 kg each)');
 });

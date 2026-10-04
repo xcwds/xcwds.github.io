@@ -7,6 +7,13 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 8,
+		date: '2026-10-04',
+		items: [
+			'Recipes can show ingredients in US or metric measures, including flour, sugar and butter by weight.'
+		]
+	},
+	{
 		id: 7,
 		date: '2026-10-04',
 		items: [

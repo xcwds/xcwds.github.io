@@ -1,5 +1,7 @@
 /** Scaling ingredient quantities to a servings target, and printing them like a cookbook. */
 
+import { toSystem, type AltMeasure, type UnitSystem } from './units';
+
 /** A quantity, or a range like "2–3". */
 export type Amount = number | readonly [number, number];
 
@@ -13,6 +15,11 @@ export type ScalableIngredient = {
 	plural?: string;
 	/** Shown after the item: "softened", "spooned and leveled". */
 	note?: string;
+	/**
+	 * The same amount in the other unit system, as the recipe gives it ("2 ¼ cups (281 g)"), for
+	 * the low end of a range. Used instead of a unit conversion when showing the other system.
+	 */
+	alt?: AltMeasure;
 };
 
 /** A string is shown as is and never scaled ("Salt and pepper, to taste"). */
@@ -45,7 +52,7 @@ const UNIT_PLURALS: Record<string, string> = {
 };
 
 /** Units measured on a scale or in metric, shown as decimals instead of kitchen fractions. */
-const DECIMAL_UNITS = new Set(['g', 'kg', 'ml', 'l']);
+const DECIMAL_UNITS = new Set(['g', 'kg', 'ml', 'l', 'oz']);
 
 const FRACTIONS: [number, string][] = [
 	[0, ''],
@@ -90,11 +97,21 @@ export function scaleAmount(amount: Amount, factor: number): Amount {
 /** The quantity part, e.g. "1 ½ cups" or "2–3"; the rest, e.g. "flour, spooned and leveled". */
 export type FormattedIngredient = { quantity: string; text: string };
 
-export function formatIngredient(ingredient: Ingredient, factor = 1): FormattedIngredient {
+/** Formats an ingredient scaled by `factor`, in `system` if given (otherwise as written). */
+export function formatIngredient(
+	ingredient: Ingredient,
+	factor = 1,
+	system?: UnitSystem
+): FormattedIngredient {
 	if (typeof ingredient === 'string') return { quantity: '', text: ingredient };
 	const amount = scaleAmount(ingredient.amount, factor);
-	const [lo, hi] = typeof amount === 'number' ? [amount, amount] : amount;
-	const { unit } = ingredient;
+	let [lo, hi] = typeof amount === 'number' ? [amount, amount] : amount;
+	let { unit } = ingredient;
+	if (system) {
+		const written = ingredient.amount;
+		const writtenLow = typeof written === 'number' ? written : written[0];
+		({ lo, hi, unit } = toSystem({ lo, hi, unit }, system, ingredient.alt, writtenLow));
+	}
 	const top = formatNumber(hi, unit);
 	let quantity = lo === hi ? top : `${formatNumber(lo, unit)}–${top}`;
 	// "1 cup", "½ cup", "½–1 cup" but "1 ½ cups"; judged by what's printed, so 0.99 shown as
