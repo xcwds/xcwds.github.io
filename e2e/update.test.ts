@@ -144,3 +144,30 @@ test('relaunching before Update keeps the old version; Update switches to the ne
 	await expect(page.getByTestId('toast').first()).toContainText('App updated');
 	expect(await pageVersion(page)).toBe('relaunch-test');
 });
+
+// #28: after one tab applies the update, the others are told to reload instead of getting stuck.
+test('other open tabs are asked to reload after one tab updates', async ({ context }) => {
+	const first = await context.newPage();
+	await gotoHydrated(first, `${origin}/`);
+	await waitForController(first);
+	const second = await context.newPage();
+	await gotoHydrated(second, `${origin}/recipes`);
+
+	await deployNewVersion(first, 'multi-tab');
+	await expect(async () => {
+		await second.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+		await expect(banner(second)).toContainText('A new version is available.', { timeout: 1000 });
+	}).toPass({ timeout: 15_000 });
+
+	await banner(first).getByRole('button', { name: 'Update', exact: true }).click();
+	await first.waitForEvent('load');
+	expect(await pageVersion(first)).toBe('multi-tab');
+
+	await expect(banner(second)).toContainText('Updated in another tab. Reload to finish updating.');
+	expect(await pageVersion(second)).not.toBe('multi-tab');
+	await banner(second).getByRole('button', { name: 'Reload', exact: true }).click();
+	await second.waitForEvent('load');
+	expect(await pageVersion(second)).toBe('multi-tab');
+	await expect(second.getByTestId('toast').first()).toContainText('App updated');
+	await expect(banner(second)).toHaveCount(0);
+});
