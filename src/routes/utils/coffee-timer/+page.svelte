@@ -29,7 +29,8 @@
 	persist(
 		entries.coffeeDuration,
 		() => custom ?? undefined,
-		(saved) => (custom = saved)
+		(saved) => (custom = saved),
+		{ cleared: () => (custom = null) }
 	);
 
 	// Settings load after this page mounts; then show the starting length.

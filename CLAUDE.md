@@ -56,7 +56,11 @@ Package manager: pnpm.
   `settings` (coffee length, cooking presets, pizza defaults, lifting equipment and owned plates). Settings
   load after pages mount, so seed page state from them in an effect gated on `settingsStatus.ready`.
 - `persist()` only writes when a value changes (never just because a page opened), and removes the entry
-  when `get` returns `undefined`. Keep "nothing saved" meaningful: a tool default applies until the user
+  when `get` returns `undefined`. It loads changes other tabs save (`storage` event; pass `cleared` to
+  handle removal, `sync: false` for per-window UI state) and reports failed writes with one toast
+  (`reportSaveFailure`). Actions that confirm a save must check the real result: apply list changes with
+  `update()` from `storage.ts` (it starts from the latest saved value) then `markSaved()`, or call
+  `saveSettings()`, and only toast "saved" when it returns true. Keep "nothing saved" meaningful: a tool default applies until the user
   makes their own choice, and changing the default in Settings clears that choice. Workouts store their
   own `unit`; never label logged weights with the calculator's current unit.
 - Workout history: "Finish workout" moves the current workout into `app:workout-history` (its own storage

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { settings, settingsStatus } from '$lib/settings.svelte';
+	import { saveSettings, settings, settingsStatus } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { computeDough, doughDefaults, type DoughInput } from '$lib/utils/dough';
 
@@ -16,7 +16,8 @@
 
 	function saveDefaults() {
 		settings.pizzaDefaults = { ...input };
-		toast('Saved as your pizza dough defaults.');
+		// A failed save is reported by saveSettings.
+		if (saveSettings()) toast('Saved as your pizza dough defaults.');
 	}
 
 	let isDefault = $derived(

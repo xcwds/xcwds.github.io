@@ -1,5 +1,31 @@
 import { onMount } from 'svelte';
 import { read, remove, write, type Entry } from './storage';
+import { toast, toasts } from './toast.svelte';
+
+export const SAVE_FAILED =
+	"Couldn't save on this device: storage is full or blocked. Download a backup from Settings.";
+
+/** Entries whose last write failed; each is reported once until a write succeeds again. */
+const failing: Record<string, boolean> = {};
+
+/**
+ * Tells the user a save failed. Repeated failures of the same entry stay quiet, and the toast
+ * is never shown twice at once (one action can fail to save several entries).
+ */
+export function reportSaveFailure(entry?: Entry<unknown>): void {
+	if (entry) {
+		if (failing[entry.key]) return;
+		failing[entry.key] = true;
+	}
+	if (!toasts.some((t) => t.message === SAVE_FAILED)) toast(SAVE_FAILED, 6000);
+}
+
+/** Records the outcome of a write of `entry`, reporting a failure. Returns `saved`. */
+export function saveResult(entry: Entry<unknown>, saved: boolean): boolean {
+	if (saved) delete failing[entry.key];
+	else reportSaveFailure(entry);
+	return saved;
+}
 
 /**
  * Keeps component state in sync with a storage entry: loads it after mount (so prerendered
@@ -7,22 +33,43 @@ import { read, remove, write, type Entry } from './storage';
  * page never writes, so "nothing saved yet" stays meaningful (e.g. for tool defaults).
  * Returning `undefined` from `get` removes the entry. Call during component init.
  *
+ * Changes saved by another tab are loaded as they happen, so a stale copy here never
+ * overwrites them; `cleared` runs when another tab removes the entry. Pass `sync: false` for
+ * per-window UI state (e.g. the open tab) that shouldn't follow other windows. A failed save
+ * shows a toast once (see `reportSaveFailure`).
+ *
  *   persist(entries.coffeeDuration, () => custom, (v) => (custom = v));
+ *
+ * Returns `markSaved()`: call it right after saving the current value yourself (e.g. with
+ * `update()` from storage.ts, to report the result), so it isn't written a second time.
  */
 export function persist<T>(
 	entry: Entry<T>,
 	get: () => T | undefined,
-	set: (value: T) => void
-): void {
+	set: (value: T) => void,
+	{ cleared, sync = true }: { cleared?: () => void; sync?: boolean } = {}
+): { markSaved: () => void } {
 	let loaded = $state(false);
 	/** JSON of the value as last loaded or saved; unchanged values aren't written again. */
 	let baseline: string | undefined;
 
-	onMount(() => {
+	function load() {
 		const saved = read(entry);
 		if (saved !== undefined) set(saved);
+		else if (loaded) cleared?.();
 		baseline = JSON.stringify(get());
+	}
+
+	onMount(() => {
+		load();
 		loaded = true;
+		if (!sync) return;
+		// Fires in every *other* tab when this one saves; `key` is null when storage is cleared.
+		const onStorage = (event: StorageEvent) => {
+			if (event.key === null || event.key === entry.key) load();
+		};
+		window.addEventListener('storage', onStorage);
+		return () => window.removeEventListener('storage', onStorage);
 	});
 
 	$effect(() => {
@@ -30,7 +77,12 @@ export function persist<T>(
 		const json = JSON.stringify(get());
 		if (!loaded || json === baseline) return;
 		baseline = json;
-		if (json === undefined) remove(entry);
-		else write(entry, JSON.parse(json) as T);
+		saveResult(entry, json === undefined ? remove(entry) : write(entry, JSON.parse(json) as T));
 	});
+
+	return {
+		markSaved() {
+			baseline = JSON.stringify(get());
+		}
+	};
 }
