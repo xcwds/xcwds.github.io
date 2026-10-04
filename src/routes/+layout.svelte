@@ -4,7 +4,6 @@
 	import { page } from '$app/state';
 	import { startUpdateChecks } from '$lib/app-update.svelte';
 	import UpdateBanner from '$lib/UpdateBanner.svelte';
-	import favicon from '$lib/assets/favicon.ico';
 	import { activeSection, routeInfo, sections } from '$lib/nav';
 	import { startSettings } from '$lib/settings.svelte';
 	import '../app.css';
@@ -22,10 +21,6 @@
 		document.documentElement.dataset.hydrated = '';
 	});
 </script>
-
-<svelte:head>
-	<link rel="icon" href={favicon} />
-</svelte:head>
 
 <div class="min-h-svh bg-blue-200 dark:bg-gray-950">
 	<!-- Not sticky: long recipe titles wrap, and the tab bar keeps navigation in reach. -->

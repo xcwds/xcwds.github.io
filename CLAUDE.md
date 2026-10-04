@@ -1,9 +1,12 @@
 # Agent notes
 
 Brand: **xcwds**, "a cyber-web Swiss Army knife". Use xcwds for the app name, titles and file names; no
-personal names. The app icon is the xcwds GitHub avatar. xcwds stands for "eXecutes Client-side, Without Data
+personal names. xcwds stands for "eXecutes Client-side, Without Data
 Servers" (shown on Home and Settings → About; brand strings live in `src/lib/brand.ts`). Tapping it three times
 on About reveals the Easter egg "eXtra Crispy Waffles, Deadlifts & Sanitizers".
+The app icon (`static/icons/icon.svg`, the "multi-tool X") must stay neutral and discreet: no faces, photos
+or revealing text. Some tools will be private (e.g. planned feminine-care tools), and the icon shows on
+home screens and in app switchers.
 
 SvelteKit static site (adapter-static, Tailwind, Skeleton) deployed to GitHub Pages from `main`.
 Package manager: pnpm.
@@ -17,7 +20,7 @@ Package manager: pnpm.
   wall-clock end times so they stay correct when a phone backgrounds the tab).
 - e2e tests that type into inputs must navigate with `gotoHydrated` from `e2e/helpers.ts`; input sent
   before hydration gets lost or doubled.
-- The site is an installable PWA: `static/manifest.webmanifest`, icons in `static/icons/` (made from the GitHub avatar in `scripts/icon-source.jpg`; regenerate with
+- The site is an installable PWA: `static/manifest.webmanifest`, icons in `static/icons/` (rendered from `static/icons/icon.svg`; regenerate with
   `node scripts/generate-icons.mjs`), and `src/service-worker.ts`, which precaches every prerendered page for
   offline use. The manifest's `share_target` sends Android shares to `/utils/url-sanitizer`; the service
   worker moves the shared link from `?query` to `#url=` so it never reaches the server. The iPhone

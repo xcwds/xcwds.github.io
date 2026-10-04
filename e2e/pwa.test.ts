@@ -13,6 +13,8 @@ test('manifest is installable and its icons load', async ({ request }) => {
 	for (const icon of manifest.icons) {
 		expect((await request.get(icon.src)).ok()).toBe(true);
 	}
+	expect((await request.get('/favicon.ico')).ok()).toBe(true);
+	expect((await request.get('/icons/icon.svg')).headers()['content-type']).toContain('svg');
 });
 
 test('sanitizer receives a link from #url= and clears it from the address', async ({ page }) => {
