@@ -9,6 +9,13 @@ on:
 jobs:
   checks:
     runs-on: ubuntu-latest
+    # A full run takes a few minutes; don't let a hung server or browser hold the deploy queue.
+    timeout-minutes: 20
+    # A new push to a PR cancels its older run. Runs called by deploy.yml (no PR) never share a
+    # group, so a deploy's checks are never cancelled.
+    concurrency:
+      group: ci-${{ github.event.pull_request.number || github.run_id }}
+      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
