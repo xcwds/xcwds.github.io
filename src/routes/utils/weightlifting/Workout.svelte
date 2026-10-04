@@ -1,13 +1,26 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { formatWeight, workoutToText, type Exercise, type Workout } from '$lib/utils/lifting';
+	import {
+		formatWeight,
+		workoutHasContent,
+		workoutToText,
+		type Exercise,
+		type Workout
+	} from '$lib/utils/lifting';
 	import { persist } from '$lib/persist.svelte';
 	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { entries } from '$lib/storage';
 	import { button, card, field, primary } from './styles';
 
-	let { calculatorWeight = 0 }: { calculatorWeight?: number } = $props();
+	let {
+		calculatorWeight = 0,
+		onFinish
+	}: {
+		calculatorWeight?: number;
+		/** Receives a finished workout to keep in the history. */
+		onFinish?: (workout: Workout) => void;
+	} = $props();
 
 	/** The calculator's unit. A workout keeps the unit it was logged in (see below). */
 	let calculatorUnit = $derived(settings.lifting.unit);
@@ -52,15 +65,23 @@
 	let nextId = 1;
 	const id = () => nextId++;
 
+	const useWorkout = (next: Workout) => {
+		workout = next;
+		nextId = 1 + Math.max(0, ...next.exercises.flatMap((e) => [e.id, ...e.sets.map((s) => s.id)]));
+	};
+
+	// An empty workout saved on an earlier day (e.g. right after "Finish workout") is dated today;
+	// "Finish workout" is disabled until something is logged, so it can't refresh the date.
 	persist(
 		entries.liftingWorkout,
 		() => workout,
-		(saved) => {
-			workout = saved;
-			nextId =
-				1 + Math.max(0, ...saved.exercises.flatMap((e) => [e.id, ...e.sets.map((s) => s.id)]));
-		}
+		(saved) => useWorkout(workoutHasContent(saved) ? saved : { ...saved, date: today() })
 	);
+
+	/** JSON of the workout as Repeat filled it; an untouched copy isn't saved again by Repeat. */
+	let repeated: string | undefined;
+
+	let hasContent = $derived(workoutHasContent(workout));
 
 	onMount(() => {
 		canShare = typeof navigator.share === 'function';
@@ -79,9 +100,24 @@
 		});
 	}
 
-	function newWorkout() {
-		if (workout.exercises.length && !confirm('Clear this workout and start a new one?')) return;
+	/** Saves the current workout to the history (if it has anything in it) and starts a new one. */
+	function finishWorkout() {
+		if (workoutHasContent(workout)) {
+			onFinish?.($state.snapshot(workout));
+			toast('Workout saved to history.');
+		}
 		workout = { date: today(), unit: calculatorUnit, exercises: [] };
+	}
+
+	/** Starts a new workout with the same exercises and sets as `source` (dated today). */
+	export function repeat(source: Workout) {
+		if (workoutHasContent(workout) && JSON.stringify(workout) !== repeated) {
+			onFinish?.($state.snapshot(workout));
+			toast('Your current workout was saved to history.');
+		}
+		// A plain copy: `source` comes from reactive state, which structuredClone can't copy.
+		useWorkout({ ...$state.snapshot(source), date: today() });
+		repeated = JSON.stringify(workout);
 	}
 
 	async function copy() {
@@ -108,7 +144,9 @@
 			<span>Date</span>
 			<input bind:value={workout.date} class={field} />
 		</label>
-		<button type="button" class="{button} self-end" onclick={newWorkout}>New workout</button>
+		<button type="button" class="{button} self-end" disabled={!hasContent} onclick={finishWorkout}
+			>Finish workout</button
+		>
 	</div>
 
 	{#if unitsDiffer}

@@ -78,8 +78,7 @@ test('switching units never relabels weights already logged', async ({ page, con
 	expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('@ 225 lb');
 
 	// A new workout follows the calculator.
-	page.once('dialog', (d) => d.accept());
-	await page.getByRole('button', { name: 'New workout' }).click();
+	await page.getByRole('button', { name: 'Finish workout' }).click();
 	await page.getByRole('button', { name: '+ Add exercise' }).click();
 	await expect(page.getByRole('columnheader', { name: 'Weight (kg)' })).toBeVisible();
 	await expect(page.getByTestId('unit-note')).toHaveCount(0);

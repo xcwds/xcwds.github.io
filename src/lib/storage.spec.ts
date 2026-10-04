@@ -199,6 +199,7 @@ describe('groups and clear', () => {
 			'coffee-timer',
 			'cooking-timer',
 			'weightlifting',
+			'workout-history',
 			'settings'
 		]);
 		write(entries.coffeeDuration, 1000);
@@ -401,5 +402,33 @@ describe('review fixes', () => {
 		expect(parseCookingPresets([0.05, 5, 10])).toBeUndefined();
 		expect(parseCookingPresets([10, 5, 5, 0.5])).toEqual([0.5, 5, 10]);
 		expect(parseCookingPresets([])).toBeUndefined();
+	});
+});
+
+describe('workout history', () => {
+	const workout = {
+		date: 'Sat',
+		unit: 'lb' as const,
+		exercises: [{ id: 1, name: 'Squat', sets: [{ id: 2, weight: 225, reps: 5 }] }]
+	};
+
+	it('round-trips and keeps valid entries when one is damaged', () => {
+		const good = { id: 1, finishedAt: '2026-10-04T12:00:00.000Z', workout };
+		write(entries.workoutHistory, [good]);
+		expect(read(entries.workoutHistory)).toEqual([good]);
+		store.setItem(
+			entries.workoutHistory.key,
+			JSON.stringify([good, { id: 2, finishedAt: 'x', workout: { date: 1 } }, { id: 'bad' }])
+		);
+		expect(read(entries.workoutHistory)).toEqual([good]);
+	});
+
+	it('is its own group, so clearing the calculator keeps it', () => {
+		write(entries.workoutHistory, [{ id: 1, finishedAt: 'x', workout }]);
+		write(entries.liftingTab, 'history');
+		clear(groups.find((g) => g.id === 'weightlifting')!.entries);
+		expect(read(entries.liftingTab)).toBeUndefined();
+		expect(read(entries.workoutHistory)).toHaveLength(1);
+		expect(groups.find((g) => g.id === 'workout-history')!.label).toBe('Workout History');
 	});
 });

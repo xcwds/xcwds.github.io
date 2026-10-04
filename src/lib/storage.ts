@@ -3,6 +3,7 @@ import {
 	EQUIPMENT_IDS,
 	UNITS,
 	type EquipmentId,
+	type HistoryEntry,
 	type PlateCounts,
 	type WeightUnit,
 	type Workout
@@ -105,6 +106,19 @@ function parseWorkout(v: unknown): Workout | undefined {
 	);
 	// Workouts logged before units existed were in lb.
 	return valid ? ({ ...v, unit: v.unit ?? 'lb' } as Workout) : undefined;
+}
+
+/** Keeps every valid entry, so one damaged workout doesn't lose the whole history. */
+function parseHistory(v: unknown): HistoryEntry[] | undefined {
+	if (!Array.isArray(v)) return undefined;
+	const out: HistoryEntry[] = [];
+	for (const item of v) {
+		if (!isRecord(item) || typeof item.id !== 'number' || typeof item.finishedAt !== 'string')
+			continue;
+		const workout = parseWorkout(item.workout);
+		if (workout) out.push({ id: item.id, finishedAt: item.finishedAt, workout });
+	}
+	return out;
 }
 
 export type Theme = 'system' | 'light' | 'dark';
@@ -244,12 +258,14 @@ export const entries = {
 		parseWorkout,
 		'lifting-workout'
 	),
-	liftingTab: entry<'plates' | 'workout'>(
+	liftingTab: entry<'plates' | 'workout' | 'history'>(
 		'weightlifting:tab',
 		'Weightlifting last tab',
-		(v) => (v === 'plates' || v === 'workout' ? v : undefined),
+		(v) => (v === 'plates' || v === 'workout' || v === 'history' ? v : undefined),
 		'lifting-tab'
 	),
+	// Its own group, so clearing the calculator's data in Settings never wipes past workouts.
+	workoutHistory: entry<HistoryEntry[]>('workout-history', 'Workout history', parseHistory),
 	settings: entry<Settings>('settings', 'Settings', parseSettings)
 } satisfies Record<string, Entry<unknown>>;
 
@@ -260,6 +276,7 @@ const GROUP_LABELS: Record<string, string> = {
 	'coffee-timer': 'Coffee Timer',
 	'cooking-timer': 'Cooking Timer',
 	weightlifting: 'Weightlifting Calculator',
+	'workout-history': 'Workout History',
 	settings: 'Settings'
 };
 
