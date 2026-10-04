@@ -3,6 +3,7 @@
 	import { version } from '$app/environment';
 	import Acronym from '$lib/Acronym.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
+	import { changelog, latestChangelogId } from '$lib/changelog';
 	import { install, promptInstall } from '$lib/install.svelte';
 	import { reloadSettings, settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
@@ -23,6 +24,7 @@
 		parseCookingPresets,
 		read,
 		remove,
+		write,
 		type Group,
 		type ParsedBackup,
 		type Theme
@@ -119,7 +121,14 @@
 			})
 		: version;
 
+	// --- What's new ---
+	/** Entries newer than this get a "New" badge for this visit (none on a fresh install). */
+	let seenBefore = $state(latestChangelogId);
+	const RECENT = 10;
+
 	onMount(() => {
+		seenBefore = read(entries.whatsNewSeen) ?? latestChangelogId;
+		if (seenBefore < latestChangelogId) write(entries.whatsNewSeen, latestChangelogId);
 		try {
 			canShareFiles = navigator.canShare?.({ files: [backupFile()] }) ?? false;
 		} catch {
@@ -506,5 +515,33 @@
 				>
 			</dd>
 		</dl>
+	</section>
+
+	<section class={card} aria-labelledby="whats-new" data-testid="whats-new">
+		<h2 id="whats-new" class="text-lg font-semibold">What's new</h2>
+		<ol class="flex flex-col gap-3 text-sm">
+			{#each changelog.slice(0, RECENT) as entry (entry.id)}
+				<li data-testid="whats-new-entry">
+					<p class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+						<time datetime={entry.date}
+							>{new Date(`${entry.date}T12:00`).toLocaleDateString(undefined, {
+								dateStyle: 'medium'
+							})}</time
+						>
+						{#if entry.id > seenBefore}
+							<span
+								data-testid="whats-new-badge"
+								class="rounded-full bg-blue-600 px-2 text-xs font-semibold text-white">New</span
+							>
+						{/if}
+					</p>
+					<ul class="list-disc pl-5">
+						{#each entry.items as item (item)}
+							<li>{item}</li>
+						{/each}
+					</ul>
+				</li>
+			{/each}
+		</ol>
 	</section>
 </main>

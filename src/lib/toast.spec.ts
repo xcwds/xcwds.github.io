@@ -9,7 +9,7 @@ describe('toast', () => {
 	});
 
 	it('shows a message, then removes it after its duration', () => {
-		toast('Link copied.', 1000);
+		toast('Link copied.', { durationMs: 1000 });
 		expect(toasts.map((t) => t.message)).toEqual(['Link copied.']);
 		vi.advanceTimersByTime(1000);
 		expect(toasts).toHaveLength(0);
@@ -20,5 +20,15 @@ describe('toast', () => {
 		expect(toasts.map((t) => t.message)).toEqual(['b', 'c', 'd']);
 		dismissToast(toasts[0].id);
 		expect(toasts.map((t) => t.message)).toEqual(['c', 'd']);
+	});
+
+	it('keeps toasts with an action up longer', () => {
+		toast('App updated.', {
+			action: { label: "See what's new", path: '/settings', hash: '#whats-new' }
+		});
+		vi.advanceTimersByTime(3000);
+		expect(toasts[0].action?.label).toBe("See what's new");
+		vi.advanceTimersByTime(5000);
+		expect(toasts).toHaveLength(0);
 	});
 });

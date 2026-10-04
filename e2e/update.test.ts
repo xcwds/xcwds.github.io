@@ -2,6 +2,7 @@ import { cp, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
+import { latestChangelogId } from '../src/lib/changelog';
 import { gotoHydrated } from './helpers';
 import { serveStatic } from './static-server';
 
@@ -103,8 +104,11 @@ test('a new version waits for the user, respects running timers, then updates', 
 	);
 
 	await page.getByRole('button', { name: 'Pause' }).click();
-	await banner(page).getByRole('button', { name: 'Update', exact: true }).click();
-	await page.waitForEvent('load');
+	// Listen before clicking: the reload can finish before a later waitForEvent starts.
+	await Promise.all([
+		page.waitForEvent('load'),
+		banner(page).getByRole('button', { name: 'Update', exact: true }).click()
+	]);
 	await expect(page.getByTestId('toast')).toHaveText('App updated to the latest version.');
 	expect(await page.evaluate(async () => !!(await navigator.serviceWorker.ready).waiting)).toBe(
 		false
@@ -139,8 +143,10 @@ test('relaunching before Update keeps the old version; Update switches to the ne
 	}
 	await expect(banner(page)).toContainText('A new version is available.');
 
-	await banner(page).getByRole('button', { name: 'Update', exact: true }).click();
-	await page.waitForEvent('load');
+	await Promise.all([
+		page.waitForEvent('load'),
+		banner(page).getByRole('button', { name: 'Update', exact: true }).click()
+	]);
 	await expect(page.getByTestId('toast').first()).toContainText('App updated');
 	expect(await pageVersion(page)).toBe('relaunch-test');
 });
@@ -159,15 +165,54 @@ test('other open tabs are asked to reload after one tab updates', async ({ conte
 		await expect(banner(second)).toContainText('A new version is available.', { timeout: 1000 });
 	}).toPass({ timeout: 15_000 });
 
-	await banner(first).getByRole('button', { name: 'Update', exact: true }).click();
-	await first.waitForEvent('load');
+	await Promise.all([
+		first.waitForEvent('load'),
+		banner(first).getByRole('button', { name: 'Update', exact: true }).click()
+	]);
 	expect(await pageVersion(first)).toBe('multi-tab');
 
 	await expect(banner(second)).toContainText('Updated in another tab. Reload to finish updating.');
 	expect(await pageVersion(second)).not.toBe('multi-tab');
-	await banner(second).getByRole('button', { name: 'Reload', exact: true }).click();
-	await second.waitForEvent('load');
+	await Promise.all([
+		second.waitForEvent('load'),
+		banner(second).getByRole('button', { name: 'Reload', exact: true }).click()
+	]);
 	expect(await pageVersion(second)).toBe('multi-tab');
 	await expect(second.getByTestId('toast').first()).toContainText('App updated');
 	await expect(banner(second)).toHaveCount(0);
+});
+
+// #41: an update offers what's new since the user last looked; a fresh install shows nothing new.
+test("after an update, the toast links to What's new with only the newer entries", async ({
+	page
+}) => {
+	await gotoHydrated(page, `${origin}/settings`);
+	await waitForController(page);
+	// A fresh install marks nothing as new and saves nothing.
+	await expect(page.getByTestId('whats-new-entry').first()).toBeVisible();
+	await expect(page.getByTestId('whats-new-badge')).toHaveCount(0);
+	expect(await page.evaluate(() => localStorage.getItem('app:settings:whats-new-seen'))).toBeNull();
+
+	// Pretend the user last saw the entry before the newest one, then update from Settings
+	// itself, which marks entries seen as it mounts.
+	await page.evaluate(
+		(id) => localStorage.setItem('app:settings:whats-new-seen', JSON.stringify(id)),
+		latestChangelogId - 1
+	);
+	await deployNewVersion(page, 'whats-new');
+	await Promise.all([
+		page.waitForEvent('load'),
+		banner(page).getByRole('button', { name: 'Update', exact: true }).click()
+	]);
+	const updated = page.getByTestId('toast').first();
+	await expect(updated).toContainText('App updated.');
+	await updated.getByRole('link', { name: "See what's new" }).click();
+	await expect(page).toHaveURL(/\/settings#whats-new$/);
+	await expect(page.getByTestId('whats-new')).toBeInViewport();
+	await expect(page.getByTestId('whats-new-badge')).toHaveCount(1);
+
+	// Viewing them marks them seen.
+	await gotoHydrated(page, `${origin}/settings`);
+	await expect(page.getByTestId('whats-new-entry').first()).toBeVisible();
+	await expect(page.getByTestId('whats-new-badge')).toHaveCount(0);
 });

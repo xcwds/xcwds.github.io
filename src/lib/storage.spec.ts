@@ -50,6 +50,18 @@ describe('registry', () => {
 		expect(keys.every((k) => k.startsWith('app:'))).toBe(true);
 		expect(new Set(keys).size).toBe(keys.length);
 	});
+
+	it("keeps What's new last-seen ids that are whole numbers", () => {
+		const parse = entries.whatsNewSeen.parse;
+		expect([3, 0, -1, 1.5, '3', null].map(parse)).toEqual([
+			3,
+			0,
+			undefined,
+			undefined,
+			undefined,
+			undefined
+		]);
+	});
 });
 
 describe('read / write / remove', () => {
