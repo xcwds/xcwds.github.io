@@ -20,8 +20,12 @@ sw.addEventListener('install', (event) => {
 	event.waitUntil(
 		caches.open(CACHE).then(async (cache) => {
 			await cache.addAll(ASSETS);
-			// Only exists in builds (not `vite dev`), so a missing file mustn't fail the install.
-			await cache.add(FALLBACK).catch(() => {});
+			// Best-effort: `vite dev` and `vite preview` don't serve 404.html, and $app/environment
+			// can't be imported here to tell them apart. A failure only costs the offline not-found
+			// page, so log it rather than fail the install (e2e/errors.test.ts covers the real build).
+			await cache.add(FALLBACK).catch((error) => {
+				console.warn(`Couldn't cache ${FALLBACK}; offline not-found pages won't work.`, error);
+			});
 		})
 	);
 });

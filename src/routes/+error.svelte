@@ -4,6 +4,8 @@
 
 	// The layout header shows the title (see errorInfo in src/lib/nav.ts); this is the body.
 	let notFound = $derived(page.status === 404);
+	// SvelteKit's message for unexpected errors says nothing useful; show only messages a page set.
+	let detail = $derived(page.error?.message === 'Internal Error' ? '' : page.error?.message);
 
 	const links = [
 		{ path: '/', label: 'Home', emoji: '🏠' },
@@ -24,7 +26,7 @@
 		{#if notFound}
 			<p>There's nothing at this address. The link may be mistyped, or the page has moved.</p>
 		{:else}
-			<p>This page couldn't load.{page.error?.message ? ` (${page.error.message})` : ''}</p>
+			<p>This page couldn't load.{detail ? ` (${detail})` : ''}</p>
 			<button
 				type="button"
 				class="rounded-xl bg-blue-600 px-3 py-2 font-semibold text-white active:bg-blue-700"
