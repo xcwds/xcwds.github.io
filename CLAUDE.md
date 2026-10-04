@@ -58,3 +58,5 @@ Package manager: pnpm.
 - Workout history: "Finish workout" moves the current workout into `app:workout-history` (its own storage
   group, so clearing the calculator never wipes it); the weightlifting page owns the history state and
   passes it to `History.svelte`. Copy reactive state with `$state.snapshot`, not `structuredClone`.
+- Reviewing a PR: always post the review on GitHub as a review (not only in chat), with inline comments
+  on the lines where a finding applies and the overall verdict in the review body.
