@@ -43,7 +43,9 @@ Package manager: pnpm.
   Don't use `data-theme`; Skeleton owns it.
 - App updates: the service worker never calls `skipWaiting()` on install; a new version waits until the
   user taps Update in the banner (`src/lib/app-update.svelte.ts`, `UpdateBanner.svelte`). Anything a reload
-  would interrupt must call `markBusy(name, () => isBusy)` (the coffee and cooking timers do). The e2e test
+  would interrupt must call `markBusy(name, () => isBusy)` (the coffee and cooking timers do). Precached
+  files are served cache-first from the active worker's own cache (never network-first), so a relaunch
+  keeps the old version until Update is tapped. The e2e test
   `e2e/update.test.ts` deploys a fake new version against its own copy of `build/`.
 - Feedback and app chrome: show confirmations with `toast()` from `src/lib/toast.svelte.ts` (not per-tool
   button text); keep validation errors inline next to their control. Toasts, the update banner and the
