@@ -1,4 +1,12 @@
-import { EQUIPMENT, PLATES, type Plate, type PlateCounts, type Workout } from '$lib/utils/lifting';
+import { doughDefaults, type DoughInput } from '$lib/utils/dough';
+import {
+	EQUIPMENT_IDS,
+	UNITS,
+	type EquipmentId,
+	type PlateCounts,
+	type WeightUnit,
+	type Workout
+} from '$lib/utils/lifting';
 
 /**
  * The one place the app reads and writes browser storage. Every saved value is registered
@@ -21,7 +29,7 @@ export type Entry<T> = {
 export const PREFIX = 'app:';
 export const VERSION_KEY = `${PREFIX}version`;
 /** Bump when adding a migration below. */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 const isRecord = (v: unknown): v is Record<string, unknown> =>
 	typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -42,30 +50,39 @@ const isSavedCookingTimer = (v: unknown): v is SavedCookingTimer =>
 	(v.state.endsAt === null || typeof v.state.endsAt === 'number');
 
 export type LiftingCalculatorState = {
-	equipmentId: string;
+	/** Unit the plate counts in `sides` are in. */
+	unit: WeightUnit;
+	equipmentId: EquipmentId;
 	mode: 'load' | 'target';
 	symmetric: boolean;
 	sides: PlateCounts[];
-	available: Plate[];
 };
 
-const isPlateCounts = (v: unknown): v is PlateCounts =>
+const isUnit = (v: unknown): v is WeightUnit => v === 'lb' || v === 'kg';
+const isEquipmentId = (v: unknown): v is EquipmentId => EQUIPMENT_IDS.includes(v as EquipmentId);
+
+const isPlateCountsFor = (unit: WeightUnit) => (v: unknown) =>
 	isRecord(v) &&
 	Object.entries(v).every(
-		([plate, n]) => PLATES.includes(Number(plate) as Plate) && typeof n === 'number' && n >= 0
+		([plate, n]) => UNITS[unit].plates.includes(Number(plate)) && typeof n === 'number' && n >= 0
 	);
 
 /** Fields that fail validation are dropped; the calculator keeps its default for them. */
 function parseLiftingCalculator(v: unknown): Partial<LiftingCalculatorState> | undefined {
 	if (!isRecord(v)) return undefined;
 	const out: Partial<LiftingCalculatorState> = {};
-	if (EQUIPMENT.some((e) => e.id === v.equipmentId)) out.equipmentId = v.equipmentId as string;
+	if (isUnit(v.unit)) out.unit = v.unit;
+	if (isEquipmentId(v.equipmentId)) out.equipmentId = v.equipmentId;
 	if (v.mode === 'load' || v.mode === 'target') out.mode = v.mode;
 	if (typeof v.symmetric === 'boolean') out.symmetric = v.symmetric;
-	if (Array.isArray(v.sides) && v.sides.length === 2 && v.sides.every(isPlateCounts))
+	// Plate counts only mean something in a known unit.
+	if (
+		out.unit &&
+		Array.isArray(v.sides) &&
+		v.sides.length === 2 &&
+		v.sides.every(isPlateCountsFor(out.unit))
+	)
 		out.sides = v.sides;
-	if (Array.isArray(v.available) && v.available.every((p) => PLATES.includes(p)))
-		out.available = v.available;
 	return out;
 }
 
@@ -77,6 +94,7 @@ const isSet = (v: unknown) =>
 
 function parseWorkout(v: unknown): Workout | undefined {
 	if (!isRecord(v) || typeof v.date !== 'string' || !Array.isArray(v.exercises)) return undefined;
+	if (v.unit !== undefined && !isUnit(v.unit)) return undefined;
 	const valid = v.exercises.every(
 		(e) =>
 			isRecord(e) &&
@@ -85,10 +103,20 @@ function parseWorkout(v: unknown): Workout | undefined {
 			Array.isArray(e.sets) &&
 			e.sets.every(isSet)
 	);
-	return valid ? (v as Workout) : undefined;
+	// Workouts logged before units existed were in lb.
+	return valid ? ({ ...v, unit: v.unit ?? 'lb' } as Workout) : undefined;
 }
 
 export type Theme = 'system' | 'light' | 'dark';
+
+export type LiftingSettings = {
+	/** lb or kg, for the weightlifting calculator only (pizza dough is always grams). */
+	unit: WeightUnit;
+	/** Equipment selected when the calculator has nothing saved. */
+	equipment: EquipmentId;
+	/** Plates you have, per unit; target mode only uses these. */
+	plates: Record<WeightUnit, number[]>;
+};
 
 export type Settings = {
 	theme: Theme;
@@ -98,14 +126,69 @@ export type Settings = {
 	vibration: boolean;
 	/** Keep the screen on while a timer runs. */
 	keepAwake: boolean;
+	/** Coffee timer starting point and "Back to" duration, in seconds. */
+	coffeeDefaultSeconds: number;
+	/** Cooking timer quick-start buttons, in minutes. */
+	cookingPresets: number[];
+	/** Pizza dough calculator starting values (grams and baker's percentages). */
+	pizzaDefaults: DoughInput;
+	lifting: LiftingSettings;
 };
 
 export const defaultSettings: Settings = {
 	theme: 'system',
 	sound: true,
 	vibration: true,
-	keepAwake: true
+	keepAwake: true,
+	coffeeDefaultSeconds: 90,
+	cookingPresets: [1, 3, 5, 10, 15, 20, 30, 45, 60],
+	pizzaDefaults: { ...doughDefaults },
+	lifting: {
+		unit: 'lb',
+		equipment: 'barbell',
+		plates: { lb: [...UNITS.lb.plates], kg: [...UNITS.kg.plates] }
+	}
 };
+
+export const COFFEE_SECONDS = { min: 5, max: 3600 };
+export const COOKING_PRESETS = { max: 12, minMinutes: 0.1, maxMinutes: 24 * 60 };
+
+const isNumberIn = (v: unknown, min: number, max: number): v is number =>
+	typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max;
+
+/** Valid presets, de-duplicated and sorted, or undefined. Settings uses this to check input too. */
+export function parseCookingPresets(v: unknown): number[] | undefined {
+	if (!Array.isArray(v) || v.length === 0 || v.length > COOKING_PRESETS.max) return undefined;
+	if (!v.every((m) => isNumberIn(m, COOKING_PRESETS.minMinutes, COOKING_PRESETS.maxMinutes)))
+		return undefined;
+	return [...new Set(v as number[])].sort((a, b) => a - b);
+}
+
+function parsePizzaDefaults(v: unknown): DoughInput {
+	const out = { ...doughDefaults };
+	if (!isRecord(v)) return out;
+	for (const key of Object.keys(doughDefaults) as (keyof DoughInput)[]) {
+		if (isNumberIn(v[key], 0, 100_000)) out[key] = v[key] as number;
+	}
+	return out;
+}
+
+function parseLiftingSettings(v: unknown): LiftingSettings {
+	const d = defaultSettings.lifting;
+	if (!isRecord(v)) return structuredClone(d);
+	const plates = isRecord(v.plates) ? v.plates : {};
+	const platesFor = (unit: WeightUnit) => {
+		const list = plates[unit];
+		return Array.isArray(list) && list.every((p) => UNITS[unit].plates.includes(p))
+			? UNITS[unit].plates.filter((p) => list.includes(p))
+			: [...d.plates[unit]];
+	};
+	return {
+		unit: isUnit(v.unit) ? v.unit : d.unit,
+		equipment: isEquipmentId(v.equipment) ? v.equipment : d.equipment,
+		plates: { lb: platesFor('lb'), kg: platesFor('kg') }
+	};
+}
 
 /** Invalid or missing fields fall back to their defaults, so new settings need no migration. */
 function parseSettings(v: unknown): Settings | undefined {
@@ -116,7 +199,13 @@ function parseSettings(v: unknown): Settings | undefined {
 		theme: v.theme === 'light' || v.theme === 'dark' ? v.theme : 'system',
 		sound: bool('sound'),
 		vibration: bool('vibration'),
-		keepAwake: bool('keepAwake')
+		keepAwake: bool('keepAwake'),
+		coffeeDefaultSeconds: isNumberIn(v.coffeeDefaultSeconds, COFFEE_SECONDS.min, COFFEE_SECONDS.max)
+			? Math.round(v.coffeeDefaultSeconds)
+			: defaultSettings.coffeeDefaultSeconds,
+		cookingPresets: parseCookingPresets(v.cookingPresets) ?? [...defaultSettings.cookingPresets],
+		pizzaDefaults: parsePizzaDefaults(v.pizzaDefaults),
+		lifting: parseLiftingSettings(v.lifting)
 	};
 }
 
@@ -203,6 +292,44 @@ function decode(text: string): unknown {
 	}
 }
 
+const RENAMED_EQUIPMENT: Record<string, EquipmentId> = {
+	'barbell-45': 'barbell',
+	'barbell-25': 'barbell-light'
+};
+
+/**
+ * Upgrades saved values (keyed by storage key) from schema version `from` to the current one,
+ * in place. Used for this device's storage and for importing older backups.
+ */
+export function upgradeData(data: Record<string, unknown>, from: number): void {
+	if (from < 2) {
+		// v2: the calculator gains a unit, equipment ids stop naming lb weights, and the plates you
+		// have move from the calculator into settings (per unit).
+		const workoutKey = entries.liftingWorkout.key;
+		if (isRecord(data[workoutKey]) && !('unit' in (data[workoutKey] as object)))
+			data[workoutKey] = { ...(data[workoutKey] as object), unit: 'lb' };
+		const calcKey = entries.liftingCalculator.key;
+		const settingsKey = entries.settings.key;
+		const calc = data[calcKey];
+		if (isRecord(calc)) {
+			const next: Record<string, unknown> = { ...calc, unit: 'lb' };
+			if (typeof calc.equipmentId === 'string')
+				next.equipmentId = RENAMED_EQUIPMENT[calc.equipmentId] ?? calc.equipmentId;
+			delete next.available;
+			data[calcKey] = next;
+			if (Array.isArray(calc.available)) {
+				const settings = isRecord(data[settingsKey]) ? data[settingsKey] : {};
+				const lifting = isRecord(settings.lifting) ? settings.lifting : {};
+				const plates = isRecord(lifting.plates) ? lifting.plates : {};
+				data[settingsKey] = {
+					...settings,
+					lifting: { ...lifting, plates: { ...plates, lb: calc.available } }
+				};
+			}
+		}
+	}
+}
+
 type Migration = { to: number; run: (store: Storage) => void };
 
 const migrations: Migration[] = [
@@ -220,6 +347,23 @@ const migrations: Migration[] = [
 				}
 				store.removeItem(e.legacyKey);
 			}
+		}
+	},
+	{
+		to: 2,
+		run(store) {
+			const data: Record<string, unknown> = {};
+			const keys = [
+				entries.liftingCalculator.key,
+				entries.settings.key,
+				entries.liftingWorkout.key
+			];
+			for (const key of keys) {
+				const text = store.getItem(key);
+				if (text !== null) data[key] = decode(text);
+			}
+			upgradeData(data, 1);
+			for (const [key, value] of Object.entries(data)) store.setItem(key, JSON.stringify(value));
 		}
 	}
 ];
@@ -272,6 +416,18 @@ export function remove(e: Entry<unknown>): void {
 	} catch {
 		// Nothing to do.
 	}
+}
+
+/**
+ * Forgets the equipment last picked in the weightlifting calculator, so it opens with the
+ * default from Settings again. Called when that default changes.
+ */
+export function forgetLiftingEquipment(): void {
+	const calc = read(entries.liftingCalculator);
+	if (calc?.equipmentId === undefined) return;
+	const rest = { ...calc };
+	delete rest.equipmentId;
+	write(entries.liftingCalculator, rest);
 }
 
 /** Removes the given entries (default: everything the app saves). */
@@ -332,10 +488,12 @@ export function parseBackup(text: string): ParsedBackup {
 			error: 'This backup is from a newer version of the app. Update the app and try again.'
 		};
 	}
+	const upgraded = structuredClone(raw.data);
+	upgradeData(upgraded, version);
 	const data: Record<string, unknown> = {};
 	const found: Entry<unknown>[] = [];
 	const skipped: string[] = [];
-	for (const [key, value] of Object.entries(raw.data)) {
+	for (const [key, value] of Object.entries(upgraded)) {
 		const e = allEntries.find((x) => x.key === key);
 		const parsed = e?.parse(value);
 		if (e && parsed !== undefined) {
@@ -347,7 +505,7 @@ export function parseBackup(text: string): ParsedBackup {
 	}
 	const backup: Backup = {
 		app: BACKUP_APP,
-		schemaVersion: version,
+		schemaVersion: SCHEMA_VERSION,
 		exportedAt: typeof raw.exportedAt === 'string' ? raw.exportedAt : '',
 		data
 	};

@@ -1,8 +1,29 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { settings, settingsStatus } from '$lib/settings.svelte';
+	import { toast } from '$lib/toast.svelte';
 	import { computeDough, doughDefaults, type DoughInput } from '$lib/utils/dough';
 
 	let input = $state<DoughInput>({ ...doughDefaults });
+
+	// Start from your saved defaults once settings have loaded (Settings → Tool defaults).
+	let seeded = false;
+	$effect(() => {
+		if (!settingsStatus.ready || seeded) return;
+		seeded = true;
+		input = { ...settings.pizzaDefaults };
+	});
+
+	function saveDefaults() {
+		settings.pizzaDefaults = { ...input };
+		toast('Saved as your pizza dough defaults.');
+	}
+
+	let isDefault = $derived(
+		(Object.keys(input) as (keyof DoughInput)[]).every(
+			(k) => input[k] === settings.pizzaDefaults[k]
+		)
+	);
 	let result = $derived(computeDough(input));
 
 	const fields: { key: keyof DoughInput; label: string; unit: string; step: number }[] = [
@@ -70,15 +91,25 @@
 		{/each}
 		<button
 			type="button"
-			onclick={() => (input = { ...doughDefaults })}
-			class="col-span-2 rounded-md bg-white/70 px-4 py-2 text-sm hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
+			disabled={isDefault}
+			onclick={() => (input = { ...settings.pizzaDefaults })}
+			class="rounded-md bg-white/70 px-4 py-2 text-sm hover:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:bg-gray-700"
 		>
-			Reset to defaults
+			Reset to my defaults
+		</button>
+		<button
+			type="button"
+			disabled={isDefault}
+			onclick={saveDefaults}
+			class="rounded-md bg-white/70 px-4 py-2 text-sm hover:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:bg-gray-700"
+		>
+			Save as my defaults
 		</button>
 	</form>
 
 	<p class="text-sm text-gray-600 dark:text-gray-400">
-		Percentages are baker's percentages (relative to flour weight). Defaults match the
+		Weights are in grams. Percentages are baker's percentages (relative to flour weight). The
+		built-in defaults match the
 		<a class="underline" href={resolve('/recipes/[slug]', { slug: 'pizza-dough' })}
 			>pizza dough recipe</a
 		>.
