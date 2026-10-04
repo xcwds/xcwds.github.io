@@ -2,7 +2,7 @@
 	"slug": "buttermilk-pancakes",
 	"name": "Buttermilk Pancakes",
 	"emoji": "🥞",
-	"tags": ["Classic", "Breakfast"],
+	"tags": ["Breakfast"],
 	"description": "Tall, fluffy weekend pancakes. The batter comes together in five minutes.",
 	"yield": { "amount": 4, "unit": "servings", "singular": "serving" },
 	"time": "25 min",

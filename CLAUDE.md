@@ -11,10 +11,11 @@ home screens and in app switchers.
 SvelteKit static site (adapter-static, Tailwind, Skeleton) deployed to GitHub Pages from `main`.
 Package manager: pnpm.
 
-- Recipes at `/recipes` are classic back-pocket recipes (tagged `Classic`, written here with structured,
-  scalable ingredients, see [docs/classic-recipes.md](docs/classic-recipes.md)) plus older imports from
-  Notion ([docs/notion-recipes.md](docs/notion-recipes.md)). Tracking issue: #49.
+- Recipes at `/recipes` are classic back-pocket recipes written here with structured, scalable
+  ingredients — follow [docs/classic-recipes.md](docs/classic-recipes.md). Tracking issue: #49.
 - Before pushing: `pnpm check && pnpm lint && pnpm test:unit -- --run --project server && pnpm build`.
+- Always open a pull request for work you push (against `main`, linking the issues it addresses),
+  unless the user explicitly says not to. Pushing a branch alone is not done.
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
   home page render from that list). New tools arrive as GitHub issues. The site is static with no server or
   auth, so tools must be fully client-side; shared logic lives in `src/lib/utils/` (timers count against

@@ -1,44 +1,42 @@
 {
 	"slug": "slow-cooker-pork-carnitas",
-	"name": "Slow-Cooker Pork Carnitas (Monday Plates + Taco Tuesday)",
+	"name": "Slow-Cooker Pork Carnitas",
 	"emoji": "🐷",
-	"tags": [],
-	"description": "Citrus-and-garlic pork shoulder that goes in the slow cooker at lunch and makes two dinners: Monday it's served as plates with sweet potatoes and green beans, Tuesday the leftovers get crisped under the broiler for tacos.",
-	"servings": "4, twice (two dinners)",
-	"time": "15 minutes hands-on, 6–7 hours on low (or 4–5 on high)",
+	"tags": ["Dinner", "Slow cooker", "Tacos"],
+	"description": "Citrus-and-garlic pork shoulder that cooks hands-off all afternoon, then gets crisped under the broiler. Makes enough for tacos tonight and leftovers later.",
+	"yield": { "amount": 8, "unit": "servings", "singular": "serving" },
+	"time": "6–7 hours (15 min hands-on)",
 	"ingredients": [
-		"4 lb boneless pork shoulder (pork butt), cut into 3-inch chunks",
-		"2 tsp kosher salt",
-		"1 Tbsp ground cumin",
-		"1 Tbsp chili powder",
-		"2 tsp dried oregano",
-		"1/2 tsp black pepper",
-		"1 yellow onion, cut into wedges",
-		"6 garlic cloves, smashed",
-		"1 orange (juice, plus the squeezed halves)",
-		"1 lime (juice)",
-		"1/2 cup chicken broth",
-		"2 bay leaves",
-		"Monday sides: 3 sweet potatoes cut into wedges, 1 lb green beans, olive oil, salt",
-		"Tuesday tacos: taco tortillas, pico, black beans, Spanish rice, shredded cheese, sour cream, lime wedges"
+		{
+			"amount": 4,
+			"unit": "lb",
+			"item": "boneless pork shoulder (pork butt)",
+			"note": "cut into 3-inch chunks"
+		},
+		{ "amount": 2, "unit": "tsp", "item": "kosher salt" },
+		{ "amount": 1, "unit": "Tbsp", "item": "ground cumin" },
+		{ "amount": 1, "unit": "Tbsp", "item": "chili powder" },
+		{ "amount": 2, "unit": "tsp", "item": "dried oregano" },
+		{ "amount": 0.5, "unit": "tsp", "item": "black pepper" },
+		{ "amount": 1, "item": "yellow onion", "plural": "yellow onions", "note": "cut into wedges" },
+		{ "amount": 6, "unit": "clove", "item": "garlic", "note": "smashed" },
+		{ "amount": 1, "item": "orange", "plural": "oranges", "note": "juiced, squeezed halves kept" },
+		{ "amount": 1, "item": "lime", "plural": "limes", "note": "juiced" },
+		{ "amount": 0.5, "unit": "cup", "item": "chicken broth" },
+		{ "amount": 2, "item": "bay leaf", "plural": "bay leaves" },
+		"To serve: tortillas, pico de gallo, cilantro, onion and lime wedges"
 	],
 	"instructions": [
-		"Mix the salt, cumin, chili powder, oregano, and pepper. Rub all over the pork.",
-		"Put the onion and garlic in the slow cooker, pork on top. Pour over the orange juice, lime juice, and broth; tuck in the squeezed orange halves and bay leaves.",
-		"Cook on low 6–7 hours (or high 4–5) until the pork shreds easily with a fork.",
-		"Monday: about 40 minutes before dinner, toss the sweet potato wedges with oil and salt and roast at 425°F for 30–35 minutes, adding the green beans for the last 15. Shred half the pork, moisten with a few spoonfuls of the cooking liquid, and serve.",
-		"Refrigerate the other half of the pork in some of its liquid for Tuesday.",
-		"Tuesday: spread the cold pork on a sheet pan, drizzle with a little liquid, and broil 4–6 minutes until the edges crisp. Stir, broil 2 more minutes. Fill tortillas and serve with pico, beans, and rice."
+		"Mix the salt, cumin, chili powder, oregano and pepper, and rub it all over the pork.",
+		"Put the onion and garlic in the slow cooker with the pork on top. Pour over the orange juice, lime juice and broth, and tuck in the squeezed orange halves and bay leaves.",
+		"Cook on low for 6–7 hours (or high for 4–5) until the pork shreds easily with a fork.",
+		"Shred the pork, discarding the orange halves and bay leaves, and moisten it with a few spoonfuls of the cooking liquid.",
+		"Heat the broiler. Spread the pork on a sheet pan, drizzle with a little more liquid and broil until the edges crisp, 4–6 minutes. Stir and broil 2 minutes more.",
+		"Serve in warm tortillas with pico de gallo, cilantro, onion and lime."
 	],
 	"tips": [
-		"Get it in before you leave for appointments; it needs no attention until dinner.",
-		"The broiler step is what makes it carnitas — don't skip it, but watch it closely.",
-		"For the toddler, pull pork before broiling so it stays soft; shred finely for the baby if they're on table foods.",
+		"The broiler step is what makes it carnitas. Don't skip it, but watch it closely.",
+		"Store leftovers in some of the cooking liquid, and broil just before serving so they're crisp.",
 		"Leftover cooking liquid freezes well for soups or rice."
-	],
-	"notion": {
-		"id": "3ee5c75f-eaa8-8163-9e43-cfa7a3641b2c",
-		"url": "https://www.notion.so/3ee5c75feaa881639e43cfa7a3641b2c",
-		"lastEditedTime": "2026-10-03T17:02:25.807Z"
-	}
+	]
 }

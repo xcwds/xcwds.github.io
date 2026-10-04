@@ -2,7 +2,7 @@
 	"slug": "chocolate-chip-cookies",
 	"name": "Chocolate Chip Cookies",
 	"emoji": "🍪",
-	"tags": ["Classic", "Baking", "Dessert"],
+	"tags": ["Baking", "Dessert"],
 	"description": "The classic: crisp edges, chewy middles and plenty of chocolate.",
 	"yield": { "amount": 48, "unit": "cookies", "singular": "cookie", "step": 12 },
 	"time": "45 min",

@@ -2,39 +2,33 @@
 	"slug": "pizza-dough",
 	"name": "Pizza Dough",
 	"emoji": "🍕",
-	"tags": ["Pizza", "TikTok"],
-	"description": "Let's be honest, most of the time when we crave pizza, we want it ASAP. Meet the quickest version of fermented pizza dough.",
-	"servings": "4 medium pizza doughs",
-	"time": "6–12 hours",
+	"tags": ["Pizza", "Baking"],
+	"description": "A quick fermented pizza dough: mix it in the morning for pizza at dinner, or at night for the next day.",
+	"yield": { "amount": 4, "unit": "dough balls", "singular": "dough ball" },
+	"time": "6–12 hours (15 min hands-on)",
 	"notes": [
-		"Ideas for when to make this: early in the morning for a pizza dinner, or at night for the following morning’s breakfast or lunch.",
-		"Ingredients are at 60% hydration."
+		"60% hydration. For other ball sizes or hydration, use the Pizza Dough Calculator in Utils."
 	],
 	"ingredients": [
-		"23 oz (650 g) bread flour or 00 flour",
-		"14 oz (395 g) room temperature water",
-		"2.5 Tbsp (35 g) olive oil",
-		"1 Tbsp (21 g) honey, or sugar (12 g)",
-		"2 tsp (6 g) active dry yeast",
-		"2 tsp (12 g) salt"
+		{ "amount": 650, "unit": "g", "item": "bread flour or 00 flour" },
+		{ "amount": 395, "unit": "g", "item": "water", "note": "room temperature" },
+		{ "amount": 35, "unit": "g", "item": "olive oil" },
+		{ "amount": 21, "unit": "g", "item": "honey", "note": "or about half that weight of sugar" },
+		{ "amount": 6, "unit": "g", "item": "active dry yeast" },
+		{ "amount": 12, "unit": "g", "item": "salt" }
 	],
 	"instructions": [
-		"Measure water by weight and add in yeast. Mix in and let sit for just a couple minutes, then add in a couple scoops of flour and mix for 30 seconds.",
-		"Add olive oil and honey/sugar and the remainder of the flour. Mix for 1 minute. Finally, add in salt. Mix altogether for 3–4 minutes, or until dough is elastic and tacky (not too sticky, not too dry).",
-		"Weigh dough as a whole and divide that number by four. Use that number as the weight for each dough ball (should be between 9.5–10 oz (270–283 g)). You can use a small amount of flour when balling the dough.",
-		"Grease four containers with olive oil and place dough balls in. Place in the fridge for 6–12 hours. Remove from fridge for 15–20 minutes before stretching into pizza."
+		"Weigh the water and stir in the yeast. Let it sit for a couple of minutes, then add a couple of scoops of the flour and mix for 30 seconds.",
+		"Add the olive oil, honey and the rest of the flour and mix for 1 minute. Add the salt and mix for 3–4 minutes more, until the dough is elastic and tacky (not too sticky, not too dry).",
+		"Weigh the dough and divide it into equal balls (about 270 g each for this batch), using a little flour to shape them.",
+		"Put each ball in an oiled container and refrigerate for 6–12 hours. Take them out 15–20 minutes before stretching."
 	],
 	"tips": [
-		"Use a generous mixture of cornmeal and flour (or semolina flour) to prevent dough stickiness.",
-		"Use room temperature toppings (and dough, which will naturally warm up as you stretch it out) for the best end results.",
-		"Freezing: freeze after the 6–12 hour proofing period for up to 4 weeks. Allow to sit at room temp for 4 hours before stretching out.",
-		"Pizza oven (Versa 16): bake on high with a stone temp of 650–750°F for about 3.5 minutes, or until desired blistering.",
-		"Conventional oven: set oven to 550°F with a stone or baking steel. Make sure the stone/steel reaches at least 530°F before launching the pizza. Bake for 8–10 minutes."
+		"Dust the peel with a generous mix of cornmeal and flour (or semolina) so the pizza slides off.",
+		"Use room-temperature toppings; the dough warms up naturally as you stretch it.",
+		"Freezing: freeze the balls after the 6–12 hour rest, for up to 4 weeks. Thaw at room temperature for 4 hours before stretching.",
+		"Pizza oven: bake with the stone at 650–750°F (345–400°C) for about 3½ minutes, until blistered.",
+		"Home oven: heat to 550°F (290°C) with a pizza stone or steel; make sure the stone reaches at least 530°F (275°C) before launching the pizza. Bake for 8–10 minutes."
 	],
-	"source": "https://www.tiktok.com/t/ZTN7Fjkmu/",
-	"notion": {
-		"id": "910cbbf9-789b-4bc5-8a93-4e0487c5dac4",
-		"url": "https://www.notion.so/910cbbf9789b4bc58a934e0487c5dac4",
-		"lastEditedTime": "2024-08-18T12:58:32.887Z"
-	}
+	"source": "https://www.tiktok.com/t/ZTN7Fjkmu/"
 }

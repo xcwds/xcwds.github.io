@@ -14,14 +14,6 @@ test('recipes index filters by search and links to a recipe', async ({ page }) =
 	await expect(page.getByRole('heading', { name: 'Ingredients' })).toBeVisible();
 });
 
-test('lists classics first', async ({ page }) => {
-	await gotoHydrated(page, '/recipes');
-	const headings = page.getByRole('main').getByRole('heading', { level: 2 });
-	await expect(headings).toHaveText(['Classics', 'More recipes']);
-	await page.getByRole('searchbox').fill('cookies');
-	await expect(headings).toHaveText(['Classics']);
-});
-
 test('a servings target scales the ingredients', async ({ page }) => {
 	await gotoHydrated(page, '/recipes/chocolate-chip-cookies');
 	const list = page.getByTestId('ingredients');

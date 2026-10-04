@@ -9,7 +9,7 @@ accounts, no server, and your data stays on your device (back it up from Setting
 
 ## What's inside
 
-- **Recipes**: searchable recipes, imported from Notion.
+- **Recipes**: classic back-pocket recipes with a servings scaler and an oven temperature converter.
 - **Utils**:
   - Pizza Dough Calculator: baker's percentages, in grams.
   - Coffee Timer and Cooking Timer: keep running in the background, with alarms.

@@ -2,7 +2,7 @@
 	"slug": "roast-chicken",
 	"name": "Roast Chicken",
 	"emoji": "🍗",
-	"tags": ["Classic", "Dinner"],
+	"tags": ["Dinner"],
 	"description": "A whole chicken with crisp, salty skin and juicy meat. Little hands-on time, and the leftovers make the week's sandwiches, soups and salads.",
 	"yield": { "amount": 4, "unit": "servings", "singular": "serving" },
 	"time": "1 h 40 min",

@@ -19,10 +19,8 @@ export type Recipe = {
 	emoji?: string;
 	tags: string[];
 	description: string;
-	/** Free-text yield (Notion imports). Recipes with `yield` can be scaled instead. */
-	servings?: string;
-	/** Structured yield; with scalable ingredients, the page offers a servings target. */
-	yield?: RecipeYield;
+	/** What it makes; the page offers a servings target that scales the ingredients. */
+	yield: RecipeYield;
 	time?: string;
 	oven?: RecipeOven;
 	notes?: string[];
@@ -30,12 +28,6 @@ export type Recipe = {
 	instructions: string[];
 	tips?: string[];
 	source?: string;
-	/** Set on recipes imported from Notion (docs/notion-recipes.md); classics have none. */
-	notion?: {
-		id: string;
-		url: string;
-		lastEditedTime: string;
-	};
 };
 
 const modules = import.meta.glob<Recipe>('./data/*.json', { eager: true, import: 'default' });
@@ -43,9 +35,6 @@ const modules = import.meta.glob<Recipe>('./data/*.json', { eager: true, import:
 export const recipes: Recipe[] = Object.values(modules).sort((a, b) =>
 	a.name.localeCompare(b.name)
 );
-
-/** Classic, back-pocket recipes (tagged Classic) are listed first on /recipes. */
-export const isClassic = (recipe: Recipe) => recipe.tags.includes('Classic');
 
 export function getRecipe(slug: string): Recipe | undefined {
 	return recipes.find((recipe) => recipe.slug === slug);

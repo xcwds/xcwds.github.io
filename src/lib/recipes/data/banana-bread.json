@@ -2,7 +2,7 @@
 	"slug": "banana-bread",
 	"name": "Banana Bread",
 	"emoji": "🍌",
-	"tags": ["Classic", "Baking", "Breakfast"],
+	"tags": ["Baking", "Breakfast"],
 	"description": "One bowl, no mixer, and the best use for bananas that have gone brown and spotty.",
 	"yield": { "amount": 1, "unit": "loaves", "singular": "loaf" },
 	"time": "1 h 15 min",

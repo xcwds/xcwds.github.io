@@ -9,10 +9,10 @@
 
 	// Servings target: starts at the recipe's yield (again whenever the recipe changes).
 	let base = $derived(recipe.yield);
-	let scalable = $derived(base !== undefined && recipe.ingredients.some(isScalable));
-	let stepSize = $derived(base?.step ?? 1);
-	let target = $derived(base?.amount ?? 1);
-	let factor = $derived(base ? target / base.amount : 1);
+	let scalable = $derived(recipe.ingredients.some(isScalable));
+	let stepSize = $derived(base.step ?? 1);
+	let target = $derived(base.amount);
+	let factor = $derived(target / base.amount);
 	let ingredients = $derived(recipe.ingredients.map((i) => formatIngredient(i, factor)));
 
 	/** Steps to the next multiple of the step size, so 24 → 36 → 48 even from an odd yield. */
@@ -34,12 +34,10 @@
 	<header class="flex flex-col gap-2">
 		<p>{recipe.description}</p>
 		<dl class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
-			{#if base || recipe.servings}
-				<div class="flex gap-1">
-					<dt class="font-medium">Yield:</dt>
-					<dd>{base ? formatYield(base.amount, base) : recipe.servings}</dd>
-				</div>
-			{/if}
+			<div class="flex gap-1">
+				<dt class="font-medium">Yield:</dt>
+				<dd>{formatYield(base.amount, base)}</dd>
+			</div>
 			{#if recipe.time}
 				<div class="flex gap-1">
 					<dt class="font-medium">Time:</dt>
@@ -75,7 +73,7 @@
 
 	<section class="flex flex-col gap-3">
 		<h2 class="text-lg font-semibold">Ingredients</h2>
-		{#if scalable && base}
+		{#if scalable}
 			<div class="flex flex-wrap items-center gap-2" data-testid="servings">
 				<button
 					type="button"

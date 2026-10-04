@@ -2,7 +2,7 @@
 	"slug": "vinaigrette",
 	"name": "Basic Vinaigrette",
 	"emoji": "🥗",
-	"tags": ["Classic", "Basics", "Sauce"],
+	"tags": ["Basics", "Sauce"],
 	"description": "The everyday salad dressing: shake it up in a jar in two minutes, and it keeps for a week.",
 	"yield": { "amount": 6, "unit": "servings", "singular": "serving" },
 	"time": "5 min",
