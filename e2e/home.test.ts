@@ -1,18 +1,15 @@
 import { expect, test } from '@playwright/test';
-
-test('home page has expected h1', async ({ page }) => {
-	await page.goto('/');
-	await expect(page.locator('h1')).toBeVisible();
-});
+import { gotoHydrated } from './helpers';
 
 test('home page links to recipes and utils', async ({ page }) => {
-	await page.goto('/');
+	await gotoHydrated(page, '/');
+	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 	await page
 		.getByRole('main')
 		.getByRole('link', { name: /Recipes/ })
 		.click();
 	await expect(page).toHaveURL(/\/recipes$/);
-	await page.goto('/');
+	await gotoHydrated(page, '/');
 	await page.getByRole('main').getByRole('link', { name: /Utils/ }).click();
 	await expect(page).toHaveURL(/\/utils$/);
 });

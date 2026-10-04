@@ -15,6 +15,8 @@ Package manager: pnpm.
   ingredients — follow [docs/classic-recipes.md](docs/classic-recipes.md). Tracking issue: #49.
 - Before pushing: `pnpm check && pnpm lint && pnpm test:unit --run --project server && pnpm build`
   (no `--` before `--run`: with it, vitest ignores `--project` and also starts the browser project).
+- CI (`.github/workflows/ci.yml`) runs check, lint, all unit tests and e2e on every PR, and
+  `deploy.yml` runs it before each deploy, so a red check blocks the deploy to Pages.
 - `pnpm test:e2e` needs a Playwright browser. In Claude Code cloud containers don't run
   `playwright install`; use a config (kept out of the repo) that sets
   `use.launchOptions.executablePath` to the Chromium under `/opt/pw-browsers/chromium-*/chrome-linux/chrome`.
@@ -27,8 +29,8 @@ Package manager: pnpm.
   something, stop, leave the PR open and report the remaining findings to the user.
 - Merging your own PR (one you opened, or one the user asked you to take over or get merged): when a
   review passes (nothing left that needs a change) and the PR is mergeable (no conflicts, the pre-push
-  checks and `pnpm test:e2e` pass on its head), squash-merge it, unless the user said not to merge.
-  Until CI runs on PRs (#34), those local runs are the only verification. GitHub won't let you
+  checks and `pnpm test:e2e` pass locally, and the CI check is green on its head), squash-merge it,
+  unless the user said not to merge. GitHub won't let you
   approve your own PR, so post the passing review as a comment review. Reviewing anyone else's PR
   only posts the review; never merge it unless asked.
 - `/utils` holds small phone-first tools, registered in `src/lib/utils/tools.ts` (the `/utils` index and
