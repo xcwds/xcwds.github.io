@@ -6,6 +6,7 @@
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
 	import { changelog, latestChangelogId } from '$lib/changelog';
+	import { reloadShortcuts } from '$lib/home.svelte';
 	import { install, promptInstall } from '$lib/install.svelte';
 	import { reloadSettings, settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
@@ -188,6 +189,7 @@
 		const count = pending.found.length;
 		pending = null;
 		reloadSettings();
+		reloadShortcuts();
 		dataVersion++;
 		toast(
 			ok
@@ -200,6 +202,7 @@
 		if (!confirm(`Clear saved data for ${group.label}?`)) return;
 		clear(group.entries);
 		if (group.id === 'settings') reloadSettings();
+		reloadShortcuts();
 		dataVersion++;
 		toast(`Cleared ${group.label}.`);
 	}
@@ -208,6 +211,7 @@
 		if (!confirm('Clear all data saved by this app on this device? This cannot be undone.')) return;
 		clear();
 		reloadSettings();
+		reloadShortcuts();
 		dataVersion++;
 		toast('All data cleared.');
 	}

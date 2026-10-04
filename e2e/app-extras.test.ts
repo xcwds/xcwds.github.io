@@ -72,6 +72,22 @@ test('keyboard focus is clearly visible', async ({ page }) => {
 test('every control is at least 44×44px on a phone', async ({ page }) => {
 	const pages: [string, ((p: typeof page) => Promise<void>)?][] = [
 		['/'],
+		[
+			'/',
+			async (p) => {
+				await p.evaluate(() =>
+					localStorage.setItem(
+						'app:home:shortcuts',
+						JSON.stringify({
+							pins: ['/utils/coffee-timer', '/utils/cooking-timer'],
+							recent: ['/utils/pizza-dough']
+						})
+					)
+				);
+				await p.reload();
+				await p.getByRole('button', { name: 'Edit' }).click();
+			}
+		],
 		['/recipes'],
 		['/recipes/pizza-dough'],
 		[

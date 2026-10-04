@@ -9,8 +9,9 @@ test('opening tools saves nothing until something changes', async ({ page }) => 
 	for (const path of ['/utils/coffee-timer', '/utils/weightlifting', '/utils/cooking-timer']) {
 		await gotoHydrated(page, path);
 	}
+	// Only "Recently used" on Home (#40) records the visits; no tool saves its state or defaults.
 	const keys = await page.evaluate(() =>
-		Object.keys(localStorage).filter((k) => k !== 'app:version')
+		Object.keys(localStorage).filter((k) => k !== 'app:version' && k !== 'app:home:shortcuts')
 	);
 	expect(keys).toEqual([]);
 });

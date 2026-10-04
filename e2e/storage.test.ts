@@ -27,7 +27,12 @@ test('data saved before the storage module is migrated and still shows up', asyn
 	await expect(page.getByLabel('Exercise 1 name')).toHaveValue('Deadlift');
 
 	// Opening the calculator saves nothing new (it only saves changes).
-	const keys = await page.evaluate(() => Object.keys(localStorage).sort());
+	// ("Recently used" on Home records the visit; that's the only addition, see #40.)
+	const keys = await page.evaluate(() =>
+		Object.keys(localStorage)
+			.filter((k) => k !== 'app:home:shortcuts')
+			.sort()
+	);
 	expect(keys).toEqual([
 		'app:coffee-timer:duration',
 		'app:version',
