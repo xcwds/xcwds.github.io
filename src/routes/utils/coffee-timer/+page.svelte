@@ -5,7 +5,7 @@
 	import { markBusy } from '$lib/app-update.svelte';
 	import { persist } from '$lib/persist.svelte';
 	import { settings, settingsStatus } from '$lib/settings.svelte';
-	import { entries } from '$lib/storage';
+	import { COFFEE_SECONDS, entries } from '$lib/storage';
 	import { formatDuration } from '$lib/utils/time';
 	import { Timer } from '$lib/utils/timer.svelte';
 
@@ -19,6 +19,8 @@
 	let base = $derived(custom ?? defaultMs);
 
 	const timer = new Timer(90_000, () => beep(3));
+	/** True from Start until the next reset; ± buttons change the saved length only before it. */
+	let started = $state(false);
 	let over = $derived(timer.running && timer.done);
 
 	// The countdown itself isn't saved, so an app update (reload) would reset it.
@@ -51,20 +53,35 @@
 		};
 	});
 
+	/** Before Start, ± changes the saved length (kept within Settings' limits); after, only this run. */
 	function adjust(ms: number) {
-		timer.add(ms);
-		if (!timer.running) custom = timer.duration;
+		if (started) {
+			timer.add(ms);
+			return;
+		}
+		custom = Math.min(Math.max(base + ms, COFFEE_SECONDS.min * 1000), COFFEE_SECONDS.max * 1000);
+		timer.reset(custom);
+	}
+
+	function reset(ms = base) {
+		started = false;
+		timer.reset(ms);
 	}
 
 	function useDefault() {
 		custom = null;
-		timer.reset(defaultMs);
+		reset(defaultMs);
 	}
 
 	function toggle() {
 		primeAudio();
-		if (timer.running) timer.pause();
-		else timer.start();
+		// Stopping a finished brew resets it, so the next Start begins a fresh countdown.
+		if (over) reset();
+		else if (timer.running) timer.pause();
+		else {
+			started = true;
+			timer.start();
+		}
 	}
 </script>
 
@@ -113,7 +130,7 @@
 		</button>
 		<button
 			type="button"
-			onclick={() => timer.reset(base)}
+			onclick={() => reset()}
 			class="rounded-xl bg-white/70 py-6 text-2xl font-semibold active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
 		>
 			Reset

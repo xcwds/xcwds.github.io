@@ -75,6 +75,8 @@ describe('Timer', () => {
 		expect(timer.remaining).toBe(75_000);
 		timer.add(-100_000);
 		expect(timer.remaining).toBe(0);
+		// Adjusting a run doesn't change the length it resets to.
+		expect(timer.duration).toBe(90_000);
 		timer.reset(90_000);
 		expect(timer.remaining).toBe(90_000);
 		expect(timer.running).toBe(false);
