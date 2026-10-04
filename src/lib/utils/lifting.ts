@@ -102,7 +102,13 @@ const UNIT = 1.25; // Smallest plate in both systems; every loadable weight is a
 
 /**
  * Fewest plates per side to reach `target` total (or the closest weight under it).
- * Returns null when the target is lighter than the empty bar(s).
+ * Returns null when the target is lighter than the empty bar(s), or isn't a finite number.
+ *
+ * Coin change over 1.25 lb/kg units, bounded so any target costs the same small amount of work
+ * (a huge typo used to freeze the page, #32). In a fewest-plates load you never need L or more of
+ * a smaller plate (where L is the largest plate in units): L of them weigh as much as fewer of the
+ * largest. So the smaller plates add at most `spare` units, and everything above that window is
+ * plain largest plates; the DP only covers the window.
  */
 export function platesForTarget(
 	equipment: Equipment,
@@ -110,33 +116,42 @@ export function platesForTarget(
 	available: readonly number[]
 ): TargetResult | null {
 	const empty = equipment.count * equipment.bar;
-	if (!(target >= empty)) return null;
+	if (!Number.isFinite(target) || !(target >= empty)) return null;
 	const perSideWeight = (target - empty) / (equipment.count * equipment.sides);
 	const maxUnits = Math.floor(perSideWeight / UNIT + 1e-9);
 	const plates = [...available].sort((a, b) => b - a);
+	const sizes = plates.map((plate) => Math.round(plate / UNIT));
 
-	// Coin change over 1.25 lb/kg units: fewest plates for every reachable amount up to maxUnits.
-	const best = new Array<number>(maxUnits + 1).fill(Infinity);
-	const pick = new Array<number>(maxUnits + 1).fill(0);
+	// Largest plates that every closest-under load is sure to contain (see above).
+	const largest = sizes[0] ?? 0;
+	const spare = (largest - 1) * sizes.slice(1).reduce((sum, size) => sum + size, 0);
+	const fixed = largest ? Math.max(0, Math.floor((maxUnits - largest - spare) / largest)) : 0;
+	const windowUnits = maxUnits - fixed * largest;
+
+	// Fewest plates for every reachable amount in the window.
+	const best = new Array<number>(windowUnits + 1).fill(Infinity);
+	const pick = new Array<number>(windowUnits + 1).fill(0);
 	best[0] = 0;
-	for (let units = 1; units <= maxUnits; units++) {
-		for (const plate of plates) {
-			const size = plate / UNIT;
+	for (let units = 1; units <= windowUnits; units++) {
+		for (let i = 0; i < plates.length; i++) {
+			const size = sizes[i];
 			if (size <= units && best[units - size] + 1 < best[units]) {
 				best[units] = best[units - size] + 1;
-				pick[units] = plate;
+				pick[units] = plates[i];
 			}
 		}
 	}
 
-	let units = maxUnits;
+	let units = windowUnits;
 	while (units > 0 && best[units] === Infinity) units--;
 	const perSide: PlateCounts = {};
-	for (let left = units; left > 0; left -= pick[left] / UNIT) {
+	if (fixed) perSide[plates[0]] = fixed;
+	for (let left = units; left > 0; left -= Math.round(pick[left] / UNIT)) {
 		const plate = pick[left];
 		perSide[plate] = (perSide[plate] ?? 0) + 1;
 	}
-	const total = equipment.count * (equipment.bar + equipment.sides * units * UNIT);
+	const loadedUnits = units + fixed * largest;
+	const total = equipment.count * (equipment.bar + equipment.sides * loadedUnits * UNIT);
 	return { perSide, total, exact: Math.abs(total - target) < 1e-9 };
 }
 
