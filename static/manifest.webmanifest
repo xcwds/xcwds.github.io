@@ -1,7 +1,7 @@
 {
 	"name": "xcwds",
 	"short_name": "xcwds",
-	"description": "A cyber-web Swiss Army knife: recipes, kitchen and gym tools, and a URL sanitizer.",
+	"description": "Everyday tools that stay on your device: recipes, kitchen and gym tools, and a URL sanitizer.",
 	"id": "/",
 	"start_url": "/",
 	"scope": "/",

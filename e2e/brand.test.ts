@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { gotoHydrated } from './helpers';
 
-test('home page shows what xcwds stands for', async ({ page }) => {
+test('home page shows the tagline and what xcwds stands for', async ({ page }) => {
 	await gotoHydrated(page, '/');
+	await expect(page.getByText('Everyday tools that stay on your device.')).toBeVisible();
 	await expect(page.getByTestId('acronym')).toHaveText(
 		/eXecutes Client-side, Without Data Servers/
 	);
