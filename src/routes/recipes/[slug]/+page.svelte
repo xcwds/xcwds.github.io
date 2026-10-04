@@ -1,8 +1,19 @@
 <script lang="ts">
+	import { stepText, stepTimer, type StepTimer } from '$lib/recipes';
 	import { formatIngredient, formatYield, isScalable } from '$lib/recipes/scale';
 	import { settings } from '$lib/settings.svelte';
-	import { asRange, formatMinutesRange, formatTemp } from '$lib/utils/oven';
+	import { toast } from '$lib/toast.svelte';
+	import { CookingTimers, MINUTE } from '$lib/utils/cooking-timers.svelte';
+	import {
+		adjustOvenTime,
+		asRange,
+		foodPreset,
+		formatMinutes,
+		formatMinutesRange,
+		formatTemp
+	} from '$lib/utils/oven';
 	import OvenPanel from './OvenPanel.svelte';
+	import TimerTray from './TimerTray.svelte';
 
 	let { data } = $props();
 	let recipe = $derived(data.recipe);
@@ -20,6 +31,32 @@
 		const n = target / stepSize;
 		const next = direction === 1 ? Math.floor(n + 1e-9) + 1 : Math.ceil(n - 1e-9) - 1;
 		target = Math.max(1, next) * stepSize;
+	}
+
+	// Step timers go into the shared Cooking Timer list; the tray below shows and rings them.
+	const timers = new CookingTimers();
+	/** The oven panel's temperature while it's open and in use (°F); oven step timers follow it. */
+	let ovenF = $state<number | undefined>();
+
+	/** Whole minutes for a step timer: the low end of a range, adjusted for the oven panel. */
+	function timerMinutes(timer: StepTimer): number {
+		const low = asRange(timer.minutes)[0];
+		const oven = recipe.oven;
+		if (!timer.oven || !oven || ovenF === undefined) return low;
+		const adjusted = adjustOvenTime({
+			fromF: oven.temp,
+			toF: ovenF,
+			minutes: low,
+			...foodPreset(oven.food)
+		});
+		return Math.max(1, Math.round(adjusted ?? low));
+	}
+
+	function startTimer(timer: StepTimer) {
+		const minutes = timerMinutes(timer);
+		const label = timer.label ?? recipe.name;
+		timers.add(minutes * MINUTE, label);
+		toast(`Started a ${formatMinutes(minutes)} timer: ${label}.`);
 	}
 </script>
 
@@ -122,7 +159,7 @@
 
 	{#if recipe.oven}
 		{#key recipe.slug}
-			<OvenPanel oven={recipe.oven} />
+			<OvenPanel oven={recipe.oven} bind:activeF={ovenF} />
 		{/key}
 	{/if}
 
@@ -130,7 +167,22 @@
 		<h2 class="text-lg font-semibold">Instructions</h2>
 		<ol class="flex list-decimal flex-col gap-2 pl-6">
 			{#each recipe.instructions as step, i (i)}
-				<li>{step}</li>
+				{@const timer = stepTimer(step)}
+				<li>
+					{stepText(step)}
+					{#if timer}
+						<button
+							type="button"
+							class="mt-2 flex min-h-11 items-center gap-2 rounded-full bg-white/70 px-4 text-sm font-medium hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
+							onclick={() => startTimer(timer)}
+						>
+							<span aria-hidden="true">⏲️</span>
+							Start {formatMinutes(timerMinutes(timer))} timer{timer.oven && ovenF !== undefined
+								? ` (at ${formatTemp(ovenF, settings.ovenUnit)})`
+								: ''}
+						</button>
+					{/if}
+				</li>
 			{/each}
 		</ol>
 	</section>
@@ -151,4 +203,7 @@
 			Source: <a href={recipe.source} class="underline" rel="external noopener">{recipe.source}</a>
 		</p>
 	{/if}
+
+	<!-- Last in the page so it sticks to the bottom of the screen while you scroll the steps. -->
+	<TimerTray {timers} />
 </main>

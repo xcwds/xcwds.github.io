@@ -62,6 +62,42 @@ test('the oven panel warns about unsafe temperatures for meat', async ({ page })
 	await expect(panel.getByRole('status')).toContainText('Food safety');
 });
 
+test('a step timer starts in the tray, rings, and shows in the Cooking Timer', async ({ page }) => {
+	await page.clock.install();
+	await gotoHydrated(page, '/recipes/chocolate-chip-cookies');
+	await expect(page.getByTestId('timer-tray')).toHaveCount(0);
+
+	await page.getByRole('button', { name: 'Start 9 min timer' }).click();
+	await expect(page.getByTestId('toast')).toHaveText('Started a 9 min timer: Cookies.');
+	const tray = page.getByTestId('timer-tray');
+	await expect(tray).toContainText('Cookies');
+	await expect(tray.getByRole('timer')).toHaveText('9:00');
+
+	await page.clock.runFor(9 * 60_000 + 1000);
+	await expect(tray.getByRole('timer')).toHaveText('Done!');
+	await tray.getByRole('button', { name: '+1 min' }).click();
+	await expect(tray.getByRole('timer')).toHaveText(/^(1:00|0:5\d)$/);
+
+	// The same saved timer is on the Cooking Timer page.
+	await tray.getByRole('link', { name: 'All timers' }).click();
+	await expect(page).toHaveURL(/\/utils\/cooking-timer$/);
+	await expect(page.getByText('Cookies')).toBeVisible();
+});
+
+test('oven step timers follow the different-temperature panel while it is open', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/recipes/chocolate-chip-cookies');
+	await expect(page.getByRole('button', { name: 'Start 9 min timer' })).toBeVisible();
+	await page.getByText('Cooking at a different temperature?').click();
+	// The pre-filled suggestion (350°F) isn't applied until you enter a temperature.
+	await expect(page.getByRole('button', { name: 'Start 9 min timer' })).toBeVisible();
+	await page.getByTestId('oven-panel').getByLabel('Your oven (°F)').fill('350');
+	await expect(page.getByRole('button', { name: 'Start 10 min timer (at 350°F)' })).toBeVisible();
+	await page.getByText('Cooking at a different temperature?').click();
+	await expect(page.getByRole('button', { name: 'Start 9 min timer' })).toBeVisible();
+});
+
 test('roast chicken scales by whole chickens', async ({ page }) => {
 	await gotoHydrated(page, '/recipes/roast-chicken');
 	await page.getByRole('button', { name: 'More servings' }).click();

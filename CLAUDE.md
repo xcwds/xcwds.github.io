@@ -61,7 +61,7 @@ Package manager: pnpm.
   Don't use `data-theme`; Skeleton owns it.
 - App updates: the service worker never calls `skipWaiting()` on install; a new version waits until the
   user taps Update in the banner (`src/lib/app-update.svelte.ts`, `UpdateBanner.svelte`). Anything a reload
-  would interrupt must call `markBusy(name, () => isBusy)` (the coffee and cooking timers do). Precached
+  would interrupt must call `markBusy(name, () => isBusy)` (the coffee and cooking timers do; recipe step timers share the cooking timers via `CookingTimers`). Precached
   files are served cache-first from the active worker's own cache (never network-first), so a relaunch
   keeps the old version until Update is tapped. When another tab applies the update, the rest get
   `controllerchange` without asking: hidden idle tabs reload quietly, others show a Reload banner. The e2e test

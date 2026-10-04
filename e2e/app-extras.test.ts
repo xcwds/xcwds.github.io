@@ -79,6 +79,8 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 			async (p) => {
 				await p.getByRole('button', { name: 'More cookies' }).click();
 				await p.getByText('Cooking at a different temperature?').click();
+				await p.getByRole('button', { name: /^Start \d+ min timer/ }).click();
+				await p.getByTestId('timer-tray').waitFor();
 			}
 		],
 		['/utils'],

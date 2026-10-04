@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readdirSync } from 'node:fs';
 import { FOOD_PRESETS, foodPreset } from '$lib/utils/oven';
-import { recipes, searchRecipes } from './index';
+import { MAX_STEP_TIMER_MINUTES, recipes, searchRecipes, stepText, stepTimer } from './index';
 import { isScalable } from './scale';
 
 describe('recipes', () => {
@@ -44,6 +44,30 @@ describe('recipes', () => {
 			expect(hi).toBeGreaterThanOrEqual(lo);
 			expect(oven.temp).toBeGreaterThan(foodPreset(oven.food).doneF);
 		}
+	});
+});
+
+describe('step timers', () => {
+	it('have a positive time or range, and oven timers only in recipes with an oven', () => {
+		for (const recipe of recipes) {
+			for (const step of recipe.instructions) {
+				expect(stepText(step)).not.toBe('');
+				const timer = stepTimer(step);
+				if (!timer) continue;
+				const [lo, hi] =
+					typeof timer.minutes === 'number' ? [timer.minutes, timer.minutes] : timer.minutes;
+				expect(lo).toBeGreaterThan(0);
+				expect(hi).toBeGreaterThanOrEqual(lo);
+				// Longer waits (fridge rests, slow cookers) would keep the screen on for hours.
+				expect(hi).toBeLessThanOrEqual(MAX_STEP_TIMER_MINUTES);
+				if (timer.oven) expect(recipe.oven).toBeDefined();
+				if (timer.label !== undefined) expect(timer.label.trim()).not.toBe('');
+			}
+		}
+	});
+
+	it('are used by the recipes', () => {
+		expect(recipes.some((r) => r.instructions.some((s) => stepTimer(s)?.oven))).toBe(true);
 	});
 });
 

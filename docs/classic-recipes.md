@@ -25,6 +25,16 @@ re-import from Notion.
   converter preset id from `FOOD_PRESETS` in `src/lib/utils/oven.ts`. Adds the "Cooking at a
   different temperature?" panel, which shares its math and unit setting with
   `/utils/oven-time`.
+- `instructions[]` — a string, or `{ text, timer: { minutes, label?, oven? } }` for a step with a
+  countdown ("Bake 9–11 minutes"). `minutes` is a number or `[low, high]`; the button starts the
+  low end. `label` names the timer (default: the recipe name). `oven: true` marks the recipe's
+  oven step: while the temperature panel is open, its timer uses the adjusted time. Add timers
+  where you'd actually set one (bake, rest, simmer), not for every "mix 1 minute", and only up to
+  3 hours (`MAX_STEP_TIMER_MINUTES`): the alarm rings only while the page is open, and it keeps
+  the screen awake and holds app updates while a timer runs, so an overnight rise or a 6-hour slow
+  cooker step is better left to a phone alarm or the appliance's own timer.
+  Step timers join the Cooking Timer's saved list (`CookingTimers` in
+  `src/lib/utils/cooking-timers.svelte.ts`); the recipe page shows them in a tray and rings them.
 
 Write temperatures in steps as °F with °C in parentheses, rounded like an oven dial
 (`375°F (190°C)`).

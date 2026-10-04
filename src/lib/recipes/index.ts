@@ -13,6 +13,29 @@ export type RecipeOven = {
 	food: FoodId;
 };
 
+/**
+ * A countdown a step can start ("Bake 9–11 minutes"). A range starts at the low end, so you
+ * check early. `oven` steps follow the "different temperature" panel when it's in use.
+ */
+export type StepTimer = {
+	minutes: number | [number, number];
+	/** Timer label in the Cooking Timer list; defaults to the recipe name. */
+	label?: string;
+	oven?: boolean;
+};
+
+/**
+ * Step timers ring only while a page showing them is open, and keep the screen awake while they
+ * run, so they're for waits you'd watch, not fridge rests or slow cookers measured in hours.
+ */
+export const MAX_STEP_TIMER_MINUTES = 180;
+
+/** A step: plain text, or text with a timer. */
+export type Instruction = string | { text: string; timer?: StepTimer };
+
+export const stepText = (step: Instruction) => (typeof step === 'string' ? step : step.text);
+export const stepTimer = (step: Instruction) => (typeof step === 'string' ? undefined : step.timer);
+
 export type Recipe = {
 	slug: string;
 	name: string;
@@ -25,7 +48,7 @@ export type Recipe = {
 	oven?: RecipeOven;
 	notes?: string[];
 	ingredients: Ingredient[];
-	instructions: string[];
+	instructions: Instruction[];
 	tips?: string[];
 	source?: string;
 };

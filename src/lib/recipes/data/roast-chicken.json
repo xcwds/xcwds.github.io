@@ -23,8 +23,14 @@
 		"Pat the chicken very dry with paper towels and season all over, inside and out, with the salt and pepper. If you have time, leave it uncovered in the fridge for a few hours or overnight; the skin dries out and crisps better.",
 		"Heat the oven to 425°F (220°C). Take the chicken out of the fridge while the oven heats.",
 		"Rub the butter over the skin. Put the lemon, garlic and herbs in the cavity, tie the legs together with string and tuck the wing tips under the body.",
-		"Roast breast side up in a cast-iron skillet or roasting pan until the thickest part of the thigh reads 165°F (74°C) and the juices run clear, 70–90 minutes.",
-		"Rest for 15 minutes before carving. Squeeze the roasted lemon over the meat and spoon over the pan juices."
+		{
+			"text": "Roast breast side up in a cast-iron skillet or roasting pan until the thickest part of the thigh reads 165°F (74°C) and the juices run clear, 70–90 minutes.",
+			"timer": { "minutes": [70, 90], "label": "Roast chicken", "oven": true }
+		},
+		{
+			"text": "Rest for 15 minutes before carving. Squeeze the roasted lemon over the meat and spoon over the pan juices.",
+			"timer": { "minutes": 15, "label": "Chicken resting" }
+		}
 	],
 	"tips": [
 		"No thermometer? Pierce the thigh where it meets the body: the juices should run clear, not pink, and the leg should wiggle loosely.",

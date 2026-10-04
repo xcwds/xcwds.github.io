@@ -1,105 +1,25 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
-	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
-	import { markBusy } from '$lib/app-update.svelte';
-	import { persist } from '$lib/persist.svelte';
 	import { settings } from '$lib/settings.svelte';
-	import { entries } from '$lib/storage';
+	import { CookingTimers, MINUTE } from '$lib/utils/cooking-timers.svelte';
 	import { formatDuration } from '$lib/utils/time';
-	import { Timer } from '$lib/utils/timer.svelte';
 
-	type Item = { id: number; label: string; timer: Timer };
-
-	const MINUTE = 60_000;
 	/** Quick-start buttons, in minutes (Settings → Tool defaults). */
 	let presets = $derived(settings.cookingPresets);
 	const presetLabel = (m: number) =>
 		m < 60 ? `${m} min` : m % 60 === 0 ? `${m / 60} hr` : `${Math.floor(m / 60)} hr ${m % 60} min`;
 
-	let items = $state<Item[]>([]);
+	// Saved timers, shared with recipe step timers; this page rings them while it's open.
+	const timers = new CookingTimers();
+
 	let label = $state('');
 	let minutes = $state<number | null>(null);
-
-	const ringing = (item: Item) => item.timer.running && item.timer.done;
-	let anyRinging = $derived(items.some(ringing));
-	let anyRunning = $derived(items.some((item) => item.timer.running));
-
-	// Timers survive a reload, but the alarm stays silent until the next tap (browsers need a
-	// gesture to play sound), so hold app updates while any are running.
-	markBusy('cooking timers', () => anyRunning);
-
-	const awake = browser ? keepAwake(() => anyRunning) : undefined;
-	$effect(() => {
-		void anyRunning;
-		void awake?.sync();
-	});
-
-	// Keep beeping until every finished timer is stopped or snoozed.
-	$effect(() => {
-		if (!anyRinging) return;
-		beep(2);
-		const interval = setInterval(() => beep(2), 3000);
-		return () => clearInterval(interval);
-	});
-
-	// Timers keep counting across reloads: end times are saved, not remaining ticks.
-	persist(
-		entries.cookingTimers,
-		() => items.map(({ id, label, timer }) => ({ id, label, state: timer.toJSON() })),
-		(saved) => {
-			// Also runs when another tab changes the timers; stop the ones being replaced.
-			for (const item of items) item.timer.destroy();
-			items = saved.map(({ id, label, state }) => {
-				const timer = new Timer(state.duration);
-				timer.restore(state);
-				return { id, label, timer };
-			});
-		},
-		{
-			cleared: () => {
-				for (const item of items) item.timer.destroy();
-				items = [];
-			}
-		}
-	);
-
-	onMount(() => {
-		return () => {
-			awake?.destroy();
-			for (const item of items) item.timer.destroy();
-		};
-	});
-
-	function add(ms: number, name: string) {
-		if (ms <= 0) return;
-		primeAudio();
-		const timer = new Timer(ms);
-		timer.start();
-		items.push({
-			id: Date.now() + Math.random(),
-			label: name || `${formatDuration(ms)} timer`,
-			timer
-		});
-	}
 
 	function addCustom(event: SubmitEvent) {
 		event.preventDefault();
 		if (!minutes || minutes <= 0) return;
-		add(minutes * MINUTE, label.trim());
+		timers.add(minutes * MINUTE, label.trim());
 		label = '';
 		minutes = null;
-	}
-
-	function remove(item: Item) {
-		item.timer.destroy();
-		items = items.filter((i) => i.id !== item.id);
-	}
-
-	function toggle(item: Item) {
-		primeAudio();
-		if (item.timer.running) item.timer.pause();
-		else item.timer.start();
 	}
 </script>
 
@@ -110,25 +30,25 @@
 <main
 	class="mx-auto flex max-w-md flex-col gap-6 px-4 pt-2 pb-4 text-gray-800 sm:px-8 sm:pb-8 dark:text-gray-200"
 >
-	{#if items.length}
+	{#if timers.items.length}
 		<ul class="flex flex-col gap-3">
-			{#each items as item (item.id)}
+			{#each timers.items as item (item.id)}
 				<li
-					class="flex flex-col gap-3 rounded-2xl p-4 transition-colors {ringing(item)
+					class="flex flex-col gap-3 rounded-2xl p-4 transition-colors {timers.ringing(item)
 						? 'bg-amber-300 dark:bg-amber-700'
 						: 'bg-white/80 dark:bg-gray-900'}"
 				>
 					<div class="flex items-baseline justify-between gap-3">
 						<span class="truncate text-lg font-medium">{item.label}</span>
 						<span class="text-4xl font-semibold tabular-nums" role="timer">
-							{ringing(item) ? 'Done!' : formatDuration(item.timer.remaining)}
+							{timers.ringing(item) ? 'Done!' : formatDuration(item.timer.remaining)}
 						</span>
 					</div>
 					<div class="grid grid-cols-3 gap-2">
-						{#if ringing(item)}
+						{#if timers.ringing(item)}
 							<button
 								type="button"
-								onclick={() => remove(item)}
+								onclick={() => timers.remove(item)}
 								class="col-span-2 rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white active:bg-blue-700"
 							>
 								Stop
@@ -136,14 +56,14 @@
 						{:else}
 							<button
 								type="button"
-								onclick={() => toggle(item)}
+								onclick={() => timers.toggle(item)}
 								class="rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white active:bg-blue-700"
 							>
 								{item.timer.running ? 'Pause' : 'Resume'}
 							</button>
 							<button
 								type="button"
-								onclick={() => remove(item)}
+								onclick={() => timers.remove(item)}
 								class="rounded-xl bg-white/70 py-3 text-lg active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
 							>
 								Remove
@@ -168,7 +88,7 @@
 			{#each presets as preset (preset)}
 				<button
 					type="button"
-					onclick={() => add(preset * MINUTE, '')}
+					onclick={() => timers.add(preset * MINUTE, '')}
 					class="rounded-xl bg-white/70 py-3 text-lg font-medium active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
 				>
 					{presetLabel(preset)}
@@ -209,7 +129,7 @@
 	</form>
 
 	<p class="text-sm text-gray-600 dark:text-gray-400">
-		Timers are saved on this device, so they keep counting if the page reloads. Keep the page open
-		to hear the alarm.
+		Timers are saved on this device, so they keep counting if the page reloads. Keep this page (or
+		the recipe that started a timer) open to hear the alarm.
 	</p>
 </main>

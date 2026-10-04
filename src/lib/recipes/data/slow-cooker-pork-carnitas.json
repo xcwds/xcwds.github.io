@@ -31,7 +31,10 @@
 		"Put the onion and garlic in the slow cooker with the pork on top. Pour over the orange juice, lime juice and broth, and tuck in the squeezed orange halves and bay leaves.",
 		"Cook on low for 6–7 hours (or high for 4–5) until the pork shreds easily with a fork.",
 		"Shred the pork, discarding the orange halves and bay leaves, and moisten it with a few spoonfuls of the cooking liquid.",
-		"Heat the broiler. Spread the pork on a sheet pan, drizzle with a little more liquid and broil until the edges crisp, 4–6 minutes. Stir and broil 2 minutes more.",
+		{
+			"text": "Heat the broiler. Spread the pork on a sheet pan, drizzle with a little more liquid and broil until the edges crisp, 4–6 minutes. Stir and broil 2 minutes more.",
+			"timer": { "minutes": [4, 6], "label": "Carnitas under the broiler" }
+		},
 		"Serve in warm tortillas with pico de gallo, cilantro, onion and lime."
 	],
 	"tips": [
