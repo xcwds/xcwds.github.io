@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { stepText, stepTimer, type StepTimer } from '$lib/recipes';
-	import { getPan, PANS, panRatio, type PanId } from '$lib/recipes/pans';
+	import { getPan, PANS, panDepthRatio, panRatio, type PanId } from '$lib/recipes/pans';
 	import { formatIngredient, formatYield, isScalable } from '$lib/recipes/scale';
 	import { nativeSystem, systemOf } from '$lib/recipes/units';
 	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
@@ -33,6 +33,10 @@
 		(target / base.amount) * (recipe.pan && panId ? panRatio(recipe.pan, panId) : 1)
 	);
 	let changed = $derived(target !== base.amount || panChanged);
+	/** Bake time follows the batter's depth in the new pan. */
+	let bakeScale = $derived(
+		recipe.pan && panId && panChanged ? panDepthRatio(recipe.pan, panId) : 1
+	);
 	/** "9×5-inch loaf" from "9×5-inch loaf (23×13 cm)". */
 	const panName = (id: PanId | undefined) => getPan(id ?? '')?.label.replace(/ \(.*\)$/, '') ?? '';
 	function resetScale() {
@@ -62,9 +66,9 @@
 
 	/** Whole minutes for a step timer: the low end of a range, adjusted for the oven panel. */
 	function timerMinutes(timer: StepTimer): number {
-		const low = asRange(timer.minutes)[0];
+		const low = asRange(timer.minutes)[0] * (timer.oven ? bakeScale : 1);
 		const oven = recipe.oven;
-		if (!timer.oven || !oven || ovenF === undefined) return low;
+		if (!timer.oven || !oven || ovenF === undefined) return Math.max(1, Math.round(low));
 		const adjusted = adjustOvenTime({
 			fromF: oven.temp,
 			toF: ovenF,
@@ -72,6 +76,16 @@
 			...foodPreset(oven.food)
 		});
 		return Math.max(1, Math.round(adjusted ?? low));
+	}
+
+	/** What an oven step timer was adjusted for: " (for your pan, at 350°F)". */
+	function timerNote(timer: StepTimer): string {
+		if (!timer.oven) return '';
+		const parts = [
+			bakeScale !== 1 ? 'for your pan' : '',
+			ovenF !== undefined ? `at ${formatTemp(ovenF, settings.ovenUnit)}` : ''
+		].filter(Boolean);
+		return parts.length ? ` (${parts.join(', ')})` : '';
 	}
 
 	function startTimer(timer: StepTimer) {
@@ -181,9 +195,16 @@
 					Quantities scaled ×{Math.round(factor * 100) / 100}{panChanged
 						? ` for a ${panName(panId)} pan`
 						: ''}.
-					{panChanged
-						? 'Bake time changes with the pan: deeper takes longer, shallower less. Start checking early.'
-						: 'Times and pan sizes are not; check doneness as you go.'}
+					{#if panChanged && recipe.oven}
+						Bake time in this pan: about {formatMinutesRange(
+							asRange(recipe.oven.minutes).map((m) => m * bakeScale) as [number, number]
+						)}, estimated from the batter's depth (the oven step's timer uses it). Start checking
+						early.
+					{:else if panChanged}
+						Times change with the pan; check doneness as you go.
+					{:else}
+						Times and pan sizes are not; check doneness as you go.
+					{/if}
 				</p>
 			{/if}
 		{/if}
@@ -208,7 +229,7 @@
 
 	{#if recipe.oven}
 		{#key recipe.slug}
-			<OvenPanel oven={recipe.oven} bind:activeF={ovenF} />
+			<OvenPanel oven={recipe.oven} timeScale={bakeScale} bind:activeF={ovenF} />
 		{/key}
 	{/if}
 
@@ -226,9 +247,7 @@
 							onclick={() => startTimer(timer)}
 						>
 							<span aria-hidden="true">⏲️</span>
-							Start {formatMinutes(timerMinutes(timer))} timer{timer.oven && ovenF !== undefined
-								? ` (at ${formatTemp(ovenF, settings.ovenUnit)})`
-								: ''}
+							Start {formatMinutes(timerMinutes(timer))} timer{timerNote(timer)}
 						</button>
 					{/if}
 				</li>

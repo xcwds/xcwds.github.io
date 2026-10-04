@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PANS, getPan, panRatio } from './pans';
+import { PANS, getPan, panDepthRatio, panRatio } from './pans';
 
 describe('pans', () => {
 	it('have unique ids and positive capacities', () => {
@@ -14,5 +14,13 @@ describe('pans', () => {
 		expect(panRatio('loaf-9', 'square-8')).toBe(1);
 		expect(panRatio('loaf-9', 'loaf-8')).toBeCloseTo(0.75);
 		expect(getPan('nope')).toBeUndefined();
+	});
+
+	it('estimate bake time from the change in batter depth', () => {
+		expect(panDepthRatio('loaf-9', 'loaf-9')).toBe(1);
+		// The loaf's batter spreads out in a 9×9 square: about 30% shallower.
+		expect(panDepthRatio('loaf-9', 'square-9')).toBeCloseTo(0.69, 2);
+		// 8×8 and 9×13 are both 2 inches deep.
+		expect(panDepthRatio('square-8', 'rect-9x13')).toBeCloseTo(1, 1);
 	});
 });

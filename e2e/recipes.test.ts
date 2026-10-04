@@ -150,7 +150,22 @@ test('choosing another pan scales the recipe by capacity', async ({ page }) => {
 	await expect(page.getByTestId('scaled-note')).toContainText(
 		'Quantities scaled ×1.25 for a 9×9-inch square pan.'
 	);
-	await expect(page.getByTestId('scaled-note')).toContainText('Bake time changes with the pan');
+	// The batter is shallower, so the bake is shorter: 55–65 min becomes about 38–45.
+	await expect(page.getByTestId('scaled-note')).toContainText(
+		'Bake time in this pan: about 38–45 min'
+	);
+	await expect(
+		page.getByRole('button', { name: 'Start 38 min timer (for your pan)' })
+	).toBeVisible();
+	await page.getByText('Cooking at a different temperature?').click();
+	await expect(page.getByTestId('oven-panel')).toContainText(
+		'For your pan, about 350°F for 38–45 min.'
+	);
+	await page.getByTestId('oven-panel').getByLabel('Your oven (°F)').fill('325');
+	await expect(
+		page.getByRole('button', { name: /^Start \d+ min timer \(for your pan, at 325°F\)$/ })
+	).toBeVisible();
+	await page.getByText('Cooking at a different temperature?').click();
 
 	// Pans and loaf count combine: two 8½×4½ loaves.
 	await pan.selectOption('loaf-8');
