@@ -62,7 +62,7 @@ test('export, clear and import a backup', async ({ page }) => {
 	const downloadPromise = page.waitForEvent('download');
 	await page.getByRole('button', { name: 'Download backup' }).click();
 	const download = await downloadPromise;
-	expect(download.suggestedFilename()).toMatch(/^waters-backup-\d{4}-\d{2}-\d{2}\.json$/);
+	expect(download.suggestedFilename()).toMatch(/^xcwds-backup-\d{4}-\d{2}-\d{2}\.json$/);
 	const file = (await download.path())!;
 	const backup = JSON.parse(await readFile(file, 'utf8'));
 	expect(backup.app).toBe('xcwds.com');

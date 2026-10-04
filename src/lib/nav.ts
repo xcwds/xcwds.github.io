@@ -23,7 +23,7 @@ const normalize = (pathname: string) => pathname.replace(/\/+$/, '') || '/';
 /** Header title and back target for a path. New tools and recipes are picked up automatically. */
 export function routeInfo(pathname: string): RouteInfo {
 	const path = normalize(pathname);
-	if (path === '/') return { title: 'Chris Waters' };
+	if (path === '/') return { title: 'xcwds' };
 
 	const section = sections.find((s) => s.path === path);
 	if (section) return { title: section.label };
@@ -35,7 +35,7 @@ export function routeInfo(pathname: string): RouteInfo {
 	const recipe = recipeSlug ? getRecipe(recipeSlug) : undefined;
 	if (recipe) return { title: recipe.name, emoji: recipe.emoji, parent: '/recipes' };
 
-	return { title: 'Chris Waters', parent: '/' };
+	return { title: 'xcwds', parent: '/' };
 }
 
 /** The section a path belongs to, for highlighting the current tab. */

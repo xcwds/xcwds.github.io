@@ -219,8 +219,8 @@
 			<section>
 				<h3 class="font-semibold">Android</h3>
 				<p>
-					Install this site (Chrome menu → <em>Install app</em>). "Waters" then shows up in the
-					share sheet; pick it and the link opens here already cleaned.
+					Install this site (Chrome menu → <em>Install app</em>). "xcwds" then shows up in the share
+					sheet; pick it and the link opens here already cleaned.
 				</p>
 			</section>
 			<section>

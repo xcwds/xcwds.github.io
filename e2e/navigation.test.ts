@@ -9,7 +9,7 @@ test.describe('on a phone', () => {
 
 	test('tab bar switches sections and marks the current one', async ({ page }) => {
 		await gotoHydrated(page, '/');
-		await expect(heading(page)).toHaveText('Chris Waters');
+		await expect(heading(page)).toHaveText('xcwds');
 		await expect(tabBar(page).getByRole('link', { name: 'Home' })).toHaveAttribute(
 			'aria-current',
 			'page'

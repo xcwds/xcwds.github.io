@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { version } from '$app/environment';
+	import Acronym from '$lib/Acronym.svelte';
+	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
 	import { reloadSettings, settings } from '$lib/settings.svelte';
 	import {
 		clear,
@@ -34,6 +36,9 @@
 	// Bumped after imports and clears so "has data" re-checks storage.
 	let dataVersion = $state(0);
 	let fileInput: HTMLInputElement | undefined = $state();
+	// Easter egg: every third tap on the acronym flips it to the secret one and back.
+	let acronymTaps = $state(0);
+	let secret = $derived(Math.floor(acronymTaps / 3) % 2 === 1);
 
 	const hasData = (group: Group) => {
 		void dataVersion;
@@ -64,7 +69,7 @@
 		const date = [now.getFullYear(), now.getMonth() + 1, now.getDate()]
 			.map((n) => String(n).padStart(2, '0'))
 			.join('-');
-		return new File([JSON.stringify(exportData(now), null, '\t')], `waters-backup-${date}.json`, {
+		return new File([JSON.stringify(exportData(now), null, '\t')], `xcwds-backup-${date}.json`, {
 			type: 'application/json'
 		});
 	}
@@ -80,7 +85,7 @@
 
 	async function share() {
 		try {
-			await navigator.share({ files: [backupFile()], title: 'Waters backup' });
+			await navigator.share({ files: [backupFile()], title: 'xcwds backup' });
 			message = 'Backup shared.';
 		} catch {
 			// Share sheet dismissed.
@@ -286,6 +291,18 @@
 	<section class={card} aria-labelledby="about">
 		<h2 id="about" class="text-lg font-semibold">About</h2>
 		<dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+			<dt class="text-gray-600 dark:text-gray-400">{BRAND}</dt>
+			<dd>
+				<button
+					type="button"
+					class="text-left"
+					data-testid="about-acronym"
+					onclick={() => acronymTaps++}
+				>
+					<Acronym phrase={secret ? SECRET_ACRONYM : ACRONYM} />{#if secret}
+						<span aria-hidden="true" class="ml-1">🧇🏋️🧼</span>{/if}
+				</button>
+			</dd>
 			<dt class="text-gray-600 dark:text-gray-400">Version</dt>
 			<dd data-testid="version">{built}</dd>
 			<dt class="text-gray-600 dark:text-gray-400">Source</dt>
