@@ -21,8 +21,12 @@
 	 * the user entered here, while the panel is open and gives an estimate; otherwise undefined.
 	 * The pre-filled suggestion doesn't count until it's edited.
 	 */
-	let { oven, activeF = $bindable() }: { oven: RecipeOven; activeF?: number | undefined } =
-		$props();
+	// `timeScale`: the bake time multiplier for another pan (1 for the recipe's own).
+	let {
+		oven,
+		timeScale = 1,
+		activeF = $bindable()
+	}: { oven: RecipeOven; timeScale?: number; activeF?: number | undefined } = $props();
 
 	let open = $state(false);
 	let edited = $state(false);
@@ -33,7 +37,7 @@
 	let yourF = $state(untrack(() => oven.temp) - 25);
 
 	let unit = $derived(settings.ovenUnit);
-	let range = $derived(asRange(oven.minutes));
+	let range = $derived(asRange(oven.minutes).map((m) => m * timeScale) as [number, number]);
 	let input = $derived((minutes: number) => ({
 		fromF: oven.temp,
 		toF: yourF,
@@ -57,7 +61,8 @@
 	>
 	<div class="flex flex-col gap-3 px-4 pb-4">
 		<p class="text-sm">
-			The recipe says {formatTemp(oven.temp, unit)} for {formatMinutesRange(range)}.
+			{timeScale === 1 ? 'The recipe says' : 'For your pan, about'}
+			{formatTemp(oven.temp, unit)} for {formatMinutesRange(range)}.
 		</p>
 		<TempUnitToggle />
 		<div class="grid grid-cols-2 items-end gap-3">
