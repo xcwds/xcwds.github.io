@@ -57,6 +57,14 @@ test('coffee timer adjustments mid-brew keep the saved default (#26)', async ({ 
 	await page.getByRole('button', { name: '+10s' }).click();
 	await expect(display).toHaveText('1:10');
 	await expect(page.getByText('Resets to 1:30.')).toBeVisible();
+	// Even adjusted back to exactly the full length, a started brew isn't the saved length.
+	await page.getByRole('button', { name: '+10s' }).click();
+	await expect(display).toHaveText('1:20');
+	await page.getByRole('button', { name: '+10s' }).click();
+	await expect(display).toHaveText('1:30');
+	await page.getByRole('button', { name: '+30s' }).click();
+	await expect(display).toHaveText('2:00');
+	await expect(page.getByText('Resets to 1:30.')).toBeVisible();
 	await page.getByRole('button', { name: 'Reset' }).click();
 	await expect(display).toHaveText('1:30');
 
@@ -65,6 +73,11 @@ test('coffee timer adjustments mid-brew keep the saved default (#26)', async ({ 
 	await expect(page.getByText('Resets to 2:00.')).toBeVisible();
 	await page.reload();
 	await expect(display).toHaveText('2:00');
+
+	// The length can't be taken down to 0:00 (which would finish instantly on Start).
+	for (let i = 0; i < 14; i++) await page.getByRole('button', { name: '−10s' }).click();
+	await expect(display).toHaveText('0:05');
+	await expect(page.getByText('Resets to 0:05.')).toBeVisible();
 });
 
 test('cooking timer runs, rings, and survives a reload', async ({ page }) => {

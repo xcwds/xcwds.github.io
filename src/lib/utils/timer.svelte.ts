@@ -61,14 +61,16 @@ export class Timer {
 		this.#fired = false;
 	}
 
-	/** Adds (or with a negative value, removes) time without dropping below zero remaining. */
+	/**
+	 * Adds (or with a negative value, removes) time from this run without dropping below zero
+	 * remaining. `duration` (what `reset()` goes back to) is left alone.
+	 */
 	add(ms: number) {
 		this.now = Date.now();
 		const next = Math.max(0, this.remaining + ms);
 		if (this.running) this.endsAt = this.now + next;
 		else this.pausedRemaining = next;
 		if (next > 0) this.#fired = false;
-		if (!this.running) this.duration = next;
 	}
 
 	toJSON(): TimerState {
