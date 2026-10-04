@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import {
 		EQUIPMENT,
 		PLATES,
@@ -10,11 +9,12 @@
 		type Plate,
 		type PlateCounts
 	} from '$lib/utils/lifting';
+	import { persist } from '$lib/persist.svelte';
+	import { entries } from '$lib/storage';
 	import { button, card, field, primary, toggle } from './styles';
 
 	let { total = $bindable(0) }: { total?: number } = $props();
 
-	const STORAGE_KEY = 'lifting-calculator';
 	const PLATE_STYLE: Record<Plate, { height: string; color: string }> = {
 		45: { height: 'h-24', color: 'bg-blue-700' },
 		35: { height: 'h-21', color: 'bg-yellow-500' },
@@ -31,7 +31,6 @@
 	let sides = $state<PlateCounts[]>([{}, {}]);
 	let target = $state<number | null>(null);
 	let available = $state<Plate[]>([...PLATES]);
-	let loaded = false;
 
 	let equipment = $derived(EQUIPMENT.find((e) => e.id === equipmentId) ?? EQUIPMENT[0]);
 	let oneSided = $derived(equipment.sides === 1);
@@ -42,31 +41,17 @@
 		total = totalWeight(equipment, effectiveSides);
 	});
 
-	onMount(() => {
-		try {
-			const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');
-			if (saved) {
-				equipmentId = saved.equipmentId ?? equipmentId;
-				mode = saved.mode ?? mode;
-				symmetric = saved.symmetric ?? symmetric;
-				sides = saved.sides ?? sides;
-				available = saved.available ?? available;
-			}
-		} catch {
-			// Ignore unreadable storage.
+	persist(
+		entries.liftingCalculator,
+		() => ({ equipmentId, mode, symmetric, sides, available }),
+		(saved) => {
+			equipmentId = saved.equipmentId ?? equipmentId;
+			mode = saved.mode ?? mode;
+			symmetric = saved.symmetric ?? symmetric;
+			sides = saved.sides ?? sides;
+			available = saved.available ?? available;
 		}
-		loaded = true;
-	});
-
-	$effect(() => {
-		const snapshot = JSON.stringify({ equipmentId, mode, symmetric, sides, available });
-		if (!loaded) return;
-		try {
-			localStorage.setItem(STORAGE_KEY, snapshot);
-		} catch {
-			// Not persisted; fine.
-		}
-	});
+	);
 
 	function change(side: number, plate: Plate, delta: number) {
 		sides[side][plate] = Math.max(0, (sides[side][plate] ?? 0) + delta);

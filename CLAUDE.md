@@ -21,3 +21,6 @@ Package manager: pnpm.
   bar on phones and header links on desktop. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
   which reads `tools.ts` and the recipe data, so new tools/recipes need no nav changes. Pages must not render
   their own `<h1>` or back links. Roadmap for further app features: issue #17.
+- Never touch `localStorage` directly. Register saved data in `entries` in `src/lib/storage.ts` (an `app:`
+  key, a label and a validator) and use `persist()` from `src/lib/persist.svelte.ts` in components, or
+  `read`/`write` elsewhere. Changing a saved shape or key needs a new migration and a `SCHEMA_VERSION` bump.

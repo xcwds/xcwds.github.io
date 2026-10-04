@@ -2,20 +2,19 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
+	import { persist } from '$lib/persist.svelte';
+	import { entries } from '$lib/storage';
 	import { formatDuration } from '$lib/utils/time';
-	import { Timer, type TimerState } from '$lib/utils/timer.svelte';
+	import { Timer } from '$lib/utils/timer.svelte';
 
 	type Item = { id: number; label: string; timer: Timer };
-	type SavedItem = { id: number; label: string; state: TimerState };
 
-	const STORAGE_KEY = 'cooking-timers';
 	const MINUTE = 60_000;
 	const presets = [1, 3, 5, 10, 15, 20, 30, 45, 60];
 
 	let items = $state<Item[]>([]);
 	let label = $state('');
 	let minutes = $state<number | null>(null);
-	let loaded = false;
 
 	const ringing = (item: Item) => item.timer.running && item.timer.done;
 	let anyRinging = $derived(items.some(ringing));
@@ -35,32 +34,20 @@
 		return () => clearInterval(interval);
 	});
 
-	$effect(() => {
-		const saved: SavedItem[] = items.map(({ id, label, timer }) => ({
-			id,
-			label,
-			state: timer.toJSON()
-		}));
-		if (!loaded) return;
-		try {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-		} catch {
-			// Not persisted; timers still run while the page is open.
-		}
-	});
-
-	onMount(() => {
-		try {
-			const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as SavedItem[];
+	// Timers keep counting across reloads: end times are saved, not remaining ticks.
+	persist(
+		entries.cookingTimers,
+		() => items.map(({ id, label, timer }) => ({ id, label, state: timer.toJSON() })),
+		(saved) => {
 			items = saved.map(({ id, label, state }) => {
 				const timer = new Timer(state.duration);
 				timer.restore(state);
 				return { id, label, timer };
 			});
-		} catch {
-			// Ignore unreadable storage.
 		}
-		loaded = true;
+	);
+
+	onMount(() => {
 		return () => {
 			awake?.destroy();
 			for (const item of items) item.timer.destroy();
