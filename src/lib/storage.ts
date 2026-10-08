@@ -1,4 +1,4 @@
-import { doughDefaults, type DoughInput } from '$lib/utils/dough';
+import { doughDefaults, isDoughValue, type DoughInput } from '$lib/utils/dough';
 import type { TempUnit } from '$lib/utils/oven';
 import type { UnitSystem } from '$lib/recipes/units';
 import { parseShortcuts, type HomeShortcuts } from '$lib/home';
@@ -192,7 +192,7 @@ function parsePizzaDefaults(v: unknown): DoughInput {
 	const out = { ...doughDefaults };
 	if (!isRecord(v)) return out;
 	for (const key of Object.keys(doughDefaults) as (keyof DoughInput)[]) {
-		if (isNumberIn(v[key], 0, 100_000)) out[key] = v[key] as number;
+		if (isDoughValue(v[key])) out[key] = v[key];
 	}
 	return out;
 }

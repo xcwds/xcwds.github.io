@@ -7,6 +7,13 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 16,
+		date: '2026-10-08',
+		items: [
+			"The pizza dough calculator only saves your defaults when every field holds a number from 0 to 100,000, and points out the one that doesn't."
+		]
+	},
+	{
 		id: 15,
 		date: '2026-10-08',
 		items: ['Scaling a recipe way down no longer shows tiny amounts like ⅛ tsp halved as "0 tsp".']
