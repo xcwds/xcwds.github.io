@@ -82,7 +82,8 @@ Package manager: pnpm.
 - Units are per tool, never app-wide: recipes have US/metric (`settings.recipeUnits`, `null` = as
   written; see docs/classic-recipes.md); the weightlifting calculator has lb/kg (`settings.lifting.unit`, unit
   systems in `src/lib/utils/lifting.ts`); the pizza dough calculator is always grams. Tool defaults live in
-  `settings` (coffee length, cooking presets, pizza defaults, lifting equipment and owned plates). Settings
+  `settings` (coffee length, cooking presets, pizza defaults, lifting equipment, owned plates and
+  equipment setups: your own bar weights and limits per station, applied by `findEquipment`). Settings
   load after pages mount, so seed page state from them in an effect gated on `settingsStatus.ready`.
 - `persist()` only writes when a value changes (never just because a page opened), and removes the entry
   when `get` returns `undefined`. It loads changes other tabs save (`storage` event; pass `cleared` to

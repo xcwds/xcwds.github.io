@@ -465,7 +465,39 @@ describe('tool defaults in settings', () => {
 		expect(s.lifting).toEqual({
 			unit: 'kg',
 			equipment: 'dumbbells',
-			plates: { lb: defaultSettings.lifting.plates.lb, kg: [20, 10] }
+			plates: { lb: defaultSettings.lifting.plates.lb, kg: [20, 10] },
+			setups: { lb: {}, kg: {} }
+		});
+	});
+
+	it('keeps the valid parts of equipment setups and drops the rest (#71)', () => {
+		store.setItem(
+			entries.settings.key,
+			JSON.stringify({
+				lifting: {
+					setups: {
+						lb: {
+							kettlebell: { plates: [10, 5], maxPlatesPerSide: 4, maxLoad: 50 },
+							// Plates are put in the unit's order; every size is the same as no list.
+							dumbbell: { bar: 5, plates: [2.5, 10], maxPlatesPerSide: 0.5 },
+							barbell: { plates: [45, 35, 25, 10, 5, 2.5, 1.25] },
+							// A max weight under the bar's weight, and out-of-range numbers, are dropped.
+							'barbell-light': { bar: 30, maxLoad: 20, maxPlatesPerSide: 99 },
+							dumbbells: { bar: -1, maxLoad: 1e9, plates: [7] },
+							'trap-bar': { bar: 60 }
+						},
+						kg: 'heavy'
+					}
+				}
+			})
+		);
+		expect(read(entries.settings)!.lifting.setups).toEqual({
+			lb: {
+				kettlebell: { plates: [10, 5], maxPlatesPerSide: 4, maxLoad: 50 },
+				dumbbell: { bar: 5, plates: [10, 2.5] },
+				'barbell-light': { bar: 30 }
+			},
+			kg: {}
 		});
 	});
 });
