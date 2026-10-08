@@ -81,6 +81,15 @@ describe('platesForTarget, bounded (#32)', () => {
 		expect(odd).toMatchObject({ total: 100_000_000, exact: false });
 		expect(platesForTarget(eq('barbell'), Infinity, LB)).toBeNull();
 	});
+
+	it('returns the empty bar right away when no plates are selected (#64)', () => {
+		const start = performance.now();
+		const none = platesForTarget(eq('barbell'), 100_000_000, []);
+		platesForTarget(eq('barbell'), 1e15, []);
+		expect(performance.now() - start).toBeLessThan(200);
+		expect(none).toEqual({ perSide: {}, total: 45, exact: false });
+		expect(platesForTarget(eq('barbell'), 45, [])).toEqual({ perSide: {}, total: 45, exact: true });
+	});
 });
 
 describe('platesForTarget', () => {

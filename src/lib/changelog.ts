@@ -7,6 +7,13 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 12,
+		date: '2026-10-08',
+		items: [
+			'A large target weight with no plates selected no longer freezes the weightlifting calculator.'
+		]
+	},
+	{
 		id: 11,
 		date: '2026-10-04',
 		items: [
