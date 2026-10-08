@@ -66,8 +66,19 @@
 		add(copySet(set, takenIds()), `Copied ${set.name}.`);
 	}
 
+	/**
+	 * Forgets the errors and rejected text of a removed set or bar. Ids are reused (`set-1` again
+	 * after deleting it), so they'd otherwise show up in the next one.
+	 */
+	function forgetFields(prefix: string) {
+		for (const key of Object.keys(drafts)) if (key.startsWith(prefix)) delete drafts[key];
+		for (const key of Object.keys(errors)) if (key.startsWith(prefix)) delete errors[key];
+	}
+
 	function remove(set: EquipmentSet) {
 		settings.lifting.sets = settings.lifting.sets.filter((s) => s.id !== set.id);
+		forgetFields(`${set.id}:`);
+		delete open[set.id];
 		if (settings.lifting.activeSet === set.id) settings.lifting.activeSet = COMMERCIAL_GYM;
 		// Forget the station the calculator remembered for it.
 		const calc = read(entries.liftingCalculator);
@@ -153,6 +164,7 @@
 
 	function removeBar(set: EquipmentSet, bar: Bar) {
 		set.bars = set.bars.filter((b) => b.id !== bar.id);
+		forgetFields(`${set.id}:${bar.id}:`);
 	}
 
 	/** One line for a closed set: "35 lb barbell, 2 dumbbell handles · 2 × 45, 8 × 10, …". */

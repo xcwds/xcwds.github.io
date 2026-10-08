@@ -112,3 +112,22 @@ test('deleting the set in use goes back to the commercial gym (#84)', async ({ p
 	await gotoHydrated(page, '/utils/weightlifting');
 	await expect(page.getByTestId('active-set')).toContainText('Equipment: Commercial gym.');
 });
+
+test("a deleted set's errors don't come back on the next new set (#84)", async ({ page }) => {
+	await gotoHydrated(page, '/settings');
+	await page.getByRole('button', { name: 'New set' }).click();
+	await page.getByRole('button', { name: 'Add set' }).click();
+	const set = page.getByTestId('set-set-1');
+	await enter(set.getByLabel('10 lb plates', { exact: true }), '2.5');
+	await enter(set.getByTestId('bar-bar-1').getByLabel('Weight (lb)'), '-5');
+	await expect(set.getByRole('alert')).toHaveCount(2);
+	await set.getByRole('button', { name: 'Delete My equipment' }).click();
+	await set.getByRole('button', { name: 'Delete', exact: true }).click();
+
+	// Ids are reused, so the new set is set-1 again, with bar-1: it starts clean.
+	await page.getByRole('button', { name: 'New set' }).click();
+	await page.getByRole('button', { name: 'Add set' }).click();
+	await expect(set.getByLabel('10 lb plates', { exact: true })).toHaveValue('0');
+	await expect(set.getByTestId('bar-bar-1').getByLabel('Weight (lb)')).toHaveValue('45');
+	await expect(set.getByRole('alert')).toHaveCount(0);
+});
