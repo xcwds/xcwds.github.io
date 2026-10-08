@@ -1,6 +1,6 @@
 # xcwds
 
-**Everyday tools that stay on your device.** Live at [xcwds.com](https://xcwds.com).
+**Everyday tools that never phone home.** Live at [xcwds.com](https://xcwds.com).
 
 **xcwds**: e**X**ecutes **C**lient-side, **W**ithout **D**ata **S**ervers.
 

@@ -7,6 +7,11 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 18,
+		date: '2026-10-08',
+		items: ['A new tagline: "Everyday tools that never phone home."']
+	},
+	{
 		id: 17,
 		date: '2026-10-08',
 		items: [
