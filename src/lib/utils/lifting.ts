@@ -119,7 +119,9 @@ export function platesForTarget(
 	if (!Number.isFinite(target) || !(target >= empty)) return null;
 	const perSideWeight = (target - empty) / (equipment.count * equipment.sides);
 	const maxUnits = Math.floor(perSideWeight / UNIT + 1e-9);
-	const plates = [...available].sort((a, b) => b - a);
+	const plates = available.filter((plate) => Math.round(plate / UNIT) > 0).sort((a, b) => b - a);
+	// Nothing to load: the bar alone is the only option (and the search below would be unbounded).
+	if (!plates.length) return { perSide: {}, total: empty, exact: Math.abs(empty - target) < 1e-9 };
 	const sizes = plates.map((plate) => Math.round(plate / UNIT));
 
 	// Largest plates that every closest-under load is sure to contain (see above).
