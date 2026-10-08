@@ -67,7 +67,9 @@ test('an equipment set picked in another tab switches an open calculator (#82)',
 
 	await gotoHydrated(a, '/settings');
 	await a.getByLabel('Equipment set').selectOption('commercial');
-	await expect(b.getByTestId('active-set')).toContainText('Equipment: Commercial gym.');
+	await expect(b.getByLabel('Equipment set').locator('option:checked')).toHaveText(
+		'Commercial gym'
+	);
 	await expect(equipment(b, 'Barbell (45 lb)')).toHaveAttribute('aria-pressed', 'true');
 
 	// Each set remembers its own station, so switching back finds the kettlebell again.

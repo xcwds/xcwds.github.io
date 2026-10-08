@@ -43,12 +43,12 @@ test('the weightlifting equipment set is picked in Settings (#82)', async ({ pag
 	await picker.selectOption({ label: 'Home gym (lb)' });
 
 	await gotoHydrated(page, '/utils/weightlifting');
-	await expect(page.getByTestId('active-set')).toContainText('Equipment: Home gym.');
+	await expect(page.getByLabel('Equipment set').locator('option:checked')).toHaveText('Home gym');
 	await expect(page.getByRole('button', { name: 'Barbell (35 lb)' })).toHaveAttribute(
 		'aria-pressed',
 		'true'
 	);
-	await page.getByRole('link', { name: 'Change it in Settings' }).click();
+	await page.getByRole('link', { name: 'Edit your equipment sets' }).click();
 	await expect(page).toHaveURL(/\/settings#equipment$/);
 	await page.getByLabel('Equipment set').selectOption('commercial');
 	await gotoHydrated(page, '/utils/weightlifting');
@@ -125,7 +125,9 @@ test('saved weightlifting data from before units is upgraded', async ({ page }) 
 	});
 	await gotoHydrated(page, '/utils/weightlifting');
 	// v3 (#82): the owned plates make it a set of your own, with the bar you'd picked.
-	await expect(page.getByTestId('active-set')).toContainText('Equipment: My equipment.');
+	await expect(page.getByLabel('Equipment set').locator('option:checked')).toHaveText(
+		'My equipment'
+	);
 	await expect(page.getByRole('button', { name: 'Barbell (25 lb)' })).toHaveAttribute(
 		'aria-pressed',
 		'true'

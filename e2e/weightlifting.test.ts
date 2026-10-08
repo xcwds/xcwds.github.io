@@ -119,7 +119,7 @@ test("a bar's limits decide what the calculator loads (#71)", async ({ page }) =
 test('a home gym only loads the plates it has (#82)', async ({ page }) => {
 	await seedLifting(page, { activeSet: 'home', sets: [HOME_GYM] });
 	await gotoHydrated(page, '/utils/weightlifting');
-	await expect(page.getByTestId('active-set')).toContainText('Equipment: Home gym.');
+	await expect(page.getByLabel('Equipment set').locator('option:checked')).toHaveText('Home gym');
 	// Its own unit, its own bars: no unit switch, no 45 lb barbell, a dumbbell pair.
 	await expect(page.getByRole('radiogroup', { name: 'Units' })).toHaveCount(0);
 	const stations = page.getByRole('group', { name: 'Equipment' }).getByRole('button');
@@ -128,9 +128,12 @@ test('a home gym only loads the plates it has (#82)', async ({ page }) => {
 	// No 35s; one 45 a side uses both.
 	await expect(page.getByRole('button', { name: 'Add 35 lb', exact: true })).toHaveCount(0);
 	const add45 = page.getByRole('button', { name: 'Add 45 lb', exact: true });
+	await expect(page.getByTestId('left-45')).toHaveText('2 left');
 	await add45.click();
 	await expect(page.getByTestId('total')).toHaveText('125 lb');
 	await expect(add45).toBeDisabled();
+	await expect(page.getByTestId('left-45')).toHaveText('0 left');
+	await expect(page.getByTestId('left-10')).toHaveText('8 left');
 
 	// The heaviest it can load: 127.5 a side on the 35 lb bar.
 	await page.getByRole('button', { name: 'Target weight' }).click();
@@ -138,12 +141,49 @@ test('a home gym only loads the plates it has (#82)', async ({ page }) => {
 	await expect(page.getByTestId('target-result')).toContainText(
 		'Per side: 45, 25, 10 × 4, 5 × 2, 2.5 × 2, 1.25 × 2'
 	);
-	await expect(page.getByTestId('target-result')).toContainText('closest under is 290 lb');
+	await expect(page.getByTestId('target-result')).toContainText(
+		'closest under is 290 lb with the plates you have.'
+	);
+});
+
+test('switch equipment sets from the calculator (#85)', async ({ page }) => {
+	await seedLifting(page, { activeSet: 'commercial', sets: [HOME_GYM] });
+	await gotoHydrated(page, '/utils/weightlifting');
+	const picker = page.getByLabel('Equipment set');
+	const stations = page.getByRole('group', { name: 'Equipment' }).getByRole('button');
+	await expect(stations).toHaveText(['Barbell (45 lb)']);
+	// The commercial gym has no counts to show.
+	await expect(page.getByTestId('left-45')).toHaveCount(0);
+
+	await picker.selectOption({ label: 'Home gym' });
+	await expect(stations).toHaveText(['Barbell (35 lb)', 'Dumbbell', 'Dumbbell pair']);
+	await page.getByRole('button', { name: 'Dumbbell pair' }).click();
+	// A pair has four sides: two 10s on each use all eight.
+	const add10 = page.getByRole('button', { name: 'Add 10 lb', exact: true });
+	await add10.click();
+	await add10.click();
+	await expect(page.getByTestId('total')).toHaveText('90 lb');
+	await expect(page.getByTestId('left-10')).toHaveText('0 left');
+	await expect(add10).toBeDisabled();
+
+	// The choice is saved: Settings and a reload agree.
+	await gotoHydrated(page, '/settings');
+	await expect(page.getByLabel('Equipment set')).toHaveValue('home');
+	await page.getByLabel('Equipment set').selectOption('commercial');
+	await gotoHydrated(page, '/utils/weightlifting');
+	await expect(stations).toHaveText(['Barbell (45 lb)']);
+	await picker.selectOption({ label: 'Home gym' });
+	await expect(page.getByRole('button', { name: 'Dumbbell pair' })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
 });
 
 test('the commercial gym is a 45 lb barbell with every plate (#82)', async ({ page }) => {
 	await gotoHydrated(page, '/utils/weightlifting');
-	await expect(page.getByTestId('active-set')).toContainText('Equipment: Commercial gym.');
+	await expect(page.getByLabel('Equipment set').locator('option:checked')).toHaveText(
+		'Commercial gym'
+	);
 	const stations = page.getByRole('group', { name: 'Equipment' }).getByRole('button');
 	await expect(stations).toHaveText(['Barbell (45 lb)']);
 	await expect(page.getByRole('button', { name: /^Add / })).toHaveCount(7);
