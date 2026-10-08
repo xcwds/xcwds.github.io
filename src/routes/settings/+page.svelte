@@ -4,6 +4,7 @@
 	import Acronym from '$lib/Acronym.svelte';
 	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
+	import EquipmentSetups from './EquipmentSetups.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
 	import { changelog, latestChangelogId } from '$lib/changelog';
 	import { reloadShortcuts } from '$lib/home.svelte';
@@ -11,7 +12,7 @@
 	import { reloadSettings, settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { doughDefaults } from '$lib/utils/dough';
-	import { UNITS, WEIGHT_UNITS, type EquipmentId } from '$lib/utils/lifting';
+	import { UNITS, WEIGHT_UNITS, equipmentList, type EquipmentId } from '$lib/utils/lifting';
 	import { formatDuration } from '$lib/utils/time';
 	import {
 		COFFEE_SECONDS,
@@ -42,6 +43,7 @@
 
 	// --- Tool defaults ---
 	let lifting = $derived(UNITS[settings.lifting.unit]);
+	let stations = $derived(equipmentList(settings.lifting.unit, settings.lifting.setups));
 
 	function adjustCoffee(deltaSeconds: number) {
 		// Forget a length picked in the timer, so the new default is what it opens with.
@@ -311,7 +313,7 @@
 				value={settings.lifting.equipment}
 				onchange={(e) => setDefaultEquipment(e.currentTarget.value as EquipmentId)}
 			>
-				{#each lifting.equipment as item (item.id)}
+				{#each stations as item (item.id)}
 					<option value={item.id}>{item.name}</option>
 				{/each}
 			</select>
@@ -335,6 +337,7 @@
 				{/each}
 			</div>
 		</fieldset>
+		<EquipmentSetups />
 
 		<h3 class="mt-2 font-semibold">Coffee Timer</h3>
 		<div class="flex items-center justify-between gap-3">

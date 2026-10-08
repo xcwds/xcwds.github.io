@@ -5,8 +5,10 @@ import { parseShortcuts, type HomeShortcuts } from '$lib/home';
 import { tools } from '$lib/utils/tools';
 import {
 	EQUIPMENT_IDS,
+	parseEquipmentSetup,
 	UNITS,
 	type EquipmentId,
+	type EquipmentSetups,
 	type HistoryEntry,
 	type PlateCounts,
 	type WeightUnit,
@@ -134,6 +136,8 @@ export type LiftingSettings = {
 	equipment: EquipmentId;
 	/** Plates you have, per unit; target mode only uses these. */
 	plates: Record<WeightUnit, number[]>;
+	/** Your own bars, handles and their limits, per unit (none: commercial-gym defaults, #71). */
+	setups: EquipmentSetups;
 };
 
 export type Settings = {
@@ -168,7 +172,8 @@ export const defaultSettings: Settings = {
 	lifting: {
 		unit: 'lb',
 		equipment: 'barbell',
-		plates: { lb: [...UNITS.lb.plates], kg: [...UNITS.kg.plates] }
+		plates: { lb: [...UNITS.lb.plates], kg: [...UNITS.kg.plates] },
+		setups: { lb: {}, kg: {} }
 	},
 	ovenUnit: 'F',
 	recipeUnits: null
@@ -207,10 +212,21 @@ function parseLiftingSettings(v: unknown): LiftingSettings {
 			? UNITS[unit].plates.filter((p) => list.includes(p))
 			: [...d.plates[unit]];
 	};
+	const setups = isRecord(v.setups) ? v.setups : {};
+	const setupsFor = (unit: WeightUnit) => {
+		const saved = isRecord(setups[unit]) ? setups[unit] : {};
+		const out: EquipmentSetups[WeightUnit] = {};
+		for (const id of EQUIPMENT_IDS) {
+			const setup = parseEquipmentSetup(unit, saved[id]);
+			if (setup) out[id] = setup;
+		}
+		return out;
+	};
 	return {
 		unit: isUnit(v.unit) ? v.unit : d.unit,
 		equipment: isEquipmentId(v.equipment) ? v.equipment : d.equipment,
-		plates: { lb: platesFor('lb'), kg: platesFor('kg') }
+		plates: { lb: platesFor('lb'), kg: platesFor('kg') },
+		setups: { lb: setupsFor('lb'), kg: setupsFor('kg') }
 	};
 }
 

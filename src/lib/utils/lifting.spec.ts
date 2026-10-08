@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
 	UNITS,
+	canAdd,
+	equipmentList,
 	findEquipment,
+	loadProblems,
 	formatWeight,
 	historyToText,
+	type EquipmentSetups,
 	platesForTarget,
 	sumPlates,
 	totalWeight,
@@ -251,5 +255,130 @@ describe('history helpers', () => {
 		]);
 		expect(text).toContain('Row\n  1 set × 8 reps @ 40 kg');
 		expect(text.indexOf('Row')).toBeLessThan(text.indexOf('Squat'));
+	});
+});
+
+describe('equipment setups (#71)', () => {
+	const setups: EquipmentSetups = {
+		lb: {
+			kettlebell: { plates: [10], maxPlatesPerSide: 4 },
+			dumbbell: { bar: 5, plates: [10, 5, 2.5], maxPlatesPerSide: 4, maxLoad: 45 },
+			barbell: { bar: 35 }
+		},
+		kg: {}
+	};
+	const mine = (id: string) => findEquipment('lb', id, setups);
+
+	it('applies a setup over the default and keeps the default without one', () => {
+		expect(mine('barbell')).toMatchObject({ bar: 35, name: 'Barbell (35 lb)', sides: 2 });
+		expect(mine('dumbbell')).toMatchObject({ bar: 5, maxLoad: 45, maxPlatesPerSide: 4 });
+		expect(mine('barbell-light')).toEqual(eq('barbell-light'));
+		expect(findEquipment('kg', 'barbell', setups)).toEqual(kg('barbell'));
+		expect(equipmentList('lb', setups).map((e) => e.name)).toEqual([
+			'Barbell (35 lb)',
+			'Barbell (25 lb)',
+			'Dumbbell',
+			'Dumbbell pair',
+			'Kettlebell'
+		]);
+	});
+
+	it('only uses plates that fit', () => {
+		// Only 10s fit, four at most: 5 lb handle + 40 = 45 is the most it takes.
+		expect(platesForTarget(mine('kettlebell'), 45, LB)).toEqual({
+			perSide: { 10: 4 },
+			total: 45,
+			exact: true
+		});
+		expect(platesForTarget(mine('kettlebell'), 60, LB)).toEqual({
+			perSide: { 10: 4 },
+			total: 45,
+			exact: false
+		});
+		expect(platesForTarget(mine('kettlebell'), 50, LB)?.perSide).toEqual({ 10: 4 });
+	});
+
+	it('stops at the max load and says so', () => {
+		// 45 lb of plates at most (the handle doesn't count), so 22.5 per side, in four plates.
+		expect(platesForTarget(mine('dumbbell'), 100, LB)).toEqual({
+			perSide: { 10: 2, 2.5: 1 },
+			total: 50,
+			exact: false,
+			overMax: true
+		});
+		expect(platesForTarget(mine('dumbbell'), 50, LB)).toEqual({
+			perSide: { 10: 2, 2.5: 1 },
+			total: 50,
+			exact: true
+		});
+		// A pair's max load is per dumbbell: 7.5 handle + 22.5 of plates, twice.
+		const pair = findEquipment('lb', 'dumbbells', { lb: { dumbbells: { maxLoad: 22.5 } } });
+		expect(platesForTarget(pair, 100, LB)).toMatchObject({ total: 60, overMax: true });
+	});
+
+	it('finds the heaviest load within the plate limit, matching a brute-force search', () => {
+		const sets = [[...LB], [45, 25, 10, 5], [25, 10, 2.5], [10]];
+		for (const plates of sets) {
+			for (const limit of [1, 2, 3, 5]) {
+				const bar = findEquipment('lb', 'barbell', {
+					lb: { barbell: { maxPlatesPerSide: limit } }
+				});
+				// Every per-side total reachable with at most `limit` plates.
+				let reachable = new Set([0]);
+				for (let i = 0; i < limit; i++)
+					reachable = new Set([
+						...reachable,
+						...[...reachable].flatMap((w) => plates.map((p) => w + p))
+					]);
+				for (let target = 45; target <= 600; target += 2.5) {
+					const best = Math.max(...[...reachable].filter((w) => 45 + 2 * w <= target + 1e-9));
+					const got = platesForTarget(bar, target, plates)!;
+					const label = `${target} lb, ${limit} of [${plates}]`;
+					expect(got.total, label).toBeCloseTo(45 + 2 * best, 9);
+					expect(countPlates(got.perSide), label).toBeLessThanOrEqual(limit);
+				}
+			}
+		}
+	});
+
+	it('only adds plates that fit, within the limits', () => {
+		const kb = mine('kettlebell');
+		expect(canAdd(kb, [{ 10: 3 }, { 10: 3 }], 0, 10, true)).toBe(true);
+		expect(canAdd(kb, [{ 10: 4 }, { 10: 4 }], 0, 10, true)).toBe(false);
+		expect(canAdd(kb, [{}, {}], 0, 5, true)).toBe(false);
+
+		const db = mine('dumbbell');
+		// 40 lb of plates; another 2.5 on both sides makes 45 (the max load), another 5 makes 50.
+		expect(canAdd(db, [{ 10: 2 }, { 10: 2 }], 0, 2.5, true)).toBe(true);
+		expect(canAdd(db, [{ 10: 2 }, { 10: 2 }], 0, 5, true)).toBe(false);
+		// Uneven sides: one more 5 on the left alone is 45.
+		expect(canAdd(db, [{ 10: 2 }, { 10: 2 }], 0, 5, false)).toBe(true);
+
+		expect(canAdd(eq('barbell'), [{ 45: 40 }, { 45: 40 }], 0, 45, true)).toBe(true);
+	});
+
+	it('explains what a saved load breaks', () => {
+		expect(loadProblems(mine('kettlebell'), [{ 10: 2 }, {}], 'lb')).toEqual([]);
+		expect(loadProblems(mine('kettlebell'), [{ 25: 1, 10: 5 }, {}], 'lb')).toEqual([
+			"25 lb plates don't fit this kettlebell.",
+			'More than 4 plates on the post.'
+		]);
+		expect(
+			loadProblems(
+				mine('dumbbell'),
+				[
+					{ 10: 2, 5: 1 },
+					{ 10: 2, 5: 1 }
+				],
+				'lb'
+			)
+		).toEqual(['Over the 45 lb max load.']);
+		expect(
+			loadProblems(
+				findEquipment('lb', 'dumbbells', { lb: { dumbbells: { maxLoad: 15 } } }),
+				[{ 10: 1 }, { 10: 1 }],
+				'lb'
+			)
+		).toEqual(['Over the 15 lb max load per dumbbell.']);
 	});
 });

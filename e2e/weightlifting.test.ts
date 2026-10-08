@@ -88,3 +88,69 @@ test('a huge target weight answers right away instead of freezing the page (#32)
 	});
 	expect(Date.now() - started).toBeLessThan(2000);
 });
+
+test('your own equipment limits what the calculator loads (#71)', async ({ page }) => {
+	await gotoHydrated(page, '/settings');
+	const kettlebell = page.getByTestId('setup-kettlebell');
+	await kettlebell.getByText('Kettlebell').click();
+	for (const plate of [45, 35, 25, 5, 2.5, 1.25])
+		await kettlebell.getByRole('button', { name: `${plate} lb fits`, exact: true }).click();
+	await kettlebell.getByLabel('Max plates on the post').fill('4');
+	await kettlebell.getByLabel('Max plates on the post').press('Tab');
+	await expect(kettlebell.locator('summary')).toContainText(
+		'5 lb handle · 4 on the post · 10 only'
+	);
+
+	const barbell = page.getByTestId('setup-barbell');
+	await barbell.locator('summary').click();
+	await barbell.getByLabel('Bar weight (lb)').fill('35');
+	await barbell.getByLabel('Bar weight (lb)').press('Tab');
+	const max = barbell.getByLabel(/Max load/);
+	await max.fill('5000');
+	await max.press('Tab');
+	await expect(barbell.getByRole('alert')).toHaveText('Enter a weight from 0 to 2000 lb.');
+	// The rejected text stays in the field next to its error, and nothing is saved.
+	await expect(max).toHaveValue('5000');
+	await expect(barbell.locator('summary')).toContainText('35 lb bar');
+	await expect(barbell.locator('summary')).not.toContainText('max');
+	await max.fill('265');
+	await max.press('Tab');
+	await expect(barbell.getByRole('alert')).toHaveCount(0);
+	await expect(barbell.locator('summary')).toContainText('Barbell (35 lb)');
+	await expect(barbell.locator('summary')).toContainText('35 lb bar · max load 265 lb');
+
+	await gotoHydrated(page, '/utils/weightlifting');
+	const total = page.getByTestId('total');
+	await expect(total).toHaveText('35 lb');
+	await page.getByRole('button', { name: 'Target weight' }).click();
+	await page.getByLabel('Target weight (lb)').fill('400');
+	await expect(page.getByTestId('target-result')).toContainText(
+		"400 lb is over this bar's 265 lb max load; the most it takes is 300 lb."
+	);
+
+	// Only 10s fit the kettlebell, four at most.
+	await page.getByRole('button', { name: 'Kettlebell' }).click();
+	await page.getByLabel('Target weight (lb)').fill('60');
+	await expect(page.getByTestId('target-result')).toContainText('On the post: 10 × 4');
+	await expect(page.getByTestId('target-result')).toContainText(
+		'closest under is 45 lb (at most 4 plates on the post)'
+	);
+	await page.getByRole('button', { name: 'Load plates' }).click();
+	await expect(page.getByRole('button', { name: /^Add / })).toHaveCount(1);
+	const add = page.getByRole('button', { name: 'Add 10 lb' });
+	for (let i = 0; i < 4; i++) await add.click();
+	await expect(total).toHaveText('45 lb');
+	await expect(add).toBeDisabled();
+
+	// Back to standard brings the commercial-gym kettlebell back.
+	await gotoHydrated(page, '/settings');
+	await page.getByTestId('setup-kettlebell').locator('summary').click();
+	await page
+		.getByTestId('setup-kettlebell')
+		.getByRole('button', { name: 'Back to standard' })
+		.click();
+	await expect(page.getByTestId('setup-kettlebell').locator('summary')).toContainText('Standard');
+	await gotoHydrated(page, '/utils/weightlifting');
+	await expect(page.getByRole('button', { name: /^Add / })).toHaveCount(7);
+	await expect(page.getByRole('button', { name: 'Add 10 lb' })).toBeEnabled();
+});

@@ -1,13 +1,20 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { persist } from '$lib/persist.svelte';
 	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { entries } from '$lib/storage';
 	import {
 		UNITS,
 		WEIGHT_UNITS,
+		canAdd,
+		equipmentList,
 		findEquipment,
+		fits,
 		formatWeight,
 		implementWeight,
+		kind,
+		loadProblems,
+		plateCount,
 		platesForTarget,
 		totalWeight,
 		type EquipmentId,
@@ -55,10 +62,19 @@
 	let sidesUnit = $state<WeightUnit>('lb');
 	let target = $state<number | null>(null);
 
-	let equipment = $derived(findEquipment(unit, equipmentId));
+	/** Your own bars and limits from Settings (#71); commercial-gym defaults without them. */
+	let setups = $derived(settings.lifting.setups);
+	let stations = $derived(equipmentList(unit, setups));
+	let equipment = $derived(findEquipment(unit, equipmentId, setups));
 	let oneSided = $derived(equipment.sides === 1);
 	let effectiveSides = $derived(symmetric || oneSided ? [sides[0], sides[0]] : sides);
 	let result = $derived(target === null ? null : platesForTarget(equipment, target, available));
+	let problems = $derived(loadProblems(equipment, effectiveSides, unit));
+	/** Rows for plates that fit, and for any that are loaded but don't (so they can come off). */
+	let plateRows = $derived(
+		system.plates.filter((plate) => fits(equipment, plate) || effectiveSides.some((s) => s[plate]))
+	);
+	let bothSides = $derived(symmetric || oneSided);
 
 	$effect(() => {
 		total = totalWeight(equipment, effectiveSides);
@@ -162,7 +178,7 @@
 	</div>
 
 	<div class="grid grid-cols-2 gap-2 sm:grid-cols-3" role="group" aria-label="Equipment">
-		{#each system.equipment as item (item.id)}
+		{#each stations as item (item.id)}
 			<button
 				type="button"
 				aria-pressed={equipmentId === item.id}
@@ -174,6 +190,12 @@
 		{/each}
 	</div>
 
+	<p class="-mt-2 text-sm text-gray-600 dark:text-gray-400">
+		Home gym? <a href="{resolve('/settings')}#equipment" class="underline"
+			>Set up your bars and plates</a
+		> in Settings.
+	</p>
+
 	<div class="{card} flex flex-col items-center gap-3 text-center">
 		<p class="text-5xl font-semibold tabular-nums" data-testid="total">{weight(total)}</p>
 		<p class="text-sm text-gray-600 dark:text-gray-400">
@@ -181,7 +203,7 @@
 				2 dumbbells × {weight(implementWeight(equipment, effectiveSides))} each
 			{:else}
 				{weight(equipment.bar)}
-				{equipment.id.startsWith('barbell') ? 'bar' : 'handle'} + {weight(total - equipment.bar)} plates
+				{kind(equipment) === 'bar' ? 'bar' : 'handle'} + {weight(total - equipment.bar)} plates
 			{/if}
 		</p>
 		<div class="flex h-24 items-center justify-center" aria-hidden="true">
@@ -252,7 +274,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each system.plates as plate (plate)}
+					{#each plateRows as plate (plate)}
 						<tr>
 							<th scope="row" class="py-1 text-left font-medium">{weight(plate)}</th>
 							{#each symmetric || oneSided ? [0] : [0, 1] as side (side)}
@@ -277,6 +299,7 @@
 											type="button"
 											aria-label="Add {label}"
 											class="{button} size-11 p-0 text-xl"
+											disabled={!canAdd(equipment, effectiveSides, side, plate, bothSides)}
 											onclick={() => change(side, plate, 1)}>+</button
 										>
 									</div>
@@ -286,6 +309,13 @@
 					{/each}
 				</tbody>
 			</table>
+			{#if problems.length}
+				<ul class="text-sm text-amber-800 dark:text-amber-300" data-testid="load-problems">
+					{#each problems as problem (problem)}
+						<li>{problem}</li>
+					{/each}
+				</ul>
+			{/if}
 			<button type="button" class={button} onclick={() => (sides = [{}, {}])}>Clear plates</button>
 		</div>
 	{:else}
@@ -308,7 +338,7 @@
 			<fieldset class="flex flex-col gap-1 text-sm">
 				<legend class="mb-1">Plates available</legend>
 				<div class="flex flex-wrap gap-2">
-					{#each system.plates as plate (plate)}
+					{#each system.plates.filter((p) => fits(equipment, p)) as plate (plate)}
 						<button
 							type="button"
 							aria-pressed={available.includes(plate)}
@@ -328,9 +358,21 @@
 						{#if equipment.count === 2}
 							<p class="text-sm">Same on both dumbbells.</p>
 						{/if}
-						{#if !result.exact}
+						{#if result.overMax}
 							<p class="text-sm text-amber-800 dark:text-amber-300">
-								{weight(target)} can't be loaded exactly; closest under is {weight(result.total)}.
+								{weight(target)} is over this {kind(equipment)}'s {weight(equipment.maxLoad ?? 0)}
+								max load{equipment.count === 2 ? ' per dumbbell' : ''}; the most it takes is {weight(
+									result.total
+								)}.
+							</p>
+						{:else if !result.exact}
+							<p class="text-sm text-amber-800 dark:text-amber-300">
+								{weight(target)} can't be loaded exactly; closest under is {weight(
+									result.total
+								)}{equipment.maxPlatesPerSide !== undefined &&
+								plateCount(result.perSide) === equipment.maxPlatesPerSide
+									? ` (at most ${equipment.maxPlatesPerSide} ${equipment.maxPlatesPerSide === 1 ? 'plate' : 'plates'} ${oneSided ? 'on the post' : 'per side'})`
+									: ''}.
 							</p>
 						{/if}
 					</div>

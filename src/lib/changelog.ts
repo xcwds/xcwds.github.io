@@ -7,6 +7,13 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 19,
+		date: '2026-10-08',
+		items: [
+			'Home gym? Set up your own bars, dumbbells and kettlebell in Settings: their weight, how much each one takes, how many plates fit and which sizes. The weightlifting calculator sticks to them.'
+		]
+	},
+	{
 		id: 18,
 		date: '2026-10-08',
 		items: ['A new tagline: "Everyday tools that never phone home."']
