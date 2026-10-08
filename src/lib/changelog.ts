@@ -7,6 +7,13 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 13,
+		date: '2026-10-08',
+		items: [
+			'"+1 min" (and the coffee timer\'s + buttons) now snooze a timer that has been ringing for a while.'
+		]
+	},
+	{
 		id: 12,
 		date: '2026-10-08',
 		items: [
