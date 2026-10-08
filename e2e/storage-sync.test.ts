@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { gotoHydrated } from './helpers';
+import { gotoHydrated, seedLifting, testGym } from './helpers';
 
 test.use({ viewport: { width: 390, height: 844 } });
 
@@ -54,23 +54,26 @@ test('two open tabs never overwrite each other’s workout history (#42)', async
 	await expect(entries(a).nth(1)).toContainText('Squat');
 });
 
-test('a new default equipment from another tab is not undone by an open calculator', async ({
+test('an equipment set picked in another tab switches an open calculator (#82)', async ({
 	context
 }) => {
+	await seedLifting(context, { activeSet: 'test-lb', sets: [testGym('lb')] });
 	const a = await context.newPage();
 	const b = await context.newPage();
 	const equipment = (page: Page, name: string) =>
 		page.getByRole('group', { name: 'Equipment' }).getByRole('button', { name, exact: true });
 	await gotoHydrated(b, '/utils/weightlifting');
-	await equipment(b, 'Dumbbell').click();
-	await expect(equipment(b, 'Dumbbell')).toHaveAttribute('aria-pressed', 'true');
+	await equipment(b, 'Kettlebell').click();
 
-	// Changing the default in Settings clears the choice, so tab B switches to the new default
-	// and doesn't save its old choice back on its next change.
 	await gotoHydrated(a, '/settings');
-	await a.getByLabel('Default equipment').selectOption({ label: 'Kettlebell' });
-	await expect(equipment(b, 'Kettlebell')).toHaveAttribute('aria-pressed', 'true');
+	await a.getByLabel('Equipment set').selectOption('commercial');
+	await expect(b.getByTestId('active-set')).toContainText('Equipment: Commercial gym.');
+	await expect(equipment(b, 'Barbell (45 lb)')).toHaveAttribute('aria-pressed', 'true');
+
+	// Each set remembers its own station, so switching back finds the kettlebell again.
 	await b.getByRole('button', { name: 'Add 5 lb', exact: true }).click();
+	await a.getByLabel('Equipment set').selectOption('test-lb');
+	await expect(equipment(b, 'Kettlebell')).toHaveAttribute('aria-pressed', 'true');
 	await b.reload();
 	await b.locator('html[data-hydrated]').waitFor({ state: 'attached' });
 	await expect(equipment(b, 'Kettlebell')).toHaveAttribute('aria-pressed', 'true');

@@ -118,13 +118,6 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 		],
 		['/utils/weightlifting'],
 		['/settings'],
-		[
-			'/settings',
-			async (p) => {
-				await p.getByTestId('setup-kettlebell').locator('summary').click();
-				await p.getByTestId('setup-kettlebell').getByRole('button', { name: '45 lb fits' }).click();
-			}
-		],
 		['/no-such-page'],
 		[porkChopsPath]
 	];

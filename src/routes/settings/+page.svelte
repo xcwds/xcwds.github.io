@@ -4,7 +4,6 @@
 	import Acronym from '$lib/Acronym.svelte';
 	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
-	import EquipmentSetups from './EquipmentSetups.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
 	import { changelog, latestChangelogId } from '$lib/changelog';
 	import { reloadShortcuts } from '$lib/home.svelte';
@@ -12,7 +11,7 @@
 	import { reloadSettings, settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { doughDefaults } from '$lib/utils/dough';
-	import { UNITS, WEIGHT_UNITS, equipmentList, type EquipmentId } from '$lib/utils/lifting';
+	import { COMMERCIAL_GYM, WEIGHT_UNITS } from '$lib/utils/lifting';
 	import { formatDuration } from '$lib/utils/time';
 	import {
 		COFFEE_SECONDS,
@@ -21,7 +20,6 @@
 		defaultSettings,
 		entries,
 		exportData,
-		forgetLiftingEquipment,
 		groups,
 		importData,
 		parseBackup,
@@ -42,9 +40,6 @@
 	];
 
 	// --- Tool defaults ---
-	let lifting = $derived(UNITS[settings.lifting.unit]);
-	let stations = $derived(equipmentList(settings.lifting.unit, settings.lifting.setups));
-
 	function adjustCoffee(deltaSeconds: number) {
 		// Forget a length picked in the timer, so the new default is what it opens with.
 		remove(entries.coffeeDuration);
@@ -52,20 +47,6 @@
 			COFFEE_SECONDS.max,
 			Math.max(COFFEE_SECONDS.min, settings.coffeeDefaultSeconds + deltaSeconds)
 		);
-	}
-
-	function setDefaultEquipment(id: EquipmentId) {
-		settings.lifting.equipment = id;
-		// Forget the equipment last picked in the calculator, so it opens with the new default.
-		forgetLiftingEquipment();
-	}
-
-	function toggleOwnedPlate(plate: number) {
-		const unit = settings.lifting.unit;
-		const owned = settings.lifting.plates[unit];
-		settings.lifting.plates[unit] = owned.includes(plate)
-			? owned.filter((p) => p !== plate)
-			: UNITS[unit].plates.filter((p) => p === plate || owned.includes(p));
 	}
 
 	// Editable copy of the presets; resets whenever the saved presets change.
@@ -306,38 +287,22 @@
 				</button>
 			{/each}
 		</div>
-		<label class="flex flex-col gap-1 text-sm">
-			<span>Default equipment</span>
+		<label id="equipment" class="flex scroll-mt-20 flex-col gap-1 text-sm">
+			<span>Equipment set</span>
 			<select
 				class="rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
-				value={settings.lifting.equipment}
-				onchange={(e) => setDefaultEquipment(e.currentTarget.value as EquipmentId)}
+				value={settings.lifting.activeSet}
+				onchange={(e) => (settings.lifting.activeSet = e.currentTarget.value)}
 			>
-				{#each stations as item (item.id)}
-					<option value={item.id}>{item.name}</option>
+				<option value={COMMERCIAL_GYM}>Commercial gym ({settings.lifting.unit})</option>
+				{#each settings.lifting.sets as set (set.id)}
+					<option value={set.id}>{set.name} ({set.unit})</option>
 				{/each}
 			</select>
 		</label>
 		<p class="text-sm text-gray-600 dark:text-gray-400">
-			The calculator remembers the equipment you pick; changing the default resets that.
+			The commercial gym has a barbell and as many plates as you need, in the units above.
 		</p>
-		<fieldset class="flex flex-col gap-1 text-sm">
-			<legend class="mb-1">Plates you have ({settings.lifting.unit})</legend>
-			<div class="flex flex-wrap gap-2">
-				{#each lifting.plates as plate (plate)}
-					{@const owned = settings.lifting.plates[settings.lifting.unit].includes(plate)}
-					<button
-						type="button"
-						aria-pressed={owned}
-						class="rounded-xl px-3 py-2 text-sm font-medium {owned
-							? 'bg-blue-600 text-white'
-							: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
-						onclick={() => toggleOwnedPlate(plate)}>{plate}</button
-					>
-				{/each}
-			</div>
-		</fieldset>
-		<EquipmentSetups />
 
 		<h3 class="mt-2 font-semibold">Coffee Timer</h3>
 		<div class="flex items-center justify-between gap-3">
