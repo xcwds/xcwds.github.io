@@ -110,7 +110,9 @@ test('deleting the set in use goes back to the commercial gym (#84)', async ({ p
 	await expect(picker).toHaveValue('commercial');
 
 	await gotoHydrated(page, '/utils/weightlifting');
-	await expect(page.getByTestId('active-set')).toContainText('Equipment: Commercial gym.');
+	await expect(page.getByLabel('Equipment set').locator('option:checked')).toHaveText(
+		'Commercial gym'
+	);
 });
 
 test("a deleted set's errors don't come back on the next new set (#84)", async ({ page }) => {

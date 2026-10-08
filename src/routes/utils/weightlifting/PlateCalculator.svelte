@@ -18,6 +18,7 @@
 		owned,
 		plateCount,
 		platesForTarget,
+		platesUsed,
 		stations,
 		totalWeight,
 		type PlateCounts,
@@ -73,6 +74,20 @@
 	let effectiveSides = $derived(symmetric || oneSided ? [sides[0], sides[0]] : sides);
 	let result = $derived(target === null ? null : platesForTarget(equipment, target, inventory));
 	let problems = $derived(loadProblems(equipment, effectiveSides, unit, inventory));
+	/**
+	 * Whether how many plates you have is what kept the target from being met: with as many as
+	 * you like of the sizes you have, it would get closer.
+	 */
+	let shortOfPlates = $derived.by(() => {
+		if (target === null || !result || result.exact || result.overMax) return false;
+		const plenty = Object.fromEntries(
+			Object.entries(inventory).map(([plate, n]) => [plate, n === 0 ? 0 : null])
+		);
+		return (platesForTarget(equipment, target, plenty)?.total ?? 0) > result.total + 1e-9;
+	});
+	/** Plates of a size still on the rack (only shown for sizes you have a number of). */
+	const left = (plate: number) =>
+		Math.max(0, owned(inventory, plate) - platesUsed(equipment, effectiveSides, plate));
 	/** Rows for plates you have that fit, and any loaded that don't (so they can come off). */
 	let plateRows = $derived(
 		system.plates.filter(
@@ -151,6 +166,20 @@
 </script>
 
 <section class="flex flex-col gap-4">
+	<label class="flex flex-col gap-1 text-sm">
+		<span>Equipment set</span>
+		<select
+			class="{field} text-base"
+			value={set.id}
+			onchange={(e) => (settings.lifting.activeSet = e.currentTarget.value)}
+		>
+			<option value={COMMERCIAL_GYM}>Commercial gym</option>
+			{#each settings.lifting.sets as item (item.id)}
+				<option value={item.id}>{item.name}</option>
+			{/each}
+		</select>
+	</label>
+
 	<!-- Your own sets have their own unit; only the commercial gym switches. -->
 	{#if set.id === COMMERCIAL_GYM}
 		<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Units">
@@ -179,9 +208,8 @@
 		{/each}
 	</div>
 
-	<p class="-mt-2 text-sm text-gray-600 dark:text-gray-400" data-testid="active-set">
-		Equipment: {set.name}.
-		<a href="{resolve('/settings')}#equipment" class="underline">Change it in Settings</a>.
+	<p class="-mt-2 text-sm text-gray-600 dark:text-gray-400">
+		<a href="{resolve('/settings')}#equipment" class="underline">Edit your equipment sets</a> in Settings.
 	</p>
 
 	<div class="{card} flex flex-col items-center gap-3 text-center">
@@ -264,7 +292,15 @@
 				<tbody>
 					{#each plateRows as plate (plate)}
 						<tr>
-							<th scope="row" class="py-1 text-left font-medium">{weight(plate)}</th>
+							<th scope="row" class="py-1 text-left font-medium">
+								{weight(plate)}
+								{#if owned(inventory, plate) !== Infinity}
+									<span
+										class="block text-xs font-normal text-gray-600 dark:text-gray-400"
+										data-testid="left-{plate}">{left(plate)} left</span
+									>
+								{/if}
+							</th>
 							{#each symmetric || oneSided ? [0] : [0, 1] as side (side)}
 								{@const label =
 									symmetric || oneSided
@@ -351,10 +387,12 @@
 							<p class="text-sm text-amber-800 dark:text-amber-300">
 								{weight(target)} can't be loaded exactly; closest under is {weight(
 									result.total
-								)}{equipment.maxPlatesPerSide !== undefined &&
-								plateCount(result.perSide) === equipment.maxPlatesPerSide
-									? ` (at most ${equipment.maxPlatesPerSide} ${equipment.maxPlatesPerSide === 1 ? 'plate' : 'plates'} ${oneSided ? 'on the post' : 'per side'})`
-									: ''}.
+								)}{shortOfPlates
+									? ' with the plates you have'
+									: equipment.maxPlatesPerSide !== undefined &&
+										  plateCount(result.perSide) === equipment.maxPlatesPerSide
+										? ` (at most ${equipment.maxPlatesPerSide} ${equipment.maxPlatesPerSide === 1 ? 'plate' : 'plates'} ${oneSided ? 'on the post' : 'per side'})`
+										: ''}.
 							</p>
 						{/if}
 					</div>
