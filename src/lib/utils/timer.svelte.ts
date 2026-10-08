@@ -63,11 +63,13 @@ export class Timer {
 
 	/**
 	 * Adds (or with a negative value, removes) time from this run without dropping below zero
-	 * remaining. `duration` (what `reset()` goes back to) is left alone.
+	 * remaining. On a finished timer, adding time snoozes it: it rings again `ms` from now, however
+	 * long it has run over. `duration` (what `reset()` goes back to) is left alone.
 	 */
 	add(ms: number) {
 		this.now = Date.now();
-		const next = Math.max(0, this.remaining + ms);
+		const left = ms > 0 ? Math.max(0, this.remaining) : this.remaining;
+		const next = Math.max(0, left + ms);
 		if (this.running) this.endsAt = this.now + next;
 		else this.pausedRemaining = next;
 		if (next > 0) this.#fired = false;

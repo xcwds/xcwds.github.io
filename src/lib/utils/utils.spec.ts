@@ -82,6 +82,25 @@ describe('Timer', () => {
 		expect(timer.running).toBe(false);
 	});
 
+	it('snoozes a timer that has rung for a while (#65)', () => {
+		const onDone = vi.fn();
+		const timer = new Timer(60_000, onDone);
+		timer.start();
+		vi.advanceTimersByTime(150_000);
+		expect(timer.remaining).toBe(-90_000);
+		expect(onDone).toHaveBeenCalledTimes(1);
+		timer.add(60_000);
+		expect(timer.remaining).toBe(60_000);
+		expect(timer.done).toBe(false);
+		vi.advanceTimersByTime(60_000);
+		expect(timer.done).toBe(true);
+		expect(onDone).toHaveBeenCalledTimes(2);
+		// Taking time off a finished timer leaves it finished.
+		timer.add(-10_000);
+		expect(timer.remaining).toBe(0);
+		timer.destroy();
+	});
+
 	it('restores a saved running timer', () => {
 		const a = new Timer(60_000);
 		a.start();
