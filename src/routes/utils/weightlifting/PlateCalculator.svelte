@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { persist } from '$lib/persist.svelte';
-	import { settings } from '$lib/settings.svelte';
+	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { entries } from '$lib/storage';
 	import {
 		COMMERCIAL_GYM,
@@ -102,9 +102,11 @@
 		}
 	);
 
-	// Plate counts are in one unit: clear them when the active set's unit changes (settings load
-	// after this page mounts, so this also covers counts saved in the other unit).
+	// Plate counts are in one unit: clear them when the active set's unit changes. Settings load
+	// after this page mounts, so wait for them: before that the set is a stand-in (the commercial
+	// gym in lb), and counts saved for a kg set would be cleared on every reload.
 	$effect(() => {
+		if (!settingsStatus.ready) return;
 		if (sidesUnit !== unit) {
 			sides = [{}, {}];
 			sidesUnit = unit;

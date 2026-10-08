@@ -151,3 +151,15 @@ test('the commercial gym is a 45 lb barbell with every plate (#82)', async ({ pa
 	await page.getByLabel('Target weight (lb)').fill('1005');
 	await expect(page.getByTestId('target-result')).toContainText('Per side: 45 × 10, 25, 5');
 });
+
+test('plates loaded on a kg set survive a reload while the commercial gym is in lb (#82)', async ({
+	page
+}) => {
+	await seedLifting(page, { activeSet: 'test-kg', sets: [testGym('kg')] });
+	await gotoHydrated(page, '/utils/weightlifting');
+	await page.getByRole('button', { name: 'Add 20 kg', exact: true }).click();
+	await expect(page.getByTestId('total')).toHaveText('60 kg');
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(page.getByTestId('total')).toHaveText('60 kg');
+});
