@@ -23,7 +23,7 @@ export type Equipment = {
 	sides: 1 | 2;
 	/** How many identical implements (a pair of dumbbells is 2). */
 	count: 1 | 2;
-	/** Heaviest one implement may weigh, bar included (none: no limit). */
+	/** Most plate weight one implement holds, bar not included (none: no limit). */
 	maxLoad?: number;
 	/** Plate sizes that fit (none: every size). */
 	plates?: readonly number[];
@@ -93,19 +93,14 @@ const isWeight = (v: unknown): v is number =>
 
 /**
  * A valid setup from saved data, or undefined when nothing in it is usable. Bad fields are
- * dropped, so they fall back to the default; so is a max weight below the bar's weight.
+ * dropped, so they fall back to the default.
  */
-export function parseEquipmentSetup(
-	unit: WeightUnit,
-	id: EquipmentId,
-	v: unknown
-): EquipmentSetup | undefined {
+export function parseEquipmentSetup(unit: WeightUnit, v: unknown): EquipmentSetup | undefined {
 	if (typeof v !== 'object' || v === null) return undefined;
 	const r = v as Record<string, unknown>;
 	const out: EquipmentSetup = {};
 	if (isWeight(r.bar)) out.bar = r.bar;
-	const bar = out.bar ?? builtIn(unit, id).bar;
-	if (isWeight(r.maxLoad) && r.maxLoad >= bar) out.maxLoad = r.maxLoad;
+	if (isWeight(r.maxLoad)) out.maxLoad = r.maxLoad;
 	const n = r.maxPlatesPerSide;
 	if (Number.isInteger(n) && (n as number) >= 1 && (n as number) <= SETUP_LIMITS.maxPlatesPerSide)
 		out.maxPlatesPerSide = n as number;
@@ -181,7 +176,7 @@ export type TargetResult = {
 	total: number;
 	/** True when `total` equals the target. */
 	exact: boolean;
-	/** Set when the target is over the equipment's max weight (so the result stops there). */
+	/** Set when the target needs more than the equipment's max load (so the result stops there). */
 	overMax?: true;
 };
 
@@ -189,7 +184,7 @@ const UNIT = 1.25; // Smallest plate in both systems; every loadable weight is a
 
 /**
  * Fewest plates per side to reach `target` total (or the closest weight under it), using only
- * plates that are available and fit the equipment, within its max weight and plates per side.
+ * plates that are available and fit the equipment, within its max load and plates per side.
  * Returns null when the target is lighter than the empty bar(s), or isn't a finite number.
  *
  * Coin change over 1.25 lb/kg units, bounded so any target costs the same small amount of work
@@ -206,7 +201,7 @@ export function platesForTarget(
 ): TargetResult | null {
 	const empty = equipment.count * equipment.bar;
 	if (!Number.isFinite(target) || !(target >= empty)) return null;
-	const cap = equipment.count * (equipment.maxLoad ?? Infinity);
+	const cap = equipment.count * (equipment.bar + (equipment.maxLoad ?? Infinity));
 	const overMax = target > cap + 1e-9;
 	const loadable = Math.min(target, cap);
 	const perSideWeight = (loadable - empty) / (equipment.count * equipment.sides);
@@ -282,7 +277,7 @@ export function canAdd(
 		changed.some((i) => i < equipment.sides && plateCount(next[i]) > limit)
 	)
 		return false;
-	return implementWeight(equipment, next) <= (equipment.maxLoad ?? Infinity) + 1e-9;
+	return implementWeight(equipment, next) - equipment.bar <= (equipment.maxLoad ?? Infinity) + 1e-9;
 }
 
 /** What's wrong with a load on this equipment (e.g. plates saved before you changed its setup). */
@@ -306,9 +301,9 @@ export function loadProblems(
 			`More than ${limit} ${limit === 1 ? 'plate' : 'plates'} ${equipment.sides === 1 ? 'on the post' : 'on a side'}.`
 		);
 	const max = equipment.maxLoad;
-	if (max !== undefined && implementWeight(equipment, sides) > max + 1e-9)
+	if (max !== undefined && implementWeight(equipment, sides) - equipment.bar > max + 1e-9)
 		problems.push(
-			`Over the ${formatWeight(max, unit)} max${equipment.count === 2 ? ' per dumbbell' : ''}.`
+			`Over the ${formatWeight(max, unit)} max load${equipment.count === 2 ? ' per dumbbell' : ''}.`
 		);
 	return problems;
 }

@@ -262,7 +262,7 @@ describe('equipment setups (#71)', () => {
 	const setups: EquipmentSetups = {
 		lb: {
 			kettlebell: { plates: [10], maxPlatesPerSide: 4 },
-			dumbbell: { bar: 5, plates: [10, 5, 2.5], maxPlatesPerSide: 4, maxLoad: 50 },
+			dumbbell: { bar: 5, plates: [10, 5, 2.5], maxPlatesPerSide: 4, maxLoad: 45 },
 			barbell: { bar: 35 }
 		},
 		kg: {}
@@ -271,7 +271,7 @@ describe('equipment setups (#71)', () => {
 
 	it('applies a setup over the default and keeps the default without one', () => {
 		expect(mine('barbell')).toMatchObject({ bar: 35, name: 'Barbell (35 lb)', sides: 2 });
-		expect(mine('dumbbell')).toMatchObject({ bar: 5, maxLoad: 50, maxPlatesPerSide: 4 });
+		expect(mine('dumbbell')).toMatchObject({ bar: 5, maxLoad: 45, maxPlatesPerSide: 4 });
 		expect(mine('barbell-light')).toEqual(eq('barbell-light'));
 		expect(findEquipment('kg', 'barbell', setups)).toEqual(kg('barbell'));
 		expect(equipmentList('lb', setups).map((e) => e.name)).toEqual([
@@ -298,8 +298,8 @@ describe('equipment setups (#71)', () => {
 		expect(platesForTarget(mine('kettlebell'), 50, LB)?.perSide).toEqual({ 10: 4 });
 	});
 
-	it('stops at the max weight and says so', () => {
-		// 50 max: 45 lb of plates on a 5 lb handle, so 22.5 per side at most, in four plates.
+	it('stops at the max load and says so', () => {
+		// 45 lb of plates at most (the handle doesn't count), so 22.5 per side, in four plates.
 		expect(platesForTarget(mine('dumbbell'), 100, LB)).toEqual({
 			perSide: { 10: 2, 2.5: 1 },
 			total: 50,
@@ -311,8 +311,8 @@ describe('equipment setups (#71)', () => {
 			total: 50,
 			exact: true
 		});
-		// A pair's max is per dumbbell.
-		const pair = findEquipment('lb', 'dumbbells', { lb: { dumbbells: { maxLoad: 30 } } });
+		// A pair's max load is per dumbbell: 7.5 handle + 22.5 of plates, twice.
+		const pair = findEquipment('lb', 'dumbbells', { lb: { dumbbells: { maxLoad: 22.5 } } });
 		expect(platesForTarget(pair, 100, LB)).toMatchObject({ total: 60, overMax: true });
 	});
 
@@ -348,10 +348,10 @@ describe('equipment setups (#71)', () => {
 		expect(canAdd(kb, [{}, {}], 0, 5, true)).toBe(false);
 
 		const db = mine('dumbbell');
-		// 5 + 2 × 20 = 45; another 2.5 on both sides makes 50 (the max), another 5 makes 55.
+		// 40 lb of plates; another 2.5 on both sides makes 45 (the max load), another 5 makes 50.
 		expect(canAdd(db, [{ 10: 2 }, { 10: 2 }], 0, 2.5, true)).toBe(true);
 		expect(canAdd(db, [{ 10: 2 }, { 10: 2 }], 0, 5, true)).toBe(false);
-		// Uneven sides: one more 5 on the left alone is 50.
+		// Uneven sides: one more 5 on the left alone is 45.
 		expect(canAdd(db, [{ 10: 2 }, { 10: 2 }], 0, 5, false)).toBe(true);
 
 		expect(canAdd(eq('barbell'), [{ 45: 40 }, { 45: 40 }], 0, 45, true)).toBe(true);
@@ -372,13 +372,13 @@ describe('equipment setups (#71)', () => {
 				],
 				'lb'
 			)
-		).toEqual(['Over the 50 lb max.']);
+		).toEqual(['Over the 45 lb max load.']);
 		expect(
 			loadProblems(
-				findEquipment('lb', 'dumbbells', { lb: { dumbbells: { maxLoad: 20 } } }),
+				findEquipment('lb', 'dumbbells', { lb: { dumbbells: { maxLoad: 15 } } }),
 				[{ 10: 1 }, { 10: 1 }],
 				'lb'
 			)
-		).toEqual(['Over the 20 lb max per dumbbell.']);
+		).toEqual(['Over the 15 lb max load per dumbbell.']);
 	});
 });

@@ -481,7 +481,7 @@ describe('tool defaults in settings', () => {
 							// Plates are put in the unit's order; every size is the same as no list.
 							dumbbell: { bar: 5, plates: [2.5, 10], maxPlatesPerSide: 0.5 },
 							barbell: { plates: [45, 35, 25, 10, 5, 2.5, 1.25] },
-							// A max weight under the bar's weight, and out-of-range numbers, are dropped.
+							// Out-of-range numbers are dropped; a max load lighter than the bar is fine.
 							'barbell-light': { bar: 30, maxLoad: 20, maxPlatesPerSide: 99 },
 							dumbbells: { bar: -1, maxLoad: 1e9, plates: [7] },
 							'trap-bar': { bar: 60 }
@@ -495,7 +495,7 @@ describe('tool defaults in settings', () => {
 			lb: {
 				kettlebell: { plates: [10, 5], maxPlatesPerSide: 4, maxLoad: 50 },
 				dumbbell: { bar: 5, plates: [10, 2.5] },
-				'barbell-light': { bar: 30 }
+				'barbell-light': { bar: 30, maxLoad: 20 }
 			},
 			kg: {}
 		});

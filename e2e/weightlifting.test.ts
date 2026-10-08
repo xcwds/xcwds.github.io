@@ -105,19 +105,19 @@ test('your own equipment limits what the calculator loads (#71)', async ({ page 
 	await barbell.locator('summary').click();
 	await barbell.getByLabel('Bar weight (lb)').fill('35');
 	await barbell.getByLabel('Bar weight (lb)').press('Tab');
-	const max = barbell.getByLabel(/Max weight/);
-	await max.fill('20');
+	const max = barbell.getByLabel(/Max load/);
+	await max.fill('5000');
 	await max.press('Tab');
-	await expect(barbell.getByRole('alert')).toHaveText("Can't be lighter than the bar (35 lb).");
+	await expect(barbell.getByRole('alert')).toHaveText('Enter a weight from 0 to 2000 lb.');
 	// The rejected text stays in the field next to its error, and nothing is saved.
-	await expect(max).toHaveValue('20');
+	await expect(max).toHaveValue('5000');
 	await expect(barbell.locator('summary')).toContainText('35 lb bar');
 	await expect(barbell.locator('summary')).not.toContainText('max');
-	await max.fill('300');
+	await max.fill('265');
 	await max.press('Tab');
 	await expect(barbell.getByRole('alert')).toHaveCount(0);
 	await expect(barbell.locator('summary')).toContainText('Barbell (35 lb)');
-	await expect(barbell.locator('summary')).toContainText('35 lb bar · max 300 lb');
+	await expect(barbell.locator('summary')).toContainText('35 lb bar · max load 265 lb');
 
 	await gotoHydrated(page, '/utils/weightlifting');
 	const total = page.getByTestId('total');
@@ -125,7 +125,7 @@ test('your own equipment limits what the calculator loads (#71)', async ({ page 
 	await page.getByRole('button', { name: 'Target weight' }).click();
 	await page.getByLabel('Target weight (lb)').fill('400');
 	await expect(page.getByTestId('target-result')).toContainText(
-		"400 lb is over this bar's 300 lb max; the most it takes is 300 lb."
+		"400 lb is over this bar's 265 lb max load; the most it takes is 300 lb."
 	);
 
 	// Only 10s fit the kettlebell, four at most.

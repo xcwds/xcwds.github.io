@@ -217,7 +217,7 @@ function parseLiftingSettings(v: unknown): LiftingSettings {
 		const saved = isRecord(setups[unit]) ? setups[unit] : {};
 		const out: EquipmentSetups[WeightUnit] = {};
 		for (const id of EQUIPMENT_IDS) {
-			const setup = parseEquipmentSetup(unit, id, saved[id]);
+			const setup = parseEquipmentSetup(unit, saved[id]);
 			if (setup) out[id] = setup;
 		}
 		return out;

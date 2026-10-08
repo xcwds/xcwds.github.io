@@ -361,7 +361,7 @@
 						{#if result.overMax}
 							<p class="text-sm text-amber-800 dark:text-amber-300">
 								{weight(target)} is over this {kind(equipment)}'s {weight(equipment.maxLoad ?? 0)}
-								max{equipment.count === 2 ? ' per dumbbell' : ''}; the most it takes is {weight(
+								max load{equipment.count === 2 ? ' per dumbbell' : ''}; the most it takes is {weight(
 									result.total
 								)}.
 							</p>

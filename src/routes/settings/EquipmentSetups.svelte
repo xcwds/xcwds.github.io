@@ -26,7 +26,6 @@
 	let drafts = $state<Record<string, string>>({});
 
 	const weight = (w: number) => formatWeight(w, unit);
-	const builtIn = (id: EquipmentId) => findEquipment(unit, id);
 
 	function save(id: EquipmentId, next: EquipmentSetup) {
 		const clean = Object.fromEntries(
@@ -37,8 +36,7 @@
 	}
 
 	/** Why `value` can't be saved for `field` ('' when it can). Mirrors `parseEquipmentSetup`. */
-	function problem(field: NumberField, next: EquipmentSetup, base: Equipment): string {
-		const value = next[field];
+	function problem(field: NumberField, value: number | undefined): string {
 		if (value === undefined) return '';
 		if (field === 'maxPlatesPerSide')
 			return Number.isInteger(value) && value >= 1 && value <= SETUP_LIMITS.maxPlatesPerSide
@@ -46,11 +44,6 @@
 				: `Enter a whole number from 1 to ${SETUP_LIMITS.maxPlatesPerSide}.`;
 		if (!(value >= 0 && value <= SETUP_LIMITS.maxWeight))
 			return `Enter a weight from 0 to ${weight(SETUP_LIMITS.maxWeight)}.`;
-		const bar = next.bar ?? base.bar;
-		if (next.maxLoad !== undefined && next.maxLoad < bar)
-			return field === 'maxLoad'
-				? `Can't be lighter than the ${noun(base)} (${weight(bar)}).`
-				: `Heavier than the max weight (${weight(next.maxLoad)}).`;
 		return '';
 	}
 
@@ -58,19 +51,13 @@
 		const key = `${id}:${field}`;
 		const text = input.value.trim();
 		const next = { ...setups[id], [field]: text === '' ? undefined : Number(text) };
-		const error = input.validity.badInput ? 'Enter a number.' : problem(field, next, builtIn(id));
+		const error = input.validity.badInput ? 'Enter a number.' : problem(field, next[field]);
 		errors[key] = error;
 		if (error) {
 			drafts[key] = input.value;
 			return;
 		}
 		delete drafts[key];
-		// The bar and max weight are checked against each other: a valid pair clears both.
-		if (field !== 'maxPlatesPerSide')
-			for (const k of [`${id}:bar`, `${id}:maxLoad`]) {
-				errors[k] = '';
-				delete drafts[k];
-			}
 		save(id, next);
 	}
 
@@ -97,7 +84,7 @@
 	function describe(e: Equipment): string {
 		const parts = [`${weight(e.bar)} ${noun(e)}`];
 		if (e.maxLoad !== undefined)
-			parts.push(`max ${weight(e.maxLoad)}${e.count === 2 ? ' each' : ''}`);
+			parts.push(`max load ${weight(e.maxLoad)}${e.count === 2 ? ' each' : ''}`);
 		if (e.maxPlatesPerSide !== undefined)
 			parts.push(`${e.maxPlatesPerSide} ${e.sides === 1 ? 'on the post' : 'per side'}`);
 		if (e.plates) parts.push(e.plates.length ? `${e.plates.join(', ')} only` : 'no plates');
@@ -164,7 +151,7 @@
 				{@render numberInput(
 					base.id,
 					'maxLoad',
-					`Max weight (${unit}${base.count === 2 ? ', per dumbbell' : ''}), plates included`,
+					`Max load (${unit} of plates${base.count === 2 ? ', per dumbbell' : ''})`,
 					'No limit',
 					'any'
 				)}
