@@ -2,7 +2,13 @@
 	import { resolve } from '$app/paths';
 	import { saveSettings, settings, settingsStatus } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
-	import { computeDough, doughDefaults, type DoughInput } from '$lib/utils/dough';
+	import {
+		computeDough,
+		DOUGH_MAX,
+		doughDefaults,
+		isDoughValue,
+		type DoughInput
+	} from '$lib/utils/dough';
 
 	let input = $state<DoughInput>({ ...doughDefaults });
 
@@ -14,7 +20,13 @@
 		input = { ...settings.pizzaDefaults };
 	});
 
+	// Saving uses storage's rules, so a saved default is never swapped out on the next load (#67).
+	let invalid = $derived(
+		(Object.keys(input) as (keyof DoughInput)[]).filter((k) => !isDoughValue(input[k]))
+	);
+
 	function saveDefaults() {
+		if (invalid.length) return;
 		settings.pizzaDefaults = { ...input };
 		// A failed save is reported by saveSettings.
 		if (saveSettings()) toast('Saved as your pizza dough defaults.');
@@ -78,17 +90,28 @@
 
 	<form class="grid grid-cols-2 gap-3" onsubmit={(e) => e.preventDefault()}>
 		{#each fields as field (field.key)}
-			<label class="flex flex-col gap-1 text-sm">
-				<span>{field.label}{field.unit ? ` (${field.unit})` : ''}</span>
-				<input
-					type="number"
-					inputmode="decimal"
-					min="0"
-					step={field.step}
-					bind:value={input[field.key]}
-					class="rounded-md border border-gray-300 bg-white px-3 py-2 text-lg text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-				/>
-			</label>
+			{@const bad = invalid.includes(field.key)}
+			<div class="flex flex-col gap-1 text-sm">
+				<label class="flex flex-col gap-1">
+					<span>{field.label}{field.unit ? ` (${field.unit})` : ''}</span>
+					<input
+						type="number"
+						inputmode="decimal"
+						min="0"
+						max={DOUGH_MAX}
+						step={field.step}
+						bind:value={input[field.key]}
+						aria-invalid={bad}
+						aria-describedby={bad ? `${field.key}-error` : undefined}
+						class="rounded-md border border-gray-300 bg-white px-3 py-2 text-lg text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+					/>
+				</label>
+				{#if bad}
+					<p id="{field.key}-error" class="text-red-700 dark:text-red-400">
+						Enter a number from 0 to {DOUGH_MAX.toLocaleString('en-US')}.
+					</p>
+				{/if}
+			</div>
 		{/each}
 		<button
 			type="button"
@@ -100,7 +123,7 @@
 		</button>
 		<button
 			type="button"
-			disabled={isDefault}
+			disabled={isDefault || invalid.length > 0}
 			onclick={saveDefaults}
 			class="rounded-md bg-white/70 px-4 py-2 text-sm hover:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:bg-gray-700"
 		>

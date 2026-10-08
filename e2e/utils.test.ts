@@ -18,6 +18,21 @@ test('pizza dough calculator updates weights', async ({ page }) => {
 	await expect(result).toContainText('Total 560 g');
 });
 
+test('pizza dough defaults reject empty and out-of-range fields (#67)', async ({ page }) => {
+	await gotoHydrated(page, '/utils/pizza-dough');
+	const save = page.getByRole('button', { name: 'Save as my defaults' });
+	const balls = page.getByLabel('Dough balls');
+	await balls.fill('');
+	await expect(balls).toHaveAccessibleDescription('Enter a number from 0 to 100,000.');
+	await expect(save).toBeDisabled();
+	await balls.fill('200000');
+	await expect(save).toBeDisabled();
+	await balls.fill('6');
+	await expect(balls).toHaveAttribute('aria-invalid', 'false');
+	await save.click();
+	await expect(page.getByText('Saved as your pizza dough defaults.')).toBeVisible();
+});
+
 test('coffee timer counts down from 1:30 and adjusts', async ({ page }) => {
 	// Freeze the clock so only runFor() moves time; otherwise real seconds leak in under load.
 	await page.clock.install({ time: new Date('2026-01-01T08:00:00') });

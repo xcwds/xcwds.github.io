@@ -30,6 +30,13 @@ export const doughDefaults: DoughInput = {
 	sugar: 3.2
 };
 
+/** Largest value saved for any dough field (Settings rejects anything outside 0–DOUGH_MAX). */
+export const DOUGH_MAX = 100_000;
+
+/** Whether a field's value can be saved as a default: the same check storage uses on load. */
+export const isDoughValue = (v: unknown): v is number =>
+	typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= DOUGH_MAX;
+
 export function computeDough(input: DoughInput): DoughResult {
 	const total = Math.max(0, input.balls) * Math.max(0, input.ballWeight);
 	const percents = [input.hydration, input.salt, input.yeast, input.oil, input.sugar];
