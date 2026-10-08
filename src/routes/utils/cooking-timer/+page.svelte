@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { settings } from '$lib/settings.svelte';
-	import { CookingTimers, MINUTE } from '$lib/utils/cooking-timers.svelte';
+	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
 	import { formatDuration } from '$lib/utils/time';
 
 	/** Quick-start buttons, in minutes (Settings → Tool defaults). */
@@ -8,8 +8,8 @@
 	const presetLabel = (m: number) =>
 		m < 60 ? `${m} min` : m % 60 === 0 ? `${m / 60} hr` : `${Math.floor(m / 60)} hr ${m % 60} min`;
 
-	// Saved timers, shared with recipe step timers; this page rings them while it's open.
-	const timers = new CookingTimers();
+	// Saved timers, shared with recipe step timers; the root layout rings them on every page.
+	const timers = useCookingTimers();
 
 	let label = $state('');
 	let minutes = $state<number | null>(null);
@@ -129,7 +129,7 @@
 	</form>
 
 	<p class="text-sm text-gray-600 dark:text-gray-400">
-		Timers are saved on this device, so they keep counting if the page reloads. Keep this page (or
-		the recipe that started a timer) open to hear the alarm.
+		Timers are saved on this device, so they keep counting if the page reloads. The alarm rings on
+		any page of the app while it's open.
 	</p>
 </main>

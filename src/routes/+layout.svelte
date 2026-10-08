@@ -7,14 +7,21 @@
 	import { startInstallSupport } from '$lib/install.svelte';
 	import { startNetworkStatus } from '$lib/network.svelte';
 	import OfflineNotice from '$lib/OfflineNotice.svelte';
+	import TimerAlert from '$lib/TimerAlert.svelte';
 	import Toaster from '$lib/Toaster.svelte';
 	import UpdateBanner from '$lib/UpdateBanner.svelte';
 	import { activeSection, errorInfo, routeInfo, sections } from '$lib/nav';
 	import { recordVisit, startShortcuts } from '$lib/home.svelte';
 	import { startSettings } from '$lib/settings.svelte';
+	import { provideCoffeeTimer } from '$lib/utils/coffee-timer.svelte';
+	import { provideCookingTimers } from '$lib/utils/cooking-timers.svelte';
 	import '../app.css';
 
 	let { children } = $props();
+
+	// Timers live here, not in their pages, so they keep counting and ring on every page (#66).
+	provideCookingTimers();
+	provideCoffeeTimer();
 
 	let info = $derived(page.error ? errorInfo(page.status) : routeInfo(page.url.pathname));
 	let active = $derived(activeSection(page.url.pathname));
@@ -83,10 +90,12 @@
 		{@render children()}
 	</div>
 
-	<!-- Toasts, the update banner and the offline notice stack above the tab bar (top on desktop). -->
+	<!-- Finished timers, toasts, the update banner and the offline notice stack above the tab bar
+	     (top on desktop). -->
 	<div
 		class="pointer-events-none fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-2 px-4 md:top-4 md:bottom-auto"
 	>
+		<TimerAlert />
 		<Toaster />
 		<UpdateBanner />
 		<OfflineNotice />

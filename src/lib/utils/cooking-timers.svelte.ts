@@ -1,4 +1,4 @@
-import { onMount } from 'svelte';
+import { getContext, onMount, setContext } from 'svelte';
 import { browser } from '$app/environment';
 import { markBusy } from '$lib/app-update.svelte';
 import { persist } from '$lib/persist.svelte';
@@ -13,9 +13,9 @@ export type CookingTimerItem = { id: number; label: string; timer: Timer };
 
 /**
  * The saved list of labeled cooking timers, shared by the Cooking Timer page and recipe step
- * timers (both read and write `app:cooking-timer:timers`). Whichever page shows the list rings
- * the alarm, keeps the screen awake and holds app updates while a timer runs. Create one during
- * component init.
+ * timers (`app:cooking-timer:timers`). The root layout owns the one instance (see
+ * `provideCookingTimers`), so the alarm rings, the screen stays awake and app updates wait on
+ * every page, not just the one that started a timer (#66).
  */
 export class CookingTimers {
 	items = $state<CookingTimerItem[]>([]);
@@ -103,4 +103,16 @@ export class CookingTimers {
 	#destroyAll() {
 		for (const item of this.items) item.timer.destroy();
 	}
+}
+
+const KEY = Symbol('cooking timers');
+
+/** Creates the app-wide cooking timers. Call once, from the root layout's init. */
+export function provideCookingTimers(): CookingTimers {
+	return setContext(KEY, new CookingTimers());
+}
+
+/** The app-wide cooking timers (from any page or component under the root layout). */
+export function useCookingTimers(): CookingTimers {
+	return getContext<CookingTimers>(KEY);
 }

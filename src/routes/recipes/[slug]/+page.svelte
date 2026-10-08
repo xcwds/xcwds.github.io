@@ -6,7 +6,7 @@
 	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
 	import { settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
-	import { CookingTimers, MINUTE } from '$lib/utils/cooking-timers.svelte';
+	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
 	import {
 		adjustOvenTime,
 		asRange,
@@ -59,8 +59,8 @@
 		target = Math.max(1, next) * stepSize;
 	}
 
-	// Step timers go into the shared Cooking Timer list; the tray below shows and rings them.
-	const timers = new CookingTimers();
+	// Step timers go into the shared Cooking Timer list; the tray below shows them.
+	const timers = useCookingTimers();
 	/** The oven panel's temperature while it's open and in use (°F); oven step timers follow it. */
 	let ovenF = $state<number | undefined>();
 

@@ -104,6 +104,50 @@ test('cooking timer runs, rings, and survives a reload', async ({ page }) => {
 	await expect(timers).toHaveCount(1);
 });
 
+test('timers keep counting and ring on other pages (#66)', async ({ page }) => {
+	// A running fake clock: client-side navigation needs timers to keep going.
+	await page.clock.install();
+	await gotoHydrated(page, '/utils/cooking-timer');
+	const tabs = page.getByRole('navigation', { name: 'Main' });
+	const alert = page.getByTestId('timer-alert');
+
+	// A cooking timer rings on Home, where it can be snoozed or stopped.
+	await page.getByRole('button', { name: '1 min', exact: true }).click();
+	await tabs.getByRole('link', { name: 'Home' }).click();
+	await expect(page).toHaveURL(/\/$/);
+	await page.clock.runFor(61_000);
+	await expect(alert).toHaveText(/1:00 timer is done/);
+	await alert.getByRole('button', { name: '+1 min' }).click();
+	await expect(alert).toHaveCount(0);
+	await page.clock.runFor(61_000);
+	await expect(alert).toHaveCount(1);
+	await alert.getByRole('button', { name: 'Stop' }).click();
+	await expect(alert).toHaveCount(0);
+
+	// A coffee brew survives leaving its page and a reload, and rings elsewhere too.
+	await tabs.getByRole('link', { name: 'Utils' }).click();
+	await page.getByRole('link', { name: /Coffee Timer/ }).click();
+	const display = page.getByTestId('display');
+	await expect(display).toHaveText('1:30');
+	await page.getByRole('button', { name: 'Start' }).click();
+	await tabs.getByRole('link', { name: 'Home' }).click();
+	await page.clock.runFor(30_000);
+	await page.goBack();
+	await expect(display).toHaveText(/^(1:00|0:5\d)$/);
+	await expect(page.getByRole('button', { name: 'Pause' })).toBeVisible();
+	await page.reload();
+	// The restored brew keeps counting, so allow for time spent reloading.
+	await expect(display).toHaveText(/^(1:00|0:[3-5]\d)$/);
+	await tabs.getByRole('link', { name: 'Recipes' }).click();
+	await page.clock.runFor(61_000);
+	await expect(alert).toHaveText(/Coffee timer is done/);
+	await alert.getByRole('link', { name: 'Open Coffee Timer' }).click();
+	await expect(page.getByText('Done!')).toBeVisible();
+	await expect(alert).toHaveCount(0);
+	await page.getByRole('button', { name: 'Stop' }).click();
+	await expect(display).toHaveText('1:30');
+});
+
 test('oven time converter estimates a new time, in °F or °C', async ({ page }) => {
 	await gotoHydrated(page, '/utils/oven-time');
 	await expect(page.getByTestId('oven-time')).toHaveText('50 min');

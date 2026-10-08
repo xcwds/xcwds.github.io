@@ -45,14 +45,14 @@ export type SavedCookingTimer = {
 	state: { duration: number; endsAt: number | null; pausedRemaining: number };
 };
 
-const isSavedCookingTimer = (v: unknown): v is SavedCookingTimer =>
+const isTimerState = (v: unknown): v is SavedCookingTimer['state'] =>
 	isRecord(v) &&
-	typeof v.id === 'number' &&
-	typeof v.label === 'string' &&
-	isRecord(v.state) &&
-	typeof v.state.duration === 'number' &&
-	typeof v.state.pausedRemaining === 'number' &&
-	(v.state.endsAt === null || typeof v.state.endsAt === 'number');
+	typeof v.duration === 'number' &&
+	typeof v.pausedRemaining === 'number' &&
+	(v.endsAt === null || typeof v.endsAt === 'number');
+
+const isSavedCookingTimer = (v: unknown): v is SavedCookingTimer =>
+	isRecord(v) && typeof v.id === 'number' && typeof v.label === 'string' && isTimerState(v.state);
 
 export type LiftingCalculatorState = {
 	/** Unit the plate counts in `sides` are in. */
@@ -250,6 +250,12 @@ export const entries = {
 		'Coffee timer duration',
 		(v) => (typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : undefined),
 		'coffee-timer-duration'
+	),
+	// A brew in progress (from Start until it's reset), so leaving the page doesn't lose it.
+	coffeeBrew: entry<SavedCookingTimer['state']>(
+		'coffee-timer:brew',
+		'Coffee timer countdown',
+		(v) => (isTimerState(v) ? v : undefined)
 	),
 	cookingTimers: entry<SavedCookingTimer[]>(
 		'cooking-timer:timers',
