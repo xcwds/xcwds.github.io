@@ -21,6 +21,17 @@ describe('formatFraction', () => {
 		expect(formatFraction(0.03)).toBe('0.03');
 		expect(formatFraction(0)).toBe('0');
 	});
+
+	it('never prints a positive amount as 0 (#69)', () => {
+		expect(formatFraction(1 / 16)).toBe('0.06');
+		expect(formatFraction(0.07)).toBe('⅛');
+		expect(formatIngredient({ amount: 0.125, unit: 'tsp', item: 'salt' }, 0.5).quantity).toBe(
+			'0.06 tsp'
+		);
+		expect(formatIngredient({ amount: 0.25, unit: 'tsp', item: 'salt' }, 0.25).quantity).toBe(
+			'0.06 tsp'
+		);
+	});
 });
 
 describe('formatDecimal', () => {

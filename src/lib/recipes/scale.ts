@@ -71,7 +71,8 @@ const FRACTIONS: [number, string][] = [
 /** 1.5 → "1 ½", 0.33 → "⅓", 2 → "2". Tiny amounts keep two decimals rather than becoming 0. */
 export function formatFraction(n: number): string {
 	if (n <= 0) return '0';
-	if (n < 1 / 16) return String(Math.round(n * 100) / 100 || 0.01);
+	// Inclusive: at exactly 1/16 the nearest fraction ties between 0 and ⅛, and 0 would win (#69).
+	if (n <= 1 / 16) return String(Math.round(n * 100) / 100 || 0.01);
 	let whole = Math.floor(n);
 	const rest = n - whole;
 	let best = FRACTIONS[0];
