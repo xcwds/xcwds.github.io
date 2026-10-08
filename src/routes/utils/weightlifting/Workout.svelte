@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {
+		activeSet,
 		formatWeight,
 		workoutHasContent,
 		workoutToText,
@@ -23,7 +24,8 @@
 	} = $props();
 
 	/** The calculator's unit. A workout keeps the unit it was logged in (see below). */
-	let calculatorUnit = $derived(settings.lifting.unit);
+	/** The active equipment set's unit (#82): a set of your own has its own. */
+	let calculatorUnit = $derived(activeSet(settings.lifting).unit);
 
 	const SUGGESTIONS = [
 		'Bench Press',

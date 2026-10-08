@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { gotoHydrated } from './helpers';
+import { gotoHydrated, seedLifting, testGym } from './helpers';
 
 test.use({ viewport: { width: 390, height: 844 } });
 
@@ -38,21 +38,19 @@ test('a new coffee default applies after the timer has been opened', async ({ pa
 	await expect(page.getByTestId('display')).toHaveText('1:30');
 });
 
-test('a new default equipment applies after the calculator has been opened', async ({ page }) => {
+test('the calculator remembers your station in each equipment set (#82)', async ({ page }) => {
+	await seedLifting(page, { activeSet: 'test-lb', sets: [testGym('lb')] });
 	await gotoHydrated(page, '/utils/weightlifting');
 	await page.getByRole('button', { name: 'Kettlebell' }).click();
 	await gotoHydrated(page, '/utils/weightlifting');
-	// Your pick is remembered...
 	await expect(page.getByRole('button', { name: 'Kettlebell' })).toHaveAttribute(
 		'aria-pressed',
 		'true'
 	);
-
-	// ...until you change the default.
 	await gotoHydrated(page, '/settings');
-	await page.getByLabel('Default equipment').selectOption({ label: 'Dumbbell pair' });
+	await page.getByLabel('Equipment set').selectOption('commercial');
 	await gotoHydrated(page, '/utils/weightlifting');
-	await expect(page.getByRole('button', { name: 'Dumbbell pair' })).toHaveAttribute(
+	await expect(page.getByRole('button', { name: 'Barbell (45 lb)' })).toHaveAttribute(
 		'aria-pressed',
 		'true'
 	);
@@ -97,12 +95,16 @@ test('presets rejected by storage are rejected in Settings too', async ({ page }
 });
 
 test('kg barbells are drawn as long bars', async ({ page }) => {
+	await seedLifting(page, { activeSet: 'test-kg', sets: [testGym('kg')] });
 	await gotoHydrated(page, '/utils/weightlifting');
-	await page.getByRole('radio', { name: 'Kilograms (kg)' }).click();
 	for (const name of ['Barbell (20 kg)', 'Barbell (15 kg)']) {
 		await page.getByRole('button', { name }).click();
 		expect((await page.getByTestId('bar').boundingBox())!.width).toBeGreaterThan(80);
 	}
 	await page.getByRole('button', { name: 'Dumbbell', exact: true }).click();
 	expect((await page.getByTestId('bar').boundingBox())!.width).toBeLessThan(50);
+	// A new workout takes the set's unit, not the commercial gym's (still lb here).
+	await page.getByRole('tab', { name: 'Workout' }).click();
+	await page.getByRole('button', { name: '+ Add exercise' }).click();
+	await expect(page.getByRole('columnheader', { name: 'Weight (kg)' })).toBeVisible();
 });

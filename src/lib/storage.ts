@@ -4,12 +4,18 @@ import type { UnitSystem } from '$lib/recipes/units';
 import { parseShortcuts, type HomeShortcuts } from '$lib/home';
 import { tools } from '$lib/utils/tools';
 import {
-	EQUIPMENT_IDS,
-	parseEquipmentSetup,
+	COMMERCIAL_GYM,
+	SETUP_LIMITS,
 	UNITS,
-	type EquipmentId,
-	type EquipmentSetups,
+	WEIGHT_UNITS,
+	barName,
+	parseBar,
+	parseEquipmentSet,
+	type Bar,
+	type BarType,
+	type EquipmentSet,
 	type HistoryEntry,
+	type LiftingSetup,
 	type PlateCounts,
 	type WeightUnit,
 	type Workout
@@ -36,7 +42,7 @@ export type Entry<T> = {
 export const PREFIX = 'app:';
 export const VERSION_KEY = `${PREFIX}version`;
 /** Bump when adding a migration below. */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 const isRecord = (v: unknown): v is Record<string, unknown> =>
 	typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -59,14 +65,16 @@ const isSavedCookingTimer = (v: unknown): v is SavedCookingTimer =>
 export type LiftingCalculatorState = {
 	/** Unit the plate counts in `sides` are in. */
 	unit: WeightUnit;
-	equipmentId: EquipmentId;
+	/** The station last picked in each equipment set (set id → station id, #82). */
+	stations: Record<string, string>;
 	mode: 'load' | 'target';
 	symmetric: boolean;
 	sides: PlateCounts[];
 };
 
 const isUnit = (v: unknown): v is WeightUnit => v === 'lb' || v === 'kg';
-const isEquipmentId = (v: unknown): v is EquipmentId => EQUIPMENT_IDS.includes(v as EquipmentId);
+const isId = (v: unknown): v is string =>
+	typeof v === 'string' && v.length > 0 && v.length <= 2 * SETUP_LIMITS.maxName;
 
 const isPlateCountsFor = (unit: WeightUnit) => (v: unknown) =>
 	isRecord(v) &&
@@ -79,7 +87,10 @@ function parseLiftingCalculator(v: unknown): Partial<LiftingCalculatorState> | u
 	if (!isRecord(v)) return undefined;
 	const out: Partial<LiftingCalculatorState> = {};
 	if (isUnit(v.unit)) out.unit = v.unit;
-	if (isEquipmentId(v.equipmentId)) out.equipmentId = v.equipmentId;
+	if (isRecord(v.stations)) {
+		const picked = Object.entries(v.stations).filter(([set, id]) => isId(set) && isId(id));
+		out.stations = Object.fromEntries(picked) as Record<string, string>;
+	}
 	if (v.mode === 'load' || v.mode === 'target') out.mode = v.mode;
 	if (typeof v.symmetric === 'boolean') out.symmetric = v.symmetric;
 	// Plate counts only mean something in a known unit.
@@ -129,16 +140,8 @@ function parseHistory(v: unknown): HistoryEntry[] | undefined {
 
 export type Theme = 'system' | 'light' | 'dark';
 
-export type LiftingSettings = {
-	/** lb or kg, for the weightlifting calculator only (pizza dough is always grams). */
-	unit: WeightUnit;
-	/** Equipment selected when the calculator has nothing saved. */
-	equipment: EquipmentId;
-	/** Plates you have, per unit; target mode only uses these. */
-	plates: Record<WeightUnit, number[]>;
-	/** Your own bars, handles and their limits, per unit (none: commercial-gym defaults, #71). */
-	setups: EquipmentSetups;
-};
+/** Equipment sets and the active one (#82); the unit is the commercial gym's lb or kg. */
+export type LiftingSettings = LiftingSetup;
 
 export type Settings = {
 	theme: Theme;
@@ -169,12 +172,7 @@ export const defaultSettings: Settings = {
 	coffeeDefaultSeconds: 90,
 	cookingPresets: [1, 3, 5, 10, 15, 20, 30, 45, 60],
 	pizzaDefaults: { ...doughDefaults },
-	lifting: {
-		unit: 'lb',
-		equipment: 'barbell',
-		plates: { lb: [...UNITS.lb.plates], kg: [...UNITS.kg.plates] },
-		setups: { lb: {}, kg: {} }
-	},
+	lifting: { unit: 'lb', activeSet: COMMERCIAL_GYM, sets: [] },
 	ovenUnit: 'F',
 	recipeUnits: null
 };
@@ -205,28 +203,15 @@ function parsePizzaDefaults(v: unknown): DoughInput {
 function parseLiftingSettings(v: unknown): LiftingSettings {
 	const d = defaultSettings.lifting;
 	if (!isRecord(v)) return structuredClone(d);
-	const plates = isRecord(v.plates) ? v.plates : {};
-	const platesFor = (unit: WeightUnit) => {
-		const list = plates[unit];
-		return Array.isArray(list) && list.every((p) => UNITS[unit].plates.includes(p))
-			? UNITS[unit].plates.filter((p) => list.includes(p))
-			: [...d.plates[unit]];
-	};
-	const setups = isRecord(v.setups) ? v.setups : {};
-	const setupsFor = (unit: WeightUnit) => {
-		const saved = isRecord(setups[unit]) ? setups[unit] : {};
-		const out: EquipmentSetups[WeightUnit] = {};
-		for (const id of EQUIPMENT_IDS) {
-			const setup = parseEquipmentSetup(unit, saved[id]);
-			if (setup) out[id] = setup;
-		}
-		return out;
-	};
+	const sets: EquipmentSet[] = [];
+	for (const item of Array.isArray(v.sets) ? v.sets.slice(0, SETUP_LIMITS.maxSets) : []) {
+		const set = parseEquipmentSet(item);
+		if (set && !sets.some((s) => s.id === set.id)) sets.push(set);
+	}
 	return {
 		unit: isUnit(v.unit) ? v.unit : d.unit,
-		equipment: isEquipmentId(v.equipment) ? v.equipment : d.equipment,
-		plates: { lb: platesFor('lb'), kg: platesFor('kg') },
-		setups: { lb: setupsFor('lb'), kg: setupsFor('kg') }
+		activeSet: sets.some((s) => s.id === v.activeSet) ? (v.activeSet as string) : COMMERCIAL_GYM,
+		sets
 	};
 }
 
@@ -353,7 +338,7 @@ function decode(text: string): unknown {
 	}
 }
 
-const RENAMED_EQUIPMENT: Record<string, EquipmentId> = {
+const RENAMED_EQUIPMENT: Record<string, string> = {
 	'barbell-45': 'barbell',
 	'barbell-25': 'barbell-light'
 };
@@ -362,8 +347,12 @@ const RENAMED_EQUIPMENT: Record<string, EquipmentId> = {
  * Upgrades saved values (keyed by storage key) from schema version `from` to the current one,
  * in place. Used for this device's storage and for importing older backups.
  */
-export function upgradeData(data: Record<string, unknown>, from: number): void {
-	if (from < 2) {
+export function upgradeData(
+	data: Record<string, unknown>,
+	from: number,
+	to = SCHEMA_VERSION
+): void {
+	if (from < 2 && to >= 2) {
 		// v2: the calculator gains a unit, equipment ids stop naming lb weights, and the plates you
 		// have move from the calculator into settings (per unit).
 		const workoutKey = entries.liftingWorkout.key;
@@ -388,6 +377,93 @@ export function upgradeData(data: Record<string, unknown>, from: number): void {
 				};
 			}
 		}
+	}
+	if (from < 3 && to >= 3) upgradeToEquipmentSets(data);
+}
+
+/** v2's five stations: their bar weights per unit, and their station ids in a v3 set. */
+const V2_BARS: Record<WeightUnit, Record<string, number>> = {
+	lb: { barbell: 45, 'barbell-light': 25, dumbbell: 7.5, kettlebell: 5 },
+	kg: { barbell: 20, 'barbell-light': 15, dumbbell: 2.5, kettlebell: 2.5 }
+};
+const V2_STATIONS: Record<string, string> = {
+	barbell: 'barbell',
+	'barbell-light': 'barbell-light',
+	dumbbell: 'dumbbell',
+	dumbbells: 'dumbbell:pair',
+	kettlebell: 'kettlebell'
+};
+
+/**
+ * v3 (#82): owned plates, #71's station setups and the default equipment become equipment
+ * sets. Anyone who customized a unit's equipment, or used a station the commercial gym no longer
+ * has, gets a "My equipment" set with v2's five stations as they had them (owned sizes
+ * unlimited, others none), active when it's in the unit they used. The calculator's equipment
+ * becomes the station it remembers for the active set.
+ */
+function upgradeToEquipmentSets(data: Record<string, unknown>): void {
+	const settingsKey = entries.settings.key;
+	const calcKey = entries.liftingCalculator.key;
+	const settings = isRecord(data[settingsKey]) ? data[settingsKey] : undefined;
+	const lifting = isRecord(settings?.lifting) ? settings.lifting : {};
+	// Already sets (e.g. a backup made by this version but labeled older): nothing to do.
+	if (Array.isArray(lifting.sets)) return;
+	const calc = isRecord(data[calcKey]) ? data[calcKey] : undefined;
+	const unit: WeightUnit = isUnit(lifting.unit) ? lifting.unit : 'lb';
+	const plates = isRecord(lifting.plates) ? lifting.plates : {};
+	const setups = isRecord(lifting.setups) ? lifting.setups : {};
+	const picked = [lifting.equipment, calc?.equipmentId].filter(
+		(id): id is string => typeof id === 'string' && id in V2_STATIONS
+	);
+
+	const sets: EquipmentSet[] = [];
+	for (const u of WEIGHT_UNITS) {
+		const sizes = UNITS[u].plates;
+		const ownedSizes = Array.isArray(plates[u])
+			? sizes.filter((p) => (plates[u] as unknown[]).includes(p))
+			: sizes;
+		const unitSetups = isRecord(setups[u]) ? setups[u] : {};
+		const setup = (id: string) => (isRecord(unitSetups[id]) ? unitSetups[id] : {});
+		const customized =
+			ownedSizes.length < sizes.length ||
+			Object.keys(unitSetups).some((id) => Object.keys(setup(id)).length > 0) ||
+			(u === unit && picked.some((id) => id !== 'barbell'));
+		if (!customized) continue;
+		const bar = (id: string, type: BarType, count: number, saved: Record<string, unknown>) => {
+			const weight = V2_BARS[u][id];
+			const fields = { ...saved, id, type, count, weight: saved.bar ?? weight };
+			const name = (w: number) => barName(type, w, u);
+			const parsed = parseBar(u, fields) ?? parseBar(u, { ...fields, weight });
+			return { ...parsed!, name: name(parsed!.weight) };
+		};
+		const bars: Bar[] = [
+			bar('barbell', 'barbell', 1, setup('barbell')),
+			bar('barbell-light', 'barbell', 1, setup('barbell-light')),
+			// v2 had a single dumbbell and a pair; v3 has one handle you own two of.
+			bar('dumbbell', 'dumbbell', 2, { ...setup('dumbbells'), ...setup('dumbbell') }),
+			bar('kettlebell', 'kettlebell', 1, setup('kettlebell'))
+		];
+		sets.push({
+			id: `my-${u}`,
+			name: 'My equipment',
+			unit: u,
+			bars,
+			plates: Object.fromEntries(sizes.map((p) => [p, ownedSizes.includes(p) ? null : 0]))
+		});
+	}
+	if (sets.length > 1) for (const set of sets) set.name = `My equipment (${set.unit})`;
+	const active = sets.find((s) => s.unit === unit)?.id ?? COMMERCIAL_GYM;
+
+	if (settings || sets.length)
+		data[settingsKey] = { ...settings, lifting: { unit, activeSet: active, sets } };
+	if (calc) {
+		const next: Record<string, unknown> = { ...calc };
+		const station =
+			typeof calc.equipmentId === 'string' ? V2_STATIONS[calc.equipmentId] : undefined;
+		delete next.equipmentId;
+		if (station && (active !== COMMERCIAL_GYM || station === 'barbell'))
+			next.stations = { [active]: station };
+		data[calcKey] = next;
 	}
 }
 
@@ -423,7 +499,19 @@ const migrations: Migration[] = [
 				const text = store.getItem(key);
 				if (text !== null) data[key] = decode(text);
 			}
-			upgradeData(data, 1);
+			upgradeData(data, 1, 2);
+			for (const [key, value] of Object.entries(data)) store.setItem(key, JSON.stringify(value));
+		}
+	},
+	{
+		to: 3,
+		run(store) {
+			const data: Record<string, unknown> = {};
+			for (const key of [entries.liftingCalculator.key, entries.settings.key]) {
+				const text = store.getItem(key);
+				if (text !== null) data[key] = decode(text);
+			}
+			upgradeData(data, 2);
 			for (const [key, value] of Object.entries(data)) store.setItem(key, JSON.stringify(value));
 		}
 	}
@@ -523,18 +611,6 @@ export function storageWritable(): boolean {
 	} catch {
 		return false;
 	}
-}
-
-/**
- * Forgets the equipment last picked in the weightlifting calculator, so it opens with the
- * default from Settings again. Called when that default changes.
- */
-export function forgetLiftingEquipment(): void {
-	const calc = read(entries.liftingCalculator);
-	if (calc?.equipmentId === undefined) return;
-	const rest = { ...calc };
-	delete rest.equipmentId;
-	write(entries.liftingCalculator, rest);
 }
 
 /** Removes the given entries (default: everything the app saves). */

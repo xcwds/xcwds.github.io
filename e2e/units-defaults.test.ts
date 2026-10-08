@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { gotoHydrated } from './helpers';
+import { HOME_GYM, gotoHydrated, seedLifting } from './helpers';
 
 test.use({ viewport: { width: 390, height: 844 } });
 
@@ -35,24 +35,27 @@ test('weightlifting switches to kg plates and bars', async ({ page }) => {
 	);
 });
 
-test('weightlifting default equipment and owned plates come from Settings', async ({ page }) => {
+test('the weightlifting equipment set is picked in Settings (#82)', async ({ page }) => {
+	await seedLifting(page, { activeSet: 'commercial', sets: [HOME_GYM] });
 	await gotoHydrated(page, '/settings');
-	await defaults(page).getByLabel('Default equipment').selectOption({ label: 'Dumbbell pair' });
-	await defaults(page).getByRole('button', { name: '35', exact: true }).click();
+	const picker = defaults(page).getByLabel('Equipment set');
+	await expect(picker).toHaveValue('commercial');
+	await picker.selectOption({ label: 'Home gym (lb)' });
 
 	await gotoHydrated(page, '/utils/weightlifting');
-	await expect(page.getByRole('button', { name: 'Dumbbell pair' })).toHaveAttribute(
+	await expect(page.getByTestId('active-set')).toContainText('Equipment: Home gym.');
+	await expect(page.getByRole('button', { name: 'Barbell (35 lb)' })).toHaveAttribute(
 		'aria-pressed',
 		'true'
 	);
-	await page.getByRole('button', { name: 'Barbell (45 lb)' }).click();
-	await page.getByRole('button', { name: 'Target weight' }).click();
-	await expect(page.getByRole('button', { name: '35', exact: true })).toHaveAttribute(
+	await page.getByRole('link', { name: 'Change it in Settings' }).click();
+	await expect(page).toHaveURL(/\/settings#equipment$/);
+	await page.getByLabel('Equipment set').selectOption('commercial');
+	await gotoHydrated(page, '/utils/weightlifting');
+	await expect(page.getByRole('button', { name: 'Barbell (45 lb)' })).toHaveAttribute(
 		'aria-pressed',
-		'false'
+		'true'
 	);
-	await page.getByLabel('Target weight (lb)').fill('165');
-	await expect(page.getByTestId('target-result')).toContainText('Per side: 45, 10, 5');
 });
 
 test('coffee timer starts from the default length', async ({ page }) => {
@@ -121,15 +124,14 @@ test('saved weightlifting data from before units is upgraded', async ({ page }) 
 		);
 	});
 	await gotoHydrated(page, '/utils/weightlifting');
+	// v3 (#82): the owned plates make it a set of your own, with the bar you'd picked.
+	await expect(page.getByTestId('active-set')).toContainText('Equipment: My equipment.');
 	await expect(page.getByRole('button', { name: 'Barbell (25 lb)' })).toHaveAttribute(
 		'aria-pressed',
 		'true'
 	);
 	await expect(page.getByTestId('total')).toHaveText('45 lb');
-	await page.getByRole('button', { name: 'Target weight' }).click();
-	await expect(page.getByRole('button', { name: '35', exact: true })).toHaveAttribute(
-		'aria-pressed',
-		'false'
-	);
-	expect(await page.evaluate(() => localStorage.getItem('app:version'))).toBe('2');
+	// You didn't have 35s.
+	await expect(page.getByRole('button', { name: 'Add 35 lb', exact: true })).toHaveCount(0);
+	expect(await page.evaluate(() => localStorage.getItem('app:version'))).toBe('3');
 });
