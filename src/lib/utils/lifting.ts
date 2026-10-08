@@ -221,6 +221,66 @@ export function parseEquipmentSet(v: unknown): EquipmentSet | undefined {
 	};
 }
 
+/** What a number in a set must be (blank is handled by each field: unlimited, none or required). */
+export type NumberRule = 'weight' | 'plateCount' | 'barCount' | 'platesPerSide';
+
+/** Why `value` can't be saved under `rule` ('' when it can). Mirrors the parsers above. */
+export function numberProblem(rule: NumberRule, value: number, unit: WeightUnit): string {
+	if (rule === 'weight')
+		return isWeight(value)
+			? ''
+			: `Enter a weight from 0 to ${formatWeight(SETUP_LIMITS.maxWeight, unit)}.`;
+	const [min, max] = {
+		plateCount: [0, SETUP_LIMITS.maxPlateCount],
+		barCount: [1, SETUP_LIMITS.maxBarCount],
+		platesPerSide: [1, SETUP_LIMITS.maxPlatesPerSide]
+	}[rule];
+	return isIntIn(value, min, max) ? '' : `Enter a whole number from ${min} to ${max}.`;
+}
+
+/** `prefix-1`, `prefix-2`, … : the first one not in `taken`. */
+export function uniqueId(prefix: string, taken: readonly string[]): string {
+	for (let n = 1; ; n++) if (!taken.includes(`${prefix}-${n}`)) return `${prefix}-${n}`;
+}
+
+/** A new bar for a set: a barbell of the commercial gym's weight. */
+export function newBar(set: EquipmentSet): Bar {
+	const weight = UNITS[set.unit].barbell;
+	return {
+		id: uniqueId(
+			'bar',
+			set.bars.map((b) => b.id)
+		),
+		name: barName('barbell', weight, set.unit),
+		type: 'barbell',
+		weight,
+		count: 1
+	};
+}
+
+/** A new set of your own: one barbell, and no plates until you say how many you have. */
+export function newSet(name: string, unit: WeightUnit, taken: readonly string[]): EquipmentSet {
+	const set: EquipmentSet = {
+		id: uniqueId('set', taken),
+		name: name.trim().slice(0, SETUP_LIMITS.maxName) || 'My equipment',
+		unit,
+		bars: [],
+		plates: Object.fromEntries(UNITS[unit].plates.map((plate) => [plate, 0]))
+	};
+	set.bars.push(newBar(set));
+	return set;
+}
+
+/** An editable copy of a set (the commercial gym included), named "… copy". */
+export function copySet(set: EquipmentSet, taken: readonly string[]): EquipmentSet {
+	return {
+		// JSON, not structuredClone: `set` may be reactive state (a proxy structuredClone rejects).
+		...(JSON.parse(JSON.stringify(set)) as EquipmentSet),
+		id: uniqueId('set', taken),
+		name: `${set.name} copy`.slice(0, SETUP_LIMITS.maxName)
+	};
+}
+
 /** "bar", "dumbbell" or "kettlebell", for messages. */
 export const kind = (equipment: Equipment) =>
 	equipment.type === 'barbell' ? 'bar' : equipment.type;

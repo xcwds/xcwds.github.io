@@ -4,6 +4,11 @@ import {
 	activeSet,
 	canAdd,
 	commercialGym,
+	copySet,
+	newBar,
+	newSet,
+	numberProblem,
+	uniqueId,
 	findStation,
 	formatWeight,
 	historyToText,
@@ -570,5 +575,40 @@ describe('equipment sets (#82)', () => {
 			],
 			plates: { 45: 2, 35: 0, 25: null, 10: 0, 5: 0, 2.5: 0, 1.25: 0 }
 		});
+	});
+});
+
+describe('editing sets (#84)', () => {
+	it('checks numbers the way saved sets are parsed', () => {
+		expect(numberProblem('weight', 35, 'lb')).toBe('');
+		expect(numberProblem('weight', -1, 'lb')).toBe('Enter a weight from 0 to 2000 lb.');
+		expect(numberProblem('weight', 2001, 'kg')).toBe('Enter a weight from 0 to 2000 kg.');
+		expect(numberProblem('plateCount', 0, 'lb')).toBe('');
+		expect(numberProblem('plateCount', 2.5, 'lb')).toBe('Enter a whole number from 0 to 99.');
+		expect(numberProblem('barCount', 0, 'lb')).toBe('Enter a whole number from 1 to 20.');
+		expect(numberProblem('platesPerSide', 31, 'lb')).toBe('Enter a whole number from 1 to 30.');
+	});
+
+	it('makes new sets, bars and copies that parse back unchanged', () => {
+		expect(uniqueId('set', ['set-1', 'set-3'])).toBe('set-2');
+		const set = newSet('  Home gym ', 'lb', [COMMERCIAL_GYM, 'set-1']);
+		expect(set).toEqual({
+			id: 'set-2',
+			name: 'Home gym',
+			unit: 'lb',
+			bars: [{ id: 'bar-1', name: 'Barbell (45 lb)', type: 'barbell', weight: 45, count: 1 }],
+			plates: { 45: 0, 35: 0, 25: 0, 10: 0, 5: 0, 2.5: 0, 1.25: 0 }
+		});
+		expect(newSet('', 'kg', []).name).toBe('My equipment');
+		expect(newBar(set)).toMatchObject({ id: 'bar-2', weight: 45 });
+		expect(parseEquipmentSet(set)).toEqual(set);
+
+		const copy = copySet(commercialGym('kg'), ['set-1']);
+		expect(copy).toMatchObject({ id: 'set-2', name: 'Commercial gym copy', unit: 'kg' });
+		expect(copy.plates).toEqual(unlimitedPlates('kg'));
+		expect(parseEquipmentSet(copy)).toEqual(copy);
+		// A deep copy: editing it leaves the original alone.
+		copy.bars[0].weight = 15;
+		expect(commercialGym('kg').bars[0].weight).toBe(20);
 	});
 });

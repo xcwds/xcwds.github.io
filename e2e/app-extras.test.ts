@@ -118,6 +118,17 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 		],
 		['/utils/weightlifting'],
 		['/settings'],
+		[
+			'/settings',
+			async (p) => {
+				await p.getByRole('button', { name: 'Copy Commercial gym' }).click();
+				await p
+					.getByTestId('set-set-1')
+					.getByRole('button', { name: /^Delete / })
+					.click();
+				await p.getByRole('button', { name: 'New set' }).click();
+			}
+		],
 		['/no-such-page'],
 		[porkChopsPath]
 	];

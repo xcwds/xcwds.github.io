@@ -4,6 +4,7 @@
 	import Acronym from '$lib/Acronym.svelte';
 	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
+	import EquipmentSets from './EquipmentSets.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
 	import { changelog, latestChangelogId } from '$lib/changelog';
 	import { reloadShortcuts } from '$lib/home.svelte';
@@ -301,8 +302,10 @@
 			</select>
 		</label>
 		<p class="text-sm text-gray-600 dark:text-gray-400">
-			The commercial gym has a barbell and as many plates as you need, in the units above.
+			The calculator loads from this set. The commercial gym uses the units above; your own sets
+			have their own.
 		</p>
+		<EquipmentSets />
 
 		<h3 class="mt-2 font-semibold">Coffee Timer</h3>
 		<div class="flex items-center justify-between gap-3">
