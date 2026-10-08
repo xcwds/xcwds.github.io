@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { onMount, untrack } from 'svelte';
-	import { browser } from '$app/environment';
-	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
-	import { markBusy } from '$lib/app-update.svelte';
+	import { untrack } from 'svelte';
 	import { persist } from '$lib/persist.svelte';
 	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { COFFEE_SECONDS, entries } from '$lib/storage';
+	import { useCoffeeTimer } from '$lib/utils/coffee-timer.svelte';
 	import { formatDuration } from '$lib/utils/time';
-	import { Timer } from '$lib/utils/timer.svelte';
 
 	/** Settings → Tool defaults (90 s unless changed). */
 	let defaultMs = $derived(settings.coffeeDefaultSeconds * 1000);
@@ -18,13 +15,12 @@
 	let custom = $state<number | null>(null);
 	let base = $derived(custom ?? defaultMs);
 
-	const timer = new Timer(90_000, () => beep(3));
+	// The countdown lives in the root layout, so it keeps running (and rings) on other pages.
+	const coffee = useCoffeeTimer();
+	const timer = coffee.timer;
 	/** True from Start until the next reset; ± buttons change the saved length only before it. */
-	let started = $state(false);
-	let over = $derived(timer.running && timer.done);
-
-	// The countdown itself isn't saved, so an app update (reload) would reset it.
-	markBusy('coffee timer', () => timer.running);
+	let started = $derived(coffee.started);
+	let over = $derived(coffee.over);
 
 	persist(
 		entries.coffeeDuration,
@@ -43,19 +39,6 @@
 		});
 	});
 
-	const awake = browser ? keepAwake(() => timer.running) : undefined;
-	$effect(() => {
-		void timer.running;
-		void awake?.sync();
-	});
-
-	onMount(() => {
-		return () => {
-			awake?.destroy();
-			timer.destroy();
-		};
-	});
-
 	/** Before Start, ± changes the saved length (kept within Settings' limits); after, only this run. */
 	function adjust(ms: number) {
 		if (started) {
@@ -67,8 +50,7 @@
 	}
 
 	function reset(ms = base) {
-		started = false;
-		timer.reset(ms);
+		coffee.reset(ms);
 	}
 
 	function useDefault() {
@@ -77,14 +59,9 @@
 	}
 
 	function toggle() {
-		primeAudio();
 		// Stopping a finished brew resets it, so the next Start begins a fresh countdown.
 		if (over) reset();
-		else if (timer.running) timer.pause();
-		else {
-			started = true;
-			timer.start();
-		}
+		else coffee.toggle();
 	}
 </script>
 
