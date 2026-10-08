@@ -1,6 +1,6 @@
 # Agent notes
 
-Brand: **xcwds**, "Everyday tools that stay on your device." (tagline, with the acronym below it). Use xcwds for the app name, titles and file names; no
+Brand: **xcwds**, "Everyday tools that never phone home." (tagline, with the acronym below it). Use xcwds for the app name, titles and file names; no
 personal names. xcwds stands for "eXecutes Client-side, Without Data
 Servers" (shown on Home and Settings → About; brand strings live in `src/lib/brand.ts`). Tapping it three times
 on About reveals the Easter egg "eXtra Crispy Waffles, Deadlifts & Sanitizers".

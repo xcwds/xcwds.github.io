@@ -1,5 +1,5 @@
 export const BRAND = 'xcwds';
-export const TAGLINE = 'Everyday tools that stay on your device.';
+export const TAGLINE = 'Everyday tools that never phone home.';
 /** What xcwds stands for. */
 export const ACRONYM = 'eXecutes Client-side, Without Data Servers';
 /** Easter egg on Settings → About (tap the acronym three times). */
