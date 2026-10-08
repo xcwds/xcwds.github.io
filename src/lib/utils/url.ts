@@ -3,7 +3,6 @@ export type Param = {
 	key: string;
 	value: string;
 	keep: boolean;
-	tracking: boolean;
 	/** The `key=value` segment exactly as shared; kept byte-for-byte unless the param is edited. */
 	raw: string;
 };
@@ -177,13 +176,16 @@ function decodeSegment(raw: string): [string, string] {
 	return [...new URLSearchParams(raw)][0] ?? ['', ''];
 }
 
-/** Lists query params in order (duplicates included), flagging known trackers. */
+/**
+ * Lists query params in order (duplicates included); known trackers start unkept. Whether a param
+ * is tracking isn't stored on it: the key can be edited, so ask `isTrackingParam` each time (#68).
+ */
 export function readParams(url: URL, removeTracking = true): Param[] {
 	const segments = url.search.slice(1).split('&').filter(Boolean);
 	return segments.map((raw, id) => {
 		const [key, value] = decodeSegment(raw);
-		const tracking = isTrackingParam(key, url.hostname);
-		return { id, key, value, tracking, keep: !(removeTracking && tracking), raw };
+		const keep = !(removeTracking && isTrackingParam(key, url.hostname));
+		return { id, key, value, keep, raw };
 	});
 }
 

@@ -58,3 +58,30 @@ test('flags input that is not a link', async ({ page }) => {
 	await page.getByLabel('Paste a link').fill('hello there');
 	await expect(page.getByRole('alert')).toHaveText("That doesn't look like a link.");
 });
+
+test('renaming a param updates its tracking badge, warning and "Remove tracking" (#68)', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/utils/url-sanitizer');
+	await page.getByLabel('Paste a link').fill('https://example.com/?utm_source=x&color=red');
+	const params = page.getByTestId('param');
+	const cleaned = page.getByTestId('cleaned');
+	const warning = page.getByText(/known tracking params? (is|are) still in the\s+link/);
+
+	// Keep the tracker, then rename it to an ordinary key: no badge, no warning.
+	await page.getByLabel('Keep utm_source').check();
+	await expect(params.nth(0).getByText('tracking', { exact: true })).toBeVisible();
+	await expect(warning).toBeVisible();
+	await params.nth(0).getByLabel('Name').fill('page');
+	await expect(params.nth(0).getByText('tracking', { exact: true })).toHaveCount(0);
+	await expect(warning).toHaveCount(0);
+	await page.getByRole('button', { name: 'Remove tracking' }).click();
+	await expect(cleaned).toHaveText('https://example.com/?page=x&color=red');
+
+	// And the other way: renaming an ordinary key to a tracker flags it.
+	await params.nth(1).getByLabel('Name').fill('utm_source');
+	await expect(params.nth(1).getByText('tracking', { exact: true })).toBeVisible();
+	await expect(warning).toBeVisible();
+	await page.getByRole('button', { name: 'Remove tracking' }).click();
+	await expect(cleaned).toHaveText('https://example.com/?page=x');
+});

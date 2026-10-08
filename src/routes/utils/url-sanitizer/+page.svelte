@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { readSharedText } from '$lib/utils/share';
-	import { buildLink, parseLink, readParams, type Param } from '$lib/utils/url';
+	import { buildLink, isTrackingParam, parseLink, readParams, type Param } from '$lib/utils/url';
 
 	let input = $state('');
 	let url = $state<URL | null>(null);
@@ -13,7 +13,9 @@
 
 	let cleaned = $derived(url ? buildLink(url, params) : '');
 	let removed = $derived(params.filter((p) => !p.keep).length);
-	let trackingKept = $derived(params.filter((p) => p.tracking && p.keep).length);
+	/** From the param's current name, so renaming one updates its badge and the warning (#68). */
+	const isTracking = (param: Param) => url !== null && isTrackingParam(param.key, url.hostname);
+	let trackingKept = $derived(params.filter((p) => isTracking(p) && p.keep).length);
 	let invalid = $derived(input.trim() !== '' && !url);
 
 	onMount(() => {
@@ -152,7 +154,7 @@
 					</span>
 				</div>
 				<div class="grid grid-cols-3 gap-2 text-sm">
-					<button type="button" class={button} onclick={() => setAll((p) => !p.tracking)}>
+					<button type="button" class={button} onclick={() => setAll((p) => !isTracking(p))}>
 						Remove tracking
 					</button>
 					<button type="button" class={button} onclick={() => setAll(() => false)}>
@@ -182,7 +184,7 @@
 									spellcheck="false"
 									class="{field} font-mono text-sm {param.keep ? '' : 'line-through opacity-60'}"
 								/>
-								{#if param.tracking}
+								{#if isTracking(param)}
 									<span
 										class="shrink-0 rounded-full bg-amber-200 px-2 py-0.5 text-xs text-amber-900 dark:bg-amber-800 dark:text-amber-100"
 									>

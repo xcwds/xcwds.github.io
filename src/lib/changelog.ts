@@ -7,6 +7,13 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 17,
+		date: '2026-10-08',
+		items: [
+			'In the URL sanitizer, renaming a parameter updates its "tracking" badge and warning, and Remove tracking goes by the new name.'
+		]
+	},
+	{
 		id: 16,
 		date: '2026-10-08',
 		items: [
