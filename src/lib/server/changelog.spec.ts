@@ -96,6 +96,15 @@ describe('loadChangelog', () => {
 		expect(loadChangelog(dir)).toEqual(before.filter((e) => e.items[0] !== 'A.'));
 	});
 
+	it('treats a renamed entry as added by the rename, the same on every build', () => {
+		const dir = setup();
+		write(dir, 'a.md', '- A long enough item for git to pair the files as a rename.\n');
+		commit(1_700_000_000);
+		git('mv', 'changelog/a.md', 'changelog/b.md');
+		commit(1_700_000_100);
+		expect(loadChangelog(dir).map((e) => e.id)).toEqual([170000010000]);
+	});
+
 	it('puts files git does not know yet first, dated today', () => {
 		const dir = setup();
 		write(dir, 'a.md', '- A.\n');

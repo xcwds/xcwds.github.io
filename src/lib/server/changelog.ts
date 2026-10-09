@@ -9,6 +9,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
+import { sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'vite';
 import type { ChangelogEntry } from '../changelog';
@@ -103,6 +104,8 @@ export function addedTimes(dir: string, strict = !!process.env.CI): Map<string, 
 			'--reverse',
 			'--first-parent',
 			'--diff-merges=first-parent',
+			// Without this, a file that arrived by a rename is an R and never counts as added.
+			'--no-renames',
 			'--diff-filter=A',
 			'--relative',
 			'--name-only',
@@ -198,7 +201,7 @@ export function changelogPlugin(dir = CHANGELOG_DIR): Plugin {
 		configureServer(server) {
 			server.watcher.add(dir);
 			const reload = (file: string) => {
-				if (!file.startsWith(dir)) return;
+				if (!file.startsWith(dir + sep)) return;
 				const module = server.moduleGraph.getModuleById(RESOLVED_ID);
 				if (module) server.moduleGraph.invalidateModule(module);
 				server.ws.send({ type: 'full-reload' });
