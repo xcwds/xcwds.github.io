@@ -6,6 +6,7 @@ import {
 	articleTexts,
 	byCategory,
 	CATEGORIES,
+	EXTERNAL_HOSTS,
 	getArticle,
 	parseInline,
 	searchArticles,
@@ -31,6 +32,8 @@ function brokenLinks(article: GuideArticle): string[] {
 			}
 			if (part.kind === 'recipe' && !getRecipe(part.slug)) broken.push(`recipe:${part.slug}`);
 			if (part.kind === 'tool' && !isTool(part.path)) broken.push(`tool:${part.path}`);
+			if (part.kind === 'external' && !EXTERNAL_HOSTS.includes(URL.parse(part.url)?.host ?? ''))
+				broken.push(part.url);
 		}
 	}
 	for (const slug of article.related?.guides ?? []) if (!getArticle(slug)) broken.push(slug);
@@ -43,7 +46,9 @@ function brokenLinks(article: GuideArticle): string[] {
 const unparsedMarkup = (article: GuideArticle) =>
 	articleTexts(article)
 		.flatMap(parseInline)
-		.filter((part) => part.kind === 'text' && /\]\((guide|recipe|tool):|\*\*/.test(part.text))
+		.filter(
+			(part) => part.kind === 'text' && /\]\((guide|recipe|tool|https?):|\*\*/.test(part.text)
+		)
 		.map((part) => part.text);
 
 describe('guide articles', () => {
@@ -106,8 +111,11 @@ describe('parseInline', () => {
 		expect(parseInline('[Roast](recipe:roast-chicken)')).toEqual([
 			{ kind: 'recipe', text: 'Roast', slug: 'roast-chicken' }
 		]);
-		expect(parseInline('[a](https://example.com)')).toEqual([
-			{ kind: 'text', text: '[a](https://example.com)' }
+		expect(parseInline('[a](http://example.com)')).toEqual([
+			{ kind: 'text', text: '[a](http://example.com)' }
+		]);
+		expect(parseInline('[USDA](https://www.fsis.usda.gov/x)')).toEqual([
+			{ kind: 'external', text: 'USDA', url: 'https://www.fsis.usda.gov/x' }
 		]);
 	});
 });

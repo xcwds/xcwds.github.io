@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Block } from '$lib/guide';
+	import DonenessChart from './DonenessChart.svelte';
 	import InlineText from './InlineText.svelte';
 
 	let { block }: { block: Block } = $props();
@@ -41,10 +42,13 @@
 				<p class="font-semibold"><InlineText text={row[0]} /></p>
 				<dl class="mt-1 flex flex-col gap-1 text-sm">
 					{#each block.columns.slice(1) as column, c (c)}
-						<div>
-							<dt class="inline font-medium text-gray-600 dark:text-gray-400">{column}:</dt>
-							<dd class="inline"><InlineText text={row[c + 1]} /></dd>
-						</div>
+						<!-- An empty cell ("also called" with nothing to add) is left out of the card. -->
+						{#if row[c + 1]}
+							<div>
+								<dt class="inline font-medium text-gray-600 dark:text-gray-400">{column}:</dt>
+								<dd class="inline"><InlineText text={row[c + 1]} /></dd>
+							</div>
+						{/if}
 					{/each}
 				</dl>
 			</div>
@@ -74,4 +78,6 @@
 			{/each}
 		</tbody>
 	</table>
+{:else if block.type === 'widget' && block.widget === 'doneness'}
+	<DonenessChart />
 {/if}
