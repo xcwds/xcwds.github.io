@@ -13,6 +13,9 @@ Package manager: pnpm.
 
 - Recipes at `/recipes` are classic back-pocket recipes written here with structured, scalable
   ingredients — follow [docs/classic-recipes.md](docs/classic-recipes.md). Tracking issue: #49.
+- The cooking guide at `/guide` (general know-how: methods, meat, doneness, basics) shares the Recipes
+  tab (a Recipes | Guide switch on both pages) — follow [docs/cooking-guide.md](docs/cooking-guide.md).
+  Tracking issue: #96.
 - Before pushing: `pnpm check && pnpm lint && pnpm test:unit --run --project server && pnpm build`
   (no `--` before `--run`: with it, vitest ignores `--project` and also starts the browser project).
 - CI (`.github/workflows/ci.yml`) runs check, lint, all unit tests and e2e on every PR, and

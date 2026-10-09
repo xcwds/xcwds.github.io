@@ -107,6 +107,8 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 				await p.getByTestId('timer-tray').waitFor();
 			}
 		],
+		['/guide'],
+		['/guide/grill-stovetop-or-oven'],
 		['/utils'],
 		['/utils/pizza-dough'],
 		['/utils/coffee-timer'],

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { articles } from './guide';
 import { activeSection, errorInfo, routeInfo } from './nav';
 import { porkChopsPath } from './parody';
 import { recipes } from './recipes';
@@ -31,6 +32,22 @@ describe('routeInfo', () => {
 		}
 	});
 
+	it('titles the cooking guide, in the Recipes tab with no back arrow', () => {
+		expect(routeInfo('/guide')).toEqual({ title: 'Cooking Guide' });
+		expect(routeInfo('/guide/')).toEqual({ title: 'Cooking Guide' });
+	});
+
+	it('covers every guide article, going back to /guide', () => {
+		for (const article of articles) {
+			expect(routeInfo(`/guide/${article.slug}`)).toEqual({
+				title: article.name,
+				emoji: article.emoji,
+				parent: '/guide'
+			});
+		}
+		expect(routeInfo('/guide/not-an-article').parent).toBe('/');
+	});
+
 	it('titles the pork chop parody page', () => {
 		expect(routeInfo(`${porkChopsPath}/`)).toEqual({
 			title: 'Pork Chops',
@@ -56,5 +73,8 @@ describe('activeSection', () => {
 		expect(activeSection('/recipes/pizza-dough')).toBe('/recipes');
 		expect(activeSection('/utils/coffee-timer')).toBe('/utils');
 		expect(activeSection('/utilsx')).toBe('/');
+		expect(activeSection('/guide')).toBe('/recipes');
+		expect(activeSection('/guide/grill-stovetop-or-oven')).toBe('/recipes');
+		expect(activeSection('/guidebook')).toBe('/');
 	});
 });

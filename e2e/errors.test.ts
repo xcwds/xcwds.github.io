@@ -52,6 +52,11 @@ test('a recipe that does not exist is not found', async ({ page }) => {
 	await expectNotFound(page);
 });
 
+test('a guide article that does not exist is not found', async ({ page }) => {
+	await gotoHydrated(page, `${origin}/guide/not-an-article`);
+	await expectNotFound(page);
+});
+
 test('offline, an unknown URL still gets the app and its not-found page', async ({
 	page,
 	context

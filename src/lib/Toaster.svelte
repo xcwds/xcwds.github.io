@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import type { Pathname } from '$app/types';
 	import { dismissToast, toasts } from './toast.svelte';
+
+	// A pathname has no params, so it resolves like any other. Passing the whole Pathname union
+	// to resolve() stops type-checking once the app has more than 25 pages (TypeScript's limit
+	// for comparing against a union of argument tuples), hence the narrowing cast.
+	const resolvePath = (path: Pathname) => resolve(path as '/');
 </script>
 
 <!-- Always rendered so screen readers pick up new messages in this live region. -->
@@ -19,7 +25,7 @@
 				<!-- The path is resolved; the lint rule just can't see through the appended #hash. -->
 				<!-- eslint-disable svelte/no-navigation-without-resolve -->
 				<a
-					href={`${resolve(t.action.path)}${t.action.hash ?? ''}`}
+					href={`${resolvePath(t.action.path)}${t.action.hash ?? ''}`}
 					class="flex min-h-11 items-center rounded-full px-3 font-semibold text-blue-300 underline dark:text-blue-700"
 					onclick={() => dismissToast(t.id)}>{t.action.label}</a
 				>

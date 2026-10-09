@@ -26,7 +26,11 @@
 
 	let info = $derived(page.error ? errorInfo(page.status) : routeInfo(page.url.pathname));
 	let active = $derived(activeSection(page.url.pathname));
-	let parentLabel = $derived(sections.find((s) => s.path === info.parent)?.label ?? 'Home');
+	let parentLabel = $derived(
+		info.parent
+			? (sections.find((s) => s.path === info.parent)?.label ?? routeInfo(info.parent).title)
+			: 'Home'
+	);
 	/**
 	 * The installed app has no browser toolbar to share from, so it gets a Share button (#89); in
 	 * a browser tab the browser's own share does the job.
