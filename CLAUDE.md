@@ -54,7 +54,9 @@ Package manager: pnpm.
 - The root layout is the app shell: a header (back arrow + page title as the page's only `<h1>`), a bottom tab
   bar on phones and header links on desktop. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
   which reads `tools.ts` and the recipe data, so new tools/recipes need no nav changes. Pages must not render
-  their own `<h1>` or back links. Roadmap for further app features: issue #17.
+  their own `<h1>` or back links. In the installed app the header also has a Share button (`src/lib/share.ts`):
+  it shares the page's origin + path only (never query or hash) and skips Settings and private
+  tools (`recents: false`). Roadmap for further app features: issue #17.
 - Never touch `localStorage` directly. Register saved data in `entries` in `src/lib/storage.ts` (an `app:`
   key, a label and a validator) and use `persist()` from `src/lib/persist.svelte.ts` in components, or
   `read`/`write` elsewhere. Changing a saved shape or key needs a new migration and a `SCHEMA_VERSION` bump.

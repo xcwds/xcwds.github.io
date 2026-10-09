@@ -4,7 +4,7 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { startUpdateChecks } from '$lib/app-update.svelte';
-	import { startInstallSupport } from '$lib/install.svelte';
+	import { install, startInstallSupport } from '$lib/install.svelte';
 	import { startNetworkStatus } from '$lib/network.svelte';
 	import OfflineNotice from '$lib/OfflineNotice.svelte';
 	import TimerAlert from '$lib/TimerAlert.svelte';
@@ -13,6 +13,7 @@
 	import { activeSection, errorInfo, routeInfo, sections } from '$lib/nav';
 	import { recordVisit, startShortcuts } from '$lib/home.svelte';
 	import { startSettings } from '$lib/settings.svelte';
+	import { share, shareTarget } from '$lib/share';
 	import { provideCoffeeTimer } from '$lib/utils/coffee-timer.svelte';
 	import { provideCookingTimers } from '$lib/utils/cooking-timers.svelte';
 	import '../app.css';
@@ -26,6 +27,11 @@
 	let info = $derived(page.error ? errorInfo(page.status) : routeInfo(page.url.pathname));
 	let active = $derived(activeSection(page.url.pathname));
 	let parentLabel = $derived(sections.find((s) => s.path === info.parent)?.label ?? 'Home');
+	/**
+	 * The installed app has no browser toolbar to share from, so it gets a Share button (#89); in
+	 * a browser tab the browser's own share does the job.
+	 */
+	let shareable = $derived(install.installed && !page.error ? shareTarget(page.url) : null);
 
 	// Tools opened become "Recently used" on Home (error pages and non-tools are ignored).
 	afterNavigate(({ to }) => {
@@ -70,6 +76,30 @@
 				{#if info.emoji}<span aria-hidden="true">{info.emoji}</span>{/if}
 				{info.title}
 			</h1>
+			{#if shareable}
+				{@const target = shareable}
+				<button
+					type="button"
+					aria-label="Share {target.title}"
+					class="-mr-2 flex size-11 shrink-0 items-center justify-center rounded-full text-gray-700 hover:bg-white/60 md:order-last md:mr-0 dark:text-gray-300 dark:hover:bg-gray-800"
+					onclick={() => share(target)}
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="size-6"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						aria-hidden="true"
+					>
+						<path
+							d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+				</button>
+			{/if}
 			<nav aria-label="Main" class="hidden gap-1 md:flex">
 				{#each sections as section (section.path)}
 					<a
