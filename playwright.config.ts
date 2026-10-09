@@ -15,6 +15,14 @@ export default defineConfig({
 		// segfaulted (SEGV at 0x1b0, in both builds), so the next test couldn't open a context.
 		// The app needs no GPU; software rendering avoids that path.
 		launchOptions: { args: ['--disable-gpu'] },
-		trace: 'retain-on-failure'
+		trace: 'retain-on-failure',
+		// No service worker unless a test file opts in with `test.use({ serviceWorkers: 'allow' })`
+		// (pwa, update and errors do) (#91). Every page registers the app's worker, which then
+		// precaches the whole site; Playwright closing the context mid-install, with two workers
+		// in parallel, still crashed the browser now and then (SEGV at 0x1b0, the next
+		// newContext failing). In a stress run of 12,240 tests per setup on CI, today's setup
+		// failed 6 times (in 3 of 6 jobs); blocking service workers elsewhere failed 0 times, and
+		// so did a single worker, which is 1.7× slower. Blocking is also faster than allowing.
+		serviceWorkers: 'block'
 	}
 });
