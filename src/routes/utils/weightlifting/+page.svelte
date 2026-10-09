@@ -23,7 +23,10 @@
 	 * `@[50rem]:` container query below), they show side by side under one tab (#95).
 	 */
 	let width = $state(0);
-	let split = $derived(width >= 50 * 16);
+	// In the root font size, like the container query, so they agree with a larger default font.
+	let split = $derived(
+		width > 0 && width >= 50 * parseFloat(getComputedStyle(document.documentElement).fontSize)
+	);
 	/** The tab that looks selected: in the side-by-side layout Plates also stands for Workout. */
 	let shown = $derived(split && tab === 'workout' ? 'plates' : tab);
 	/** Panel visibility, in CSS so the layout is right before the page hydrates. */

@@ -228,6 +228,24 @@ test.describe('two-column tools and Settings', () => {
 		await expect(add).toBeVisible();
 	});
 
+	test('with a larger default font, the tabs follow the same breakpoint as the layout', async ({
+		page
+	}) => {
+		// At 1280px with the 280px (14rem) sidebar, the page's content is 880px: over 50rem at
+		// 16px, but only 44rem at 20px, so the three tabs stay.
+		await page.setViewportSize({ width: 1280, height: 800 });
+		await page.addInitScript(() =>
+			document.addEventListener('DOMContentLoaded', () => {
+				document.documentElement.style.fontSize = '20px';
+			})
+		);
+		await gotoHydrated(page, '/utils/weightlifting');
+		const workout = page.getByRole('tab', { name: 'Workout', exact: true });
+		await workout.click();
+		await expect(workout).toHaveAttribute('aria-selected', 'true');
+		await expect(page.getByRole('button', { name: '+ Add exercise' })).toBeVisible();
+	});
+
 	test('narrower screens keep the three tabs', async ({ page }) => {
 		await page.setViewportSize(viewports.tabletLandscape);
 		await gotoHydrated(page, '/utils/weightlifting');
