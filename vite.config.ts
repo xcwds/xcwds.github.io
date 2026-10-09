@@ -2,9 +2,10 @@ import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { changelogPlugin } from './src/lib/server/changelog';
 
 export default defineConfig({
-	plugins: [sveltekit(), tailwindcss()],
+	plugins: [sveltekit(), tailwindcss(), changelogPlugin()],
 
 	test: {
 		expect: { requireAssertions: true },

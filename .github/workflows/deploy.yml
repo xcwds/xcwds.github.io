@@ -27,8 +27,11 @@ jobs:
     needs: checks
     runs-on: ubuntu-latest
     steps:
+      # Full history: the changelog build numbers entries by the commit that added them.
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v3

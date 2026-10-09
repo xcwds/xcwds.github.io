@@ -17,8 +17,22 @@ jobs:
       group: ci-${{ github.event.pull_request.number || github.run_id }}
       cancel-in-progress: true
     steps:
+      # Full history: the changelog build numbers entries by the commit that added them.
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # A PR's checkout is GitHub's merge commit, so HEAD^1 is the base branch it merges into.
+      - name: Changelog entries are never renamed
+        if: github.event_name == 'pull_request'
+        run: |
+          renamed=$(git diff --find-renames --name-status --diff-filter=R HEAD^1 HEAD -- changelog/)
+          if [ -n "$renamed" ]; then
+            echo "::error::Don't rename changelog entries (the entry would show as new again):"
+            echo "$renamed"
+            exit 1
+          fi
 
       - name: Install pnpm
         uses: pnpm/action-setup@v3

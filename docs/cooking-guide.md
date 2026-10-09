@@ -59,7 +59,7 @@ space after `guide:`, a link inside bold, an unclosed `**`), which would otherwi
   repeating numbers elsewhere. Where common practice differs from USDA (rare steak, runny eggs),
   say so plainly.
 - A PR that adds articles lists the sources it checked numbers against in its description.
-- Add each new article's changelog line to the PR's `src/lib/changelog.ts` entry.
+- Add each new article's changelog line to the PR's entry file in `changelog/`.
 
 ## Baking
 
