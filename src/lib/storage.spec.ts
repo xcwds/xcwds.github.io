@@ -297,6 +297,21 @@ describe('settings entry', () => {
 		store.setItem(entries.settings.key, JSON.stringify({ ovenUnit: 'K' }));
 		expect(read(entries.settings)?.ovenUnit).toBe('F');
 	});
+
+	it('loads the navigation style per orientation, defaulting each one on its own', () => {
+		// Saved before the setting existed.
+		store.setItem(entries.settings.key, JSON.stringify({ theme: 'dark' }));
+		expect(read(entries.settings)?.nav).toEqual({ portrait: 'bar', landscape: 'sidebar' });
+		write(entries.settings, { ...defaultSettings, nav: { portrait: 'sidebar', landscape: 'bar' } });
+		expect(read(entries.settings)?.nav).toEqual({ portrait: 'sidebar', landscape: 'bar' });
+		store.setItem(
+			entries.settings.key,
+			JSON.stringify({ nav: { portrait: 'sidebar', landscape: 'rail' } })
+		);
+		expect(read(entries.settings)?.nav).toEqual({ portrait: 'sidebar', landscape: 'sidebar' });
+		store.setItem(entries.settings.key, JSON.stringify({ nav: 'sidebar' }));
+		expect(read(entries.settings)?.nav).toEqual({ portrait: 'bar', landscape: 'sidebar' });
+	});
 });
 
 describe('groups and clear', () => {

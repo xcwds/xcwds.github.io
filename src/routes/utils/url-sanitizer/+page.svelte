@@ -87,9 +87,7 @@
 	<title>URL Sanitizer</title>
 </svelte:head>
 
-<main
-	class="mx-auto flex max-w-xl flex-col gap-6 px-4 pt-2 pb-4 text-gray-800 sm:px-8 sm:pb-8 dark:text-gray-200"
->
+<main class="page-narrow flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200">
 	<section class="flex flex-col gap-2">
 		<label for="link" class="text-sm">Paste a link</label>
 		<textarea

@@ -10,7 +10,8 @@
 	import TimerAlert from '$lib/TimerAlert.svelte';
 	import Toaster from '$lib/Toaster.svelte';
 	import UpdateBanner from '$lib/UpdateBanner.svelte';
-	import { activeSection, errorInfo, routeInfo, sections } from '$lib/nav';
+	import { BRAND } from '$lib/brand';
+	import { activeSection, errorInfo, pageWidth, routeInfo, sections } from '$lib/nav';
 	import { recordVisit, startShortcuts } from '$lib/home.svelte';
 	import { startSettings } from '$lib/settings.svelte';
 	import { share, shareTarget } from '$lib/share';
@@ -26,6 +27,15 @@
 
 	let info = $derived(page.error ? errorInfo(page.status) : routeInfo(page.url.pathname));
 	let active = $derived(activeSection(page.url.pathname));
+	/**
+	 * The header lines up with the page's container (#95): wide pages from `md`, narrow ones only
+	 * beside the sidebar, since the header links need more room than a narrow page has.
+	 */
+	let headerWidth = $derived(
+		!page.error && pageWidth(page.url.pathname) === 'wide'
+			? 'md:px-12'
+			: 'sidebar:max-w-md sidebar:px-8'
+	);
 	let parentLabel = $derived(sections.find((s) => s.path === info.parent)?.label ?? 'Home');
 	/**
 	 * The installed app has no browser toolbar to share from, so it gets a Share button (#89); in
@@ -50,9 +60,9 @@
 </script>
 
 <div class="min-h-svh bg-blue-200 dark:bg-gray-950">
-	<!-- Not sticky: long recipe titles wrap, and the tab bar keeps navigation in reach. -->
-	<header class="pt-[env(safe-area-inset-top)]">
-		<div class="mx-auto flex max-w-2xl items-center gap-2 px-4 py-3">
+	<!-- Not sticky: long recipe titles wrap, and the tab bar or sidebar keeps navigation in reach. -->
+	<header class="pt-[env(safe-area-inset-top)] sidebar:pl-[calc(14rem+env(safe-area-inset-left))]">
+		<div class="mx-auto flex max-w-2xl items-center gap-2 px-4 py-3 {headerWidth}">
 			{#if info.parent}
 				<a
 					href={resolve(info.parent)}
@@ -100,7 +110,7 @@
 					</svg>
 				</button>
 			{/if}
-			<nav aria-label="Main" class="hidden gap-1 md:flex">
+			<nav aria-label="Main" class="hidden gap-1 md:flex sidebar:hidden">
 				{#each sections as section (section.path)}
 					<a
 						href={resolve(section.path)}
@@ -116,20 +126,47 @@
 		</div>
 	</header>
 
-	<div class="pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
+	<div
+		class="pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0 sidebar:pl-[calc(14rem+env(safe-area-inset-left))]"
+	>
 		{@render children()}
 	</div>
 
 	<!-- Finished timers, toasts, the update banner and the offline notice stack above the tab bar
-	     (top on desktop). -->
+	     (top right on wider screens, clear of the page title). -->
 	<div
-		class="pointer-events-none fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-2 px-4 md:top-4 md:bottom-auto"
+		class="pointer-events-none fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-2 px-4 md:top-[calc(1rem+env(safe-area-inset-top))] md:right-[calc(1rem+env(safe-area-inset-right))] md:bottom-auto md:left-auto md:w-full md:max-w-md md:items-end md:px-0"
 	>
 		<TimerAlert />
 		<Toaster />
 		<UpdateBanner />
 		<OfflineNotice />
 	</div>
+
+	<!-- Tablets and computers: a sidebar instead of the header links, per Settings → Appearance. -->
+	<nav
+		aria-label="Main"
+		class="fixed inset-y-0 left-0 z-10 hidden w-[calc(14rem+env(safe-area-inset-left))] flex-col gap-1 border-r border-black/5 bg-blue-100/95 pt-[calc(env(safe-area-inset-top)+0.75rem)] pr-3 pb-3 pl-[calc(env(safe-area-inset-left)+0.75rem)] backdrop-blur sidebar:flex dark:border-white/10 dark:bg-gray-900/95"
+	>
+		<p class="px-3 py-2 text-lg font-semibold text-gray-900 dark:text-gray-100">{BRAND}</p>
+		<ul class="flex flex-col gap-1">
+			{#each sections as section (section.path)}
+				<li>
+					<a
+						href={resolve(section.path)}
+						aria-current={active === section.path ? 'page' : undefined}
+						class="flex min-h-11 items-center gap-3 rounded-xl px-3 font-medium {active ===
+						section.path
+							? 'bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100'
+							: 'text-gray-700 hover:bg-white/60 dark:text-gray-300 dark:hover:bg-gray-800'}"
+					>
+						<span aria-hidden="true" class="text-xl">{section.emoji}</span>
+						{section.label}
+					</a>
+				</li>
+			{/each}
+		</ul>
+	</nav>
 
 	<nav
 		aria-label="Main"

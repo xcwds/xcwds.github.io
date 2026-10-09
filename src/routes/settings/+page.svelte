@@ -31,8 +31,18 @@
 		write,
 		type Group,
 		type ParsedBackup,
+		type NavStyle,
 		type Theme
 	} from '$lib/storage';
+
+	const navStyles: { value: NavStyle; label: string }[] = [
+		{ value: 'bar', label: 'Top bar' },
+		{ value: 'sidebar', label: 'Sidebar' }
+	];
+	const orientations = [
+		{ key: 'portrait', label: 'Portrait' },
+		{ key: 'landscape', label: 'Landscape' }
+	] as const;
 
 	const themes: { value: Theme; label: string }[] = [
 		{ value: 'system', label: 'System' },
@@ -211,9 +221,7 @@
 	<title>Settings</title>
 </svelte:head>
 
-<main
-	class="mx-auto flex max-w-md flex-col gap-6 px-4 pt-2 pb-4 text-gray-800 sm:px-8 sm:pb-8 dark:text-gray-200"
->
+<main class="page-narrow flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200">
 	{#if install.checked && !install.installed}
 		<section class={card} aria-labelledby="install" data-testid="install">
 			<h2 id="install" class="text-lg font-semibold">Install the app</h2>
@@ -254,6 +262,35 @@
 				</button>
 			{/each}
 		</div>
+		<h3 class="font-semibold">Navigation</h3>
+		<p class="-mt-2 text-sm text-gray-600 dark:text-gray-400">
+			On tablets and computers. Phones keep the tab bar.
+		</p>
+		{#each orientations as orientation (orientation.key)}
+			<div class="flex items-center gap-3">
+				<span class="w-24 shrink-0 text-sm" id="nav-{orientation.key}">{orientation.label}</span>
+				<div
+					class="grid flex-1 grid-cols-2 gap-2"
+					role="radiogroup"
+					aria-labelledby="nav-{orientation.key}"
+				>
+					{#each navStyles as style (style.value)}
+						{@const checked = settings.nav[orientation.key] === style.value}
+						<button
+							type="button"
+							role="radio"
+							aria-checked={checked}
+							class="rounded-xl px-3 py-2 text-sm font-medium {checked
+								? 'bg-blue-600 text-white'
+								: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+							onclick={() => (settings.nav[orientation.key] = style.value)}
+						>
+							{style.label}
+						</button>
+					{/each}
+				</div>
+			</div>
+		{/each}
 	</section>
 
 	<section class={card} aria-labelledby="timers">

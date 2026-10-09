@@ -101,9 +101,7 @@
 	<meta name="description" content={recipe.description} />
 </svelte:head>
 
-<main
-	class="mx-auto flex max-w-2xl flex-col gap-6 px-6 pt-2 pb-6 text-gray-800 sm:px-12 sm:pb-12 dark:text-gray-200"
->
+<main class="page-wide flex flex-col gap-6 pt-2 pb-6 text-gray-800 sm:pb-12 dark:text-gray-200">
 	<header class="flex flex-col gap-2">
 		<p>{recipe.description}</p>
 		<dl class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600 dark:text-gray-400">

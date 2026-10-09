@@ -8,6 +8,47 @@ html[data-color-scheme='dark'] {
 	color-scheme: dark;
 }
 
+/* Main navigation (#95). Phones (narrower than `md`) get the bottom tab bar. Wider screens get
+   the header links ("bar") or a left sidebar, picked per orientation in Settings
+   (`data-nav-portrait` / `data-nav-landscape` on <html>, set before first paint by app.html;
+   defaults: bar in portrait, sidebar in landscape). Screens under 500px tall are phones on their
+   side, which keep the header links whatever the setting says. `sidebar:` styles the sidebar
+   layout; anything tied to the tab bar keeps using `md:`. */
+@custom-variant sidebar {
+	@media (width >= 48rem) and (height >= 31.25rem) and (orientation: landscape) {
+		&:where(:root:not([data-nav-landscape='bar']) *) {
+			@slot;
+		}
+	}
+	@media (width >= 48rem) and (height >= 31.25rem) and (orientation: portrait) {
+		&:where([data-nav-portrait='sidebar'] *) {
+			@slot;
+		}
+	}
+}
+
+/* Page containers (#95). Every page's <main> uses one; `pageWidth` in src/lib/nav.ts must name
+   the same width so the header lines up with it. */
+@utility page-narrow {
+	margin-inline: auto;
+	width: 100%;
+	max-width: var(--container-md);
+	padding-inline: --spacing(4);
+	@variant sm {
+		padding-inline: --spacing(8);
+	}
+}
+
+@utility page-wide {
+	margin-inline: auto;
+	width: 100%;
+	max-width: var(--container-2xl);
+	padding-inline: --spacing(6);
+	@variant sm {
+		padding-inline: --spacing(12);
+	}
+}
+
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton/themes/wintry';

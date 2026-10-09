@@ -17,17 +17,23 @@
 			});
 		</script>
 		<script>
-			// Apply the saved theme before first paint so dark mode doesn't flash light.
-			// Keep in sync with src/lib/settings.svelte.ts.
+			// Apply the saved theme and navigation style before first paint so dark mode doesn't
+			// flash light and the layout doesn't jump. Keep in sync with src/lib/settings.svelte.ts.
 			(function () {
 				var theme = 'system';
+				var nav = {};
 				try {
-					theme = JSON.parse(localStorage.getItem('app:settings') || '{}').theme || 'system';
+					var saved = JSON.parse(localStorage.getItem('app:settings') || '{}');
+					theme = saved.theme || 'system';
+					if (saved.nav && typeof saved.nav === 'object') nav = saved.nav;
 				} catch (e) {}
+				var root = document.documentElement;
+				root.dataset.navPortrait = nav.portrait === 'sidebar' ? 'sidebar' : 'bar';
+				root.dataset.navLandscape = nav.landscape === 'bar' ? 'bar' : 'sidebar';
 				var dark =
 					theme === 'dark' ||
 					(theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
-				document.documentElement.dataset.colorScheme = dark ? 'dark' : 'light';
+				root.dataset.colorScheme = dark ? 'dark' : 'light';
 				if (dark) document.querySelector('meta[name="theme-color"]').content = '#030712';
 			})();
 		</script>
