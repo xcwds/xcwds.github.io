@@ -221,365 +221,373 @@
 	<title>Settings</title>
 </svelte:head>
 
-<main class="page-narrow flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200">
-	{#if install.checked && !install.installed}
-		<section class={card} aria-labelledby="install" data-testid="install">
-			<h2 id="install" class="text-lg font-semibold">Install the app</h2>
-			<p class="text-sm text-gray-600 dark:text-gray-400">
-				Get xcwds on your home screen. It opens full-screen and works offline.
-			</p>
-			{#if install.canPrompt}
-				<button type="button" class={primary} onclick={promptInstall}>Install xcwds</button>
-			{:else if install.ios}
-				<ol class="list-decimal pl-5 text-sm">
-					<li>Open this page in <strong>Safari</strong>.</li>
-					<li>Tap <strong>Share</strong> (the square with an arrow).</li>
-					<li>Choose <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
-				</ol>
-			{:else}
-				<p class="text-sm">
-					Use your browser's menu and choose <strong>Install app</strong> or
-					<strong>Add to Home screen</strong>.
+<!-- Two balanced columns of cards when there's room (#95). -->
+<main class="page-split @container pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200">
+	<div
+		class="flex flex-col gap-6 @[50rem]:block @[50rem]:columns-2 @[50rem]:gap-10 @[50rem]:*:mb-6 @[50rem]:*:break-inside-avoid"
+	>
+		{#if install.checked && !install.installed}
+			<section class={card} aria-labelledby="install" data-testid="install">
+				<h2 id="install" class="text-lg font-semibold">Install the app</h2>
+				<p class="text-sm text-gray-600 dark:text-gray-400">
+					Get xcwds on your home screen. It opens full-screen and works offline.
 				</p>
-			{/if}
-		</section>
-	{/if}
-
-	<section class={card} aria-labelledby="appearance">
-		<h2 id="appearance" class="text-lg font-semibold">Appearance</h2>
-		<div class="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Theme">
-			{#each themes as theme (theme.value)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={settings.theme === theme.value}
-					class="rounded-xl px-3 py-2 text-sm font-medium {settings.theme === theme.value
-						? 'bg-blue-600 text-white'
-						: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
-					onclick={() => (settings.theme = theme.value)}
-				>
-					{theme.label}
-				</button>
-			{/each}
-		</div>
-		<h3 class="font-semibold">Navigation</h3>
-		<p class="-mt-2 text-sm text-gray-600 dark:text-gray-400">
-			On tablets and computers. Phones keep the tab bar.
-		</p>
-		{#each orientations as orientation (orientation.key)}
-			<div class="flex items-center gap-3">
-				<span class="w-24 shrink-0 text-sm" aria-hidden="true">{orientation.label}</span>
-				<div
-					class="grid flex-1 grid-cols-2 gap-2"
-					role="radiogroup"
-					aria-label="Navigation in {orientation.label.toLowerCase()}"
-				>
-					{#each navStyles as style (style.value)}
-						{@const checked = settings.nav[orientation.key] === style.value}
-						<button
-							type="button"
-							role="radio"
-							aria-checked={checked}
-							class="rounded-xl px-3 py-2 text-sm font-medium {checked
-								? 'bg-blue-600 text-white'
-								: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
-							onclick={() => (settings.nav[orientation.key] = style.value)}
-						>
-							{style.label}
-						</button>
-					{/each}
-				</div>
-			</div>
-		{/each}
-	</section>
-
-	<section class={card} aria-labelledby="timers">
-		<h2 id="timers" class="text-lg font-semibold">Timers</h2>
-		{#each toggles as toggle (toggle.key)}
-			<label class="flex min-h-11 items-center justify-between gap-3">
-				<span class="flex flex-col">
-					<span class="font-medium">{toggle.label}</span>
-					<span class="text-sm text-gray-600 dark:text-gray-400">{toggle.hint}</span>
-				</span>
-				<input type="checkbox" class="size-6 shrink-0" bind:checked={settings[toggle.key]} />
-			</label>
-		{/each}
-	</section>
-
-	<section class={card} aria-labelledby="tool-defaults" data-testid="tool-defaults">
-		<h2 id="tool-defaults" class="text-lg font-semibold">Tool defaults</h2>
-
-		<h3 class="font-semibold">Weightlifting Calculator</h3>
-		<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Weightlifting units">
-			{#each WEIGHT_UNITS as unit (unit)}
-				<button
-					type="button"
-					role="radio"
-					aria-checked={settings.lifting.unit === unit}
-					class="rounded-xl px-3 py-2 text-sm font-medium {settings.lifting.unit === unit
-						? 'bg-blue-600 text-white'
-						: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
-					onclick={() => (settings.lifting.unit = unit)}
-				>
-					{unit === 'lb' ? 'Pounds (lb)' : 'Kilograms (kg)'}
-				</button>
-			{/each}
-		</div>
-		<label id="equipment" class="flex scroll-mt-20 flex-col gap-1 text-sm">
-			<span>Equipment set</span>
-			<select
-				class="rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
-				value={settings.lifting.activeSet}
-				onchange={(e) => (settings.lifting.activeSet = e.currentTarget.value)}
-			>
-				<option value={COMMERCIAL_GYM}>Commercial gym ({settings.lifting.unit})</option>
-				{#each settings.lifting.sets as set (set.id)}
-					<option value={set.id}>{set.name} ({set.unit})</option>
-				{/each}
-			</select>
-		</label>
-		<p class="text-sm text-gray-600 dark:text-gray-400">
-			The calculator loads from this set. The commercial gym uses the units above; your own sets
-			have their own.
-		</p>
-		<EquipmentSets />
-
-		<h3 class="mt-2 font-semibold">Coffee Timer</h3>
-		<div class="flex items-center justify-between gap-3">
-			<span>Default length</span>
-			<div class="flex items-center gap-2">
-				<button
-					type="button"
-					class={button}
-					aria-label="15 seconds shorter"
-					disabled={settings.coffeeDefaultSeconds <= COFFEE_SECONDS.min}
-					onclick={() => adjustCoffee(-15)}>−15s</button
-				>
-				<span class="w-14 text-center text-lg tabular-nums" data-testid="coffee-default"
-					>{formatDuration(settings.coffeeDefaultSeconds * 1000)}</span
-				>
-				<button
-					type="button"
-					class={button}
-					aria-label="15 seconds longer"
-					disabled={settings.coffeeDefaultSeconds >= COFFEE_SECONDS.max}
-					onclick={() => adjustCoffee(15)}>+15s</button
-				>
-			</div>
-		</div>
-
-		<p class="text-sm text-gray-600 dark:text-gray-400">
-			A length you pick in the timer is remembered; changing the default resets that.
-		</p>
-
-		<h3 class="mt-2 font-semibold">Cooking Timer</h3>
-		<label class="flex flex-col gap-1 text-sm">
-			<span>Quick-start buttons (minutes, separated by commas)</span>
-			<input
-				class="rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
-				inputmode="decimal"
-				bind:value={presetsText}
-				onchange={savePresets}
-			/>
-		</label>
-		{#if presetsError}
-			<p class="text-sm text-red-700 dark:text-red-400" role="alert">{presetsError}</p>
-		{/if}
-
-		<h3 class="mt-2 font-semibold">Pizza Dough Calculator</h3>
-		<p class="text-sm" data-testid="pizza-defaults">
-			{pizza.balls} × {pizza.ballWeight} g · {pizza.hydration}% hydration · {pizza.salt}% salt ·
-			{pizza.yeast}% yeast · {pizza.oil}% oil · {pizza.sugar}% sugar
-		</p>
-		<p class="text-sm text-gray-600 dark:text-gray-400">
-			Always in grams. Change these with <strong>Save as my defaults</strong> in the calculator.
-		</p>
-		<button
-			type="button"
-			class="{button} text-sm"
-			disabled={pizzaIsBuiltIn}
-			onclick={() => (settings.pizzaDefaults = { ...doughDefaults })}
-		>
-			Restore built-in pizza defaults
-		</button>
-
-		<h3 class="mt-2 font-semibold">Recipes</h3>
-		<RecipeUnitsToggle />
-		<p class="text-sm text-gray-600 dark:text-gray-400">
-			Ingredient units. “As written” shows each recipe in the units it was written in.
-		</p>
-
-		<h3 class="mt-2 font-semibold">Oven Time Converter</h3>
-		<TempUnitToggle />
-		<p class="text-sm text-gray-600 dark:text-gray-400">
-			Also used by the “different temperature” panel on recipes.
-		</p>
-	</section>
-
-	<section class={card} aria-labelledby="data">
-		<h2 id="data" class="text-lg font-semibold">Your data</h2>
-		<p class="text-sm text-gray-600 dark:text-gray-400">
-			Everything is saved only on this device. Back it up to move it to another phone or keep a
-			copy.
-		</p>
-		{#if !writable}
-			<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="storage-warning">
-				This browser isn't letting xcwds save anything right now (storage is full, or site data is
-				blocked). Changes last only until you close the app. If storage is full, download a backup,
-				then clear data you don't need.
-			</p>
-		{/if}
-
-		<div class="grid gap-2 {canShareFiles ? 'grid-cols-2' : 'grid-cols-1'}">
-			<button type="button" class={primary} onclick={download}>Download backup</button>
-			{#if canShareFiles}
-				<button type="button" class={primary} onclick={share}>Share backup</button>
-			{/if}
-		</div>
-
-		<input
-			bind:this={fileInput}
-			type="file"
-			accept="application/json,.json"
-			class="hidden"
-			aria-label="Backup file"
-			onchange={chooseFile}
-		/>
-		<button type="button" class={button} onclick={() => fileInput?.click()}>Import backup…</button>
-
-		{#if importError}
-			<p class="text-sm text-red-700 dark:text-red-400" role="alert">{importError}</p>
-		{/if}
-
-		{#if pending}
-			<div
-				class="flex flex-col gap-2 rounded-xl bg-blue-50 p-3 dark:bg-gray-800"
-				data-testid="import-preview"
-			>
-				<p class="font-medium">
-					Backup{pending.backup.exportedAt
-						? ` from ${new Date(pending.backup.exportedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`
-						: ''}
-				</p>
-				{#if pending.found.length}
-					<ul class="list-disc pl-5 text-sm">
-						{#each pending.found as e (e.key)}
-							<li>{e.label}</li>
-						{/each}
-					</ul>
+				{#if install.canPrompt}
+					<button type="button" class={primary} onclick={promptInstall}>Install xcwds</button>
+				{:else if install.ios}
+					<ol class="list-decimal pl-5 text-sm">
+						<li>Open this page in <strong>Safari</strong>.</li>
+						<li>Tap <strong>Share</strong> (the square with an arrow).</li>
+						<li>Choose <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
+					</ol>
 				{:else}
-					<p class="text-sm">It has no data this app can use.</p>
-				{/if}
-				{#if pending.skipped.length}
-					<p class="text-sm text-amber-800 dark:text-amber-300">
-						{pending.skipped.length} unrecognized or invalid {pending.skipped.length === 1
-							? 'item'
-							: 'items'} will be skipped.
+					<p class="text-sm">
+						Use your browser's menu and choose <strong>Install app</strong> or
+						<strong>Add to Home screen</strong>.
 					</p>
 				{/if}
-				<div class="grid grid-cols-2 gap-2 text-sm">
+			</section>
+		{/if}
+
+		<section class={card} aria-labelledby="appearance">
+			<h2 id="appearance" class="text-lg font-semibold">Appearance</h2>
+			<div class="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Theme">
+				{#each themes as theme (theme.value)}
 					<button
 						type="button"
-						class={primary}
-						disabled={!pending.found.length}
-						onclick={() => apply('merge')}
+						role="radio"
+						aria-checked={settings.theme === theme.value}
+						class="rounded-xl px-3 py-2 text-sm font-medium {settings.theme === theme.value
+							? 'bg-blue-600 text-white'
+							: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+						onclick={() => (settings.theme = theme.value)}
 					>
-						Merge
+						{theme.label}
 					</button>
+				{/each}
+			</div>
+			<h3 class="font-semibold">Navigation</h3>
+			<p class="-mt-2 text-sm text-gray-600 dark:text-gray-400">
+				On tablets and computers. Phones keep the tab bar.
+			</p>
+			{#each orientations as orientation (orientation.key)}
+				<div class="flex items-center gap-3">
+					<span class="w-24 shrink-0 text-sm" aria-hidden="true">{orientation.label}</span>
+					<div
+						class="grid flex-1 grid-cols-2 gap-2"
+						role="radiogroup"
+						aria-label="Navigation in {orientation.label.toLowerCase()}"
+					>
+						{#each navStyles as style (style.value)}
+							{@const checked = settings.nav[orientation.key] === style.value}
+							<button
+								type="button"
+								role="radio"
+								aria-checked={checked}
+								class="rounded-xl px-3 py-2 text-sm font-medium {checked
+									? 'bg-blue-600 text-white'
+									: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+								onclick={() => (settings.nav[orientation.key] = style.value)}
+							>
+								{style.label}
+							</button>
+						{/each}
+					</div>
+				</div>
+			{/each}
+		</section>
+
+		<section class={card} aria-labelledby="timers">
+			<h2 id="timers" class="text-lg font-semibold">Timers</h2>
+			{#each toggles as toggle (toggle.key)}
+				<label class="flex min-h-11 items-center justify-between gap-3">
+					<span class="flex flex-col">
+						<span class="font-medium">{toggle.label}</span>
+						<span class="text-sm text-gray-600 dark:text-gray-400">{toggle.hint}</span>
+					</span>
+					<input type="checkbox" class="size-6 shrink-0" bind:checked={settings[toggle.key]} />
+				</label>
+			{/each}
+		</section>
+
+		<section class={card} aria-labelledby="tool-defaults" data-testid="tool-defaults">
+			<h2 id="tool-defaults" class="text-lg font-semibold">Tool defaults</h2>
+
+			<h3 class="font-semibold">Weightlifting Calculator</h3>
+			<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Weightlifting units">
+				{#each WEIGHT_UNITS as unit (unit)}
+					<button
+						type="button"
+						role="radio"
+						aria-checked={settings.lifting.unit === unit}
+						class="rounded-xl px-3 py-2 text-sm font-medium {settings.lifting.unit === unit
+							? 'bg-blue-600 text-white'
+							: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+						onclick={() => (settings.lifting.unit = unit)}
+					>
+						{unit === 'lb' ? 'Pounds (lb)' : 'Kilograms (kg)'}
+					</button>
+				{/each}
+			</div>
+			<label id="equipment" class="flex scroll-mt-20 flex-col gap-1 text-sm">
+				<span>Equipment set</span>
+				<select
+					class="rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
+					value={settings.lifting.activeSet}
+					onchange={(e) => (settings.lifting.activeSet = e.currentTarget.value)}
+				>
+					<option value={COMMERCIAL_GYM}>Commercial gym ({settings.lifting.unit})</option>
+					{#each settings.lifting.sets as set (set.id)}
+						<option value={set.id}>{set.name} ({set.unit})</option>
+					{/each}
+				</select>
+			</label>
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				The calculator loads from this set. The commercial gym uses the units above; your own sets
+				have their own.
+			</p>
+			<EquipmentSets />
+
+			<h3 class="mt-2 font-semibold">Coffee Timer</h3>
+			<div class="flex items-center justify-between gap-3">
+				<span>Default length</span>
+				<div class="flex items-center gap-2">
 					<button
 						type="button"
 						class={button}
-						disabled={!pending.found.length}
-						onclick={() => apply('replace')}
+						aria-label="15 seconds shorter"
+						disabled={settings.coffeeDefaultSeconds <= COFFEE_SECONDS.min}
+						onclick={() => adjustCoffee(-15)}>−15s</button
 					>
-						Replace everything
-					</button>
-				</div>
-				<p class="text-xs text-gray-600 dark:text-gray-400">
-					Merge keeps data that isn't in the backup. Replace clears everything first.
-				</p>
-				<button type="button" class="{button} text-sm" onclick={() => (pending = null)}
-					>Cancel</button
-				>
-			</div>
-		{/if}
-
-		<h3 class="mt-2 font-semibold">Clear data</h3>
-		<ul class="flex flex-col gap-2">
-			{#each groups as group (group.id)}
-				<li class="flex items-center justify-between gap-3">
-					<span>{group.label}</span>
+					<span class="w-14 text-center text-lg tabular-nums" data-testid="coffee-default"
+						>{formatDuration(settings.coffeeDefaultSeconds * 1000)}</span
+					>
 					<button
 						type="button"
-						class="{button} text-sm"
-						disabled={!hasData(group)}
-						aria-label="Clear {group.label}"
-						onclick={() => clearGroup(group)}>Clear</button
+						class={button}
+						aria-label="15 seconds longer"
+						disabled={settings.coffeeDefaultSeconds >= COFFEE_SECONDS.max}
+						onclick={() => adjustCoffee(15)}>+15s</button
 					>
-				</li>
-			{/each}
-		</ul>
-		<button
-			type="button"
-			class="rounded-xl bg-red-600 px-3 py-2 font-semibold text-white active:bg-red-700 disabled:opacity-40"
-			disabled={!anyData}
-			onclick={clearAll}
-		>
-			Clear all data
-		</button>
-	</section>
+				</div>
+			</div>
 
-	<section class={card} aria-labelledby="about">
-		<h2 id="about" class="text-lg font-semibold">About</h2>
-		<dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-			<dt class="text-gray-600 dark:text-gray-400">{BRAND}</dt>
-			<dd>
-				<button
-					type="button"
-					class="text-left"
-					data-testid="about-acronym"
-					onclick={() => acronymTaps++}
-				>
-					<Acronym phrase={secret ? SECRET_ACRONYM : ACRONYM} />{#if secret}
-						<span aria-hidden="true" class="ml-1">🧇🏋️🧼</span>{/if}
-				</button>
-			</dd>
-			<dt class="text-gray-600 dark:text-gray-400">Version</dt>
-			<dd data-testid="version">{built}</dd>
-			<dt class="text-gray-600 dark:text-gray-400">Source</dt>
-			<dd>
-				<a class="underline" href="https://github.com/xcwds/xcwds.github.io" rel="external noopener"
-					>github.com/xcwds/xcwds.github.io</a
-				>
-			</dd>
-		</dl>
-	</section>
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				A length you pick in the timer is remembered; changing the default resets that.
+			</p>
 
-	<section class={card} aria-labelledby="whats-new" data-testid="whats-new">
-		<h2 id="whats-new" class="text-lg font-semibold">What's new</h2>
-		<ol class="flex flex-col gap-3 text-sm">
-			{#each changelog.slice(0, RECENT) as entry (entry.id)}
-				<li data-testid="whats-new-entry">
-					<p class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-						<time datetime={entry.date}
-							>{new Date(`${entry.date}T12:00`).toLocaleDateString(undefined, {
-								dateStyle: 'medium'
-							})}</time
-						>
-						{#if entry.id > seenBefore}
-							<span
-								data-testid="whats-new-badge"
-								class="rounded-full bg-blue-600 px-2 text-xs font-semibold text-white">New</span
-							>
-						{/if}
+			<h3 class="mt-2 font-semibold">Cooking Timer</h3>
+			<label class="flex flex-col gap-1 text-sm">
+				<span>Quick-start buttons (minutes, separated by commas)</span>
+				<input
+					class="rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
+					inputmode="decimal"
+					bind:value={presetsText}
+					onchange={savePresets}
+				/>
+			</label>
+			{#if presetsError}
+				<p class="text-sm text-red-700 dark:text-red-400" role="alert">{presetsError}</p>
+			{/if}
+
+			<h3 class="mt-2 font-semibold">Pizza Dough Calculator</h3>
+			<p class="text-sm" data-testid="pizza-defaults">
+				{pizza.balls} × {pizza.ballWeight} g · {pizza.hydration}% hydration · {pizza.salt}% salt ·
+				{pizza.yeast}% yeast · {pizza.oil}% oil · {pizza.sugar}% sugar
+			</p>
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				Always in grams. Change these with <strong>Save as my defaults</strong> in the calculator.
+			</p>
+			<button
+				type="button"
+				class="{button} text-sm"
+				disabled={pizzaIsBuiltIn}
+				onclick={() => (settings.pizzaDefaults = { ...doughDefaults })}
+			>
+				Restore built-in pizza defaults
+			</button>
+
+			<h3 class="mt-2 font-semibold">Recipes</h3>
+			<RecipeUnitsToggle />
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				Ingredient units. “As written” shows each recipe in the units it was written in.
+			</p>
+
+			<h3 class="mt-2 font-semibold">Oven Time Converter</h3>
+			<TempUnitToggle />
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				Also used by the “different temperature” panel on recipes.
+			</p>
+		</section>
+
+		<section class={card} aria-labelledby="data">
+			<h2 id="data" class="text-lg font-semibold">Your data</h2>
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				Everything is saved only on this device. Back it up to move it to another phone or keep a
+				copy.
+			</p>
+			{#if !writable}
+				<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="storage-warning">
+					This browser isn't letting xcwds save anything right now (storage is full, or site data is
+					blocked). Changes last only until you close the app. If storage is full, download a
+					backup, then clear data you don't need.
+				</p>
+			{/if}
+
+			<div class="grid gap-2 {canShareFiles ? 'grid-cols-2' : 'grid-cols-1'}">
+				<button type="button" class={primary} onclick={download}>Download backup</button>
+				{#if canShareFiles}
+					<button type="button" class={primary} onclick={share}>Share backup</button>
+				{/if}
+			</div>
+
+			<input
+				bind:this={fileInput}
+				type="file"
+				accept="application/json,.json"
+				class="hidden"
+				aria-label="Backup file"
+				onchange={chooseFile}
+			/>
+			<button type="button" class={button} onclick={() => fileInput?.click()}>Import backup…</button
+			>
+
+			{#if importError}
+				<p class="text-sm text-red-700 dark:text-red-400" role="alert">{importError}</p>
+			{/if}
+
+			{#if pending}
+				<div
+					class="flex flex-col gap-2 rounded-xl bg-blue-50 p-3 dark:bg-gray-800"
+					data-testid="import-preview"
+				>
+					<p class="font-medium">
+						Backup{pending.backup.exportedAt
+							? ` from ${new Date(pending.backup.exportedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`
+							: ''}
 					</p>
-					<ul class="list-disc pl-5">
-						{#each entry.items as item (item)}
-							<li>{item}</li>
-						{/each}
-					</ul>
-				</li>
-			{/each}
-		</ol>
-	</section>
+					{#if pending.found.length}
+						<ul class="list-disc pl-5 text-sm">
+							{#each pending.found as e (e.key)}
+								<li>{e.label}</li>
+							{/each}
+						</ul>
+					{:else}
+						<p class="text-sm">It has no data this app can use.</p>
+					{/if}
+					{#if pending.skipped.length}
+						<p class="text-sm text-amber-800 dark:text-amber-300">
+							{pending.skipped.length} unrecognized or invalid {pending.skipped.length === 1
+								? 'item'
+								: 'items'} will be skipped.
+						</p>
+					{/if}
+					<div class="grid grid-cols-2 gap-2 text-sm">
+						<button
+							type="button"
+							class={primary}
+							disabled={!pending.found.length}
+							onclick={() => apply('merge')}
+						>
+							Merge
+						</button>
+						<button
+							type="button"
+							class={button}
+							disabled={!pending.found.length}
+							onclick={() => apply('replace')}
+						>
+							Replace everything
+						</button>
+					</div>
+					<p class="text-xs text-gray-600 dark:text-gray-400">
+						Merge keeps data that isn't in the backup. Replace clears everything first.
+					</p>
+					<button type="button" class="{button} text-sm" onclick={() => (pending = null)}
+						>Cancel</button
+					>
+				</div>
+			{/if}
+
+			<h3 class="mt-2 font-semibold">Clear data</h3>
+			<ul class="flex flex-col gap-2">
+				{#each groups as group (group.id)}
+					<li class="flex items-center justify-between gap-3">
+						<span>{group.label}</span>
+						<button
+							type="button"
+							class="{button} text-sm"
+							disabled={!hasData(group)}
+							aria-label="Clear {group.label}"
+							onclick={() => clearGroup(group)}>Clear</button
+						>
+					</li>
+				{/each}
+			</ul>
+			<button
+				type="button"
+				class="rounded-xl bg-red-600 px-3 py-2 font-semibold text-white active:bg-red-700 disabled:opacity-40"
+				disabled={!anyData}
+				onclick={clearAll}
+			>
+				Clear all data
+			</button>
+		</section>
+
+		<section class={card} aria-labelledby="about">
+			<h2 id="about" class="text-lg font-semibold">About</h2>
+			<dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+				<dt class="text-gray-600 dark:text-gray-400">{BRAND}</dt>
+				<dd>
+					<button
+						type="button"
+						class="text-left"
+						data-testid="about-acronym"
+						onclick={() => acronymTaps++}
+					>
+						<Acronym phrase={secret ? SECRET_ACRONYM : ACRONYM} />{#if secret}
+							<span aria-hidden="true" class="ml-1">🧇🏋️🧼</span>{/if}
+					</button>
+				</dd>
+				<dt class="text-gray-600 dark:text-gray-400">Version</dt>
+				<dd data-testid="version">{built}</dd>
+				<dt class="text-gray-600 dark:text-gray-400">Source</dt>
+				<dd>
+					<a
+						class="underline"
+						href="https://github.com/xcwds/xcwds.github.io"
+						rel="external noopener">github.com/xcwds/xcwds.github.io</a
+					>
+				</dd>
+			</dl>
+		</section>
+
+		<section class={card} aria-labelledby="whats-new" data-testid="whats-new">
+			<h2 id="whats-new" class="text-lg font-semibold">What's new</h2>
+			<ol class="flex flex-col gap-3 text-sm">
+				{#each changelog.slice(0, RECENT) as entry (entry.id)}
+					<li data-testid="whats-new-entry">
+						<p class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+							<time datetime={entry.date}
+								>{new Date(`${entry.date}T12:00`).toLocaleDateString(undefined, {
+									dateStyle: 'medium'
+								})}</time
+							>
+							{#if entry.id > seenBefore}
+								<span
+									data-testid="whats-new-badge"
+									class="rounded-full bg-blue-600 px-2 text-xs font-semibold text-white">New</span
+								>
+							{/if}
+						</p>
+						<ul class="list-disc pl-5">
+							{#each entry.items as item (item)}
+								<li>{item}</li>
+							{/each}
+						</ul>
+					</li>
+				{/each}
+			</ol>
+		</section>
+	</div>
 </main>

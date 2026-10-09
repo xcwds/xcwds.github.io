@@ -66,7 +66,7 @@ test('renaming a param updates its tracking badge, warning and "Remove tracking"
 	await page.getByLabel('Paste a link').fill('https://example.com/?utm_source=x&color=red');
 	const params = page.getByTestId('param');
 	const cleaned = page.getByTestId('cleaned');
-	const warning = page.getByText(/known tracking params? (is|are) still in the\s+link/);
+	const warning = page.getByText(/known tracking params? (is|are) still in\s+the\s+link/);
 
 	// Keep the tracker, then rename it to an ordinary key: no badge, no warning.
 	await page.getByLabel('Keep utm_source').check();

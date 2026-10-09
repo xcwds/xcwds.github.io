@@ -39,6 +39,23 @@ html[data-color-scheme='dark'] {
 	}
 }
 
+/* Narrow until `xl`, then wide enough for two columns (with or without the sidebar); the page
+   switches to them with a container query (`@container` + `@[50rem]:`), so they only appear
+   when both fit. */
+@utility page-split {
+	margin-inline: auto;
+	width: 100%;
+	max-width: var(--container-md);
+	padding-inline: --spacing(4);
+	@variant sm {
+		padding-inline: --spacing(8);
+	}
+	@variant xl {
+		max-width: var(--container-5xl);
+		padding-inline: --spacing(12);
+	}
+}
+
 @utility page-wide {
 	margin-inline: auto;
 	width: 100%;
