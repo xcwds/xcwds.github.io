@@ -19,7 +19,7 @@
 </svelte:head>
 
 <main
-	class="mx-auto flex max-w-md flex-col gap-6 px-4 pt-2 pb-4 text-gray-800 sm:px-8 sm:pb-8 dark:text-gray-200"
+	class="page-narrow flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200"
 	data-testid="error-page"
 >
 	<div class="flex flex-col gap-2 rounded-2xl bg-white/80 p-4 dark:bg-gray-900">

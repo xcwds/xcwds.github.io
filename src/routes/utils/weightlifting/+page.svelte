@@ -76,9 +76,7 @@
 	<title>Weightlifting Calculator</title>
 </svelte:head>
 
-<main
-	class="mx-auto flex max-w-md flex-col gap-6 px-4 pt-2 pb-4 text-gray-800 sm:px-8 sm:pb-8 dark:text-gray-200"
->
+<main class="page-narrow flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200">
 	<div class="grid grid-cols-3 gap-2" role="tablist">
 		{#each tabs as t (t.id)}
 			<button

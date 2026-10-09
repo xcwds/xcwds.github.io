@@ -7,10 +7,18 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
-		id: 25,
+		id: 26,
 		date: '2026-10-09',
 		items: [
 			'New Cooking Guide in the Recipes tab: general cooking know-how, starting with when to use the grill, the stovetop or the oven.'
+		]
+	},
+	{
+		id: 25,
+		date: '2026-10-09',
+		items: [
+			'On tablets in landscape and on computers, sections now live in a sidebar. Pick a top bar or the sidebar for portrait and landscape in Settings → Appearance.',
+			'On bigger screens, pages line up with their titles, and notifications show at the top right.'
 		]
 	},
 	{

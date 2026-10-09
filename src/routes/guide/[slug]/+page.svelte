@@ -30,9 +30,7 @@
 	<meta name="description" content={article.summary} />
 </svelte:head>
 
-<main
-	class="mx-auto flex max-w-2xl flex-col gap-6 px-6 pt-2 pb-6 text-gray-800 sm:px-12 sm:pb-12 dark:text-gray-200"
->
+<main class="page-wide flex flex-col gap-6 pt-2 pb-6 text-gray-800 sm:pb-12 dark:text-gray-200">
 	<p>{article.summary}</p>
 
 	{#each article.sections as section (sectionId(section))}

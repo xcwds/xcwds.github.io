@@ -67,3 +67,13 @@ export function activeSection(pathname: string): SectionPath {
 		.find((s) => path === s.path || path.startsWith(`${s.path}/`));
 	return match?.path ?? '/';
 }
+
+/**
+ * Which page container (`page-narrow` / `page-wide` in app.css) a path's <main> uses, so the
+ * header can line up with it. Lists, recipes and Home are wide; tools, Settings and errors narrow.
+ */
+export function pageWidth(pathname: string): 'narrow' | 'wide' {
+	const path = normalize(pathname);
+	if (path === '/settings' || tools.some((t) => t.path === path)) return 'narrow';
+	return 'wide';
+}

@@ -23,6 +23,16 @@ function applyTheme(theme: Theme) {
 	document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[scheme]);
 }
 
+/**
+ * Sets the navigation style for each orientation on <html> (`data-nav-portrait`,
+ * `data-nav-landscape`); the `sidebar` variant in app.css picks the one that applies.
+ */
+export function applyNav(nav: Settings['nav']) {
+	const root = document.documentElement;
+	root.dataset.navPortrait = nav.portrait;
+	root.dataset.navLandscape = nav.landscape;
+}
+
 /** Re-reads settings from storage, e.g. after an import or reset. */
 export function reloadSettings() {
 	Object.assign(settings, read(entries.settings) ?? structuredClone(defaultSettings));
@@ -64,6 +74,7 @@ export function startSettings() {
 			// Snapshot reads every nested field, so changes to lists and objects are saved too.
 			const snapshot = $state.snapshot(settings);
 			applyTheme(snapshot.theme);
+			applyNav(snapshot.nav);
 			// Don't recreate saved data just by visiting: only save once something differs.
 			const json = JSON.stringify(snapshot);
 			if (json === lastSaved) return;

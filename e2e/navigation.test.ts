@@ -57,17 +57,17 @@ test.describe('on a phone', () => {
 test.describe('on desktop', () => {
 	test.use({ viewport: { width: 1280, height: 800 } });
 
-	test('sections are linked from the header instead of a tab bar', async ({ page }) => {
+	test('sections are linked from a sidebar instead of a tab bar', async ({ page }) => {
 		await gotoHydrated(page, '/recipes');
-		const header = page.locator('header').getByRole('navigation', { name: 'Main' });
-		await expect(header).toBeVisible();
-		await expect(header.getByRole('link', { name: 'Recipes' })).toHaveAttribute(
+		const sidebar = page.getByRole('navigation', { name: 'Main' });
+		// The tab bar and header links are display:none here, so only the sidebar is exposed.
+		await expect(sidebar).toHaveCount(1);
+		await expect(page.locator('header').getByRole('navigation')).toHaveCount(0);
+		await expect(sidebar.getByRole('link', { name: 'Recipes' })).toHaveAttribute(
 			'aria-current',
 			'page'
 		);
-		// The phone tab bar is display:none here, so only the header nav is exposed.
-		await expect(page.getByRole('navigation', { name: 'Main' })).toHaveCount(1);
-		await header.getByRole('link', { name: 'Utils' }).click();
+		await sidebar.getByRole('link', { name: 'Utils' }).click();
 		await expect(heading(page)).toHaveText('Utils');
 	});
 });

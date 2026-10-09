@@ -52,7 +52,7 @@
 	<meta name="description" content="{BRAND}: {TAGLINE} {ACRONYM}." />
 </svelte:head>
 
-<main class="mx-auto flex max-w-2xl flex-col gap-8 px-6 pt-2 pb-6 sm:px-12 sm:pb-12">
+<main class="page-wide flex flex-col gap-8 pt-2 pb-6 sm:pb-12">
 	<div class="flex flex-col gap-1">
 		<p class="text-gray-700 dark:text-gray-300">{TAGLINE}</p>
 		<p class="text-sm text-gray-600 dark:text-gray-400" data-testid="acronym">

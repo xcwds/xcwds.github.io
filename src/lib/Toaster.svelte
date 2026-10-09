@@ -10,7 +10,11 @@
 </script>
 
 <!-- Always rendered so screen readers pick up new messages in this live region. -->
-<div role="status" aria-live="polite" class="flex w-full max-w-md flex-col items-center gap-2">
+<div
+	role="status"
+	aria-live="polite"
+	class="flex w-full max-w-md flex-col items-center gap-2 md:items-end"
+>
 	{#each toasts as t (t.id)}
 		{#if t.action}
 			<div

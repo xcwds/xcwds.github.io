@@ -55,7 +55,14 @@ Package manager: pnpm.
   `vite preview` renders errors on the server instead, so `e2e/errors.test.ts` serves `build/` like Pages
   does (`e2e/static-server.ts`).
 - The root layout is the app shell: a header (back arrow + page title as the page's only `<h1>`), a bottom tab
-  bar on phones and header links on desktop. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
+  bar on phones and, on tablets and computers, header links or a left sidebar (#95). Phones (narrower than
+  `md`, or under 500px tall) never get the sidebar; elsewhere Settings → Appearance picks per orientation
+  (`settings.nav`, defaults: header links in portrait, sidebar in landscape), applied as `data-nav-portrait` /
+  `data-nav-landscape` on `<html>` (also set by the `app.html` inline script) and styled with the `sidebar:`
+  variant in `app.css`. Anything tied to the tab bar keeps using `md:`. Every page's `<main>` uses the
+  `page-narrow` (tools, Settings, errors) or `page-wide` (Home, lists, recipes) container from `app.css`, and
+  `pageWidth` in `src/lib/nav.ts` must name the same one so the header lines up. Breakpoints: phone < `md`,
+  tablet `md`–`lg`, computer `lg`+; `e2e/layout.test.ts` covers each. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
   which reads `tools.ts` and the recipe data, so new tools/recipes need no nav changes. Pages must not render
   their own `<h1>` or back links. In the installed app the header also has a Share button (`src/lib/share.ts`):
   it shares the page's origin + path only (never query or hash) and skips Settings and private
