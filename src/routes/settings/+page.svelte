@@ -268,11 +268,11 @@
 		</p>
 		{#each orientations as orientation (orientation.key)}
 			<div class="flex items-center gap-3">
-				<span class="w-24 shrink-0 text-sm" id="nav-{orientation.key}">{orientation.label}</span>
+				<span class="w-24 shrink-0 text-sm" aria-hidden="true">{orientation.label}</span>
 				<div
 					class="grid flex-1 grid-cols-2 gap-2"
 					role="radiogroup"
-					aria-labelledby="nav-{orientation.key}"
+					aria-label="Navigation in {orientation.label.toLowerCase()}"
 				>
 					{#each navStyles as style (style.value)}
 						{@const checked = settings.nav[orientation.key] === style.value}

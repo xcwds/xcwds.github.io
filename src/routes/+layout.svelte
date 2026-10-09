@@ -60,6 +60,32 @@
 </script>
 
 <div class="min-h-svh bg-blue-200 dark:bg-gray-950">
+	<!-- Tablets and computers: a sidebar instead of the header links, per Settings → Appearance.
+	     First in the DOM so keyboard users reach it before the page, like the header links. -->
+	<nav
+		aria-label="Main"
+		class="fixed inset-y-0 left-0 z-10 hidden w-[calc(14rem+env(safe-area-inset-left))] flex-col gap-1 border-r border-black/5 bg-blue-100/95 pt-[calc(env(safe-area-inset-top)+0.75rem)] pr-3 pb-3 pl-[calc(env(safe-area-inset-left)+0.75rem)] backdrop-blur sidebar:flex dark:border-white/10 dark:bg-gray-900/95"
+	>
+		<p class="px-3 py-2 text-lg font-semibold text-gray-900 dark:text-gray-100">{BRAND}</p>
+		<ul class="flex flex-col gap-1">
+			{#each sections as section (section.path)}
+				<li>
+					<a
+						href={resolve(section.path)}
+						aria-current={active === section.path ? 'page' : undefined}
+						class="flex min-h-11 items-center gap-3 rounded-xl px-3 font-medium {active ===
+						section.path
+							? 'bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100'
+							: 'text-gray-700 hover:bg-white/60 dark:text-gray-300 dark:hover:bg-gray-800'}"
+					>
+						<span aria-hidden="true" class="text-xl">{section.emoji}</span>
+						{section.label}
+					</a>
+				</li>
+			{/each}
+		</ul>
+	</nav>
+
 	<!-- Not sticky: long recipe titles wrap, and the tab bar or sidebar keeps navigation in reach. -->
 	<header class="pt-[env(safe-area-inset-top)] sidebar:pl-[calc(14rem+env(safe-area-inset-left))]">
 		<div class="mx-auto flex max-w-2xl items-center gap-2 px-4 py-3 {headerWidth}">
@@ -142,31 +168,6 @@
 		<UpdateBanner />
 		<OfflineNotice />
 	</div>
-
-	<!-- Tablets and computers: a sidebar instead of the header links, per Settings → Appearance. -->
-	<nav
-		aria-label="Main"
-		class="fixed inset-y-0 left-0 z-10 hidden w-[calc(14rem+env(safe-area-inset-left))] flex-col gap-1 border-r border-black/5 bg-blue-100/95 pt-[calc(env(safe-area-inset-top)+0.75rem)] pr-3 pb-3 pl-[calc(env(safe-area-inset-left)+0.75rem)] backdrop-blur sidebar:flex dark:border-white/10 dark:bg-gray-900/95"
-	>
-		<p class="px-3 py-2 text-lg font-semibold text-gray-900 dark:text-gray-100">{BRAND}</p>
-		<ul class="flex flex-col gap-1">
-			{#each sections as section (section.path)}
-				<li>
-					<a
-						href={resolve(section.path)}
-						aria-current={active === section.path ? 'page' : undefined}
-						class="flex min-h-11 items-center gap-3 rounded-xl px-3 font-medium {active ===
-						section.path
-							? 'bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100'
-							: 'text-gray-700 hover:bg-white/60 dark:text-gray-300 dark:hover:bg-gray-800'}"
-					>
-						<span aria-hidden="true" class="text-xl">{section.emoji}</span>
-						{section.label}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</nav>
 
 	<nav
 		aria-label="Main"

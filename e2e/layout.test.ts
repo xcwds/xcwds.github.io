@@ -77,14 +77,14 @@ test('changing the setting in Settings switches the navigation', async ({ page }
 	await gotoHydrated(page, '/settings');
 	await expectNav(page, 'sidebar');
 	await page
-		.getByRole('radiogroup', { name: 'Landscape' })
+		.getByRole('radiogroup', { name: 'Navigation in landscape' })
 		.getByRole('radio', { name: 'Top bar' })
 		.click();
 	await expectNav(page, 'header');
 	await page.reload();
 	await expectNav(page, 'header');
 	await page
-		.getByRole('radiogroup', { name: 'Landscape' })
+		.getByRole('radiogroup', { name: 'Navigation in landscape' })
 		.getByRole('radio', { name: 'Sidebar' })
 		.click();
 	await expectNav(page, 'sidebar');
@@ -92,6 +92,12 @@ test('changing the setting in Settings switches the navigation', async ({ page }
 
 test.describe('with the sidebar', () => {
 	test.use({ viewport: viewports.desktop });
+
+	test('keyboard users reach the sidebar before the page', async ({ page }) => {
+		await gotoHydrated(page, '/recipes');
+		await page.keyboard.press('Tab');
+		await expect(sidebar(page).getByRole('link', { name: 'Home' })).toBeFocused();
+	});
 
 	for (const path of [
 		'/',
