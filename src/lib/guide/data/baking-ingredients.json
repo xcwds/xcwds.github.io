@@ -1,0 +1,180 @@
+{
+	"slug": "baking-ingredients",
+	"name": "Baking Ingredients",
+	"emoji": "🧈",
+	"category": "baking",
+	"tags": [
+		"Baking",
+		"Flour",
+		"Sugar",
+		"Butter",
+		"Eggs",
+		"Baking soda",
+		"Baking powder",
+		"Salt",
+		"Buttermilk"
+	],
+	"summary": "What flour, sugar, fat, eggs, leaveners and salt each do in a bake, so you know what changes when you swap one.",
+	"sections": [
+		{
+			"heading": "Flour",
+			"blocks": [
+				"Flour gives a bake its structure. Mixed with water, two of its proteins form **gluten**, a stretchy network that traps gas. More protein means more gluten: chewier bread, but tougher cakes.",
+				{
+					"type": "table",
+					"columns": ["Flour", "Protein", "Use it for"],
+					"rows": [
+						["Cake or pastry", "Low", "Tender cakes, delicate pastry."],
+						[
+							"All-purpose",
+							"Medium",
+							"Almost everything: cookies, quick breads, pancakes, pie crust, everyday bread."
+						],
+						["Bread", "High", "Chewy yeast breads and pizza."],
+						[
+							"Whole wheat",
+							"High, but the bran cuts the gluten",
+							"Nuttier, denser bakes; it drinks more liquid, so start by swapping a quarter of the white flour."
+						],
+						[
+							"00",
+							"Varies",
+							"A very finely milled Italian flour, used for Neapolitan-style pizza and pasta."
+						]
+					]
+				},
+				"The more you mix flour with liquid, the more gluten develops. That's what you want in bread dough and what you avoid in muffins and pancakes; see [mixing methods](guide:mixing-methods)."
+			]
+		},
+		{
+			"heading": "Sugar",
+			"blocks": [
+				"Sugar does far more than sweeten. It holds on to moisture (softer, longer-keeping bakes), browns the crust, makes cookies spread and keeps cakes tender. Cutting the sugar in a recipe by more than about a quarter changes the texture, not just the taste.",
+				{
+					"type": "list",
+					"items": [
+						"**Granulated:** the default.",
+						"**Brown:** granulated sugar with molasses. It's moister and slightly acidic, so it makes cookies chewier and helps baking soda work.",
+						"**Powdered (confectioners'):** finely ground with a little cornstarch, for icings and some shortbreads. Not a one-for-one swap for granulated."
+					]
+				}
+			]
+		},
+		{
+			"heading": "Fat",
+			"blocks": [
+				"Fat makes bakes tender by coating flour so less gluten forms, and it carries flavor.",
+				{
+					"type": "list",
+					"items": [
+						"**Butter** has the best flavor. It's only about 80% fat; the rest is mostly water, which turns to steam and helps flaky doughs lift.",
+						"**Oil** is pure fat and stays liquid, so it makes moist, soft cakes and quick breads, but nothing flaky or creamed.",
+						"**Shortening** is pure fat that stays solid at room temperature: tender, flaky crusts with little flavor."
+					]
+				},
+				"Butter's temperature changes the result as much as the amount:",
+				{
+					"type": "table",
+					"columns": ["Butter", "How it feels", "Used for"],
+					"rows": [
+						[
+							"Cold",
+							"Straight from the fridge, firm.",
+							"Pie crust, biscuits, scones: pieces of it make flaky layers."
+						],
+						[
+							"Softened",
+							"About 65°F (18°C). A finger presses a dent without sinking in; it's cool, not shiny or greasy.",
+							"Creaming with sugar for cookies and cakes."
+						],
+						[
+							"Melted",
+							"Liquid, cooled until just warm.",
+							"Brownies, many quick breads, pancakes: denser and chewier."
+						]
+					]
+				},
+				{
+					"type": "tip",
+					"text": "The recipes here use unsalted butter so the salt is under your control. Salted butter works; use a little less salt (see [substitutions](guide:baking-substitutions))."
+				}
+			]
+		},
+		{
+			"heading": "Eggs",
+			"blocks": [
+				"Eggs bind, add structure as they set, help things rise (especially beaten), and add richness from the yolk. Recipes mean **large** eggs unless they say otherwise.",
+				{
+					"type": "tip",
+					"text": "Room-temperature eggs mix in more evenly and don't firm up softened butter. Forgot to take them out? Leave them in a bowl of warm tap water for 5–10 minutes."
+				}
+			]
+		},
+		{
+			"heading": "Baking soda and baking powder",
+			"id": "leaveners",
+			"blocks": [
+				"Both make bubbles of carbon dioxide that lift a batter, but they aren't interchangeable.",
+				{
+					"type": "table",
+					"columns": ["Leavener", "What it needs", "Notes"],
+					"rows": [
+						[
+							"Baking soda",
+							"An acid in the recipe: buttermilk, yogurt, sour cream, brown sugar, honey, natural cocoa, lemon juice.",
+							"About 3–4 times stronger than baking powder. It starts working as soon as it's wet, so bake soon after mixing. It also helps browning."
+						],
+						[
+							"Baking powder",
+							"Nothing: it's baking soda with a dry acid already mixed in.",
+							"Most sold in the US is double-acting: some lift when it's wet, more in the oven's heat."
+						]
+					]
+				},
+				"Many recipes use both: soda to balance an acid ingredient, powder for the rest of the lift. Too much of either tastes bitter or soapy and can make a bake rise fast and then sink.",
+				{
+					"type": "tip",
+					"text": "Both go flat with age. To test baking powder, stir ½ tsp into hot water: it should fizz right away. For baking soda, add a few drops of vinegar to ¼ tsp."
+				},
+				"Dutch-process cocoa has been treated to remove its acidity, so it doesn't activate baking soda the way natural cocoa does. Recipes written for one aren't always right with the other.",
+				"Yeast is a different kind of leavener, living rather than chemical; see [yeast dough](guide:yeast-dough)."
+			]
+		},
+		{
+			"heading": "Salt",
+			"blocks": [
+				"A little salt makes sweet things taste more like themselves, and in bread it strengthens gluten and keeps the yeast in check.",
+				"Salts differ a lot by volume: a teaspoon of table salt is about twice as salty as a teaspoon of Diamond Crystal kosher salt, because kosher flakes are bigger and pack loosely. In these recipes plain \"salt\" means table or fine sea salt; see the [spoon weights](guide:measuring-for-baking#spoons)."
+			]
+		},
+		{
+			"heading": "Milk, buttermilk and yogurt",
+			"id": "dairy",
+			"blocks": [
+				"Milk adds moisture, richness and browning. Buttermilk, yogurt and sour cream do the same and add acid, which tenderizes and feeds baking soda; that's why the [pancakes](recipe:buttermilk-pancakes) use both buttermilk and soda. No buttermilk? See [substitutions](guide:baking-substitutions)."
+			]
+		},
+		{
+			"heading": "If you change one thing",
+			"id": "changes",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Change", "Expect"],
+					"rows": [
+						["Less sugar", "Paler, drier, less tender; cookies spread less."],
+						["More flour", "Drier, denser, more cakey; cookies spread less."],
+						["Melted butter instead of softened", "Denser and chewier; cookies spread more."],
+						["Oil instead of butter", "Moister and softer, less buttery flavor, nothing flaky."],
+						["Bread flour instead of all-purpose", "Chewier and taller; tougher in cakes."],
+						["Brown sugar instead of white", "Moister, chewier, more caramel flavor."]
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["measuring-for-baking", "mixing-methods", "baking-substitutions"],
+		"recipes": ["chocolate-chip-cookies", "buttermilk-pancakes"]
+	}
+}
