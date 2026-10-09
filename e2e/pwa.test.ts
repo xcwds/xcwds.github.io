@@ -2,6 +2,9 @@ import { expect, test } from '@playwright/test';
 import { porkChopsPath } from '../src/lib/parody';
 import { gotoHydrated } from './helpers';
 
+// This file tests the service worker, so it runs even where other tests block it (#91).
+test.use({ serviceWorkers: 'allow' });
+
 const shared = 'https://shop.example.com/item?id=9&utm_source=app&fbclid=zz';
 const clean = 'https://shop.example.com/item?id=9';
 
