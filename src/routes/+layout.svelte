@@ -33,7 +33,7 @@
 	 */
 	let headerWidth = $derived(
 		!page.error && pageWidth(page.url.pathname) === 'wide'
-			? 'md:px-12'
+			? 'md:px-12 lg:max-w-5xl'
 			: 'sidebar:max-w-md sidebar:px-8'
 	);
 	let parentLabel = $derived(sections.find((s) => s.path === info.parent)?.label ?? 'Home');

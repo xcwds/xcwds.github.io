@@ -9,7 +9,7 @@
 </svelte:head>
 
 <main class="page-wide flex flex-col gap-6 pt-2 pb-6 sm:pb-12">
-	<ul class="flex flex-col gap-2">
+	<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
 		{#each tools as tool (tool.path)}
 			{@const pinned = shortcuts.pins.includes(tool.path)}
 			<li class="flex items-stretch gap-2">
