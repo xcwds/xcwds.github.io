@@ -47,6 +47,10 @@ html[data-color-scheme='dark'] {
 	@variant sm {
 		padding-inline: --spacing(12);
 	}
+	/* Computers: room for card grids and the recipe columns. */
+	@variant lg {
+		max-width: var(--container-5xl);
+	}
 }
 
 @import '@skeletonlabs/skeleton';

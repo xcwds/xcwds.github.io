@@ -14,7 +14,7 @@
 	<section
 		aria-label="Timers"
 		data-testid="timer-tray"
-		class="sticky bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-10 flex flex-col gap-2 rounded-2xl bg-blue-50/95 p-3 shadow-lg backdrop-blur md:bottom-4 dark:bg-gray-900/95"
+		class="sticky bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-10 flex flex-col gap-2 rounded-2xl bg-blue-50/95 p-3 shadow-lg backdrop-blur md:bottom-4 lg:col-start-2 dark:bg-gray-900/95"
 	>
 		<ul class="flex flex-col gap-2">
 			{#each timers.items as item (item.id)}

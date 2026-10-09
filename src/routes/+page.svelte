@@ -71,7 +71,7 @@
 					{editing ? 'Done' : 'Edit'}
 				</button>
 			</div>
-			<ul class="flex flex-col gap-2">
+			<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
 				{#each pinned as tool, i (tool.path)}
 					<li class="flex items-stretch gap-2">
 						<a
@@ -117,12 +117,12 @@
 			>
 				Recently used
 			</h2>
-			<ul class="flex flex-col gap-2">
+			<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
 				{#each recent as tool (tool.path)}
 					<li>
 						<a
 							href={resolve(tool.path)}
-							class="flex items-center gap-3 rounded-xl bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
+							class="flex h-full items-center gap-3 rounded-xl bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
 						>
 							<span aria-hidden="true" class="text-2xl">{tool.emoji}</span>
 							<span class="font-medium text-gray-900 dark:text-gray-100">{tool.name}</span>

@@ -59,7 +59,9 @@ Package manager: pnpm.
   variant in `app.css`. Anything tied to the tab bar keeps using `md:`. Every page's `<main>` uses the
   `page-narrow` (tools, Settings, errors) or `page-wide` (Home, lists, recipes) container from `app.css`, and
   `pageWidth` in `src/lib/nav.ts` must name the same one so the header lines up. Breakpoints: phone < `md`,
-  tablet `md`–`lg`, computer `lg`+; `e2e/layout.test.ts` covers each. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
+  tablet `md`–`lg`, computer `lg`+; `e2e/layout.test.ts` covers each. `page-wide` grows to `max-w-5xl` on `lg`,
+  where lists are 3-column grids (2 from `md`) and recipe pages put ingredients in a sticky column beside
+  the steps. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
   which reads `tools.ts` and the recipe data, so new tools/recipes need no nav changes. Pages must not render
   their own `<h1>` or back links. In the installed app the header also has a Share button (`src/lib/share.ts`):
   it shares the page's origin + path only (never query or hash) and skips Settings and private
