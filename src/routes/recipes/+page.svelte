@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { recipes, searchRecipes } from '$lib/recipes';
+	import RecipesGuideSwitch from '$lib/RecipesGuideSwitch.svelte';
 
 	let query = $state('');
 	let results = $derived(searchRecipes(recipes, query));
@@ -11,6 +12,8 @@
 </svelte:head>
 
 <main class="page-wide flex flex-col gap-6 pt-2 pb-6 sm:pb-12">
+	<RecipesGuideSwitch />
+
 	<label class="flex flex-col gap-1">
 		<span class="sr-only">Search recipes</span>
 		<input

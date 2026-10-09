@@ -3,6 +3,7 @@
 	import Acronym from '$lib/Acronym.svelte';
 	import { ACRONYM, BRAND, TAGLINE } from '$lib/brand';
 	import { movePin, shortcuts, togglePin } from '$lib/home.svelte';
+	import { articles } from '$lib/guide';
 	import { recipes } from '$lib/recipes';
 	import { tools } from '$lib/utils/tools';
 
@@ -30,6 +31,12 @@
 			emoji: '📖',
 			name: 'Recipes',
 			blurb: `${recipes.length} classic back-pocket recipes.`
+		},
+		{
+			path: '/guide',
+			emoji: '🍳',
+			name: 'Cooking Guide',
+			blurb: `Cooking know-how beyond the recipes, in ${articles.length} ${articles.length === 1 ? 'article' : 'articles'}.`
 		},
 		{
 			path: '/utils',

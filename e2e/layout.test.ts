@@ -104,6 +104,7 @@ test.describe('with the sidebar', () => {
 		'/utils',
 		'/recipes',
 		'/recipes/pizza-dough',
+		'/guide/grill-stovetop-or-oven',
 		'/settings',
 		'/utils/coffee-timer'
 	]) {
@@ -143,6 +144,8 @@ for (const [name, viewport] of Object.entries(viewports)) {
 			'/utils',
 			'/recipes',
 			'/recipes/pizza-dough',
+			'/guide',
+			'/guide/grill-stovetop-or-oven',
 			'/settings',
 			'/utils/weightlifting'
 		]) {
