@@ -39,6 +39,13 @@ function brokenLinks(article: GuideArticle): string[] {
 	return broken;
 }
 
+/** Plain-text pieces still holding link or bold markup, which would show on the page as is. */
+const unparsedMarkup = (article: GuideArticle) =>
+	articleTexts(article)
+		.flatMap(parseInline)
+		.filter((part) => part.kind === 'text' && /\]\((guide|recipe|tool):|\*\*/.test(part.text))
+		.map((part) => part.text);
+
 describe('guide articles', () => {
 	it('exist', () => {
 		expect(articles.length).toBeGreaterThan(0);
@@ -63,6 +70,7 @@ describe('guide articles', () => {
 			}
 		}
 		expect(brokenLinks(article)).toEqual([]);
+		expect(unparsedMarkup(article)).toEqual([]);
 	});
 
 	it.each(articles.map((a) => [a.slug, a] as const))(
@@ -101,6 +109,19 @@ describe('parseInline', () => {
 		expect(parseInline('[a](https://example.com)')).toEqual([
 			{ kind: 'text', text: '[a](https://example.com)' }
 		]);
+	});
+});
+
+describe('unparsedMarkup', () => {
+	it('catches links and bold that did not parse', () => {
+		const article = (text: string): GuideArticle => ({
+			...articles[0],
+			sections: [{ heading: 'Test', blocks: [text] }]
+		});
+		expect(unparsedMarkup(article('See [sear](guide:stovetop).'))).toEqual([]);
+		expect(unparsedMarkup(article('See [sear](guide: stovetop).'))).toHaveLength(1);
+		expect(unparsedMarkup(article('**[x](recipe:roast-chicken)**'))).toHaveLength(1);
+		expect(unparsedMarkup(article('An **unclosed bold'))).toHaveLength(1);
 	});
 });
 

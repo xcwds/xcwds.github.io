@@ -25,6 +25,7 @@ export type Block =
 	| string
 	| { type: 'list'; items: string[]; ordered?: boolean }
 	| { type: 'tip'; text: string }
+	/** Safety: food safety, burns, fire, carbon monoxide. */
 	| { type: 'warning'; text: string }
 	| TableBlock;
 

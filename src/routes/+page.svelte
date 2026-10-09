@@ -36,7 +36,7 @@
 			path: '/guide',
 			emoji: '🍳',
 			name: 'Cooking Guide',
-			blurb: `${articles.length} ${articles.length === 1 ? 'article' : 'articles'} on cooking methods, meat, doneness and kitchen basics.`
+			blurb: `Cooking know-how beyond the recipes, in ${articles.length} ${articles.length === 1 ? 'article' : 'articles'}.`
 		},
 		{
 			path: '/utils',

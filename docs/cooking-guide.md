@@ -21,7 +21,7 @@ ids are URLs, so don't rename them. See the `GuideArticle` type in `src/lib/guid
 - `blocks[]`: a string (a paragraph), or
   - `{ "type": "list", "items": [...], "ordered"?: true }`
   - `{ "type": "tip", "text": ... }`
-  - `{ "type": "warning", "text": ... }` for food-safety warnings
+  - `{ "type": "warning", "text": ... }` for safety warnings (food safety, burns, fire)
   - `{ "type": "table", "columns": [...], "rows": [[...]], "caption"?: ... }`. On phones each row
     becomes a card headed by its first cell, so make the first column the row's name and keep
     tables to about 4 columns.
@@ -34,7 +34,8 @@ Any text (paragraphs, list items, tips, table cells) supports `**bold**` and lin
 `[sear](guide:stovetop#searing)`, `[Roast Chicken](recipe:roast-chicken)`,
 `[Oven Time Converter](tool:/utils/oven-time)`. No raw HTML or outside links in text.
 `src/lib/guide/guide.spec.ts` fails on any link to a missing article, section, recipe or tool, so
-only link to articles that exist.
+only link to articles that exist. It also fails on link or bold markup that didn't parse (a
+space after `guide:`, a link inside bold, an unclosed `**`), which would otherwise show as raw text.
 
 ## Writing
 

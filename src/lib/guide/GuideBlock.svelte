@@ -27,7 +27,7 @@
 {:else if block.type === 'warning'}
 	<aside
 		class="rounded-xl bg-amber-50 px-4 py-3 text-amber-950 dark:bg-amber-950/60 dark:text-amber-100"
-		aria-label="Food safety"
+		aria-label="Warning"
 	>
 		<span aria-hidden="true">⚠️</span>
 		<InlineText text={block.text} />
