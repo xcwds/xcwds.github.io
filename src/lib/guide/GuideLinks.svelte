@@ -3,12 +3,12 @@
 	import { getArticle } from '$lib/guide';
 
 	/** Kitchen Guide articles to point to, by slug (specs check they exist). */
-	let { slugs, class: className = '' }: { slugs: readonly string[]; class?: string } = $props();
+	let { slugs }: { slugs: readonly string[] } = $props();
 	let links = $derived(slugs.map(getArticle).filter((a) => a !== undefined));
 </script>
 
 {#if links.length}
-	<section class="flex flex-col gap-2 {className}" aria-labelledby="learn-more">
+	<section class="flex flex-col gap-2" aria-labelledby="learn-more">
 		<h2 id="learn-more" class="text-lg font-semibold">Learn more</h2>
 		<ul class="flex flex-col gap-2">
 			{#each links as article (article.slug)}

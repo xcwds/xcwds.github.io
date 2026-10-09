@@ -277,9 +277,7 @@
 			</section>
 		{/if}
 
-		{#if recipe.guides?.length}
-			<GuideLinks slugs={recipe.guides} />
-		{/if}
+		<GuideLinks slugs={recipe.guides ?? []} />
 	</div>
 
 	{#if recipe.source}
