@@ -1,4 +1,6 @@
 <script lang="ts">
+	import GuideLinks from '$lib/guide/GuideLinks.svelte';
+	import { toolGuides } from '$lib/utils/tools';
 	import { settings } from '$lib/settings.svelte';
 	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
 	import { formatDuration } from '$lib/utils/time';
@@ -130,4 +132,6 @@
 		Timers are saved on this device, so they keep counting if the page reloads. The alarm rings on
 		any page of the app while it's open.
 	</p>
+
+	<GuideLinks slugs={toolGuides('/utils/cooking-timer')} />
 </main>

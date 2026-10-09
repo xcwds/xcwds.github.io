@@ -55,6 +55,10 @@ Ingredient names: plain "salt" means table or fine sea salt; name kosher salt wh
 butter". The kitchen guide's measuring article (`/guide/measuring-for-baking`) has the
 cups-to-grams chart that `alt` values should agree with.
 
+- `guides` — Kitchen Guide article slugs (`src/lib/guide/data/`) that go deeper on the recipe's
+  technique or main ingredient, shown as "Learn more" cards after the tips. Two or three at
+  most; `recipes.spec.ts` checks they exist.
+
 Write temperatures in steps as °F with °C in parentheses, rounded like an oven dial
 (`375°F (190°C)`).
 

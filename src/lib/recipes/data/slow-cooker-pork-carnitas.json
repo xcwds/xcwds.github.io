@@ -41,5 +41,6 @@
 		"The broiler step is what makes it carnitas. Don't skip it, but watch it closely.",
 		"Store leftovers in some of the cooking liquid, and broil just before serving so they're crisp.",
 		"Leftover cooking liquid freezes well for soups or rice."
-	]
+	],
+	"guides": ["pork", "braising-and-stewing"]
 }

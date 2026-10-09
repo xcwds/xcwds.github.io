@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readdirSync } from 'node:fs';
+import { getArticle } from '$lib/guide';
 import { FOOD_PRESETS, foodPreset } from '$lib/utils/oven';
 import { MAX_STEP_TIMER_MINUTES, recipes, searchRecipes, stepText, stepTimer } from './index';
 import { isScalable } from './scale';
@@ -45,6 +46,14 @@ describe('recipes', () => {
 			expect(lo).toBeGreaterThan(0);
 			expect(hi).toBeGreaterThanOrEqual(lo);
 			expect(oven.temp).toBeGreaterThan(foodPreset(oven.food).doneF);
+		}
+	});
+});
+
+describe('guides', () => {
+	it('link to Kitchen Guide articles that exist', () => {
+		for (const recipe of recipes) {
+			for (const slug of recipe.guides ?? []) expect(getArticle(slug), recipe.slug).toBeDefined();
 		}
 	});
 });
