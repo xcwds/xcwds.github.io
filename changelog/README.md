@@ -13,4 +13,5 @@ one new file, named with a short slug for the change (the name only has to be un
   `main` (`src/lib/server/changelog.ts`), so two PRs never conflict. Only the entries written
   before this folder existed carry them, in frontmatter.
 - Never rename an entry file: git would see a new file, and the entry would show as new again.
-  Editing an entry's text, or deleting it, is fine. CI checks both rules.
+  Editing an entry's text, or deleting it, is fine. The build rejects a new `id`, and CI rejects
+  renames.

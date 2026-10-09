@@ -19,6 +19,12 @@ export const CHANGELOG_DIR = fileURLToPath(new URL('../../../changelog', import.
 /** Files in the folder that aren't entries. */
 const IGNORED = new Set(['README.md']);
 
+/**
+ * The newest entry written before this folder existed. Only those carry an `id`; a new one can't
+ * pick its own, because only the build knows the order entries reach `main`.
+ */
+const LAST_HAND_NUMBERED_ID = 33;
+
 /** Ids of entries added in the same second are spread over this many slots. */
 const PER_SECOND = 100;
 
@@ -43,6 +49,8 @@ export function parseEntry(file: string, text: string): ParsedEntry {
 			if (key === 'id') {
 				if (!/^[1-9]\d*$/.test(value)) fail(file, `id must be a positive integer, not "${value}"`);
 				entry.id = Number(value);
+				if (entry.id > LAST_HAND_NUMBERED_ID)
+					fail(file, 'new entries get their id from the build; remove the id line');
 			} else if (key === 'date') {
 				if (!isDate(value)) fail(file, `date must be a real YYYY-MM-DD date, not "${value}"`);
 				entry.date = value;

@@ -24,6 +24,7 @@ describe('parseEntry', () => {
 		['- Same.\n- Same.\n', 'listed twice'],
 		['---\nid: 0\n---\n- A.\n', 'positive integer'],
 		['---\nid: 1.5\n---\n- A.\n', 'positive integer'],
+		['---\nid: 34\ndate: 2026-10-10\n---\n- A.\n', 'id from the build'],
 		['---\ndate: 2026-02-30\n---\n- A.\n', 'real YYYY-MM-DD'],
 		['---\ntitle: Hi\n---\n- A.\n', 'unknown frontmatter key'],
 		['---\nid: 1\n- A.\n', 'no closing ---']
