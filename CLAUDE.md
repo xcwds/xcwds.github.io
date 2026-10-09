@@ -41,6 +41,9 @@ Package manager: pnpm.
   wall-clock end times so they stay correct when a phone backgrounds the tab).
 - e2e tests that type into inputs must navigate with `gotoHydrated` from `e2e/helpers.ts`; input sent
   before hydration gets lost or doubled.
+  e2e tests run with service workers blocked (#91: they crashed Chromium on CI); a test file that
+  needs the service worker opts in with `test.use({ serviceWorkers: 'allow' })`, as `pwa`, `update`
+  and `errors` do.
 - The site is an installable PWA: `static/manifest.webmanifest`, icons in `static/icons/` (rendered from `static/icons/icon.svg`; regenerate with
   `node scripts/generate-icons.mjs`), and `src/service-worker.ts`, which precaches every prerendered page for
   offline use. The manifest's `share_target` sends Android shares to `/utils/url-sanitizer`; the service
