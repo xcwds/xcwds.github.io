@@ -32,9 +32,9 @@ describe('routeInfo', () => {
 		}
 	});
 
-	it('titles the cooking guide, in the Recipes tab with no back arrow', () => {
-		expect(routeInfo('/guide')).toEqual({ title: 'Cooking Guide' });
-		expect(routeInfo('/guide/')).toEqual({ title: 'Cooking Guide' });
+	it('titles the kitchen guide, in the Recipes tab with no back arrow', () => {
+		expect(routeInfo('/guide')).toEqual({ title: 'Kitchen Guide' });
+		expect(routeInfo('/guide/')).toEqual({ title: 'Kitchen Guide' });
 	});
 
 	it('covers every guide article, going back to /guide', () => {

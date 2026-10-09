@@ -1,0 +1,156 @@
+{
+	"slug": "baking-troubleshooting",
+	"name": "What Went Wrong?",
+	"emoji": "🔍",
+	"category": "baking",
+	"tags": [
+		"Baking",
+		"Troubleshooting",
+		"Cookies",
+		"Brownies",
+		"Quick bread",
+		"Muffins",
+		"Pancakes",
+		"Flat",
+		"Dense",
+		"Sank"
+	],
+	"summary": "Flat cookies, cakey brownies, a sunken loaf, tough pancakes: the usual causes and what to change next time.",
+	"sections": [
+		{
+			"heading": "Cookies",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Problem", "Likely causes", "Next time"],
+					"rows": [
+						[
+							"Spread thin and flat",
+							"Butter too soft or melted; too little flour; dough put on a warm sheet; oven not fully hot.",
+							"Use softened, not warm, butter; [measure flour](guide:measuring-for-baking) carefully; chill the dough 30 minutes; cool sheets between batches."
+						],
+						[
+							"Puffy and cakey",
+							"Too much flour (scooped cups); too much creaming or too many eggs.",
+							"Spoon and level the flour, or weigh it; cream just until light."
+						],
+						[
+							"Dark or burnt bottoms",
+							"Dark baking sheet; rack too low; oven runs hot.",
+							"Light sheet lined with parchment, middle rack, check your oven with a thermometer ([Oven and Pans](guide:oven-and-pans))."
+						],
+						[
+							"Dry and hard",
+							"Overbaked, or too much flour.",
+							"Take them out while the centers still look soft."
+						],
+						[
+							"Uneven batch",
+							"Different-sized scoops; hot spots in the oven.",
+							"Use a scoop or tablespoon; turn the sheet halfway."
+						]
+					]
+				},
+				{
+					"type": "tip",
+					"text": "The [Chocolate Chip Cookies](recipe:chocolate-chip-cookies) tips explain chilling the dough for thicker cookies."
+				}
+			]
+		},
+		{
+			"heading": "Brownies and bars",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Problem", "Likely causes", "Next time"],
+					"rows": [
+						[
+							"Cakey instead of fudgy",
+							"Overbaked; too much flour; too much beating after the flour went in.",
+							"Pull them when a toothpick shows moist crumbs; fold the flour in gently."
+						],
+						[
+							"No shiny, crackly top",
+							"Eggs and sugar not beaten enough.",
+							"Beat the eggs and sugar hard for a minute, as the [Fudgy Brownies](recipe:brownies) tip says."
+						],
+						[
+							"Dry edges, raw middle",
+							"Glass or dark pan; the recipe's full batter in a smaller pan, so it's deeper.",
+							"Use a light metal pan, or lower the oven by 25°F (15°C) and bake longer ([pan size](guide:oven-and-pans#size))."
+						],
+						["Crumble when cut", "Cut while warm.", "Cool completely in the pan first."]
+					]
+				}
+			]
+		},
+		{
+			"heading": "Quick breads and muffins",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Problem", "Likely causes", "Next time"],
+					"rows": [
+						[
+							"Sank in the middle",
+							"Underbaked; too much baking soda or powder; oven door opened too early.",
+							"Check doneness with a skewer, not the clock; measure leaveners with level spoons."
+						],
+						[
+							"Tough, with tunnels and peaked tops",
+							"Overmixed after the flour went in.",
+							"Stir only until no dry flour shows ([muffin method](guide:mixing-methods#muffin-method))."
+						],
+						[
+							"Gummy streak near the bottom",
+							"Underbaked, or too much wet ingredient (very big bananas).",
+							"Bake until a skewer is clean; measure mashed banana if your bananas are large."
+						],
+						[
+							"Dark top, raw center",
+							"Oven too hot, or a dark pan.",
+							"Lay foil loosely over the top once it's brown, as in the [Banana Bread](recipe:banana-bread) tip."
+						],
+						[
+							"Dense and heavy",
+							"Old leavener; too much flour.",
+							"[Test](guide:baking-ingredients#leaveners) your baking soda and powder; weigh the flour."
+						]
+					]
+				}
+			]
+		},
+		{
+			"heading": "Pancakes",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Problem", "Likely causes", "Next time"],
+					"rows": [
+						[
+							"Flat and dense",
+							"Old baking powder; overmixed batter; batter left standing a long time.",
+							"Test the baking powder; stir until just combined; cook within about 15 minutes."
+						],
+						["Tough or rubbery", "Overmixed.", "Lumpy batter is right."],
+						[
+							"Burnt outside, raw inside",
+							"Pan too hot.",
+							"Medium heat; the first pancake is a test."
+						],
+						[
+							"Pale and greasy",
+							"Pan not hot enough, or too much butter in the pan.",
+							"Heat the pan longer; brush on a thin layer of butter."
+						]
+					]
+				},
+				"More on pan heat for the stovetop in [Grill, Stovetop or Oven?](guide:grill-stovetop-or-oven)."
+			]
+		}
+	],
+	"related": {
+		"guides": ["measuring-for-baking", "mixing-methods", "oven-and-pans", "baking-doneness"],
+		"recipes": ["chocolate-chip-cookies", "brownies", "banana-bread", "buttermilk-pancakes"]
+	}
+}

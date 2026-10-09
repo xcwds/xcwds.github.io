@@ -1,0 +1,109 @@
+{
+	"slug": "measuring-for-baking",
+	"name": "Measuring for Baking",
+	"emoji": "⚖️",
+	"category": "baking",
+	"tags": ["Baking", "Measuring", "Scale", "Cups", "Grams", "Flour", "Conversions"],
+	"summary": "Why a scale beats cups, how to measure flour when you only have cups, and a cups-to-grams chart that matches the recipes.",
+	"sections": [
+		{
+			"heading": "Why baking needs more care",
+			"blocks": [
+				"A stew forgives an extra handful of anything. A cake doesn't: flour, fat, sugar, eggs and leavener work as a set of ratios, and if one drifts the texture changes. Too much flour is the most common problem, and it gives dry cookies, dense cakes and stiff dough.",
+				"A **kitchen scale** fixes most of it. A gram of flour is a gram however you scoop it, while a cup of flour can vary a lot from one person to the next. Weighing is also faster: put the bowl on the scale, press tare (zero), add the first ingredient, tare again, add the next."
+			]
+		},
+		{
+			"heading": "Measuring flour with cups",
+			"blocks": [
+				"No scale? Then how you fill the cup matters more than anything else.",
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Stir the flour in the bag or canister to loosen it.",
+						"Spoon it into a dry measuring cup until it's heaped over the top. Don't shake or tap the cup.",
+						"Sweep the excess off with the back of a knife."
+					]
+				},
+				"Dipping the cup into the bag and scooping packs the flour down, so you get noticeably more of it than the recipe means. That's the usual reason a recipe comes out dry or tough the first time.",
+				{
+					"type": "tip",
+					"text": "The recipes here are written for spooned-and-leveled flour, about 125 g per cup. Some sources use 120 g; either works, the difference is small."
+				}
+			]
+		},
+		{
+			"heading": "Everything else",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Brown sugar** is packed: press it into the cup firmly enough that it holds the cup's shape when you tip it out.",
+						"**Liquids** go in a clear liquid measuring cup on the counter. Read it at eye level, not from above.",
+						"**Sticky things** like honey, molasses and peanut butter slide out of a cup or spoon you've wiped with a little oil.",
+						"**Spoons** are level unless the recipe says heaping: fill, then sweep flat.",
+						"**Butter** sticks in the US are marked in tablespoons: one stick is ½ cup, 8 Tbsp or 113 g."
+					]
+				}
+			]
+		},
+		{
+			"heading": "Cups to grams",
+			"blocks": [
+				"Weights for one level US cup (237 ml), measured the way described above. The recipes' metric amounts agree with these to within a few percent, so a recipe comes out the same whether you follow it in cups or in grams.",
+				{
+					"type": "table",
+					"columns": ["Ingredient", "1 cup", "½ cup", "¼ cup"],
+					"rows": [
+						["All-purpose flour", "125 g", "63 g", "31 g"],
+						["Bread flour", "125 g", "63 g", "31 g"],
+						["Granulated sugar", "200 g", "100 g", "50 g"],
+						["Brown sugar, packed", "215 g", "108 g", "54 g"],
+						["Powdered sugar", "120 g", "60 g", "30 g"],
+						["Butter", "227 g", "113 g", "57 g"],
+						["Unsweetened cocoa powder", "84 g", "42 g", "21 g"],
+						["Chocolate chips", "170 g", "85 g", "43 g"],
+						["Rolled oats", "90 g", "45 g", "23 g"],
+						["Honey", "340 g", "170 g", "85 g"]
+					],
+					"caption": "Water and milk: 1 cup is 237 ml, which weighs about 240 g."
+				}
+			]
+		},
+		{
+			"heading": "Small amounts",
+			"id": "spoons",
+			"blocks": [
+				"A household scale that reads in 1 g steps can't weigh half a teaspoon of baking soda accurately, so for small amounts spoons are often the better tool. Approximate weights of one level teaspoon:",
+				{
+					"type": "table",
+					"columns": ["Ingredient", "1 tsp"],
+					"rows": [
+						["Baking soda", "about 6 g"],
+						["Baking powder", "about 4 g"],
+						["Table salt or fine sea salt", "about 6 g"],
+						["Morton kosher salt", "about 5 g"],
+						["Diamond Crystal kosher salt", "about 3 g"],
+						["Instant or active dry yeast", "about 3 g"]
+					]
+				},
+				{
+					"type": "tip",
+					"text": "That salt table is why recipes say which salt they mean: a teaspoon of Diamond Crystal kosher salt is about half as salty as a teaspoon of table salt. In these recipes, plain \"salt\" means table or fine sea salt."
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["baking-ingredients"],
+		"recipes": [
+			"chocolate-chip-cookies",
+			"banana-bread",
+			"brownies",
+			"buttermilk-pancakes",
+			"pizza-dough"
+		],
+		"tools": ["/utils/pizza-dough"]
+	}
+}

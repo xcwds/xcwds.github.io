@@ -16,7 +16,7 @@
 		{
 			"amount": 0.333,
 			"unit": "cup",
-			"item": "butter",
+			"item": "unsalted butter",
 			"note": "melted",
 			"alt": { "amount": 76, "unit": "g" }
 		},

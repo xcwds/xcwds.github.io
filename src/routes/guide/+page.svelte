@@ -8,10 +8,10 @@
 </script>
 
 <svelte:head>
-	<title>Cooking Guide</title>
+	<title>Kitchen Guide</title>
 	<meta
 		name="description"
-		content="Cooking know-how: which method to use, cuts of meat, doneness and kitchen basics."
+		content="Cooking and baking know-how: which method to use, cuts of meat, measuring, ovens and pans, doneness and kitchen basics."
 	/>
 </svelte:head>
 
@@ -19,7 +19,7 @@
 	<RecipesGuideSwitch />
 
 	<label class="flex flex-col gap-1">
-		<span class="sr-only">Search the cooking guide</span>
+		<span class="sr-only">Search the kitchen guide</span>
 		<input
 			type="search"
 			bind:value={query}

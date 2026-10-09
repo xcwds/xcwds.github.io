@@ -2,14 +2,14 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 
-	// The Recipes tab holds both the recipes and the cooking guide; this switches between them.
+	// The Recipes tab holds both the recipes and the kitchen guide; this switches between them.
 	const links = [
 		{ path: '/recipes', label: 'Recipes' },
-		{ path: '/guide', label: 'Cooking Guide' }
+		{ path: '/guide', label: 'Kitchen Guide' }
 	] as const;
 </script>
 
-<nav aria-label="Recipes or cooking guide" class="grid grid-cols-2 gap-2">
+<nav aria-label="Recipes or kitchen guide" class="grid grid-cols-2 gap-2">
 	{#each links as link (link.path)}
 		{@const current = page.url.pathname.replace(/\/+$/, '') === resolve(link.path)}
 		<a

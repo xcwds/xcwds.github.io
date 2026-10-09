@@ -4,27 +4,27 @@ import { gotoHydrated } from './helpers';
 const heading = (page: Page) => page.getByRole('heading', { level: 1 });
 const tabBar = (page: Page) => page.getByRole('navigation', { name: 'Main' });
 const guideSwitch = (page: Page) =>
-	page.getByRole('navigation', { name: 'Recipes or cooking guide' });
+	page.getByRole('navigation', { name: 'Recipes or kitchen guide' });
 
 test.describe('on a phone', () => {
 	test.use({ viewport: { width: 390, height: 844 } });
 
-	test('the Recipes tab switches between recipes and the cooking guide', async ({ page }) => {
+	test('the Recipes tab switches between recipes and the kitchen guide', async ({ page }) => {
 		await gotoHydrated(page, '/recipes');
 		await expect(guideSwitch(page).getByRole('link', { name: 'Recipes' })).toHaveAttribute(
 			'aria-current',
 			'page'
 		);
 
-		await guideSwitch(page).getByRole('link', { name: 'Cooking Guide' }).click();
+		await guideSwitch(page).getByRole('link', { name: 'Kitchen Guide' }).click();
 		await expect(page).toHaveURL(/\/guide$/);
-		await expect(heading(page)).toHaveText('Cooking Guide');
+		await expect(heading(page)).toHaveText('Kitchen Guide');
 		await expect(page.getByRole('link', { name: /^Back to/ })).toHaveCount(0);
 		await expect(tabBar(page).getByRole('link', { name: 'Recipes' })).toHaveAttribute(
 			'aria-current',
 			'page'
 		);
-		await expect(guideSwitch(page).getByRole('link', { name: 'Cooking Guide' })).toHaveAttribute(
+		await expect(guideSwitch(page).getByRole('link', { name: 'Kitchen Guide' })).toHaveAttribute(
 			'aria-current',
 			'page'
 		);
@@ -50,8 +50,20 @@ test.describe('on a phone', () => {
 			'page'
 		);
 
-		await page.getByRole('link', { name: 'Back to Cooking Guide' }).click();
+		await page.getByRole('link', { name: 'Back to Kitchen Guide' }).click();
 		await expect(page).toHaveURL(/\/guide$/);
+	});
+
+	test('the index has a Baking group that a link can open', async ({ page }) => {
+		await gotoHydrated(page, '/guide#category-baking');
+		const baking = page.getByRole('region', { name: 'Baking' });
+		await expect(baking).toBeInViewport();
+		await baking.getByRole('link', { name: /Measuring for Baking/ }).click();
+		await expect(page).toHaveURL(/\/guide\/measuring-for-baking$/);
+		await expect(page.getByTestId('guide-table-cards').first()).toContainText('All-purpose flour');
+		expect(
+			await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
+		).toBe(true);
 	});
 
 	test('an article shows tables as cards and links to recipes and tools', async ({ page }) => {
