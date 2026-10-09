@@ -3,7 +3,7 @@
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
-	import { doneness, formatInternal, MEATS } from './doneness';
+	import { doneness, formatInternal, formatRise, MEATS } from './doneness';
 
 	const timers = useCookingTimers();
 
@@ -101,9 +101,15 @@
 		<p class="text-sm">
 			{level.looks}.
 			{#if result.pullF < result.targetF}
-				It keeps rising about {settings.ovenUnit === 'F'
-					? `${result.targetF - result.pullF}°F`
-					: `${Math.round(((result.targetF - result.pullF) * 5) / 9)}°C`} while it rests.
+				It keeps rising about {formatRise(result.targetF - result.pullF, settings.ovenUnit)} while it
+				rests.
+			{:else if result.overshootF}
+				<span data-testid="doneness-overshoot">
+					For safety it comes off at the target, so it will likely finish about {formatRise(
+						result.overshootF,
+						settings.ovenUnit
+					)} higher as it rests.
+				</span>
 			{/if}
 			{#if result.restMinutes}
 				Rest {result.restMinutes} minutes before cutting.

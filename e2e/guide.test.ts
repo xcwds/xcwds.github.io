@@ -95,6 +95,7 @@ test('the doneness chart gives pull and done temperatures and starts a rest time
 	// Beef steak, medium: at the USDA minimum, so it comes off right there.
 	await expect(chart.getByRole('radio', { name: /^Medium \d/ })).toBeChecked();
 	await expect(pull).toHaveText('145°F');
+	await expect(page.getByTestId('doneness-overshoot')).toContainText('about 5°F higher');
 	await expect(page.getByTestId('doneness-below-usda')).toHaveCount(0);
 
 	await chart.getByRole('radio', { name: /^Rare/ }).click();

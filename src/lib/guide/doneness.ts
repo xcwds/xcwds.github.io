@@ -162,6 +162,11 @@ export type Doneness = {
 	targetF: number;
 	/** Take it off the heat here; it rises to the target while it rests. */
 	pullF: number;
+	/**
+	 * How far past the target it's likely to finish (°F): when it can't come off early (safety,
+	 * poultry), it still rises while it rests.
+	 */
+	overshootF: number;
 	restMinutes: number;
 	/** The finished temperature is under the USDA safe minimum. */
 	belowUsda: boolean;
@@ -175,9 +180,11 @@ export function doneness(meat: Meat, size: Size, level: DonenessLevel): Doneness
 	const pullF = belowUsda
 		? level.targetF - early
 		: Math.max(level.targetF - early, Math.min(level.targetF, meat.usdaF));
+	const rise = level.tender ? 0 : size.carryoverF;
 	return {
 		targetF: level.targetF,
 		pullF,
+		overshootF: Math.max(0, pullF + rise - level.targetF),
 		restMinutes: size.restMinutes,
 		belowUsda
 	};
@@ -190,4 +197,9 @@ export function doneness(meat: Meat, size: Size, level: DonenessLevel): Doneness
 export function formatInternal(f: number, unit: TempUnit): string {
 	const value = unit === 'F' ? f : ((f - 32) * 5) / 9;
 	return `${Math.round(value)}°${unit}`;
+}
+
+/** A temperature difference ("5°F", "3°C"): no 32° offset, unlike a temperature. */
+export function formatRise(f: number, unit: TempUnit): string {
+	return `${Math.round(unit === 'F' ? f : (f * 5) / 9)}°${unit}`;
 }

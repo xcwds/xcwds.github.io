@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { doneness, formatInternal, MEATS, type Meat } from './doneness';
+import { doneness, formatInternal, formatRise, MEATS, type Meat } from './doneness';
 
 const meat = (id: string) => MEATS.find((m) => m.id === id)!;
 const pick = (m: Meat, size: string, level: string) =>
@@ -30,6 +30,7 @@ describe('doneness', () => {
 		expect(pick(meat('beef'), 'steak', 'rare')).toEqual({
 			targetF: 125,
 			pullF: 120,
+			overshootF: 0,
 			restMinutes: 5,
 			belowUsda: true
 		});
@@ -37,23 +38,40 @@ describe('doneness', () => {
 	});
 
 	it('never pulls a safe level below the USDA minimum', () => {
-		expect(pick(meat('pork'), 'steak', 'medium')).toMatchObject({ pullF: 145, belowUsda: false });
+		expect(pick(meat('pork'), 'steak', 'medium')).toMatchObject({
+			pullF: 145,
+			overshootF: 5,
+			belowUsda: false
+		});
+		expect(pick(meat('beef'), 'roast', 'medium')).toMatchObject({ pullF: 145, overshootF: 10 });
 		expect(pick(meat('beef'), 'roast', 'medium-well').pullF).toBe(145);
-		expect(pick(meat('beef'), 'roast', 'well-done').pullF).toBe(150);
+		expect(pick(meat('beef'), 'roast', 'well-done')).toMatchObject({ pullF: 150, overshootF: 0 });
 	});
 
 	it('takes poultry and ground meat off at the target', () => {
 		expect(pick(meat('poultry'), 'whole', 'breast')).toEqual({
 			targetF: 165,
 			pullF: 165,
+			overshootF: 10,
 			restMinutes: 20,
 			belowUsda: false
 		});
-		expect(pick(meat('ground'), 'patties', 'beef-pork').pullF).toBe(160);
+		expect(pick(meat('ground'), 'patties', 'beef-pork')).toMatchObject({
+			pullF: 160,
+			overshootF: 0
+		});
 	});
 
 	it('has no carryover for fall-apart braises', () => {
-		expect(pick(meat('pork'), 'roast', 'fall-apart').pullF).toBe(200);
+		expect(pick(meat('pork'), 'roast', 'fall-apart')).toMatchObject({ pullF: 200, overshootF: 0 });
+	});
+});
+
+describe('formatRise', () => {
+	it('converts a difference without the 32° offset', () => {
+		expect(formatRise(5, 'F')).toBe('5°F');
+		expect(formatRise(5, 'C')).toBe('3°C');
+		expect(formatRise(10, 'C')).toBe('6°C');
 	});
 });
 
