@@ -383,6 +383,13 @@
 									result.total
 								)}.
 							</p>
+						{:else if result.overLimit}
+							<p class="text-sm text-amber-800 dark:text-amber-300">
+								{weight(target)} is over the calculator's {weight(equipment.maxTotal ?? 0)} limit; the
+								most it loads is {weight(result.total)}{shortOfPlates
+									? ' with the plates you have'
+									: ''}.
+							</p>
 						{:else if !result.exact}
 							<p class="text-sm text-amber-800 dark:text-amber-300">
 								{weight(target)} can't be loaded exactly; closest under is {weight(

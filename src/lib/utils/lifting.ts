@@ -18,6 +18,12 @@ export const UNITS: Record<WeightUnit, UnitSystem> = {
 	kg: { unit: 'kg', plates: [25, 20, 15, 10, 5, 2.5, 1.25], barbell: 20 }
 };
 
+/**
+ * The heaviest total the calculator loads, past what an Olympic bar is rated for (about 1,000 lb).
+ * A typo or a joke can't load a ton of plates (#92). 545 kg is 1,200 lb, to the nearest 5 kg.
+ */
+export const MAX_TOTAL: Record<WeightUnit, number> = { lb: 1200, kg: 545 };
+
 export type BarType = 'barbell' | 'dumbbell' | 'kettlebell';
 export const BAR_TYPES: BarType[] = ['barbell', 'dumbbell', 'kettlebell'];
 
@@ -69,6 +75,8 @@ export type Equipment = {
 	maxLoad?: number;
 	plates?: readonly number[];
 	maxPlatesPerSide?: number;
+	/** Most total weight, bar(s) included (`MAX_TOTAL` for the set's unit). */
+	maxTotal?: number;
 };
 
 /** The built-in set's id; it isn't saved with your own sets. */
@@ -121,7 +129,8 @@ export function stations(set: EquipmentSet): Equipment[] {
 			type: bar.type,
 			bar: bar.weight,
 			sides: bar.type === 'kettlebell' ? 1 : 2,
-			count: 1
+			count: 1,
+			maxTotal: MAX_TOTAL[set.unit]
 		};
 		if (bar.maxLoad !== undefined) one.maxLoad = bar.maxLoad;
 		if (bar.maxPlatesPerSide !== undefined) one.maxPlatesPerSide = bar.maxPlatesPerSide;
@@ -323,6 +332,10 @@ export function platesUsed(equipment: Equipment, sides: PlateCounts[], plate: nu
 	);
 }
 
+/** The heaviest total this equipment loads: its `maxTotal`, but never less than the empty bar(s). */
+export const totalCap = (equipment: Equipment) =>
+	Math.max(equipment.count * equipment.bar, equipment.maxTotal ?? Infinity);
+
 export type TargetResult = {
 	/** Plates for one side (repeat on each side and on each implement). */
 	perSide: PlateCounts;
@@ -332,13 +345,16 @@ export type TargetResult = {
 	exact: boolean;
 	/** Set when the target needs more than the equipment's max load (so the result stops there). */
 	overMax?: true;
+	/** Set when the target is over the calculator's `maxTotal` (so the result stops there). */
+	overLimit?: true;
 };
 
 const UNIT = 1.25; // Smallest plate in both systems; every loadable weight is a multiple of it.
 
 /**
  * Fewest plates per side to reach `target` total (or the closest weight under it), using only
- * plates you have (`inventory`) that fit the equipment, within its max load and plates per side.
+ * plates you have (`inventory`) that fit the equipment, within its max load, plates per side and
+ * max total.
  * Loads are symmetric, so a size can go on each side at most count ÷ (sides × implements)
  * times. Returns null when the target is lighter than the empty bar(s), or isn't a number.
  *
@@ -357,9 +373,11 @@ export function platesForTarget(
 ): TargetResult | null {
 	const empty = equipment.count * equipment.bar;
 	if (!Number.isFinite(target) || !(target >= empty)) return null;
-	const cap = equipment.count * (equipment.bar + (equipment.maxLoad ?? Infinity));
-	const overMax = target > cap + 1e-9;
-	const loadable = Math.min(target, cap);
+	const equipmentCap = equipment.count * (equipment.bar + (equipment.maxLoad ?? Infinity));
+	const limitCap = totalCap(equipment);
+	const overMax = target > equipmentCap + 1e-9 && equipmentCap <= limitCap;
+	const overLimit = target > limitCap + 1e-9 && limitCap < equipmentCap;
+	const loadable = Math.min(target, equipmentCap, limitCap);
 	const perSideWeight = (loadable - empty) / (equipment.count * equipment.sides);
 	let maxUnits = Math.max(0, Math.floor(perSideWeight / UNIT + 1e-9));
 	const implementsSides = equipment.count * equipment.sides;
@@ -378,7 +396,8 @@ export function platesForTarget(
 		perSide,
 		total,
 		exact: Math.abs(total - target) < 1e-9,
-		...(overMax ? { overMax } : {})
+		...(overMax ? { overMax } : {}),
+		...(overLimit ? { overLimit } : {})
 	});
 	// Nothing to load: the bar alone is the only option (and the search below would be unbounded).
 	if (!usable.length) return result({}, empty);
@@ -469,6 +488,7 @@ export function canAdd(
 		changed.some((i) => i < equipment.sides && plateCount(next[i]) > limit)
 	)
 		return false;
+	if (totalWeight(equipment, next) > totalCap(equipment) + 1e-9) return false;
 	return implementWeight(equipment, next) - equipment.bar <= (equipment.maxLoad ?? Infinity) + 1e-9;
 }
 
@@ -506,6 +526,8 @@ export function loadProblems(
 		problems.push(
 			`Over the ${formatWeight(max, unit)} max load${equipment.count === 2 ? ' per dumbbell' : ''}.`
 		);
+	if (totalWeight(equipment, sides) > totalCap(equipment) + 1e-9)
+		problems.push(`Over the calculator's ${formatWeight(equipment.maxTotal ?? 0, unit)} limit.`);
 	return problems;
 }
 

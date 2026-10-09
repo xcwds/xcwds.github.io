@@ -81,10 +81,35 @@ test('a huge target weight answers right away instead of freezing the page (#32)
 	await page.getByRole('button', { name: 'Target weight' }).click();
 	const started = Date.now();
 	await page.getByLabel('Target weight (lb)').fill('100000001');
-	await expect(page.getByTestId('target-result')).toContainText("can't be loaded exactly", {
-		timeout: 2000
-	});
+	await expect(page.getByTestId('target-result')).toContainText(
+		"100000001 lb is over the calculator's 1200 lb limit; the most it loads is 1200 lb.",
+		{ timeout: 2000 }
+	);
 	expect(Date.now() - started).toBeLessThan(2000);
+});
+
+test('the calculator stops at 1,200 lb or 545 kg, loading by hand too (#92)', async ({ page }) => {
+	await gotoHydrated(page, '/utils/weightlifting');
+	const total = page.getByTestId('total');
+	const add45 = page.getByRole('button', { name: 'Add 45 lb', exact: true });
+	for (let i = 0; i < 12; i++) await add45.click();
+	await expect(total).toHaveText('1125 lb');
+	await expect(add45).toBeDisabled();
+	await expect(page.getByRole('button', { name: 'Add 35 lb', exact: true })).toBeEnabled();
+
+	await page.getByRole('button', { name: 'Target weight' }).click();
+	await page.getByLabel('Target weight (lb)').fill('1200');
+	await expect(page.getByTestId('target-result')).not.toContainText('limit');
+	await page.getByLabel('Target weight (lb)').fill('1500');
+	await expect(page.getByTestId('target-result')).toContainText(
+		"1500 lb is over the calculator's 1200 lb limit; the most it loads is 1200 lb."
+	);
+
+	await page.getByRole('radio', { name: 'Kilograms (kg)' }).click();
+	await page.getByLabel('Target weight (kg)').fill('9999');
+	await expect(page.getByTestId('target-result')).toContainText(
+		"9999 kg is over the calculator's 545 kg limit; the most it loads is 545 kg."
+	);
 });
 
 test("a bar's limits decide what the calculator loads (#71)", async ({ page }) => {
