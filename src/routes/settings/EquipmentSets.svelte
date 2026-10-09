@@ -179,12 +179,12 @@
 	const field =
 		'w-full rounded-md border border-gray-300 bg-white px-2 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100';
 	const button =
-		'rounded-xl bg-white/70 px-3 py-2 text-sm font-medium active:bg-white disabled:opacity-40 dark:bg-gray-800 dark:active:bg-gray-700';
+		'rounded-xl bg-white/70 px-3 py-2 text-sm font-medium hover:not-disabled:bg-white active:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700';
 	const toggleClass = (on: boolean) =>
 		`rounded-xl px-3 py-2 text-sm font-medium ${
 			on
 				? 'bg-blue-600 text-white'
-				: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'
+				: 'bg-white/70 hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700'
 		}`;
 </script>
 
@@ -426,7 +426,7 @@
 							</button>
 							<button
 								type="button"
-								class="rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white active:bg-red-700"
+								class="rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:not-disabled:bg-red-700 active:bg-red-700"
 								onclick={() => remove(set)}
 							>
 								Delete
@@ -464,7 +464,7 @@
 				<button type="button" class={button} onclick={() => (creating = false)}>Cancel</button>
 				<button
 					type="button"
-					class="rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white active:bg-blue-700"
+					class="rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700"
 					onclick={create}
 				>
 					Add set

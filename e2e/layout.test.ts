@@ -279,3 +279,38 @@ test.describe('two-column tools and Settings', () => {
 		expect(await x('About')).toBeGreaterThan(await x('Appearance'));
 	});
 });
+
+test.describe('kitchen guide and search on a computer', () => {
+	test.use({ viewport: viewports.desktop });
+
+	test('an article lists its sections beside the text', async ({ page }) => {
+		await gotoHydrated(page, '/guide/grill-stovetop-or-oven');
+		const toc = page.getByRole('navigation', { name: 'On this page' });
+		await expect(toc).toBeVisible();
+		const first = toc.getByRole('link').first();
+		const id = (await first.getAttribute('href'))!.slice(1);
+		const text = (await page.locator('main section h2').first().boundingBox())!;
+		expect((await toc.boundingBox())!.x).toBeGreaterThan(text.x + text.width);
+		await first.click();
+		await expect(page).toHaveURL(new RegExp(`#${id}$`));
+		await page.mouse.wheel(0, 3000);
+		await expect(toc).toBeInViewport();
+	});
+
+	test('"/" focuses the search box', async ({ page }) => {
+		for (const path of ['/recipes', '/guide']) {
+			await gotoHydrated(page, path);
+			await page.keyboard.press('/');
+			await expect(page.getByRole('searchbox')).toBeFocused();
+			// Typing "/" in the box itself types it.
+			await page.keyboard.press('/');
+			await expect(page.getByRole('searchbox')).toHaveValue('/');
+		}
+	});
+});
+
+test('on a phone, an article has no side list', async ({ page }) => {
+	await page.setViewportSize(viewports.phone);
+	await gotoHydrated(page, '/guide/grill-stovetop-or-oven');
+	await expect(page.getByRole('navigation', { name: 'On this page' })).toBeHidden();
+});

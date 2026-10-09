@@ -49,7 +49,7 @@
 							<button
 								type="button"
 								onclick={() => timers.remove(item)}
-								class="col-span-2 rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white active:bg-blue-700"
+								class="col-span-2 rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700"
 							>
 								Stop
 							</button>
@@ -57,14 +57,14 @@
 							<button
 								type="button"
 								onclick={() => timers.toggle(item)}
-								class="rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white active:bg-blue-700"
+								class="rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700"
 							>
 								{item.timer.running ? 'Pause' : 'Resume'}
 							</button>
 							<button
 								type="button"
 								onclick={() => timers.remove(item)}
-								class="rounded-xl bg-white/70 py-3 text-lg active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
+								class="rounded-xl bg-white/70 py-3 text-lg hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700"
 							>
 								Remove
 							</button>
@@ -72,7 +72,7 @@
 						<button
 							type="button"
 							onclick={() => item.timer.add(MINUTE)}
-							class="rounded-xl bg-white/70 py-3 text-lg active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
+							class="rounded-xl bg-white/70 py-3 text-lg hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700"
 						>
 							+1 min
 						</button>
@@ -89,7 +89,7 @@
 				<button
 					type="button"
 					onclick={() => timers.add(preset * MINUTE, '')}
-					class="rounded-xl bg-white/70 py-3 text-lg font-medium active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
+					class="rounded-xl bg-white/70 py-3 text-lg font-medium hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700"
 				>
 					{presetLabel(preset)}
 				</button>
@@ -122,7 +122,7 @@
 		</div>
 		<button
 			type="submit"
-			class="rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white active:bg-blue-700"
+			class="rounded-xl bg-blue-600 py-3 text-lg font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700"
 		>
 			Start timer
 		</button>

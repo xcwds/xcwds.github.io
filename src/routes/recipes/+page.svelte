@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { slashToFocus } from '$lib/shortcuts';
 	import { resolve } from '$app/paths';
 	import { recipes, searchRecipes } from '$lib/recipes';
 	import RecipesGuideSwitch from '$lib/RecipesGuideSwitch.svelte';
@@ -19,6 +20,7 @@
 		<input
 			type="search"
 			bind:value={query}
+			use:slashToFocus
 			placeholder="Search recipes…"
 			class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
 		/>

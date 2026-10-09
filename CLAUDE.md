@@ -96,7 +96,10 @@ Package manager: pnpm.
   offline notice share one stack in the root layout. Install support (`install.svelte.ts`) shows an
   Install button / iPhone steps in Settings and hides once installed.
 - Accessibility baseline lives in `app.css`: 44px minimum controls, a visible `:focus-visible` ring and
-  reduced-motion support. `e2e/app-extras.test.ts` audits tap targets on every page; add new pages to it.
+  reduced-motion support. `e2e/app-extras.test.ts` audits tap targets on every page at phone, tablet
+  (portrait and landscape) and computer sizes; add new pages to it. Buttons that darken on `active:` also
+  get the same `hover:not-disabled:` color for mouse users. Search boxes take `use:slashToFocus`
+  (`src/lib/shortcuts.ts`) so "/" jumps to them; guide articles show a sticky "On this page" list on `lg`+.
 - Units are per tool, never app-wide: recipes have US/metric (`settings.recipeUnits`, `null` = as
   written; see docs/classic-recipes.md); the weightlifting calculator has lb/kg (`settings.lifting.unit`, unit
   systems in `src/lib/utils/lifting.ts`); the pizza dough calculator is always grams. Tool defaults live in
