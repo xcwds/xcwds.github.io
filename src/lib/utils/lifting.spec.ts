@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	COMMERCIAL_GYM,
+	MAX_TOTAL,
 	activeSet,
 	canAdd,
 	commercialGym,
@@ -59,11 +60,16 @@ const gym = (unit: WeightUnit, bars: Partial<Record<string, Partial<Bar>>> = {})
 		plates: unlimitedPlates(unit)
 	};
 };
-/** v2 station ids, as stations of `gym`. */
+/**
+ * v2 station ids, as stations of `gym`, without the calculator's total limit (most tests check
+ * the search itself, with absurd targets; `MAX_TOTAL` has its own tests).
+ */
 const station = (set: EquipmentSet, id: string): Equipment => {
 	const found = stations(set).find((e) => e.id === (id === 'dumbbells' ? 'dumbbell:pair' : id));
 	if (!found) throw new Error(`no station ${id}`);
-	return found;
+	const unlimited = { ...found };
+	delete unlimited.maxTotal;
+	return unlimited;
 };
 const eq = (id: string) => station(gym('lb'), id);
 const kg = (id: string) => station(gym('kg'), id);
@@ -438,7 +444,15 @@ describe('equipment sets (#82)', () => {
 
 	it('has a commercial gym with one barbell and unlimited plates in either unit', () => {
 		expect(stations(commercialGym('lb'))).toEqual([
-			{ id: 'barbell', name: 'Barbell (45 lb)', type: 'barbell', bar: 45, sides: 2, count: 1 }
+			{
+				id: 'barbell',
+				name: 'Barbell (45 lb)',
+				type: 'barbell',
+				bar: 45,
+				sides: 2,
+				count: 1,
+				maxTotal: 1200
+			}
 		]);
 		expect(stations(commercialGym('kg'))[0]).toMatchObject({ name: 'Barbell (20 kg)', bar: 20 });
 		expect(commercialGym('lb').plates).toEqual(ALL_LB);
@@ -610,5 +624,68 @@ describe('editing sets (#84)', () => {
 		// A deep copy: editing it leaves the original alone.
 		copy.bars[0].weight = 15;
 		expect(commercialGym('kg').bars[0].weight).toBe(20);
+	});
+});
+
+describe('the calculator total limit (#92)', () => {
+	const [lbBar] = stations(commercialGym('lb'));
+	const [kgBar] = stations(commercialGym('kg'));
+
+	it('is 1,200 lb or 545 kg on every station', () => {
+		expect(MAX_TOTAL).toEqual({ lb: 1200, kg: 545 });
+		expect(kgBar.maxTotal).toBe(545);
+		const pair = stations(gym('lb')).find((e) => e.id === 'dumbbell:pair')!;
+		expect(pair.maxTotal).toBe(1200);
+	});
+
+	it('stops a target at the limit and says so, in either unit', () => {
+		expect(search(lbBar, 1200, ALL_LB)).toEqual({
+			perSide: { 45: 12, 35: 1, 2.5: 1 },
+			total: 1200,
+			exact: true
+		});
+		expect(search(lbBar, 1_000_000, ALL_LB)).toMatchObject({
+			total: 1200,
+			exact: false,
+			overLimit: true
+		});
+		expect(search(kgBar, 99_999, unlimitedPlates('kg'))).toMatchObject({
+			total: 545,
+			overLimit: true
+		});
+		expect(search(kgBar, 99_999, unlimitedPlates('kg'))?.overMax).toBeUndefined();
+	});
+
+	it("leaves a bar's own lower max load in charge", () => {
+		const bar = { ...lbBar, maxLoad: 300 };
+		expect(search(bar, 2000, ALL_LB)).toMatchObject({ total: 345, overMax: true });
+		expect(search(bar, 2000, ALL_LB)?.overLimit).toBeUndefined();
+	});
+
+	it('counts both dumbbells of a pair, and still loads a bar heavier than the limit', () => {
+		const pair = { ...station(gym('lb'), 'dumbbells'), maxTotal: 1200 };
+		expect(search(pair, 5000, ALL_LB)?.total).toBeLessThanOrEqual(1200);
+		const heavy = { ...lbBar, bar: 1500 };
+		expect(search(heavy, 2000, ALL_LB)).toMatchObject({
+			perSide: {},
+			total: 1500,
+			overLimit: true
+		});
+	});
+
+	it("won't add plates past the limit, and flags a saved load over it", () => {
+		const full = [
+			{ 45: 12, 35: 1, 2.5: 1 },
+			{ 45: 12, 35: 1, 2.5: 1 }
+		];
+		expect(canAdd(lbBar, full, 0, 1.25, true, ALL_LB)).toBe(false);
+		expect(canAdd(lbBar, [{ 45: 12 }, { 45: 12 }], 0, 25, true, ALL_LB)).toBe(true);
+		expect(canAdd(lbBar, [{ 45: 12 }, { 45: 12 }], 0, 45, true, ALL_LB)).toBe(false);
+		expect(canAdd(lbBar, [{ 45: 13 }, { 45: 12 }], 1, 25, false, ALL_LB)).toBe(true);
+		expect(canAdd(lbBar, [{ 45: 13 }, { 45: 13 }], 0, 45, false, ALL_LB)).toBe(false);
+		expect(loadProblems(lbBar, full, 'lb', ALL_LB)).toEqual([]);
+		expect(loadProblems(kgBar, [{ 25: 30 }, { 25: 30 }], 'kg', unlimitedPlates('kg'))).toEqual([
+			"Over the calculator's 545 kg limit."
+		]);
 	});
 });
