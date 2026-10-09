@@ -1,0 +1,110 @@
+{
+	"slug": "oven",
+	"name": "Oven: Roasting, Baking & Broiling",
+	"emoji": "♨️",
+	"category": "methods",
+	"tags": [
+		"Oven",
+		"Roast",
+		"Bake",
+		"Broil",
+		"Broiler",
+		"Convection",
+		"Reverse sear",
+		"Rack position",
+		"Sheet pan"
+	],
+	"summary": "Roasting vs. baking vs. broiling, convection, rack positions and the reverse sear.",
+	"sections": [
+		{
+			"id": "roast-bake-broil",
+			"heading": "Roasting, baking and broiling",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Method", "Temperature", "What it's for"],
+					"rows": [
+						[
+							"Roasting, hot",
+							"400–450°F (200–230°C)",
+							"Vegetables, chicken pieces and whole chickens, small roasts: browns the outside well."
+						],
+						[
+							"Roasting, moderate",
+							"300–350°F (150–180°C)",
+							"Big roasts and turkeys, which need time for heat to reach the middle without the outside overcooking."
+						],
+						[
+							"Baking",
+							"325–375°F (160–190°C)",
+							"Cakes, cookies, breads, casseroles. The temperature matters more here; follow the recipe."
+						],
+						[
+							"Broiling",
+							"Top element, full power",
+							"Melting cheese, browning tops, thin fish and steaks. Fast: watch it the whole time."
+						]
+					]
+				}
+			]
+		},
+		{
+			"id": "basics",
+			"heading": "Oven basics",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Preheat fully.** Most ovens take 10–15 minutes; many beep before the walls are really hot.",
+						"**Middle rack** unless the recipe says otherwise. Lower racks brown bottoms (pizza, crisp vegetables); upper racks brown tops.",
+						"**Give food space.** Vegetables in one layer with room between pieces roast; piled up, they steam. Use two pans rather than one crowded one.",
+						"**Rimmed sheet pans** for roasting, so juices don't drip onto the oven floor.",
+						"**Ovens run hot or cold.** An inexpensive oven thermometer tells you how far off yours is."
+					]
+				},
+				"Baking? [Oven and Pans](guide:oven-and-pans) covers pan materials and sizes, and rack positions for cakes and cookies."
+			]
+		},
+		{
+			"id": "convection",
+			"heading": "Convection",
+			"blocks": [
+				"A convection (fan) setting blows hot air around, so food cooks and browns faster and more evenly. For a recipe written for a regular oven, lower the temperature by about 25°F (15°C), or keep it and start checking about a quarter of the way early.",
+				"It's great for roasting and anything you want crisp. For delicate bakes (custards, soufflés, some cakes) the moving air can dry or tilt them; use the regular setting unless the recipe says otherwise.",
+				"Cooking at a different temperature than the recipe says, because something else is in the oven? The [Oven Time Converter](tool:/utils/oven-time) estimates the new time."
+			]
+		},
+		{
+			"id": "broiling",
+			"heading": "Broiling",
+			"blocks": [
+				"The broiler is an upside-down grill. Put the rack so the food's top sits about 3–4 inches (8–10 cm) below the element, preheat it for 5 minutes, and keep the door where your recipe or manual says (some ovens broil with the door cracked).",
+				{
+					"type": "warning",
+					"text": "Stay at the oven while broiling: food goes from browned to burnt in under a minute. Don't broil in glass baking dishes, which can shatter under direct heat."
+				}
+			]
+		},
+		{
+			"id": "reverse-sear",
+			"heading": "The reverse sear",
+			"blocks": [
+				"For thick steaks (1 ½ inches (4 cm) or more) and small roasts, cook low first, then sear: you get even doneness from edge to center and a crisp crust.",
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Season the meat and put it on a rack over a sheet pan in a 250°F (120°C) oven.",
+						"Roast until it's about 10–15°F (5–8°C) below your target on the [doneness chart](guide:doneness-and-food-safety#doneness-chart), usually 30–60 minutes for steaks.",
+						"Sear in a very hot, oiled pan for about a minute a side, edges included. No long rest needed: it was resting in the gentle oven."
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["grill-stovetop-or-oven", "doneness-and-food-safety"],
+		"recipes": ["roast-chicken"],
+		"tools": ["/utils/oven-time"]
+	}
+}

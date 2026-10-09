@@ -1,0 +1,112 @@
+{
+	"slug": "chicken-and-turkey",
+	"name": "Chicken & Turkey",
+	"emoji": "🐔",
+	"category": "meat",
+	"tags": [
+		"Chicken",
+		"Turkey",
+		"Poultry",
+		"Breast",
+		"Thigh",
+		"Drumstick",
+		"Wings",
+		"Whole chicken",
+		"Spatchcock",
+		"White meat",
+		"Dark meat"
+	],
+	"summary": "White meat vs. dark meat, cooking each part, whole birds, spatchcocking, and turkey basics.",
+	"sections": [
+		{
+			"id": "white-vs-dark",
+			"heading": "White meat vs. dark meat",
+			"blocks": [
+				"**Breast** (white meat) is lean and mild, and turns dry and stringy soon after it's done. Cook it to 165°F (74°C) and no further.",
+				"**Thighs and legs** (dark meat) have more fat and connective tissue, so they stay juicy and forgiving. They're safe at 165°F (74°C) but get more tender cooked to about 175–185°F (79–85°C), which is why roast chicken legs taste better than the breast.",
+				{
+					"type": "warning",
+					"text": "All poultry, including ground chicken and turkey, must reach 165°F (74°C). Don't rinse raw poultry: it spreads bacteria around the sink. See [Doneness & Food Safety](guide:doneness-and-food-safety)."
+				}
+			]
+		},
+		{
+			"id": "parts",
+			"heading": "The parts",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Part", "Best cooked", "Notes"],
+					"rows": [
+						[
+							"Boneless breast",
+							"[Sear](guide:stovetop#searing), grill, bake at 425°F (220°C)",
+							"Pound thick ends to an even thickness so it cooks evenly, or slice it in half horizontally into cutlets."
+						],
+						[
+							"Bone-in, skin-on breast",
+							"Roast at 400–425°F (200–220°C)",
+							"Bone and skin keep it juicier than boneless."
+						],
+						[
+							"Thighs",
+							"Roast, sear, grill, braise",
+							"The most forgiving piece. Skin-on thighs roasted hot get very crisp."
+						],
+						[
+							"Drumsticks",
+							"Roast, grill, braise",
+							"Cheap and easy; cook until tender near the bone."
+						],
+						[
+							"Wings",
+							"Roast hot, [air fry](guide:air-fryer), grill, deep-fry",
+							"Pat very dry for crisp skin; cook past 165°F (74°C) so the fat renders."
+						],
+						[
+							"Whole chicken",
+							"Roast, or spatchcock and roast or grill",
+							"Our [Roast Chicken](recipe:roast-chicken) recipe is a good start."
+						]
+					]
+				}
+			]
+		},
+		{
+			"id": "spatchcocking",
+			"heading": "Spatchcocking",
+			"blocks": [
+				"Cutting out the backbone and flattening a whole bird makes it cook faster and more evenly, with all the skin facing up to crisp.",
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Put the bird breast side down. With sturdy kitchen shears, cut along both sides of the backbone and remove it (save it for stock).",
+						"Turn it over and press firmly on the breastbone with the heel of your hand until it cracks and lies flat.",
+						"Roast at 425–450°F (220–230°C): a 4 lb (1.8 kg) chicken takes about 40–50 minutes. Check the thigh and the breast."
+					]
+				}
+			]
+		},
+		{
+			"id": "turkey",
+			"heading": "Turkey basics",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Size:** allow about 1–1 ½ lb (450–700 g) of whole turkey per person, more if you want leftovers.",
+						"**Thawing:** in the fridge, about a day for every 4–5 lb (2 kg). A 16 lb (7 kg) turkey needs about 4 days. See [thawing safely](guide:doneness-and-food-safety#thawing).",
+						"**Roasting:** 325°F (160°C) is the usual temperature; an unstuffed 12–14 lb (5.5–6.5 kg) turkey takes roughly 3–3 ¾ hours. Go by the thermometer, not the clock.",
+						"**Done:** 165°F (74°C) in the thickest part of the breast and in the thigh, then rest 20–30 minutes before carving.",
+						"**Stuffing:** baking it in a separate dish is safer and the turkey cooks faster. If it's inside the bird, the stuffing's center must also reach 165°F (74°C)."
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["doneness-and-food-safety", "oven", "buying-and-storing-meat"],
+		"recipes": ["roast-chicken"]
+	}
+}

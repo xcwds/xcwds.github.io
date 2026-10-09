@@ -1,0 +1,90 @@
+{
+	"slug": "rice-and-grains",
+	"name": "Rice & Grains",
+	"emoji": "🍚",
+	"category": "staples",
+	"tags": [
+		"Rice",
+		"Jasmine",
+		"Basmati",
+		"Brown rice",
+		"Quinoa",
+		"Farro",
+		"Couscous",
+		"Oats",
+		"Barley",
+		"Rice cooker",
+		"Grains"
+	],
+	"summary": "Water ratios and times for rice and common grains, the stovetop method, and storing cooked rice safely.",
+	"sections": [
+		{
+			"id": "stovetop",
+			"heading": "Stovetop method",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Rinse white rice in a sieve until the water runs mostly clear; it washes off loose starch so the grains don't clump. Quinoa needs a rinse too, to remove its bitter coating.",
+						"Put the grain, water and a pinch of salt in a pot with a tight lid and bring to a boil.",
+						"Turn the heat to low, cover, and simmer without lifting the lid for the time below.",
+						"Take it off the heat and let it sit, still covered, for 10 minutes. Then fluff with a fork."
+					]
+				}
+			]
+		},
+		{
+			"id": "ratios",
+			"heading": "Ratios and times",
+			"blocks": [
+				"Water is per 1 cup of dry grain. One cup of dry rice (about 185–200 g) makes about 3 cups cooked, enough for 3–4 people as a side.",
+				{
+					"type": "table",
+					"columns": ["Grain", "Water per 1 cup (240 ml)", "Simmer"],
+					"rows": [
+						["Long-grain white rice", "1 ½ cups (360 ml)", "15–18 minutes"],
+						["Jasmine rice", "1 ¼ cups (300 ml)", "15 minutes"],
+						["Basmati rice", "1 ½ cups (360 ml)", "15 minutes"],
+						["Brown rice", "2 cups (480 ml)", "40–45 minutes"],
+						["Short-grain (sushi) rice", "1 ¼ cups (300 ml)", "15–18 minutes"],
+						["Quinoa", "1 ¾ cups (420 ml)", "15 minutes"],
+						["Farro (pearled)", "Plenty, like pasta; drain", "20–25 minutes"],
+						["Pearl barley", "3 cups (720 ml), or like pasta", "30–40 minutes"],
+						[
+							"Couscous",
+							"1 ¼ cups (300 ml) boiling water, poured over",
+							"No simmer: cover 5 minutes"
+						],
+						["Rolled oats", "2 cups (480 ml) water or milk", "5 minutes"]
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Brown rice, farro and barley can also be boiled in a big pot of salted water like pasta, then drained. It's harder to get wrong, and the ratio stops mattering."
+				}
+			]
+		},
+		{
+			"id": "rice-cooker",
+			"heading": "Rice cookers",
+			"blocks": [
+				"A rice cooker does the timing and keeps rice warm. Use the cup that came with it (usually smaller than a US cup, about ¾ cup (180 ml)) and fill water to the line for that number of cups."
+			]
+		},
+		{
+			"id": "leftovers",
+			"heading": "Cooked rice safety",
+			"blocks": [
+				{
+					"type": "warning",
+					"text": "Cooked rice can carry spores of Bacillus cereus that survive cooking and multiply at room temperature. Refrigerate leftover rice within 1–2 hours, spread out to cool quickly, eat it within 3–4 days, and reheat until steaming hot."
+				},
+				"Day-old, cold rice makes the best fried rice: it's drier, so the grains stay separate."
+			]
+		}
+	],
+	"related": {
+		"guides": ["pasta", "beans-and-lentils"]
+	}
+}

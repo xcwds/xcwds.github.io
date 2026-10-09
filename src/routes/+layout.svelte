@@ -40,7 +40,11 @@
 				'sidebar:max-w-md sidebar:px-8 xl:max-w-5xl xl:px-12 xl:sidebar:max-w-5xl xl:sidebar:px-12'
 		}[page.error ? 'narrow' : pageWidth(page.url.pathname)]
 	);
-	let parentLabel = $derived(sections.find((s) => s.path === info.parent)?.label ?? 'Home');
+	let parentLabel = $derived(
+		info.parent
+			? (sections.find((s) => s.path === info.parent)?.label ?? routeInfo(info.parent).title)
+			: 'Home'
+	);
 	/**
 	 * The installed app has no browser toolbar to share from, so it gets a Share button (#89); in
 	 * a browser tab the browser's own share does the job.

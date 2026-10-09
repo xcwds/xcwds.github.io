@@ -1,0 +1,122 @@
+{
+	"slug": "doneness-and-food-safety",
+	"name": "Doneness & Food Safety",
+	"emoji": "🌡️",
+	"category": "basics",
+	"tags": [
+		"Doneness",
+		"Temperature",
+		"Thermometer",
+		"Food safety",
+		"Resting",
+		"Carryover",
+		"Leftovers",
+		"Thawing",
+		"Steak",
+		"Chicken",
+		"Pork",
+		"Fish",
+		"USDA"
+	],
+	"summary": "When meat, poultry and fish are done, how to check with a thermometer, and keeping food safe from fridge to leftovers.",
+	"sections": [
+		{
+			"id": "doneness-chart",
+			"heading": "Doneness chart",
+			"blocks": [
+				"Pick what you're cooking and how done you like it. Take it off the heat at the first temperature; it keeps cooking as it rests and finishes at the second. Temperatures are measured in the thickest part.",
+				{ "type": "widget", "widget": "doneness" },
+				"The safe minimums come from the [USDA's safe temperature chart](https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart). Rare and medium-rare beef, lamb and fish are below them: many people eat them that way, and the chart says so rather than hiding the choice."
+			]
+		},
+		{
+			"id": "thermometer",
+			"heading": "Using a thermometer",
+			"blocks": [
+				"Color and cooking times are guesses; an instant-read thermometer is the only reliable way to know. Times depend on thickness, starting temperature and your equipment.",
+				{
+					"type": "list",
+					"items": [
+						"Push the tip into the **thickest part**, away from bone, fat and gristle, which read differently.",
+						"For a whole chicken or turkey, check the thickest part of the thigh near the body and the thickest part of the breast. Every spot needs to reach the safe temperature.",
+						"For thin pieces (chops, chicken breasts, burgers), go in from the side so the tip sits in the middle.",
+						"For big roasts, check in a couple of places and go by the lowest reading.",
+						"Wash the probe between raw and cooked checks."
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Check your thermometer now and then: stir it in a glass packed with ice and a little water. It should read 32°F (0°C). If it doesn't, adjust it if it has a calibration nut or button, or remember the difference."
+				}
+			]
+		},
+		{
+			"id": "resting",
+			"heading": "Carryover and resting",
+			"blocks": [
+				"Meat keeps cooking after it leaves the heat, as the hot outside warms the middle. Thick roasts and whole birds rise about 5–10°F (3–6°C); steaks and chops about 5°F (3°C); thin cutlets and fish barely at all. Pull food early to land on your target, which is what the chart's first number does.",
+				"Resting also lets the juices settle so less runs out when you cut. Rest steaks and chops about 5 minutes and roasts and whole birds 15–20 minutes, loosely covered with foil. The USDA asks for at least a 3-minute rest for beef, pork, veal and lamb steaks, chops and roasts.",
+				"For safety, the chart never pulls poultry, ground meat or a safe doneness below the USDA minimum: carryover is too uneven to count on."
+			]
+		},
+		{
+			"id": "danger-zone",
+			"heading": "The danger zone",
+			"blocks": [
+				{
+					"type": "warning",
+					"text": "Bacteria multiply fastest between 40–140°F (4–60°C). Keep cold food cold, hot food hot, and don't leave perishable food out longer than 2 hours, or 1 hour when it's above 90°F (32°C)."
+				},
+				{
+					"type": "list",
+					"items": [
+						"Keep the fridge at 40°F (4°C) or colder and the freezer at 0°F (-18°C).",
+						"Keep hot food at 140°F (60°C) or hotter until serving.",
+						"Cool leftovers fast: divide big batches into shallow containers and refrigerate them within 2 hours. It's fine to put warm food straight into the fridge.",
+						"Eat refrigerated leftovers within 3–4 days, or freeze them.",
+						"Reheat leftovers to 165°F (74°C), and bring sauces, soups and gravies to a boil."
+					]
+				}
+			]
+		},
+		{
+			"id": "thawing",
+			"heading": "Thawing safely",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**In the fridge** (best): plan ahead. Small cuts take about a day; a whole turkey takes about a day for every 4–5 lb (2 kg). Thawed meat keeps a day or two more in the fridge.",
+						"**In cold water**: seal the meat in a leak-proof bag, submerge it, and change the water every 30 minutes. About 30 minutes per pound (half-kilo). Cook it right away.",
+						"**In the microwave**: use the defrost setting and cook right away, since parts of it start to cook.",
+						"**From frozen**: it's safe to cook meat without thawing; it takes about 50% longer."
+					]
+				},
+				{
+					"type": "warning",
+					"text": "Never thaw meat on the counter or in hot water: the outside sits in the danger zone while the middle is still frozen."
+				}
+			]
+		},
+		{
+			"id": "cross-contamination",
+			"heading": "Avoiding cross-contamination",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"Use a separate cutting board and plate for raw meat, poultry and fish, and never put cooked food back on the plate that held it raw.",
+						"Wash hands with soap for 20 seconds after handling raw meat, and wash boards, knives and counters with hot, soapy water.",
+						"**Don't rinse raw chicken or meat**: it splashes bacteria around the sink and counter, and cooking kills them anyway. Pat it dry with paper towels instead.",
+						"Marinate in the fridge, not on the counter. To use a marinade as a sauce, set some aside before it touches raw meat, or bring it to a rolling boil first."
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["grill-stovetop-or-oven"],
+		"recipes": ["roast-chicken"],
+		"tools": ["/utils/cooking-timer"]
+	}
+}

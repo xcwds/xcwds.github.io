@@ -1,0 +1,97 @@
+{
+	"slug": "grilling",
+	"name": "Grilling",
+	"emoji": "🔥",
+	"category": "methods",
+	"tags": ["Grill", "Barbecue", "BBQ", "Charcoal", "Gas", "Two-zone", "Direct", "Indirect", "Char"],
+	"summary": "Direct and indirect heat, setting up two zones, charcoal vs. gas, and what grills well.",
+	"sections": [
+		{
+			"id": "two-zones",
+			"heading": "Direct and indirect heat",
+			"blocks": [
+				"**Direct heat** is cooking right over the flames or coals: fast, hot and good at browning. **Indirect heat** is cooking beside them with the lid closed, so the grill works like an oven.",
+				"Set up every grill with two zones and you can do both. On a gas grill, light the burners on one side and leave the other side off. On a charcoal grill, pile the lit coals on one side.",
+				{
+					"type": "table",
+					"columns": ["Food", "Heat", "How"],
+					"rows": [
+						[
+							"Steaks, chops, burgers, sausages",
+							"Direct, high",
+							"Sear both sides; move thick ones to the indirect side to finish."
+						],
+						[
+							"Chicken pieces on the bone",
+							"Indirect, then direct",
+							"Cook through on the cool side with the lid down, then crisp the skin over the heat."
+						],
+						[
+							"Whole chicken, pork shoulder, roasts",
+							"Indirect, medium",
+							"Lid down the whole time, like roasting in an oven."
+						],
+						[
+							"Firm fish (salmon, swordfish, tuna)",
+							"Direct, medium-high",
+							"Oil the fish, leave it until it releases, flip once."
+						],
+						[
+							"Vegetables (peppers, zucchini, onions, corn)",
+							"Direct, medium-high",
+							"Cut into big slabs or rounds so they don't fall through; toss in oil first."
+						]
+					]
+				}
+			]
+		},
+		{
+			"id": "charcoal-vs-gas",
+			"heading": "Charcoal or gas",
+			"blocks": [
+				"**Gas** lights in seconds and holds a steady temperature: the easy everyday choice. **Charcoal** gets hotter, takes 15–20 minutes to be ready, and adds more smoky flavor.",
+				"Light charcoal in a chimney starter rather than with lighter fluid, which can leave a taste. The coals are ready when they're covered in gray ash. Open the vents for hotter coals; close them partway to cool things down."
+			]
+		},
+		{
+			"id": "how-to",
+			"heading": "Getting it right",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Preheat with the lid closed for 10–15 minutes, so the grates get hot enough to sear and release food.",
+						"Scrape the grates clean with a grill brush or a ball of foil.",
+						"Pat food dry and oil the food, not the grates. Season it.",
+						"Put it down and leave it. It sticks at first and releases once it has a crust.",
+						"Use tongs or a spatula, not a fork: piercing lets juices out.",
+						"Check doneness with a thermometer: see the [doneness chart](guide:doneness-and-food-safety#doneness-chart)."
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Brush on sugary sauces (barbecue sauce, honey glazes) only in the last 5 minutes. Sugar burns long before the meat is done."
+				}
+			]
+		},
+		{
+			"id": "flare-ups",
+			"heading": "Flare-ups and safety",
+			"blocks": [
+				"Flare-ups happen when fat drips onto the flames. Move the food to the indirect side until they die down; don't spray them with water, which kicks up ash. Trim thick fat caps before grilling.",
+				{
+					"type": "warning",
+					"text": "Grill outdoors only, well away from the house, never in a garage, tent or under a covered porch: grills give off carbon monoxide. Keep kids and pets away, and never add lighter fluid to coals that are already lit."
+				},
+				{
+					"type": "warning",
+					"text": "Use a clean plate for cooked food, never the one that carried it out raw."
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["grill-stovetop-or-oven", "doneness-and-food-safety"]
+	}
+}

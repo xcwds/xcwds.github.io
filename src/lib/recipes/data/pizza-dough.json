@@ -32,7 +32,13 @@
 			"alt": { "amount": 1, "unit": "Tbsp" }
 		},
 		{ "amount": 6, "unit": "g", "item": "active dry yeast", "alt": { "amount": 2, "unit": "tsp" } },
-		{ "amount": 12, "unit": "g", "item": "salt", "alt": { "amount": 2, "unit": "tsp" } }
+		{
+			"amount": 12,
+			"unit": "g",
+			"item": "salt",
+			"note": "table or fine sea salt",
+			"alt": { "amount": 2, "unit": "tsp" }
+		}
 	],
 	"instructions": [
 		"Weigh the water and stir in the yeast. Let it sit for a couple of minutes, then add a couple of scoops of the flour and mix for 30 seconds.",
@@ -47,5 +53,6 @@
 		"Pizza oven: bake with the stone at 650–750°F (345–400°C) for about 3½ minutes, until blistered.",
 		"Home oven: heat to 550°F (290°C) with a pizza stone or steel; make sure the stone reaches at least 530°F (275°C) before launching the pizza. Bake for 8–10 minutes."
 	],
+	"guides": ["yeast-dough"],
 	"source": "https://www.tiktok.com/t/ZTN7Fjkmu/"
 }

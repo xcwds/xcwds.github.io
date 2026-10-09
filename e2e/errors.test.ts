@@ -2,6 +2,9 @@ import { expect, test, type Page } from '@playwright/test';
 import { gotoHydrated } from './helpers';
 import { serveStatic } from './static-server';
 
+// This file tests the service worker, so it runs even where other tests block it (#91).
+test.use({ serviceWorkers: 'allow' });
+
 test.use({ viewport: { width: 390, height: 844 } });
 
 // Served like GitHub Pages (unknown paths get build/404.html), not by `vite preview`, which
@@ -49,6 +52,11 @@ test('an unknown URL shows the app shell and a not-found page', async ({ page })
 
 test('a recipe that does not exist is not found', async ({ page }) => {
 	await gotoHydrated(page, `${origin}/recipes/not-a-recipe`);
+	await expectNotFound(page);
+});
+
+test('a guide article that does not exist is not found', async ({ page }) => {
+	await gotoHydrated(page, `${origin}/guide/not-an-article`);
 	await expectNotFound(page);
 });
 

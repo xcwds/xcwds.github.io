@@ -7,10 +7,46 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
-		id: 27,
+		id: 32,
 		date: '2026-10-09',
 		items: [
 			'On computers, the weightlifting calculator shows your plates beside your workout, the URL Sanitizer lists the params beside the link, and Settings uses two columns.'
+		]
+	},
+	{
+		id: 31,
+		date: '2026-10-09',
+		items: [
+			'Recipes and the Oven Time Converter, Cooking Timer and Pizza Dough Calculator now link to the Kitchen Guide articles that go with them.'
+		]
+	},
+	{
+		id: 30,
+		date: '2026-10-09',
+		items: [
+			'Kitchen Guide: 21 new articles on grilling, stovetop and oven cooking, braising and the air fryer; beef, pork, poultry, lamb and fish cuts; vegetables and potatoes; eggs (with boiled-egg timers), rice, pasta and beans; and knife skills, salt and kitchen tools.'
+		]
+	},
+	{
+		id: 29,
+		date: '2026-10-09',
+		items: [
+			'Kitchen Guide: a doneness chart that says when to take meat, poultry and fish off the heat (with USDA safe minimums and a rest timer), plus thermometer, leftovers and thawing basics.'
+		]
+	},
+	{
+		id: 28,
+		date: '2026-10-09',
+		items: [
+			'The guide is now the Kitchen Guide, with a new Baking section: measuring (with a cups-to-grams chart), ingredients, ovens and pans, mixing methods, doneness, troubleshooting, yeast dough, pie crust and biscuits, and substitutions.',
+			'Baking recipes now say unsalted butter, and the pizza dough says which salt it means.'
+		]
+	},
+	{
+		id: 27,
+		date: '2026-10-09',
+		items: [
+			'New Cooking Guide in the Recipes tab: general cooking know-how, starting with when to use the grill, the stovetop or the oven.'
 		]
 	},
 	{

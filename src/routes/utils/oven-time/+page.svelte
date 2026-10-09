@@ -1,4 +1,6 @@
 <script lang="ts">
+	import GuideLinks from '$lib/guide/GuideLinks.svelte';
+	import { toolGuides } from '$lib/utils/tools';
 	import { resolve } from '$app/paths';
 	import OvenWarnings from '$lib/OvenWarnings.svelte';
 	import TempInput from '$lib/TempInput.svelte';
@@ -126,4 +128,6 @@
 			>.
 		</p>
 	</div>
+
+	<GuideLinks slugs={toolGuides('/utils/oven-time')} />
 </main>

@@ -1,0 +1,165 @@
+{
+	"slug": "stovetop",
+	"name": "Stovetop Cooking",
+	"emoji": "🍳",
+	"category": "methods",
+	"tags": [
+		"Stovetop",
+		"Sear",
+		"Sauté",
+		"Pan-fry",
+		"Stir-fry",
+		"Simmer",
+		"Poach",
+		"Boil",
+		"Deep-fry",
+		"Pan sauce",
+		"Smoke point",
+		"Oil"
+	],
+	"summary": "Searing, sautéing, pan-frying and simmering: choosing a pan and oil, heat levels, and a quick pan sauce.",
+	"sections": [
+		{
+			"id": "techniques",
+			"heading": "The techniques",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Technique", "Heat", "What it's for"],
+					"rows": [
+						[
+							"Searing",
+							"High",
+							"A deep brown crust on steaks, chops, chicken, scallops. A thin film of oil, food left alone."
+						],
+						[
+							"Sautéing",
+							"Medium-high",
+							"Small pieces (vegetables, shrimp, sliced meat) cooked fast in a little fat, stirred or tossed often."
+						],
+						[
+							"Stir-frying",
+							"Highest",
+							"Like sautéing, faster and hotter, stirring constantly. Prep everything first: there's no time once it starts."
+						],
+						[
+							"Pan-frying",
+							"Medium to medium-high",
+							"Cutlets, fish, breaded food in about ¼ inch (6 mm) of oil, turned once."
+						],
+						[
+							"Simmering",
+							"Low to medium-low",
+							"Soups, stews, sauces, grains. Small bubbles breaking the surface now and then."
+						],
+						[
+							"Poaching",
+							"Low",
+							"Eggs, fish, chicken in liquid that's steaming but barely bubbling, for tender, moist results."
+						],
+						["Boiling", "High", "Pasta, potatoes, blanching vegetables. Big, rolling bubbles."]
+					]
+				}
+			]
+		},
+		{
+			"id": "searing",
+			"heading": "Searing",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Take the meat out of the fridge 20–30 minutes ahead and pat it very dry: a wet surface steams instead of browning.",
+						"Heat a heavy pan (cast iron or stainless) over medium-high to high for 2–3 minutes.",
+						"Add a thin film of high-smoke-point oil; when it shimmers, add the meat, laying it away from you.",
+						"Leave it alone until it releases easily and is deep brown, usually 2–4 minutes, then turn it.",
+						"Thick pieces: finish in a 400°F (200°C) oven or lower the heat, and check with a thermometer."
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Don't crowd the pan. Leave a finger's width between pieces and cook in batches; too much food at once cools the pan and everything turns gray."
+				}
+			]
+		},
+		{
+			"id": "pans",
+			"heading": "Choosing a pan",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Pan", "Best for", "Avoid"],
+					"rows": [
+						[
+							"Cast iron",
+							"Searing, pan-frying, cornbread, going from stove to oven. Holds heat like nothing else.",
+							"Long-simmered acidic sauces (tomato, wine) in a newly seasoned pan; soaking it."
+						],
+						[
+							"Stainless steel",
+							"Searing, sautéing, pan sauces (the browned bits stick, then lift off with liquid). Dishwasher-safe.",
+							"Eggs and delicate fish unless you're generous with fat and patience."
+						],
+						[
+							"Nonstick",
+							"Eggs, pancakes, delicate fish.",
+							"High heat (keep it at medium or below) and metal tools."
+						],
+						[
+							"Enameled cast iron (Dutch oven)",
+							"Braises, stews, soups, deep-frying, bread.",
+							"Heating it empty on high."
+						]
+					]
+				}
+			]
+		},
+		{
+			"id": "oils",
+			"heading": "Oils and smoke points",
+			"blocks": [
+				"Every fat starts to smoke at some point, and past it, it tastes acrid. Match the fat to the heat.",
+				{
+					"type": "list",
+					"items": [
+						"**High heat** (searing, stir-frying, deep-frying): vegetable, canola, peanut, avocado or refined sunflower oil.",
+						"**Medium heat** (sautéing, roasting): olive oil, including extra-virgin, is fine for everyday sautéing.",
+						"**Low heat or flavor** (finishing, eggs, sauces): butter. For searing with butter, start in oil and add the butter near the end."
+					]
+				}
+			]
+		},
+		{
+			"id": "pan-sauce",
+			"heading": "A quick pan sauce",
+			"blocks": [
+				"After searing, the browned bits (fond) stuck to the pan are flavor. Turn them into a sauce while the meat rests:",
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Pour off all but a spoonful of fat. Over medium heat, cook a chopped shallot or garlic clove for 30 seconds.",
+						"Add about ½ cup (120 ml) of wine, stock or even water and scrape the bottom with a wooden spoon.",
+						"Simmer until reduced by about half, then turn off the heat.",
+						"Swirl in a tablespoon of cold butter, add any juices from the resting meat, and season with salt, pepper and a squeeze of lemon or a little mustard."
+					]
+				}
+			]
+		},
+		{
+			"id": "deep-frying",
+			"heading": "Deep-frying safely",
+			"blocks": [
+				"Use a heavy, deep pot filled no more than halfway with a high-smoke-point oil, and a thermometer clipped to the side. Most frying happens at 350–375°F (175–190°C). Fry in small batches so the temperature doesn't crash, and lower food in gently with a spider or slotted spoon.",
+				{
+					"type": "warning",
+					"text": "Never leave hot oil unattended, and keep water away from it. If oil catches fire, turn off the heat and slide a lid or baking sheet over the pot. Never use water: it makes burning oil explode."
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["grill-stovetop-or-oven", "doneness-and-food-safety"]
+	}
+}

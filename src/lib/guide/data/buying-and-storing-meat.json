@@ -1,0 +1,74 @@
+{
+	"slug": "buying-and-storing-meat",
+	"name": "Buying & Storing Meat",
+	"emoji": "🛒",
+	"category": "meat",
+	"tags": [
+		"Buying",
+		"Storing",
+		"Fridge",
+		"Freezer",
+		"Labels",
+		"Sell-by",
+		"Leftovers",
+		"Freezing",
+		"Freezer burn"
+	],
+	"summary": "Reading labels and dates, how long meat keeps in the fridge and freezer, and freezing it well.",
+	"sections": [
+		{
+			"id": "buying",
+			"heading": "At the store",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"Pick up meat last and get it into the fridge within 2 hours (1 hour on a hot day). Bag it separately so juices can't drip onto other food.",
+						"Look for firm meat with good color and little liquid in the package. Beef that's brownish inside the pack is usually fine (it's just not exposed to air); a sour smell or slimy feel is not.",
+						"**Sell-by** dates are for the store. **Use-by** dates are the maker's advice for best quality. Neither is a safety deadline, but follow the fridge times below from the day you buy it."
+					]
+				}
+			]
+		},
+		{
+			"id": "storage-times",
+			"heading": "How long it keeps",
+			"blocks": [
+				"Times are for a fridge at 40°F (4°C) or colder and a freezer at 0°F (-18°C). Frozen meat stays safe indefinitely; the freezer times are for best quality.",
+				{
+					"type": "table",
+					"columns": ["Food", "Fridge", "Freezer"],
+					"rows": [
+						["Steaks, chops, roasts (beef, pork, lamb)", "3–5 days", "4–12 months"],
+						["Ground meat (raw)", "1–2 days", "3–4 months"],
+						["Sausages (raw)", "1–2 days", "1–2 months"],
+						["Chicken and turkey, whole or parts", "1–2 days", "9–12 months"],
+						["Fish (fatty fish keep less time frozen)", "1–2 days", "2–8 months"],
+						["Bacon", "7 days", "1 month"],
+						["Cooked leftovers", "3–4 days", "2–6 months"]
+					]
+				},
+				"These follow the USDA's [FoodKeeper guidance](https://www.foodsafety.gov/food-safety-charts/cold-food-storage-charts)."
+			]
+		},
+		{
+			"id": "freezing",
+			"heading": "Freezing well",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"Freeze meat as soon as you know you won't cook it in time, not on its last day.",
+						"Wrap tightly and squeeze out the air (freezer bags or plastic wrap plus foil) to avoid freezer burn: dry, grayish patches that are safe but taste flat.",
+						"Freeze in meal-sized portions and flat, so it freezes and thaws faster.",
+						"Label with what it is and the date.",
+						"Meat thawed in the fridge can go back in the freezer uncooked; meat thawed in cold water or the microwave should be cooked first. See [thawing safely](guide:doneness-and-food-safety#thawing)."
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["doneness-and-food-safety", "beef", "pork", "chicken-and-turkey"]
+	}
+}

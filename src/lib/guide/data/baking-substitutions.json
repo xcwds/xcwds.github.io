@@ -1,0 +1,159 @@
+{
+	"slug": "baking-substitutions",
+	"name": "Baking Substitutions",
+	"emoji": "🔄",
+	"category": "baking",
+	"tags": [
+		"Baking",
+		"Substitutions",
+		"Swaps",
+		"Buttermilk",
+		"Baking powder",
+		"Brown sugar",
+		"Self-rising flour",
+		"Cake flour",
+		"Eggs",
+		"Butter",
+		"Oil"
+	],
+	"summary": "Reliable swaps for buttermilk, baking powder, brown sugar, special flours, butter and eggs, and what each one changes.",
+	"sections": [
+		{
+			"heading": "Dairy",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Out of", "Use instead", "What changes"],
+					"rows": [
+						[
+							"1 cup (240 ml) buttermilk",
+							"1 Tbsp (15 ml) lemon juice or white vinegar, plus milk to make 1 cup (240 ml). Let it sit 5 minutes.",
+							"Thinner than real buttermilk, but works the same with baking soda."
+						],
+						[
+							"1 cup (240 ml) buttermilk",
+							"¾ cup (180 ml) plain yogurt or sour cream thinned with ¼ cup (60 ml) milk.",
+							"Very close; a little richer."
+						],
+						[
+							"Unsalted butter",
+							"Salted butter, with about ¼ tsp less salt per ½ cup (113 g) of butter.",
+							"Nearly nothing. Brands vary in how salty they are."
+						]
+					]
+				}
+			]
+		},
+		{
+			"heading": "Leaveners",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Out of", "Use instead", "What changes"],
+					"rows": [
+						[
+							"1 tsp baking powder",
+							"¼ tsp baking soda plus ½ tsp cream of tartar.",
+							"Single-acting: it all works as soon as it's wet, so bake right after mixing."
+						],
+						[
+							"1 tsp baking soda",
+							"In a pinch, about 3 tsp baking powder.",
+							"A different taste and rise, since the recipe's acid is no longer balanced. Fine for pancakes; better to buy baking soda for anything you care about."
+						]
+					]
+				},
+				"Baking soda and baking powder aren't interchangeable one for one; see [why](guide:baking-ingredients#leaveners). Swapping one type of yeast for another is in the [yeast table](guide:yeast-dough#yeast)."
+			]
+		},
+		{
+			"heading": "Sugar and flour",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Out of", "Use instead", "What changes"],
+					"rows": [
+						[
+							"1 cup (215 g) packed light brown sugar",
+							"1 cup (200 g) granulated sugar plus 1 Tbsp (20 g) molasses, mixed well. For dark brown, 2 Tbsp (40 g) molasses.",
+							"Nothing noticeable."
+						],
+						[
+							"1 cup (215 g) brown sugar",
+							"1 cup (200 g) granulated sugar.",
+							"Crisper, paler cookies with less caramel flavor."
+						],
+						[
+							"1 cup self-rising flour",
+							"1 cup (125 g) all-purpose flour, 1 ½ tsp baking powder and ¼ tsp salt.",
+							"Nothing noticeable."
+						],
+						[
+							"1 cup cake flour",
+							"1 cup (125 g) all-purpose flour minus 2 Tbsp, plus 2 Tbsp cornstarch, sifted together.",
+							"Slightly less tender than real cake flour."
+						],
+						[
+							"Bread flour",
+							"All-purpose flour, same amount.",
+							"Softer, less chewy bread and pizza; the dough may feel wetter."
+						],
+						[
+							"All-purpose flour",
+							"Bread flour, same amount.",
+							"Chewier, sometimes tougher; fine in cookies, not ideal in cakes."
+						]
+					]
+				},
+				"Why flours behave differently: [Baking Ingredients](guide:baking-ingredients#flour)."
+			]
+		},
+		{
+			"heading": "Fat",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Out of", "Use instead", "What changes"],
+					"rows": [
+						[
+							"Melted butter",
+							"A neutral oil, about ¾ the amount.",
+							"Moister, softer, less buttery flavor. Works in brownies, quick breads, pancakes and muffins."
+						],
+						[
+							"Softened or cold butter",
+							"Oil doesn't work.",
+							"Creaming and flaky doughs need a solid fat. Shortening works for flaky doughs, with less flavor."
+						]
+					]
+				}
+			]
+		},
+		{
+			"heading": "Eggs",
+			"blocks": [
+				"Egg swaps work where eggs mostly bind and add moisture: muffins, quick breads, pancakes and many cookies. They don't work where eggs are the structure or the lift: sponge and angel food cakes, custards, meringue, soufflés.",
+				{
+					"type": "table",
+					"columns": ["Per egg", "Use instead", "What changes"],
+					"rows": [
+						[
+							"1 large egg",
+							"1 Tbsp ground flaxseed mixed with 3 Tbsp (45 ml) water, left 5 minutes to thicken.",
+							"Denser, slightly nutty; good in muffins and quick breads."
+						],
+						[
+							"1 large egg",
+							"¼ cup (60 g) unsweetened applesauce or mashed banana.",
+							"Moister and denser, with some flavor of the fruit."
+						]
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["baking-ingredients", "measuring-for-baking"],
+		"recipes": ["buttermilk-pancakes"]
+	}
+}

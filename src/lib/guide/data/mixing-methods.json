@@ -1,0 +1,106 @@
+{
+	"slug": "mixing-methods",
+	"name": "Mixing Methods",
+	"emoji": "🥣",
+	"category": "baking",
+	"tags": [
+		"Baking",
+		"Mixing",
+		"Creaming",
+		"Muffin method",
+		"Overmixing",
+		"Whipping",
+		"Egg whites",
+		"Folding"
+	],
+	"summary": "What \"cream the butter and sugar\", \"don't overmix\" and \"fold in\" actually mean, and why they matter.",
+	"sections": [
+		{
+			"heading": "At a glance",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Method", "Makes", "Avoid"],
+					"rows": [
+						["Creaming", "Cookies, butter cakes", "Butter that's too warm or too cold."],
+						[
+							"Melted butter",
+							"Brownies, many quick breads",
+							"Butter so hot it scrambles the eggs."
+						],
+						["Muffin method", "Muffins, pancakes, quick breads", "Overmixing."],
+						["Cutting in", "Pie crust, biscuits, scones", "Letting the butter soften."],
+						[
+							"Whipping and folding",
+							"Meringue, mousse, light cakes",
+							"A greasy bowl; stirring instead of folding."
+						]
+					]
+				}
+			]
+		},
+		{
+			"heading": "Creaming",
+			"blocks": [
+				"Beat **softened** butter with sugar until it's paler, fluffy and noticeably bigger, a few minutes with a mixer. The sugar crystals punch tiny air pockets into the butter, and those pockets expand in the oven and help the bake rise. Then beat in the eggs one at a time, and stir in the dry ingredients last, just until combined.",
+				{
+					"type": "list",
+					"items": [
+						"**Butter too cold:** it won't hold air; you get lumps and a dense bake.",
+						"**Butter too warm or melted:** the air pockets collapse; cookies spread flat and greasy.",
+						"See [Baking Ingredients](guide:baking-ingredients#fat) for how softened butter should feel."
+					]
+				},
+				"Used in: [Chocolate Chip Cookies](recipe:chocolate-chip-cookies)."
+			]
+		},
+		{
+			"heading": "Melted butter",
+			"blocks": [
+				"Stir melted butter with the sugar and eggs, then the dry ingredients. With no air beaten in, the result is denser and chewier: fudgy brownies rather than cakey ones, moist quick breads. Let the butter cool for a few minutes first so it doesn't cook the eggs.",
+				"Used in: [Fudgy Brownies](recipe:brownies), [Banana Bread](recipe:banana-bread)."
+			]
+		},
+		{
+			"heading": "Muffin method",
+			"blocks": [
+				"Whisk the dry ingredients in one bowl and the wet ones in another, pour the wet into the dry, and stir with a spatula **only until no dry flour shows**. Lumps are fine; they disappear in the oven.",
+				"Every extra stir develops gluten. In muffins, pancakes and quick breads that means tough, rubbery bakes with tunnels running through them and peaked tops. Leavening has also started working once the batter is wet, so get it into the pan or onto the griddle soon.",
+				"Used in: [Buttermilk Pancakes](recipe:buttermilk-pancakes), and the end of most quick bread recipes."
+			]
+		},
+		{
+			"heading": "Cutting in cold fat",
+			"blocks": [
+				"Rub or cut cold butter into flour until it's in small pieces, then add just enough cold liquid to hold it together. The butter pieces melt in the oven and leave flaky layers. This is the method behind pie crust, biscuits and scones; see [Pie Crust, Biscuits and Scones](guide:flaky-doughs)."
+			]
+		},
+		{
+			"heading": "Whipping and folding",
+			"blocks": [
+				"**Egg whites** whip up to several times their volume. Use a clean, dry bowl (any fat, including a speck of yolk, stops them from foaming) and a pinch of cream of tartar or a few drops of lemon juice to steady them. Room-temperature whites whip faster.",
+				{
+					"type": "table",
+					"columns": ["Stage", "Lift the whisk and…", "Used for"],
+					"rows": [
+						["Soft peaks", "the peak flops over.", "Folding into batters, mousse."],
+						["Firm peaks", "the peak holds, with the tip curling.", "Most cakes and soufflés."],
+						["Stiff peaks", "the peak stands straight up; the foam is glossy.", "Meringue."]
+					]
+				},
+				"Past stiff peaks the whites turn dry and grainy and start to separate; start again with new whites. **Cream** goes through the same stages; past stiff peaks it turns to butter.",
+				"To **fold**, add a third of the foam to the batter and stir it in to lighten it. Then add the rest and, with a spatula, cut down through the middle, sweep along the bottom and turn it over the top, rotating the bowl as you go. Stop as soon as no streaks remain."
+			]
+		},
+		{
+			"heading": "Kneading",
+			"blocks": [
+				"Kneading is the opposite of the muffin method: you work the dough on purpose to build gluten, so bread can hold its rise. How and how long is in [Yeast Dough and Bread](guide:yeast-dough#kneading)."
+			]
+		}
+	],
+	"related": {
+		"guides": ["baking-ingredients", "baking-troubleshooting"],
+		"recipes": ["chocolate-chip-cookies", "brownies", "buttermilk-pancakes", "banana-bread"]
+	}
+}

@@ -1,0 +1,91 @@
+{
+	"slug": "flaky-doughs",
+	"name": "Pie Crust, Biscuits and Scones",
+	"emoji": "🥧",
+	"category": "baking",
+	"tags": [
+		"Baking",
+		"Pie crust",
+		"Pastry",
+		"Biscuits",
+		"Scones",
+		"Flaky",
+		"Cold butter",
+		"Blind baking"
+	],
+	"summary": "How cold butter makes flaky layers, and how to mix, roll and bake pie crust, biscuits and scones without making them tough.",
+	"sections": [
+		{
+			"heading": "Why cold fat makes flakes",
+			"blocks": [
+				"Pie crust, biscuits and scones are all flour with pieces of **cold** butter (or shortening) and just enough liquid to hold together. In the oven the butter pieces melt, their water turns to steam, and they leave thin layers and pockets behind: flakes.",
+				"Two things ruin it: butter that softens and smears into the flour before baking, and too much mixing or water, which builds gluten and makes the dough tough and shrink.",
+				{
+					"type": "list",
+					"items": [
+						"Keep everything cold: butter straight from the fridge (or cubed and frozen for 15 minutes), ice water, and a cool bowl.",
+						"Handle the dough as little and as briefly as you can.",
+						"If the butter starts to look soft or greasy at any point, put the dough back in the fridge for 15 minutes."
+					]
+				}
+			]
+		},
+		{
+			"heading": "Cutting in the butter",
+			"blocks": [
+				"Toss cubes of cold butter with the flour, then break them up with any of these:",
+				{
+					"type": "list",
+					"items": [
+						"**Pastry blender** or two knives, cutting down through the butter.",
+						"**Fingertips**, pinching and flattening the cubes. Work fast; your hands are warm.",
+						"**Food processor**, in short pulses. Easy to overdo.",
+						"**Box grater** with frozen butter, then a quick toss: the easiest way to even pieces."
+					]
+				},
+				"Stop while the mixture still has pieces from pea-sized to a bit bigger, flattened into flakes. Those are your layers."
+			]
+		},
+		{
+			"heading": "Adding the liquid",
+			"blocks": [
+				"Sprinkle in the ice water (or cold buttermilk for biscuits) a little at a time, tossing with a fork, until a handful squeezed together holds. It should look shaggy, not smooth. Too dry and it cracks when rolled; too wet and it's tough and sticky.",
+				"Press it into a disk, wrap it and refrigerate for at least 30 minutes, up to a couple of days. Resting chills the butter again and relaxes the gluten, so the crust doesn't shrink."
+			]
+		},
+		{
+			"heading": "Pie crust",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Roll** on a lightly floured counter from the center out, turning the dough a quarter turn every few rolls so it doesn't stick. If it cracks at the edges, let it warm for a few minutes; if it gets soft, chill it.",
+						"**Lift** it into the pan by rolling it around the rolling pin. Ease it into the corners; don't stretch it, or it shrinks back as it bakes.",
+						"**Chill** the lined pan for 30 minutes before baking.",
+						"**Blind bake** (bake the crust before filling) for custard, cream and other wet fillings: line it with parchment, fill it with pie weights or dried beans, and bake until the edges are set, then remove the weights and bake until the bottom looks dry. Follow your recipe's times.",
+						"**Soggy bottom?** Bake on the lowest rack, ideally on a preheated baking sheet, and use a metal or glass pan rather than ceramic."
+					]
+				},
+				"Custard, pumpkin and cream pies are egg dishes: bake them until set and keep them in the fridge once cool."
+			]
+		},
+		{
+			"heading": "Biscuits and scones",
+			"blocks": [
+				"The same method, with a soft dough patted out rather than rolled thin. Biscuits are usually just flour, fat, buttermilk and leavening; scones add sugar and often an egg or cream, and come out richer and denser.",
+				{
+					"type": "list",
+					"items": [
+						"For taller, layered biscuits, pat the dough out, fold it in thirds like a letter, pat it out again and repeat two or three times.",
+						"Cut straight down with a sharp cutter and don't twist: twisting seals the edges and stops them from rising.",
+						"Set them touching on the sheet for soft sides and a taller rise, or apart for crisp edges.",
+						"Bake hot, so the butter turns to steam before it melts out."
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["mixing-methods", "oven-and-pans", "baking-ingredients"]
+	}
+}

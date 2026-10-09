@@ -1,0 +1,141 @@
+{
+	"slug": "baking-doneness",
+	"name": "Is It Done?",
+	"emoji": "⏲️",
+	"category": "baking",
+	"tags": [
+		"Baking",
+		"Doneness",
+		"Toothpick",
+		"Thermometer",
+		"Bread",
+		"Cooling",
+		"Storing",
+		"Freezing"
+	],
+	"summary": "How to tell cookies, brownies, quick breads and bread are done, how to cool them, and how to keep them.",
+	"sections": [
+		{
+			"heading": "Signs it's done",
+			"id": "signs",
+			"blocks": [
+				"Bake times in recipes are a range because ovens, pans and ingredients vary. Set a timer for the low end and check with these signs:",
+				{
+					"type": "table",
+					"columns": ["Bake", "Done when", "Watch out"],
+					"rows": [
+						[
+							"Cookies",
+							"Edges golden and set; centers puffed and still look a little soft.",
+							"They keep baking on the hot sheet. Wait for a firm center and they'll be hard once cool."
+						],
+						[
+							"Brownies",
+							"Edges set; a toothpick in the center comes out with a few moist crumbs, not wet batter.",
+							"A clean toothpick means they're overbaked. They firm up as they cool."
+						],
+						[
+							"Quick breads and muffins",
+							"A skewer in the center comes out clean or with a crumb or two; the top springs back when pressed; the edges pull away from the pan.",
+							"A crack down the top of a loaf is normal. Check inside the crack: it should look dry."
+						],
+						[
+							"Cakes",
+							"As for quick breads: springs back, skewer clean, edges pulling away.",
+							"Opening the oven early, before the cake has set, can make it sink."
+						],
+						[
+							"Yeast bread",
+							"Deep golden brown all over, sounds hollow when tapped underneath, and reaches the temperature below.",
+							"Pale bread is often underbaked inside even when it looks done."
+						]
+					]
+				}
+			]
+		},
+		{
+			"heading": "Using a thermometer",
+			"id": "temperatures",
+			"blocks": [
+				"An instant-read thermometer takes the guessing out of bread. Push it into the center from the side or the bottom:",
+				{
+					"type": "table",
+					"columns": ["Bread", "Done at"],
+					"rows": [
+						[
+							"Soft, rich breads (sandwich loaves, brioche, rolls with milk, butter or eggs)",
+							"About 190°F (88°C)"
+						],
+						["Lean, crusty breads (flour, water, salt and yeast)", "200–210°F (93–99°C)"]
+					]
+				},
+				"These numbers are about texture: below them the inside is gummy. They aren't food-safety temperatures. The [Oven Time Converter](tool:/utils/oven-time)'s baked-goods setting assumes about 205°F (96°C), within the lean-bread range.",
+				"Cookies and brownies are too thin to measure; use the signs above."
+			]
+		},
+		{
+			"heading": "Cooling",
+			"id": "cooling",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Cookies:** a couple of minutes on the sheet to firm up, then onto a rack.",
+						"**Brownies and bars:** cool completely in the pan, at least an hour, or they fall apart when cut.",
+						"**Quick breads and cakes:** about 10 minutes in the pan, then turn out onto a rack so the bottom doesn't steam and turn soggy.",
+						"**Yeast bread:** out of the pan right away, then cool on a rack for at least an hour before slicing. It's still setting inside; cut it hot and the crumb turns gummy."
+					]
+				}
+			]
+		},
+		{
+			"heading": "Storing",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Bake", "Counter", "Freezer"],
+					"rows": [
+						[
+							"Cookies",
+							"Airtight, a few days. Keep crisp and soft ones apart.",
+							"Baked cookies or scooped dough, wrapped well, for months. Bake dough balls straight from frozen and add 1–2 minutes."
+						],
+						["Brownies", "Covered, a few days.", "Cut, wrapped individually, for months."],
+						[
+							"Quick breads and muffins",
+							"Wrapped, a few days.",
+							"Wrapped well, for months; thaw on the counter."
+						],
+						[
+							"Yeast bread",
+							"Cut side down on a board or in a paper or cloth bag, a couple of days.",
+							"Sliced, in a freezer bag; toast slices straight from frozen."
+						]
+					],
+					"caption": "Freezer times are for quality, not safety: frozen food stays safe, it just dries out over time."
+				},
+				"Don't keep bread in the fridge: it goes stale faster there than on the counter.",
+				"Anything with a cream cheese frosting, custard or cream filling is perishable: keep it in the fridge, and see the general food-safety rules for how long it can sit out.",
+				{
+					"type": "tip",
+					"text": "Pizza dough freezes too: see the [Pizza Dough](recipe:pizza-dough) tips for when to freeze it and how to thaw it."
+				}
+			]
+		},
+		{
+			"heading": "Don't eat raw dough",
+			"id": "raw-dough",
+			"blocks": [
+				{
+					"type": "warning",
+					"text": "The FDA and CDC advise against eating raw cookie dough or batter, even without eggs: raw flour hasn't been treated to kill germs and has caused E. coli outbreaks, and raw eggs can carry salmonella. Baking makes both safe. The same goes for kids playing with raw dough."
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["oven-and-pans", "baking-troubleshooting"],
+		"recipes": ["chocolate-chip-cookies", "brownies", "banana-bread", "pizza-dough"],
+		"tools": ["/utils/oven-time", "/utils/cooking-timer"]
+	}
+}

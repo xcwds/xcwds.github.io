@@ -56,6 +56,8 @@ export type Recipe = {
 	ingredients: Ingredient[];
 	instructions: Instruction[];
 	tips?: string[];
+	/** Kitchen Guide articles that go deeper (slugs), shown as "Learn more" links. */
+	guides?: string[];
 	source?: string;
 };
 

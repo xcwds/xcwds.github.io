@@ -1,0 +1,132 @@
+{
+	"slug": "grill-stovetop-or-oven",
+	"name": "Grill, Stovetop or Oven?",
+	"emoji": "🔥",
+	"category": "methods",
+	"tags": ["Grilling", "Stovetop", "Oven", "Roasting", "Searing", "Broiling", "Basics"],
+	"summary": "How each one heats food, what it's best at, and how to pick one for what you're cooking.",
+	"sections": [
+		{
+			"heading": "How each one heats",
+			"blocks": [
+				"All three cook with dry heat, but they deliver it differently, and that's what makes each one good at different things.",
+				{
+					"type": "table",
+					"columns": ["Method", "How it heats", "Best for", "Watch out for"],
+					"rows": [
+						[
+							"Grill",
+							"Intense heat from below, mostly radiant; with the lid down it also works like an oven.",
+							"Steaks, burgers, chops, chicken pieces, kebabs, firm fish, sturdy vegetables. Char and smoky flavor.",
+							"Flare-ups, burnt outsides on thick or sugary food, small pieces falling through."
+						],
+						[
+							"Stovetop",
+							"Contact with a hot pan (conduction), so heat goes straight into the side that touches it.",
+							"Searing, sautéing, eggs, thin cuts, stir-fries, pan sauces, anything simmered.",
+							"Crowding the pan (food steams instead of browning), thick cuts browning before the middle is done."
+						],
+						[
+							"Oven",
+							"Hot air all around the food (convection), plus radiant heat from the walls and elements.",
+							"Whole birds, roasts, big batches of vegetables, baking, casseroles. Hands-off cooking.",
+							"Slow to brown unless it's hot; a cold start; crowded sheet pans that steam."
+						]
+					]
+				}
+			]
+		},
+		{
+			"heading": "Grill",
+			"blocks": [
+				"Use the grill when you want browning and char on food that cooks through in about the time its outside takes to brown: steaks and chops up to about 1 ½ inches (4 cm) thick, burgers, sausages, chicken thighs, skewers, firm fish such as salmon or swordfish, and vegetables like peppers, zucchini, onions and corn.",
+				"Set it up with **two zones**: one side hot (direct heat), the other side with the burners off or no coals (indirect heat). Sear over the hot side, then move thick pieces to the cool side and close the lid to finish cooking without burning.",
+				{
+					"type": "list",
+					"items": [
+						"Preheat with the lid closed for 10–15 minutes, then scrape the grates clean.",
+						"Pat food dry and oil the food, not the grates.",
+						"Leave food alone until it releases on its own; forcing it tears the crust.",
+						"Brush on sugary sauces only in the last few minutes, or they burn."
+					]
+				},
+				{
+					"type": "warning",
+					"text": "Only use a charcoal or gas grill outdoors, away from the house, never in a garage or under a covered porch: it gives off carbon monoxide."
+				},
+				{
+					"type": "tip",
+					"text": "No grill? Your oven's broiler is an upside-down grill: put the rack about 4 inches (10 cm) below it and turn the food halfway."
+				},
+				"More in [Grilling](guide:grilling)."
+			]
+		},
+		{
+			"heading": "Stovetop",
+			"blocks": [
+				"The stovetop gives you the most control and the fastest response: turn the burner down and the pan cools in seconds. It's the place for anything quick, anything you stir, and anything with a sauce.",
+				{
+					"type": "list",
+					"items": [
+						"**Sear** steaks, chops, chicken and fish in a hot pan with a thin layer of oil until browned. A heavy pan (cast iron or stainless) holds heat best.",
+						"**Sauté** vegetables and small pieces over medium-high heat, stirring often.",
+						"**Simmer** soups, stews, sauces and grains with small, lazy bubbles; a hard boil toughens meat and breaks things apart.",
+						"**Make a pan sauce** after searing: pour off extra fat, add wine, stock or water, and scrape up the browned bits."
+					]
+				},
+				"Preheat the pan before the food goes in: when the oil shimmers, it's ready. Cook in batches with space between pieces; a crowded pan drops in temperature and the food steams instead of browning.",
+				{
+					"type": "tip",
+					"text": "For thick steaks, chops or chicken breasts on the bone, sear on the stovetop, then move the pan to a 400°F (200°C) oven to finish the middle without burning the outside."
+				},
+				"More in [Stovetop Cooking](guide:stovetop)."
+			]
+		},
+		{
+			"heading": "Oven",
+			"blocks": [
+				"The oven cooks evenly and without attention, which makes it best for anything big or anything you'd rather walk away from: a [whole roast chicken](recipe:roast-chicken), pork loin, a tray of vegetables, baking, and casseroles.",
+				{
+					"type": "list",
+					"items": [
+						"**Roasting** is hot and dry, usually 400–450°F (200–230°C) for vegetables and poultry, so the outside browns. Lower temperatures, around 300–350°F (150–180°C), suit big roasts that need time to cook through.",
+						"**Baking** is the same heat, used for batters, doughs and casseroles, usually around 325–375°F (160–190°C).",
+						"**Broiling** uses only the top element at full power, for melting, browning and quick cooking of thin food."
+					]
+				},
+				"Always preheat. Give food room on the pan: vegetables in a single layer with space between them brown; piled up, they steam. Use the middle rack unless a recipe says otherwise.",
+				"Have to cook at a different temperature than the recipe says, because something else is in the oven? The [Oven Time Converter](tool:/utils/oven-time) estimates the new time.",
+				"More in [Oven: Roasting, Baking & Broiling](guide:oven)."
+			]
+		},
+		{
+			"heading": "Rules of thumb",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Thin and tender** (steaks, chops, fillets, cutlets): hot and fast, on the grill or in a pan.",
+						"**Thick and tender** (thick steaks, whole tenderloin, bone-in chicken): brown it over high heat, then finish with gentler heat in the oven or on the grill's cool side.",
+						"**Tough cuts with lots of connective tissue** (chuck, brisket, pork shoulder, short ribs): low and slow with liquid ([braising](guide:braising-and-stewing)), in the oven or on the stovetop, until fork-tender.",
+						"**Big or many** (whole birds, roasts, a crowd's worth of vegetables): the oven.",
+						"**Want a sauce?** The stovetop, so you can build it in the same pan.",
+						"**Want char and smoke?** The grill, or the broiler as a stand-in."
+					]
+				},
+				"Whatever the method, judge meat by its internal temperature, not by the clock: times depend on thickness, starting temperature and your equipment. An instant-read thermometer is the most useful cheap tool in the kitchen; the [doneness chart](guide:doneness-and-food-safety#doneness-chart) says what temperature to aim for."
+			]
+		}
+	],
+	"related": {
+		"guides": [
+			"grilling",
+			"stovetop",
+			"oven",
+			"braising-and-stewing",
+			"air-fryer",
+			"doneness-and-food-safety"
+		],
+		"recipes": ["roast-chicken"],
+		"tools": ["/utils/oven-time", "/utils/cooking-timer"]
+	}
+}

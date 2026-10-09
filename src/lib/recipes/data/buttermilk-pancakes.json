@@ -20,7 +20,12 @@
 		{ "amount": 0.5, "unit": "tsp", "item": "salt" },
 		{ "amount": 2, "unit": "cup", "item": "buttermilk" },
 		{ "amount": 2, "item": "large egg", "plural": "large eggs" },
-		{ "amount": 3, "unit": "Tbsp", "item": "butter", "note": "melted, plus more for the pan" }
+		{
+			"amount": 3,
+			"unit": "Tbsp",
+			"item": "unsalted butter",
+			"note": "melted, plus more for the pan"
+		}
 	],
 	"instructions": [
 		"Whisk the flour, sugar, baking powder, baking soda and salt in a large bowl.",
@@ -39,5 +44,6 @@
 		"No buttermilk? Stir 2 Tbsp lemon juice or vinegar into 2 cups (475 ml) of milk and let it sit for 5 minutes.",
 		"Keep finished pancakes warm on a rack in a 200°F (95°C) oven while you cook the rest.",
 		"Add blueberries or chocolate chips by scattering them on each pancake right after pouring, not into the bowl."
-	]
+	],
+	"guides": ["mixing-methods", "baking-substitutions"]
 }

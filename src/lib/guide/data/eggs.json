@@ -1,0 +1,128 @@
+{
+	"slug": "eggs",
+	"name": "Eggs",
+	"emoji": "🥚",
+	"category": "staples",
+	"tags": [
+		"Eggs",
+		"Boiled eggs",
+		"Hard-boiled",
+		"Soft-boiled",
+		"Fried eggs",
+		"Scrambled eggs",
+		"Poached eggs",
+		"Omelette",
+		"Breakfast"
+	],
+	"summary": "Boiled (with timers), fried, scrambled, poached and omelettes, plus buying, storing and egg safety.",
+	"sections": [
+		{
+			"id": "boiled",
+			"heading": "Boiled",
+			"blocks": [
+				"For large eggs straight from the fridge: bring a pot of water to a gentle boil, lower the eggs in with a spoon, and start a timer. When it rings, move them to a bowl of ice water for a few minutes. Starting in boiling water makes timing exact and the eggs easier to peel.",
+				{
+					"type": "table",
+					"columns": ["Time", "Yolk", "Good for"],
+					"rows": [
+						["6 minutes", "Runny, whites just set", "Toast soldiers, ramen, salads"],
+						["8 minutes", "Jammy, soft in the middle", "Ramen, grain bowls, snacking"],
+						["10 minutes", "Just firm, still moist", "Salads, sandwiches"],
+						["12 minutes", "Fully firm", "Deviled eggs, egg salad, packed lunches"]
+					]
+				},
+				{
+					"type": "timers",
+					"timers": [
+						{
+							"label": "Runny eggs",
+							"minutes": 6
+						},
+						{
+							"label": "Jammy eggs",
+							"minutes": 8
+						},
+						{
+							"label": "Firm eggs",
+							"minutes": 10
+						},
+						{
+							"label": "Hard-boiled eggs",
+							"minutes": 12
+						}
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Older eggs peel more easily than very fresh ones. Crack the shell all over and peel under running water, starting from the wide end where the air pocket is."
+				}
+			]
+		},
+		{
+			"id": "fried",
+			"heading": "Fried",
+			"blocks": [
+				"Heat a nonstick or well-seasoned pan over medium heat with a little butter or oil. Crack the egg in and cook until the white is set, 2–3 minutes. **Sunny side up**: cover the pan for the last minute to set the top of the white. **Over easy**: flip and cook 20–30 seconds more; over medium or hard, longer.",
+				"For crispy, lacy edges, use more oil over medium-high heat and spoon hot oil over the white."
+			]
+		},
+		{
+			"id": "scrambled",
+			"heading": "Scrambled",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Beat eggs with a pinch of salt until no streaks of white remain.",
+						"Melt butter in a nonstick pan over medium-low heat and add the eggs.",
+						"Stir slowly with a spatula, pushing the curds from the edges to the middle.",
+						"Take them off the heat while they still look slightly wet; they finish cooking on the plate."
+					]
+				},
+				"Low heat and patience make soft, creamy curds; high heat makes them rubbery and dry."
+			]
+		},
+		{
+			"id": "poached",
+			"heading": "Poached",
+			"blocks": [
+				"Bring a few inches of water to a bare simmer (no big bubbles) and add a splash of vinegar. Crack each egg into a small cup first. Stir the water into a gentle whirlpool, slide the egg into the middle, and cook 3–4 minutes until the white is set and the yolk is soft. Lift out with a slotted spoon and blot on a towel. The freshest eggs hold together best."
+			]
+		},
+		{
+			"id": "omelette",
+			"heading": "Omelette",
+			"blocks": [
+				"Beat 2–3 eggs with salt. In a hot, buttered nonstick pan over medium heat, pour in the eggs and, as the edges set, push them toward the middle and tilt the pan so raw egg runs underneath. When the top is almost set, add fillings (already cooked, and not too many) to one half, fold, and slide it out."
+			]
+		},
+		{
+			"id": "basics",
+			"heading": "Buying and storing",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"Recipes assume **large** eggs unless they say otherwise.",
+						"In the US, eggs are washed before sale, which removes their natural coating, so they must stay in the fridge, in their carton on a shelf rather than in the door.",
+						"Raw eggs in the shell keep 3–5 weeks in the fridge; hard-boiled eggs about a week.",
+						"For baking, bring eggs to room temperature by setting them in warm water for 5–10 minutes."
+					]
+				}
+			]
+		},
+		{
+			"id": "safety",
+			"heading": "Egg safety",
+			"blocks": [
+				"The USDA advises cooking eggs until the yolk and white are firm, and egg dishes (quiche, casseroles) to 160°F (71°C). Runny yolks are a very common choice that carries a small risk of salmonella. Anyone pregnant, very young, older or with a weakened immune system should eat firm eggs, or use pasteurized eggs for runny yolks and raw-egg recipes (homemade mayonnaise, Caesar dressing). See [Doneness & Food Safety](guide:doneness-and-food-safety)."
+			]
+		}
+	],
+	"related": {
+		"guides": ["doneness-and-food-safety", "baking-ingredients"],
+		"recipes": ["buttermilk-pancakes"],
+		"tools": ["/utils/cooking-timer"]
+	}
+}

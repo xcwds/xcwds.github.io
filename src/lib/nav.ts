@@ -1,3 +1,4 @@
+import { getArticle } from '$lib/guide';
 import { porkChopsPath } from '$lib/parody';
 import { getRecipe } from '$lib/recipes';
 import { tools } from '$lib/utils/tools';
@@ -16,7 +17,7 @@ export type RouteInfo = {
 	title: string;
 	emoji?: string;
 	/** Where the header's back arrow goes; top-level sections have none. */
-	parent?: SectionPath;
+	parent?: SectionPath | '/guide';
 };
 
 /** Standalone pages outside the sections, tools and recipes. */
@@ -36,6 +37,12 @@ export function routeInfo(pathname: string): RouteInfo {
 
 	if (pages[path]) return pages[path];
 
+	// The kitchen guide sits in the Recipes tab beside the recipes, as a peer with no back arrow.
+	if (path === '/guide') return { title: 'Kitchen Guide' };
+	const articleSlug = path.match(/^\/guide\/([^/]+)$/)?.[1];
+	const article = articleSlug ? getArticle(articleSlug) : undefined;
+	if (article) return { title: article.name, emoji: article.emoji, parent: '/guide' };
+
 	const tool = tools.find((t) => t.path === path);
 	if (tool) return { title: tool.name, emoji: tool.emoji, parent: '/utils' };
 
@@ -54,6 +61,7 @@ export function errorInfo(status: number): RouteInfo {
 /** The section a path belongs to, for highlighting the current tab. */
 export function activeSection(pathname: string): SectionPath {
 	const path = normalize(pathname);
+	if (path === '/guide' || path.startsWith('/guide/')) return '/recipes';
 	const match = sections
 		.filter((s) => s.path !== '/')
 		.find((s) => path === s.path || path.startsWith(`${s.path}/`));
