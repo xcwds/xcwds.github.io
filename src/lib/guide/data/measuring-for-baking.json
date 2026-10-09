@@ -51,7 +51,7 @@
 		{
 			"heading": "Cups to grams",
 			"blocks": [
-				"Weights for one level US cup (237 ml), measured the way described above. These are the values the recipes' metric amounts use, so a recipe shown in metric and one shown in cups come out the same.",
+				"Weights for one level US cup (237 ml), measured the way described above. The recipes' metric amounts agree with these to within a few percent, so a recipe comes out the same whether you follow it in cups or in grams.",
 				{
 					"type": "table",
 					"columns": ["Ingredient", "1 cup", "½ cup", "¼ cup"],

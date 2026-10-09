@@ -79,12 +79,13 @@
 			"heading": "Pan size",
 			"id": "size",
 			"blocks": [
-				"The recipe pages offer a pan picker on recipes baked in a pan, like [Banana Bread](recipe:banana-bread) and [Fudgy Brownies](recipe:brownies). It scales the batter to fill the pan you choose the same way the original fills its pan. What it can't do is change the bake time, because time depends on how deep the batter is:",
+				"The recipe pages offer a pan picker on recipes baked in a pan, like [Banana Bread](recipe:banana-bread) and [Fudgy Brownies](recipe:brownies). It scales the batter by how much the pan you choose holds, but it can't change the bake time, and time depends mostly on how deep the batter is:",
 				{
 					"type": "list",
 					"items": [
-						"**Deeper batter** (a smaller pan, or a loaf pan instead of a square one): longer bake, and the edges may finish before the middle. Lower the oven by 25°F (15°C) if the edges get too dark.",
-						"**Shallower batter** (a bigger pan): shorter bake. Start checking well before the recipe's time.",
+						"**A deeper pan shape** (a loaf pan instead of a square one that holds as much): longer bake, and the edges may finish before the middle. Lower the oven by 25°F (15°C) if the edges get too dark.",
+						"**A shallower pan shape** (a 9×13-inch (23×33 cm) pan instead of a loaf): shorter bake. Start checking well before the recipe's time.",
+						"**The original batter in a different pan** without scaling it: a smaller pan means deeper batter and a longer bake; a bigger one means a shorter bake.",
 						"**Muffins from a loaf recipe:** much shorter. Banana Bread's tip gives 20–25 minutes instead of about an hour."
 					]
 				},

@@ -69,7 +69,7 @@
 						["Lean, crusty breads (flour, water, salt and yeast)", "200–210°F (93–99°C)"]
 					]
 				},
-				"These numbers are about texture: below them the inside is gummy. They aren't food-safety temperatures. The [Oven Time Converter](tool:/utils/oven-time)'s baked-goods setting aims for the middle of this range, about 205°F (96°C).",
+				"These numbers are about texture: below them the inside is gummy. They aren't food-safety temperatures. The [Oven Time Converter](tool:/utils/oven-time)'s baked-goods setting assumes about 205°F (96°C), within the lean-bread range.",
 				"Cookies and brownies are too thin to measure; use the signs above."
 			]
 		},
