@@ -95,3 +95,34 @@ test('on a wide screen, an article shows tables as tables', async ({ page }) => 
 	await expect(table.getByRole('rowheader', { name: 'Oven' })).toBeVisible();
 	await expect(page.getByTestId('guide-table-cards').first()).toBeHidden();
 });
+
+test('the doneness chart gives pull and done temperatures and starts a rest timer', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/guide/doneness-and-food-safety');
+	const chart = page.getByTestId('doneness');
+	const pull = page.getByTestId('doneness-pull');
+	const done = page.getByTestId('doneness-target');
+
+	// Beef steak, medium: at the USDA minimum, so it comes off right there.
+	await expect(chart.getByRole('radio', { name: /^Medium \d/ })).toBeChecked();
+	await expect(pull).toHaveText('145°F');
+	await expect(page.getByTestId('doneness-overshoot')).toContainText('about 5°F higher');
+	await expect(page.getByTestId('doneness-below-usda')).toHaveCount(0);
+
+	await chart.getByRole('radio', { name: /^Rare/ }).click();
+	await expect(pull).toHaveText('120°F');
+	await expect(done).toHaveText('125°F');
+	await expect(page.getByTestId('doneness-below-usda')).toBeVisible();
+
+	await chart.getByRole('radio', { name: 'Celsius (°C)' }).click();
+	await expect(pull).toHaveText('49°C');
+	await expect(done).toHaveText('52°C');
+
+	await chart.getByRole('radio', { name: /Chicken & turkey/ }).click();
+	await expect(pull).toHaveText('74°C');
+	await expect(page.getByTestId('doneness-below-usda')).toHaveCount(0);
+
+	await chart.getByRole('button', { name: 'Start 5 min rest timer' }).click();
+	await expect(page.getByTestId('toast')).toContainText('Chicken & turkey resting');
+});

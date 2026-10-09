@@ -19,8 +19,8 @@ export type TableBlock = { type: 'table'; columns: string[]; rows: string[][]; c
 
 /**
  * A piece of an article section. A bare string is a paragraph. Text supports `**bold**` and
- * links: `[text](guide:slug)`, `[text](guide:slug#section)`, `[text](recipe:slug)` and
- * `[text](tool:/utils/oven-time)`.
+ * links: `[text](guide:slug)`, `[text](guide:slug#section)`, `[text](recipe:slug)`,
+ * `[text](tool:/utils/oven-time)`, and `[text](https://…)` to a source in `EXTERNAL_HOSTS`.
  */
 export type Block =
 	| string
@@ -28,7 +28,9 @@ export type Block =
 	| { type: 'tip'; text: string }
 	/** Safety: food safety, burns, fire, carbon monoxide. */
 	| { type: 'warning'; text: string }
-	| TableBlock;
+	| TableBlock
+	/** An interactive piece, by name: `doneness` is the doneness chart (DonenessChart.svelte). */
+	| { type: 'widget'; widget: 'doneness' };
 
 export type GuideSection = {
 	/** Anchor for `guide:slug#id` links; defaults to the heading, slugified. Keep it stable. */
@@ -99,9 +101,13 @@ export type Inline =
 	| { kind: 'text'; text: string; bold?: boolean }
 	| { kind: 'guide'; text: string; slug: string; section?: string }
 	| { kind: 'recipe'; text: string; slug: string }
-	| { kind: 'tool'; text: string; path: string };
+	| { kind: 'tool'; text: string; path: string }
+	| { kind: 'external'; text: string; url: string };
 
-const INLINE = /\*\*(.+?)\*\*|\[([^\]]+)\]\((guide|recipe|tool):([^)\s]+)\)/g;
+/** Sites inline text may link out to (sources for food-safety numbers). */
+export const EXTERNAL_HOSTS = ['www.fsis.usda.gov', 'www.foodsafety.gov'];
+
+const INLINE = /\*\*(.+?)\*\*|\[([^\]]+)\]\((guide|recipe|tool|https):([^)\s]+)\)/g;
 
 /** Splits text into plain, bold and link pieces (see `Block`). Unknown syntax stays as text. */
 export function parseInline(text: string): Inline[] {
@@ -115,6 +121,8 @@ export function parseInline(text: string): Inline[] {
 			const [slug, section] = target.split('#');
 			parts.push({ kind: 'guide', text: label, slug, ...(section ? { section } : {}) });
 		} else if (kind === 'recipe') parts.push({ kind: 'recipe', text: label, slug: target });
+		else if (kind === 'https')
+			parts.push({ kind: 'external', text: label, url: `https:${target}` });
 		else parts.push({ kind: 'tool', text: label, path: target });
 		last = match.index + match[0].length;
 	}
@@ -129,6 +137,7 @@ export function articleTexts(article: GuideArticle): string[] {
 			if (typeof block === 'string') return [block];
 			if (block.type === 'list') return block.items;
 			if (block.type === 'table') return [...block.columns, ...block.rows.flat()];
+			if (block.type === 'widget') return [];
 			return [block.text];
 		})
 	);

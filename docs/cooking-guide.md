@@ -20,6 +20,7 @@ ids are URLs, so don't rename them. See the `GuideArticle` type in `src/lib/guid
 - `sections[]`: `{ heading, blocks, id? }`. Each section is an `<h2>` with an anchor id: `id`, or
   the heading slugified. Give an explicit `id` when you might reword the heading later.
 - `blocks[]`: a string (a paragraph), or
+  - `{ "type": "widget", "widget": "doneness" }` for the interactive doneness chart
   - `{ "type": "list", "items": [...], "ordered"?: true }`
   - `{ "type": "tip", "text": ... }`
   - `{ "type": "warning", "text": ... }` for safety warnings (food safety, burns, fire)
@@ -33,7 +34,9 @@ ids are URLs, so don't rename them. See the `GuideArticle` type in `src/lib/guid
 
 Any text (paragraphs, list items, tips, table cells) supports `**bold**` and links by id:
 `[sear](guide:stovetop#searing)`, `[Roast Chicken](recipe:roast-chicken)`,
-`[Oven Time Converter](tool:/utils/oven-time)`. No raw HTML or outside links in text.
+`[Oven Time Converter](tool:/utils/oven-time)`, plus `[USDA chart](https://www.fsis.usda.gov/...)`
+for sources on the hosts in `EXTERNAL_HOSTS` (USDA FSIS, FoodSafety.gov). No raw HTML or other
+outside links.
 `src/lib/guide/guide.spec.ts` fails on any link to a missing article, section, recipe or tool, so
 only link to articles that exist. It also fails on link or bold markup that didn't parse (a
 space after `guide:`, a link inside bold, an unclosed `**`), which would otherwise show as raw text.

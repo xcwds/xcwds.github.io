@@ -146,6 +146,7 @@ for (const [name, viewport] of Object.entries(viewports)) {
 			'/recipes/pizza-dough',
 			'/guide',
 			'/guide/grill-stovetop-or-oven',
+			'/guide/doneness-and-food-safety',
 			'/settings',
 			'/utils/weightlifting'
 		]) {

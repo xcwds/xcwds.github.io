@@ -110,11 +110,12 @@
 						"**Want char and smoke?** The grill, or the broiler as a stand-in."
 					]
 				},
-				"Whatever the method, judge meat by its internal temperature, not by the clock: times depend on thickness, starting temperature and your equipment. An instant-read thermometer is the most useful cheap tool in the kitchen."
+				"Whatever the method, judge meat by its internal temperature, not by the clock: times depend on thickness, starting temperature and your equipment. An instant-read thermometer is the most useful cheap tool in the kitchen; the [doneness chart](guide:doneness-and-food-safety#doneness-chart) says what temperature to aim for."
 			]
 		}
 	],
 	"related": {
+		"guides": ["doneness-and-food-safety"],
 		"recipes": ["roast-chicken"],
 		"tools": ["/utils/oven-time", "/utils/cooking-timer"]
 	}
