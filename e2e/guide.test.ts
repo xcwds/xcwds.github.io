@@ -130,7 +130,7 @@ test('the doneness chart gives pull and done temperatures and starts a rest time
 test('an article can start timers, which join the Cooking Timer', async ({ page }) => {
 	await gotoHydrated(page, '/guide/eggs');
 	await page.getByRole('button', { name: '8 min: Jammy eggs' }).click();
-	await expect(page.getByTestId('toast')).toContainText('Started a 8 min timer: Jammy eggs.');
+	await expect(page.getByTestId('toast')).toContainText('Started an 8 min timer: Jammy eggs.');
 	await page.goto('/utils/cooking-timer');
 	await expect(page.getByText('Jammy eggs')).toBeVisible();
 });

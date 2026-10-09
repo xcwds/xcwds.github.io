@@ -2,6 +2,7 @@
 	import { toast } from '$lib/toast.svelte';
 	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
 	import { formatMinutes } from '$lib/utils/oven';
+	import { startedMessage } from './timers';
 
 	let { timers }: { timers: { label: string; minutes: number }[] } = $props();
 
@@ -10,7 +11,7 @@
 
 	function start(timer: { label: string; minutes: number }) {
 		cookingTimers.add(timer.minutes * MINUTE, timer.label);
-		toast(`Started a ${formatMinutes(timer.minutes)} timer: ${timer.label}.`);
+		toast(startedMessage(timer.minutes, timer.label));
 	}
 </script>
 
