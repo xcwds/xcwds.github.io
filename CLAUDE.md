@@ -57,7 +57,8 @@ Package manager: pnpm.
   (`settings.nav`, defaults: header links in portrait, sidebar in landscape), applied as `data-nav-portrait` /
   `data-nav-landscape` on `<html>` (also set by the `app.html` inline script) and styled with the `sidebar:`
   variant in `app.css`. Anything tied to the tab bar keeps using `md:`. Every page's `<main>` uses the
-  `page-narrow` (tools, Settings, errors) or `page-wide` (Home, lists, recipes) container from `app.css`, and
+  `page-narrow` (tools, errors), `page-wide` (Home, lists, recipes) or `page-split` (Settings, weightlifting, URL
+  sanitizer: narrow until `xl`, then two columns via a `@container` query on `@[50rem]:`) container from `app.css`, and
   `pageWidth` in `src/lib/nav.ts` must name the same one so the header lines up. Breakpoints: phone < `md`,
   tablet `md`–`lg`, computer `lg`+; `e2e/layout.test.ts` covers each. `page-wide` grows to `max-w-5xl` on `lg`,
   where lists are 3-column grids (2 from `md`) and recipe pages put ingredients in a sticky column beside

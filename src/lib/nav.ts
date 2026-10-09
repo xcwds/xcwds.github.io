@@ -60,12 +60,18 @@ export function activeSection(pathname: string): SectionPath {
 	return match?.path ?? '/';
 }
 
+/** Pages that are narrow on phones and tablets but use two columns on computers (#95). */
+const splitPages = ['/settings', '/utils/weightlifting', '/utils/url-sanitizer'];
+
 /**
- * Which page container (`page-narrow` / `page-wide` in app.css) a path's <main> uses, so the
- * header can line up with it. Lists, recipes and Home are wide; tools, Settings and errors narrow.
+ * Which page container (`page-narrow` / `page-wide` / `page-split` in app.css) a path's <main>
+ * uses, so the header can line up with it. Lists, recipes and Home are wide; tools and errors
+ * narrow; Settings, the weightlifting calculator and the URL sanitizer split into two columns
+ * when there's room.
  */
-export function pageWidth(pathname: string): 'narrow' | 'wide' {
+export function pageWidth(pathname: string): 'narrow' | 'wide' | 'split' {
 	const path = normalize(pathname);
-	if (path === '/settings' || tools.some((t) => t.path === path)) return 'narrow';
+	if (splitPages.includes(path)) return 'split';
+	if (tools.some((t) => t.path === path)) return 'narrow';
 	return 'wide';
 }

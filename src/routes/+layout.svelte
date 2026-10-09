@@ -32,9 +32,13 @@
 	 * beside the sidebar, since the header links need more room than a narrow page has.
 	 */
 	let headerWidth = $derived(
-		!page.error && pageWidth(page.url.pathname) === 'wide'
-			? 'md:px-12 lg:max-w-5xl'
-			: 'sidebar:max-w-md sidebar:px-8'
+		{
+			wide: 'md:px-12 lg:max-w-5xl',
+			narrow: 'sidebar:max-w-md sidebar:px-8',
+			// `sidebar:` sorts after `xl:`, so the two-column width is repeated under both.
+			split:
+				'sidebar:max-w-md sidebar:px-8 xl:max-w-5xl xl:px-12 xl:sidebar:max-w-5xl xl:sidebar:px-12'
+		}[page.error ? 'narrow' : pageWidth(page.url.pathname)]
 	);
 	let parentLabel = $derived(sections.find((s) => s.path === info.parent)?.label ?? 'Home');
 	/**

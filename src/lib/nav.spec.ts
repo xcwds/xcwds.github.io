@@ -60,9 +60,11 @@ describe('activeSection', () => {
 });
 
 describe('pageWidth', () => {
-	it('keeps tools and Settings narrow', () => {
-		for (const tool of tools) expect(pageWidth(tool.path)).toBe('narrow');
-		expect(pageWidth('/settings/')).toBe('narrow');
+	it('keeps tools narrow, except the ones that split into two columns', () => {
+		const split = ['/utils/weightlifting', '/utils/url-sanitizer'];
+		for (const tool of tools)
+			expect(pageWidth(tool.path)).toBe(split.includes(tool.path) ? 'split' : 'narrow');
+		expect(pageWidth('/settings/')).toBe('split');
 	});
 
 	it('makes Home, lists and recipes wide', () => {

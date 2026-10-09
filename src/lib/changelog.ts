@@ -7,6 +7,13 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 27,
+		date: '2026-10-09',
+		items: [
+			'On computers, the weightlifting calculator shows your plates beside your workout, the URL Sanitizer lists the params beside the link, and Settings uses two columns.'
+		]
+	},
+	{
 		id: 26,
 		date: '2026-10-09',
 		items: [

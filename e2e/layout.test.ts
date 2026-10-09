@@ -105,7 +105,9 @@ test.describe('with the sidebar', () => {
 		'/recipes',
 		'/recipes/pizza-dough',
 		'/settings',
-		'/utils/coffee-timer'
+		'/utils/coffee-timer',
+		'/utils/weightlifting',
+		'/utils/url-sanitizer'
 	]) {
 		test(`the header lines up with the page on ${path}`, async ({ page }) => {
 			await gotoHydrated(page, path);
@@ -130,8 +132,13 @@ test.describe('with the sidebar', () => {
 		const notice = page.getByTestId('offline-notice');
 		await expect(notice).toBeVisible();
 		const box = (await notice.boundingBox())!;
-		const title = (await page.getByRole('heading', { level: 1 }).boundingBox())!;
-		expect(box.x).toBeGreaterThan(title.x + title.width);
+		// Where the title's text ends (the <h1> box itself fills the header).
+		const titleEnd = await page.getByRole('heading', { level: 1 }).evaluate((h1) => {
+			const range = document.createRange();
+			range.selectNodeContents(h1);
+			return range.getBoundingClientRect().right;
+		});
+		expect(box.x).toBeGreaterThan(titleEnd);
 	});
 });
 
@@ -192,4 +199,60 @@ test('on a phone, recipe ingredients come before the steps', async ({ page }) =>
 	const b = (await page.getByRole('heading', { name: 'Instructions' }).boundingBox())!;
 	expect(b.y).toBeGreaterThan(a.y);
 	expect(Math.abs(a.x - b.x)).toBeLessThanOrEqual(1);
+});
+
+test.describe('two-column tools and Settings', () => {
+	const besides = async (page: Page, left: string, right: string) => {
+		const a = (await page.getByText(left, { exact: true }).first().boundingBox())!;
+		const b = (await page.getByText(right, { exact: true }).first().boundingBox())!;
+		return b.x > a.x + a.width;
+	};
+
+	test('a computer shows the plate calculator beside the workout', async ({ page }) => {
+		await page.setViewportSize(viewports.desktop);
+		await gotoHydrated(page, '/utils/weightlifting');
+		await expect(page.getByRole('tab')).toHaveText(['Plates & Workout', 'History'], {
+			useInnerText: true
+		});
+		await expect(page.getByRole('tab', { name: 'Plates & Workout' })).toHaveAttribute(
+			'aria-selected',
+			'true'
+		);
+		const add = page.getByRole('button', { name: '+ Add exercise' });
+		await expect(add).toBeVisible();
+		expect(await besides(page, 'Equipment set', 'Date')).toBe(true);
+
+		await page.getByRole('tab', { name: 'History' }).click();
+		await expect(add).toBeHidden();
+		await page.getByRole('tab', { name: 'Plates & Workout' }).click();
+		await expect(add).toBeVisible();
+	});
+
+	test('narrower screens keep the three tabs', async ({ page }) => {
+		await page.setViewportSize(viewports.tabletLandscape);
+		await gotoHydrated(page, '/utils/weightlifting');
+		await expect(page.getByRole('tab')).toHaveText(['Plates', 'Workout', 'History'], {
+			useInnerText: true
+		});
+		await expect(page.getByRole('button', { name: '+ Add exercise' })).toBeHidden();
+		await page.getByRole('tab', { name: 'Workout' }).click();
+		await expect(page.getByRole('button', { name: '+ Add exercise' })).toBeVisible();
+	});
+
+	test('the URL sanitizer lists params beside the link', async ({ page }) => {
+		await page.setViewportSize(viewports.desktop);
+		await gotoHydrated(
+			page,
+			'/utils/url-sanitizer#url=' + encodeURIComponent('https://example.com/?utm_source=x&id=3')
+		);
+		expect(await besides(page, 'Clean link', 'Params')).toBe(true);
+	});
+
+	test('Settings shows its cards in two columns', async ({ page }) => {
+		await page.setViewportSize(viewports.desktop);
+		await gotoHydrated(page, '/settings');
+		const x = async (name: string) =>
+			(await page.getByRole('heading', { name, exact: true }).boundingBox())!.x;
+		expect(await x('About')).toBeGreaterThan(await x('Appearance'));
+	});
 });

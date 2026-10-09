@@ -18,6 +18,20 @@
 	let total = $state(0);
 	let history = $state<HistoryEntry[]>([]);
 	let tracker: ReturnType<typeof WorkoutTracker> | undefined = $state();
+	/**
+	 * Width of the page's content. When the calculator and the workout both fit (50rem, the
+	 * `@[50rem]:` container query below), they show side by side under one tab (#95).
+	 */
+	let width = $state(0);
+	let split = $derived(width >= 50 * 16);
+	/** The tab that looks selected: in the side-by-side layout Plates also stands for Workout. */
+	let shown = $derived(split && tab === 'workout' ? 'plates' : tab);
+	/** Panel visibility, in CSS so the layout is right before the page hydrates. */
+	function panel(id: Tab) {
+		if (tab === id) return '';
+		const pair = (id === 'plates' && tab === 'workout') || (id === 'workout' && tab === 'plates');
+		return pair ? 'hidden @[50rem]:block' : 'hidden';
+	}
 
 	// The open tab is per window, so it doesn't follow other windows.
 	persist(
@@ -76,23 +90,40 @@
 	<title>Weightlifting Calculator</title>
 </svelte:head>
 
-<main class="page-narrow flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200">
-	<div class="grid grid-cols-3 gap-2" role="tablist">
-		{#each tabs as t (t.id)}
-			<button
-				type="button"
-				role="tab"
-				aria-selected={tab === t.id}
-				class="{toggle(tab === t.id)} py-3 text-base"
-				onclick={() => (tab = t.id)}>{t.label}</button
-			>
-		{/each}
-	</div>
+<main
+	class="page-split @container flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200"
+>
+	<div class="flex flex-col gap-6" bind:clientWidth={width}>
+		<div class="grid grid-cols-3 gap-2 @[50rem]:grid-cols-2" role="tablist">
+			{#each tabs as t (t.id)}
+				<button
+					type="button"
+					role="tab"
+					aria-selected={shown === t.id}
+					class="{toggle(shown === t.id)} py-3 text-base {t.id === 'workout'
+						? '@[50rem]:hidden'
+						: ''}"
+					onclick={() => (tab = t.id)}
+					>{t.label}{#if t.id === 'plates'}<span class="hidden @[50rem]:inline"
+							>&nbsp;&amp; Workout</span
+						>{/if}</button
+				>
+			{/each}
+		</div>
 
-	<!-- All stay mounted so the calculator total reaches the workout tab and Repeat can fill it. -->
-	<div hidden={tab !== 'plates'}><PlateCalculator bind:total /></div>
-	<div hidden={tab !== 'workout'}>
-		<WorkoutTracker bind:this={tracker} calculatorWeight={total} onFinish={finished} />
+		<!-- All stay mounted so the calculator total reaches the workout tab and Repeat can fill it. -->
+		<div
+			class={tab === 'history'
+				? 'hidden'
+				: '@[50rem]:grid @[50rem]:grid-cols-2 @[50rem]:items-start @[50rem]:gap-10'}
+		>
+			<div class={panel('plates')}><PlateCalculator bind:total /></div>
+			<div class={panel('workout')}>
+				<WorkoutTracker bind:this={tracker} calculatorWeight={total} onFinish={finished} />
+			</div>
+		</div>
+		<div class={panel('history')}>
+			<History {history} onRepeat={repeat} onDelete={deleted} />
+		</div>
 	</div>
-	<div hidden={tab !== 'history'}><History {history} onRepeat={repeat} onDelete={deleted} /></div>
 </main>
