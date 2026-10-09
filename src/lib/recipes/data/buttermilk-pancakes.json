@@ -20,7 +20,12 @@
 		{ "amount": 0.5, "unit": "tsp", "item": "salt" },
 		{ "amount": 2, "unit": "cup", "item": "buttermilk" },
 		{ "amount": 2, "item": "large egg", "plural": "large eggs" },
-		{ "amount": 3, "unit": "Tbsp", "item": "butter", "note": "melted, plus more for the pan" }
+		{
+			"amount": 3,
+			"unit": "Tbsp",
+			"item": "unsalted butter",
+			"note": "melted, plus more for the pan"
+		}
 	],
 	"instructions": [
 		"Whisk the flour, sugar, baking powder, baking soda and salt in a large bowl.",

@@ -32,7 +32,13 @@
 			"alt": { "amount": 1, "unit": "Tbsp" }
 		},
 		{ "amount": 6, "unit": "g", "item": "active dry yeast", "alt": { "amount": 2, "unit": "tsp" } },
-		{ "amount": 12, "unit": "g", "item": "salt", "alt": { "amount": 2, "unit": "tsp" } }
+		{
+			"amount": 12,
+			"unit": "g",
+			"item": "salt",
+			"note": "table or fine sea salt",
+			"alt": { "amount": 2, "unit": "tsp" }
+		}
 	],
 	"instructions": [
 		"Weigh the water and stir in the yeast. Let it sit for a couple of minutes, then add a couple of scoops of the flour and mix for 30 seconds.",

@@ -110,6 +110,7 @@ test('every control is at least 44×44px on a phone', async ({ page }) => {
 		['/guide'],
 		['/guide/grill-stovetop-or-oven'],
 		['/guide/doneness-and-food-safety'],
+		['/guide/measuring-for-baking'],
 		['/utils'],
 		['/utils/pizza-dough'],
 		['/utils/coffee-timer'],

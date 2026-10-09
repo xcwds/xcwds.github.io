@@ -1,5 +1,5 @@
 /**
- * The cooking guide at /guide: general know-how that isn't tied to one recipe. Each article is
+ * The kitchen guide at /guide: general know-how that isn't tied to one recipe. Each article is
  * one JSON file in `./data/`; see docs/cooking-guide.md for how to write one.
  */
 
@@ -8,6 +8,7 @@ export const CATEGORIES = [
 	{ id: 'meat', label: 'Meat, poultry & fish' },
 	{ id: 'vegetables', label: 'Vegetables' },
 	{ id: 'staples', label: 'Eggs, grains, pasta & beans' },
+	{ id: 'baking', label: 'Baking' },
 	{ id: 'basics', label: 'Kitchen basics & food safety' }
 ] as const;
 

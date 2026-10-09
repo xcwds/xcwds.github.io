@@ -50,6 +50,11 @@ re-import from Notion.
   Step timers join the Cooking Timer's saved list (`CookingTimers` in
   `src/lib/utils/cooking-timers.svelte.ts`); the recipe page shows them in a tray and rings them.
 
+Ingredient names: plain "salt" means table or fine sea salt; name kosher salt when a recipe uses it
+("kosher salt"), since a teaspoon of it weighs about half as much. Baking recipes use "unsalted
+butter". The kitchen guide's measuring article (`/guide/measuring-for-baking`) has the
+cups-to-grams chart that `alt` values should agree with.
+
 Write temperatures in steps as °F with °C in parentheses, rounded like an oven dial
 (`375°F (190°C)`).
 

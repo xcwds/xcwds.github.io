@@ -1,0 +1,122 @@
+{
+	"slug": "oven-and-pans",
+	"name": "Oven and Pans",
+	"emoji": "🌡️",
+	"category": "baking",
+	"tags": ["Baking", "Oven", "Convection", "Pans", "Bakeware", "Rack", "Parchment", "Cooling"],
+	"summary": "Getting even heat from your oven, how the pan's size and material change a bake, and how to prep and cool it.",
+	"sections": [
+		{
+			"heading": "Preheat properly",
+			"blocks": [
+				"Most bakes need a fully hot oven from the first minute: cookies set before they spread too far, and quick breads and cakes rise before their crust forms. An oven's ready signal usually means the air has reached the temperature; the walls and racks catch up later, so give it another 10–15 minutes.",
+				{
+					"type": "tip",
+					"text": "Ovens are often off by 25°F (15°C) or more. A cheap oven thermometer on the middle rack tells you how yours runs; then set the dial higher or lower to match what the recipe asks for."
+				}
+			]
+		},
+		{
+			"heading": "Rack position",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Middle rack** for nearly everything: the heat is most even there.",
+						"**Lower third** for pies and pizza, so the bottom crust gets more heat.",
+						"**Upper third** for browning a top at the end."
+					]
+				},
+				"For the most even cookies, bake one sheet at a time in the middle. Baking two? Use the upper and lower thirds and swap and turn the sheets halfway through."
+			]
+		},
+		{
+			"heading": "Convection",
+			"blocks": [
+				"A convection (fan) setting blows the hot air around, which browns and bakes faster. When a recipe is written for a regular oven, lower the temperature by 25°F (15°C), or keep it and start checking a few minutes early. Some ovens make that adjustment for you; the manual says.",
+				"Baking at a different temperature for another reason, like sharing the oven with something else? The [Oven Time Converter](tool:/utils/oven-time) estimates the new time. It doesn't know about pan size, convection or how full the oven is: treat its time as the moment to start checking."
+			]
+		},
+		{
+			"heading": "Pan material",
+			"id": "material",
+			"blocks": [
+				"Recipes assume a **light-colored metal** pan unless they say otherwise. Other pans bake differently:",
+				{
+					"type": "table",
+					"columns": ["Pan", "What happens", "Adjust"],
+					"rows": [
+						[
+							"Light metal (aluminum)",
+							"Even heat, light golden edges.",
+							"Nothing: this is the baseline."
+						],
+						[
+							"Dark or nonstick metal",
+							"Absorbs more heat: darker bottoms and edges.",
+							"Lower the oven by 25°F (15°C), or check early."
+						],
+						[
+							"Glass",
+							"Slow to heat, then holds heat: edges can overbake before the middle is done.",
+							"Lower the oven by 25°F (15°C)."
+						],
+						["Ceramic or stoneware", "Like glass.", "Like glass; check early."],
+						[
+							"Silicone",
+							"Pale, soft edges; flexible.",
+							"Set it on a baking sheet so it doesn't sag."
+						]
+					]
+				},
+				{
+					"type": "warning",
+					"text": "Don't move a hot glass dish onto a wet or cold surface, or put it under a broiler: a sudden temperature change can make it shatter."
+				}
+			]
+		},
+		{
+			"heading": "Pan size",
+			"id": "size",
+			"blocks": [
+				"The recipe pages offer a pan picker on recipes baked in a pan, like [Banana Bread](recipe:banana-bread) and [Fudgy Brownies](recipe:brownies). It scales the batter by how much the pan you choose holds, but it can't change the bake time, and time depends mostly on how deep the batter is:",
+				{
+					"type": "list",
+					"items": [
+						"**A deeper pan shape** (a loaf pan instead of a square one that holds as much): longer bake, and the edges may finish before the middle. Lower the oven by 25°F (15°C) if the edges get too dark.",
+						"**A shallower pan shape** (a 9×13-inch (23×33 cm) pan instead of a loaf): shorter bake. Start checking well before the recipe's time.",
+						"**The original batter in a different pan** without scaling it: a smaller pan means deeper batter and a longer bake; a bigger one means a shorter bake.",
+						"**Muffins from a loaf recipe:** much shorter. Banana Bread's tip gives 20–25 minutes instead of about an hour."
+					]
+				},
+				"Whatever the pan, judge doneness by the signs in [Is It Done?](guide:baking-doneness), not the clock."
+			]
+		},
+		{
+			"heading": "Prepping the pan",
+			"id": "prep",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Grease and flour** for cakes and quick breads: butter or spray the pan, add a spoonful of flour, tilt and tap until it's coated, and knock out the rest. Use cocoa instead of flour for chocolate bakes.",
+						"**Parchment sling** for brownies and bars: a strip of parchment that hangs over two sides, so you can lift the whole slab out to cut it.",
+						"**Parchment or a silicone mat** under cookies: they don't stick, and bottoms brown more evenly.",
+						"**Paper liners** for muffins, or grease the cups."
+					]
+				}
+			]
+		},
+		{
+			"heading": "Cooling",
+			"blocks": [
+				"Baking doesn't stop when the pan comes out: the heat stored in the pan keeps cooking. Set pans on a wire rack so air reaches the bottom, which also stops steam from making it soggy. How long to leave things in the pan is in [Is It Done?](guide:baking-doneness#cooling)."
+			]
+		}
+	],
+	"related": {
+		"guides": ["baking-doneness", "baking-troubleshooting"],
+		"recipes": ["banana-bread", "brownies", "chocolate-chip-cookies"],
+		"tools": ["/utils/oven-time"]
+	}
+}

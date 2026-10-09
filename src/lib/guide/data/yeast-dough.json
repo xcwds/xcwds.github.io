@@ -1,0 +1,138 @@
+{
+	"slug": "yeast-dough",
+	"name": "Yeast Dough and Bread",
+	"emoji": "🍞",
+	"category": "baking",
+	"tags": [
+		"Baking",
+		"Bread",
+		"Yeast",
+		"Kneading",
+		"Proofing",
+		"Rising",
+		"Hydration",
+		"Baker's percentages",
+		"Pizza"
+	],
+	"summary": "Types of yeast, kneading, rising and proofing, baker's percentages and hydration, and baking bread with a good crust.",
+	"sections": [
+		{
+			"heading": "Types of yeast",
+			"id": "yeast",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Yeast", "How to use it", "Swapping"],
+					"rows": [
+						[
+							"Active dry",
+							"Traditionally dissolved in warm water first (\"proofed\"); modern active dry can also go in with the flour.",
+							"Use the same amount as instant; the dough may rise a little more slowly."
+						],
+						[
+							"Instant (rapid-rise, bread machine)",
+							"Mix straight into the flour.",
+							"Use the same amount as active dry."
+						],
+						[
+							"Fresh (cake)",
+							"Crumble into the water or flour. Keeps only a couple of weeks in the fridge.",
+							"A 0.6 oz (17 g) cake replaces one ¼ oz (7 g) packet of dry yeast: roughly 2½ times the weight."
+						]
+					]
+				},
+				"Water for yeast should feel comfortably warm on your wrist, about 105–110°F (41–43°C). Hot water kills yeast: by about 140°F (60°C) it's dead. Cold water just slows it down, which is fine.",
+				{
+					"type": "tip",
+					"text": "Not sure your yeast is alive? Stir it into warm water with a pinch of sugar. Within 10 minutes it should look foamy and smell yeasty. If nothing happens, buy fresh yeast."
+				}
+			]
+		},
+		{
+			"heading": "Kneading",
+			"id": "kneading",
+			"blocks": [
+				"Kneading builds gluten, the stretchy network that traps the yeast's gas so bread can rise and hold its shape. Push the dough away with the heel of your hand, fold it back, turn it and repeat, about 10 minutes by hand or 5–8 with a stand mixer's dough hook.",
+				"It's ready when it's smooth and springy and passes the **windowpane test**: stretch a small piece gently between your fingers and it thins enough to let light through without tearing.",
+				"Two low-effort alternatives build gluten with time instead: **stretch and fold** (every 30 minutes during the first rise, stretch one side of the dough up and fold it over, turning the bowl, four times) and **no-knead** dough, a very wet dough left to rise for 12 hours or more."
+			]
+		},
+		{
+			"heading": "Rising and proofing",
+			"id": "rising",
+			"blocks": [
+				"Most breads rise twice:",
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"**First (bulk) rise:** the whole dough in a covered bowl until roughly doubled. This is where most of the flavor develops.",
+						"**Shape** it into a loaf, rolls or balls, gently pressing out the big bubbles.",
+						"**Final rise (proof):** shaped, covered, until puffy, often about 1 ½ times the size."
+					]
+				},
+				"Go by the dough, not the clock: a warm kitchen can halve the time and a cold one double it. The **poke test** tells you when a shaped loaf is ready: flour a finger and press about ½ inch (1 cm) in.",
+				{
+					"type": "table",
+					"columns": ["The dent…", "Means", "Do"],
+					"rows": [
+						["springs right back", "Underproofed", "Wait and test again."],
+						["springs back slowly and leaves a small dent", "Ready", "Bake."],
+						[
+							"stays, or the dough sighs and sinks",
+							"Overproofed",
+							"Bake now and expect a flatter loaf, or reshape and let it rise again."
+						]
+					]
+				},
+				"**Cold fermentation:** a slow rise in the fridge, from overnight to a few days, gives more flavor and a dough that's easier to handle. The [Pizza Dough](recipe:pizza-dough) rests in the fridge for 6–12 hours for that reason."
+			]
+		},
+		{
+			"heading": "Baker's percentages and hydration",
+			"id": "bakers-percentages",
+			"blocks": [
+				"Bakers write dough recipes as percentages of the flour's weight. The flour is always 100%, and everything else is a share of it. That makes any dough easy to scale and to compare.",
+				"For example, the [Pizza Dough](recipe:pizza-dough):",
+				{
+					"type": "table",
+					"columns": ["Ingredient", "Weight", "Baker's %"],
+					"rows": [
+						["Flour", "650 g", "100%"],
+						["Water", "395 g", "61% (the hydration)"],
+						["Olive oil", "35 g", "5%"],
+						["Honey", "21 g", "3%"],
+						["Salt", "12 g", "1.8%"],
+						["Active dry yeast", "6 g", "0.9%"]
+					]
+				},
+				"**Hydration** is the water's percentage. Around 60% gives a firm, easy-to-handle dough (sandwich bread, New York-style pizza); 70% and up gives a sticky dough with a more open, holey crumb (ciabatta, many artisan loaves). Salt usually sits around 2%.",
+				"The [Pizza Dough Calculator](tool:/utils/pizza-dough) works in these terms: set the number and size of the dough balls and the percentages, and it gives you the weights."
+			]
+		},
+		{
+			"heading": "Baking a good crust",
+			"id": "baking",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Score** a crusty loaf just before baking with a sharp knife or razor, a quick cut about ¼ inch (6 mm) deep, so it expands where you choose instead of bursting at the side.",
+						"**Steam** in the first minutes keeps the crust soft long enough for the loaf to rise, then gives a shiny, crisp crust. Bake in a preheated covered pot (lid off for the last part), or put a metal pan on the bottom rack while the oven heats and pour in a cup of hot water when the bread goes in.",
+						"**A stone or steel**, preheated with the oven for at least 45 minutes, gives pizza and free-form loaves a crisp bottom; see the Pizza Dough tips.",
+						"**Done** is best judged by temperature; see [Is It Done?](guide:baking-doneness#temperatures)."
+					]
+				},
+				{
+					"type": "warning",
+					"text": "Pour water into the steam pan carefully, with an oven mitt and your face turned away: it erupts in a burst of steam. Never pour it onto a hot glass oven door or a glass dish."
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["baking-ingredients", "baking-doneness"],
+		"recipes": ["pizza-dough"],
+		"tools": ["/utils/pizza-dough", "/utils/cooking-timer"]
+	}
+}

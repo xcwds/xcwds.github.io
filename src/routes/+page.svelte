@@ -35,8 +35,8 @@
 		{
 			path: '/guide',
 			emoji: '🍳',
-			name: 'Cooking Guide',
-			blurb: `Cooking know-how beyond the recipes, in ${articles.length} ${articles.length === 1 ? 'article' : 'articles'}.`
+			name: 'Kitchen Guide',
+			blurb: `Cooking and baking know-how beyond the recipes, in ${articles.length} ${articles.length === 1 ? 'article' : 'articles'}.`
 		},
 		{
 			path: '/utils',

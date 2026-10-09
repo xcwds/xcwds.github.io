@@ -1,8 +1,8 @@
 # Cooking guide
 
-Agent notes for the cooking guide at `/guide` (tracking issue #96): short, phone-first articles
-with general cooking know-how that isn't tied to one recipe (which method to use, cuts of meat,
-doneness, kitchen basics). Recipes live at `/recipes` ([classic-recipes.md](classic-recipes.md));
+Agent notes for the kitchen guide at `/guide` (tracking issues #96 for cooking, #108 for baking):
+short, phone-first articles with general know-how that isn't tied to one recipe (which method to
+use, cuts of meat, measuring and baking, doneness, kitchen basics). Recipes live at `/recipes` ([classic-recipes.md](classic-recipes.md));
 both share the Recipes tab, with a Recipes | Guide switch (`src/lib/RecipesGuideSwitch.svelte`)
 at the top of both index pages.
 
@@ -14,8 +14,9 @@ ids are URLs, so don't rename them. See the `GuideArticle` type in `src/lib/guid
 
 - `slug`, `name`, `emoji`, `tags` (searched with the name and summary), `summary` (one or two
   sentences, shown under the title and on the index).
-- `category`: one of `CATEGORIES` (`methods`, `meat`, `vegetables`, `staples`, `basics`); the
-  index groups articles by it, in that order.
+- `category`: one of `CATEGORIES` (`methods`, `meat`, `vegetables`, `staples`, `baking`,
+  `basics`); the index groups articles by it, in that order. Each group has the anchor
+  `category-<id>`, so `/guide#category-baking` opens the index at Baking.
 - `sections[]`: `{ heading, blocks, id? }`. Each section is an `<h2>` with an anchor id: `id`, or
   the heading slugified. Give an explicit `id` when you might reword the heading later.
 - `blocks[]`: a string (a paragraph), or
@@ -51,6 +52,20 @@ space after `guide:`, a link inside bold, an unclosed `**`), which would otherwi
   say so plainly.
 - A PR that adds articles lists the sources it checked numbers against in its description.
 - Add each new article's changelog line to the PR's `src/lib/changelog.ts` entry.
+
+## Baking
+
+Baking articles (category `baking`, #108) are companions to the baking recipes, so they must
+agree with them:
+
+- Write ingredient amounts in both systems, weight in parentheses: `1 cup (125 g)`,
+  `2 Tbsp (30 ml)`.
+- The cups-to-grams chart in `measuring-for-baking` is the reference for the recipes' `alt`
+  values. If you change a chart value or a recipe's `alt`, keep them within about 5% of each other.
+- Plain "salt" in the recipes means table or fine sea salt; kosher salt is always named (see
+  [classic-recipes.md](classic-recipes.md)).
+- Doneness temperatures for baked goods (bread at 190–210°F) are about texture and live in
+  `baking-doneness`. Safety temperatures (egg dishes, custards) stay in the food-safety article.
 
 ## Verify
 

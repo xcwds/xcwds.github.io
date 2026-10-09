@@ -37,8 +37,8 @@ export function routeInfo(pathname: string): RouteInfo {
 
 	if (pages[path]) return pages[path];
 
-	// The cooking guide sits in the Recipes tab beside the recipes, as a peer with no back arrow.
-	if (path === '/guide') return { title: 'Cooking Guide' };
+	// The kitchen guide sits in the Recipes tab beside the recipes, as a peer with no back arrow.
+	if (path === '/guide') return { title: 'Kitchen Guide' };
 	const articleSlug = path.match(/^\/guide\/([^/]+)$/)?.[1];
 	const article = articleSlug ? getArticle(articleSlug) : undefined;
 	if (article) return { title: article.name, emoji: article.emoji, parent: '/guide' };
