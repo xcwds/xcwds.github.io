@@ -1,0 +1,55 @@
+{
+	"slug": "air-fryer",
+	"name": "Air Fryer",
+	"emoji": "🌀",
+	"category": "methods",
+	"tags": ["Air fryer", "Convection", "Crispy", "Reheating", "Frozen food"],
+	"summary": "What an air fryer really is, what it does well, and converting oven recipes.",
+	"sections": [
+		{
+			"id": "what-it-is",
+			"heading": "What it is",
+			"blocks": [
+				"An air fryer is a small, powerful convection oven: a heating element and a strong fan blowing hot air around a basket. It doesn't fry; it roasts quickly, and because the space is small, it preheats fast and crisps well with little oil."
+			]
+		},
+		{
+			"id": "good-for",
+			"heading": "What it's good at",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"Frozen foods made for the oven: fries, nuggets, fish sticks.",
+						"Chicken wings and thighs with crisp skin.",
+						"Roasted vegetables in small batches: Brussels sprouts, broccoli, potatoes.",
+						"Reheating fried food and pizza so it's crisp again, not soggy like in the microwave."
+					]
+				},
+				"It's not great for wet batters (they drip through the basket), big roasts, or large amounts: a basketful of food steams instead of crisping."
+			]
+		},
+		{
+			"id": "how-to",
+			"heading": "Getting it right",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"Don't overfill the basket: a single layer with gaps, cooking in batches if needed.",
+						"Shake the basket or turn food halfway through.",
+						"Toss food in a teaspoon or two of oil for browning; skip aerosol cooking sprays, which can damage nonstick baskets.",
+						"Check meat with a thermometer: the outside browns fast and can look done before the inside is. See the [doneness chart](guide:doneness-and-food-safety#doneness-chart)."
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Converting an oven recipe: lower the temperature by about 25°F (15°C) and cut the time by about 20%, then check early. Times vary a lot by model."
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["oven", "doneness-and-food-safety"]
+	}
+}

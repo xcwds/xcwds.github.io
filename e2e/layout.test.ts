@@ -147,6 +147,7 @@ for (const [name, viewport] of Object.entries(viewports)) {
 			'/guide',
 			'/guide/grill-stovetop-or-oven',
 			'/guide/doneness-and-food-safety',
+			'/guide/beef',
 			'/settings',
 			'/utils/weightlifting'
 		]) {
@@ -162,7 +163,7 @@ for (const [name, viewport] of Object.entries(viewports)) {
 test.describe('lists and recipes on a computer', () => {
 	test.use({ viewport: viewports.desktop });
 
-	for (const path of ['/utils', '/recipes']) {
+	for (const path of ['/utils', '/recipes', '/guide']) {
 		test(`${path} shows its cards in a grid`, async ({ page }) => {
 			await gotoHydrated(page, path);
 			const cards = page.locator('main li');

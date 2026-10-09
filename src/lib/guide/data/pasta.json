@@ -1,0 +1,70 @@
+{
+	"slug": "pasta",
+	"name": "Pasta",
+	"emoji": "🍝",
+	"category": "staples",
+	"tags": ["Pasta", "Spaghetti", "Al dente", "Pasta water", "Sauce", "Noodles", "Shapes"],
+	"summary": "Water, salt and timing for perfect pasta, saving pasta water, and matching shapes to sauces.",
+	"sections": [
+		{
+			"id": "cooking",
+			"heading": "Cooking pasta",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Use a big pot of water: about 4 quarts (4 liters) per pound (450 g) of dried pasta. A smaller pot works if you stir often.",
+						"Bring it to a full boil and salt it well: about 1 tablespoon of kosher salt per 4 quarts (4 liters). It should taste pleasantly salty. Skip the oil; it just keeps sauce from sticking.",
+						"Add the pasta and stir right away, and again a few times as it cooks, so it doesn't stick.",
+						"Start tasting 2 minutes before the package time. **Al dente** means tender with a slight bite in the center.",
+						"Before draining, scoop out a mug of the starchy cooking water."
+					]
+				},
+				"A pound (450 g) of dried pasta serves about 4 as a main, 6–8 as a side."
+			]
+		},
+		{
+			"id": "pasta-water",
+			"heading": "Finish it in the sauce",
+			"blocks": [
+				"Drain the pasta a minute early and toss it in the pan with the sauce over medium heat for a minute or two, adding splashes of pasta water. The starch in the water helps the sauce cling and turn glossy instead of watery or greasy. Don't rinse cooked pasta, unless it's for a cold pasta salad."
+			]
+		},
+		{
+			"id": "shapes",
+			"heading": "Shapes and sauces",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Shape", "Examples", "Sauce"],
+					"rows": [
+						[
+							"Long and thin",
+							"Spaghetti, linguine, angel hair",
+							"Olive oil, tomato, light cream, seafood sauces"
+						],
+						["Long and flat, wide", "Fettuccine, pappardelle", "Rich cream sauces, ragù"],
+						["Tubes", "Penne, rigatoni, ziti", "Chunky and meat sauces, baked pasta"],
+						[
+							"Twists and shells",
+							"Fusilli, rotini, shells, orecchiette",
+							"Pesto, chunky vegetable sauces, pasta salad"
+						],
+						["Small", "Orzo, ditalini, small shells", "Soups, salads"]
+					]
+				}
+			]
+		},
+		{
+			"id": "fresh",
+			"heading": "Fresh pasta",
+			"blocks": [
+				"Fresh egg pasta cooks in 2–4 minutes and is best with butter, cream and delicate sauces. Taste early: it goes from done to soft quickly."
+			]
+		}
+	],
+	"related": {
+		"guides": ["rice-and-grains", "seasoning-and-salt"]
+	}
+}

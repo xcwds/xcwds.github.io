@@ -1,0 +1,97 @@
+{
+	"slug": "knife-skills",
+	"name": "Knife Skills",
+	"emoji": "🔪",
+	"category": "basics",
+	"tags": [
+		"Knife",
+		"Knives",
+		"Chopping",
+		"Dice",
+		"Mince",
+		"Julienne",
+		"Chiffonade",
+		"Sharpening",
+		"Honing",
+		"Cutting board",
+		"Onion"
+	],
+	"summary": "The knives worth owning, holding the knife safely, the basic cuts, and keeping a knife sharp.",
+	"sections": [
+		{
+			"id": "knives",
+			"heading": "Three knives are enough",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Chef's knife**, 8 inches (20 cm): does almost everything. Spend your money here.",
+						"**Paring knife**: small jobs in your hand, like peeling, hulling strawberries and trimming.",
+						"**Serrated bread knife**: bread, tomatoes, cakes, anything with a hard crust and soft inside."
+					]
+				}
+			]
+		},
+		{
+			"id": "safety",
+			"heading": "Holding the knife",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"Grip the handle with three fingers and pinch the blade just in front of the handle between your thumb and the side of your index finger. It gives far more control than holding only the handle.",
+						"With your other hand, make a **claw**: fingertips tucked under, knuckles forward. The flat of the blade rests against your knuckles, so it can't reach your fingertips.",
+						"Put a damp towel or paper towel under the cutting board so it can't slide.",
+						"Cut round things (onions, potatoes) in half first, so they sit flat instead of rolling.",
+						"A sharp knife is safer than a dull one: it goes where you aim it instead of slipping."
+					]
+				}
+			]
+		},
+		{
+			"id": "cuts",
+			"heading": "The basic cuts",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Cut", "Size", "Used for"],
+					"rows": [
+						["Large dice", "¾ inch (2 cm) cubes", "Stews, roasted vegetables"],
+						["Medium dice", "½ inch (1.2 cm) cubes", "Soups, sautés, home fries"],
+						["Small dice", "¼ inch (6 mm) cubes", "Sauces, salsas, the base of most recipes"],
+						["Mince", "As fine as you can", "Garlic, ginger, shallots, herbs"],
+						["Julienne", "Matchsticks about ⅛ inch (3 mm) thick", "Stir-fries, slaws, garnishes"],
+						["Chiffonade", "Thin ribbons", "Basil, mint, leafy greens: stack, roll and slice"]
+					]
+				}
+			]
+		},
+		{
+			"id": "onion",
+			"heading": "Dicing an onion",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Cut off the stem end (not the hairy root end, which holds the layers together), halve the onion through the root, and peel.",
+						"Lay a half flat. Make vertical cuts toward the root, stopping just short of it.",
+						"Make one or two horizontal cuts toward the root, parallel to the board (optional for small onions).",
+						"Slice across the cuts to make the dice. Throw away the root end."
+					]
+				}
+			]
+		},
+		{
+			"id": "sharp",
+			"heading": "Keeping it sharp",
+			"blocks": [
+				"**Honing** with a honing steel straightens the blade's edge, which bends with use. Do it every few uses. **Sharpening** (on a whetstone or a pull-through sharpener, or by a professional) grinds a new edge when honing no longer helps, every few months for a home cook.",
+				"Hand-wash knives and dry them right away; dishwashers dull and chip them. Cut on wood or plastic boards, never glass, stone or plates."
+			]
+		}
+	],
+	"related": {
+		"guides": ["pans-and-tools", "seasoning-and-salt"]
+	}
+}

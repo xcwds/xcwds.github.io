@@ -2,6 +2,7 @@
 	import type { Block } from '$lib/guide';
 	import DonenessChart from './DonenessChart.svelte';
 	import InlineText from './InlineText.svelte';
+	import TimerButtons from './TimerButtons.svelte';
 
 	let { block }: { block: Block } = $props();
 </script>
@@ -78,6 +79,8 @@
 			{/each}
 		</tbody>
 	</table>
+{:else if block.type === 'timers'}
+	<TimerButtons timers={block.timers} />
 {:else if block.type === 'widget' && block.widget === 'doneness'}
 	<DonenessChart />
 {/if}

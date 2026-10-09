@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getRecipe } from '$lib/recipes';
+import { getRecipe, MAX_STEP_TIMER_MINUTES } from '$lib/recipes';
 import { tools } from '$lib/utils/tools';
 import {
 	articles,
@@ -69,6 +69,14 @@ describe('guide articles', () => {
 		for (const section of article.sections) {
 			expect(section.blocks.length).toBeGreaterThan(0);
 			for (const block of section.blocks) {
+				if (typeof block === 'object' && block.type === 'timers') {
+					// Like recipe step timers: the alarm only rings while the app is open.
+					for (const t of block.timers) {
+						expect(t.minutes).toBeGreaterThan(0);
+						expect(t.minutes).toBeLessThanOrEqual(MAX_STEP_TIMER_MINUTES);
+					}
+					expect(new Set(block.timers.map((t) => t.label)).size).toBe(block.timers.length);
+				}
 				if (typeof block === 'object' && block.type === 'table') {
 					for (const row of block.rows) expect(row).toHaveLength(block.columns.length);
 				}

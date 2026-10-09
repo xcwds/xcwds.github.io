@@ -1,0 +1,60 @@
+{
+	"slug": "pans-and-tools",
+	"name": "Pans & Kitchen Tools",
+	"emoji": "🍽️",
+	"category": "basics",
+	"tags": [
+		"Pans",
+		"Cast iron",
+		"Nonstick",
+		"Stainless steel",
+		"Dutch oven",
+		"Thermometer",
+		"Tools",
+		"Equipment",
+		"Seasoning cast iron"
+	],
+	"summary": "Caring for cast iron, nonstick and stainless pans, and the handful of tools worth having.",
+	"sections": [
+		{
+			"id": "care",
+			"heading": "Caring for pans",
+			"blocks": [
+				"Which pan suits which job is in [Stovetop Cooking](guide:stovetop#pans). Caring for each:",
+				{
+					"type": "list",
+					"items": [
+						"**Cast iron**: wash with hot water and a brush or a little soap (modern soap won't strip seasoning), dry it on the burner, and rub in a few drops of oil while it's warm. Never soak it. If it rusts, scrub the rust off, then oil it and bake it upside down at 450°F (230°C) for an hour.",
+						"**Stainless steel**: dishwasher-safe. For stuck-on bits, simmer a little water in the pan and scrape; a paste of Bar Keepers Friend or baking soda removes stains.",
+						"**Nonstick**: medium heat or below, never preheated empty on high. Use wood or silicone tools and wash by hand with a soft sponge. Replace it when the coating scratches or flakes.",
+						"**Enameled cast iron**: don't heat it empty on high or plunge it hot into cold water, which can crack the enamel. Soak to loosen stuck food."
+					]
+				}
+			]
+		},
+		{
+			"id": "tools",
+			"heading": "Tools worth having",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**An instant-read thermometer**: the single biggest step up for cooking meat. See the [doneness chart](guide:doneness-and-food-safety#doneness-chart).",
+						"**A kitchen scale**: more accurate than cups for baking, and fewer dishes.",
+						"**Sheet pans** (rimmed half-sheet pans, 18×13 inches (46×33 cm)): roasting, baking, everything.",
+						"**A large cutting board** that doesn't slide, and a separate one for raw meat.",
+						"**Tongs, a flat spatula (fish spatula) and a wooden spoon.**",
+						"**A Dutch oven**: soups, braises, bread, deep-frying.",
+						"**A big pot** for pasta and stock, and a medium saucepan with a lid for grains and sauces.",
+						"**Measuring cups and spoons, a whisk, a colander, and a microplane** for zest, garlic and hard cheese."
+					]
+				},
+				"This app's [Cooking Timer](tool:/utils/cooking-timer) runs several labeled timers at once, and the [Oven Time Converter](tool:/utils/oven-time) adjusts cook times for a different oven temperature."
+			]
+		}
+	],
+	"related": {
+		"guides": ["stovetop", "knife-skills", "doneness-and-food-safety", "oven-and-pans"],
+		"tools": ["/utils/cooking-timer", "/utils/oven-time"]
+	}
+}

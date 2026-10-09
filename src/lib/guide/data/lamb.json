@@ -1,0 +1,63 @@
+{
+	"slug": "lamb",
+	"name": "Lamb Cuts",
+	"emoji": "🐑",
+	"category": "meat",
+	"tags": ["Lamb", "Leg of lamb", "Rack", "Lamb chops", "Shoulder", "Shank", "Ground lamb"],
+	"summary": "Rack, chops and leg to roast or grill, shoulder and shanks to braise.",
+	"sections": [
+		{
+			"id": "cuts",
+			"heading": "The cuts",
+			"blocks": [
+				"Lamb follows the same rule as beef: the loin and rib are tender and cooked quickly, often to medium-rare; the shoulder and legs' lower ends are tough and braised. Its fat carries most of the distinctive flavor; trim thick fat if you'd like it milder.",
+				{
+					"type": "table",
+					"columns": ["Cut", "Tenderness", "Best cooked", "Notes"],
+					"rows": [
+						[
+							"Rack",
+							"Very tender",
+							"Sear, then roast at 425°F (220°C)",
+							"Cut into elegant rib chops after resting. Medium-rare to medium."
+						],
+						[
+							"Loin & rib chops",
+							"Tender",
+							"[Grill](guide:grilling) or [sear](guide:stovetop#searing)",
+							"Like tiny T-bones; a few minutes a side."
+						],
+						[
+							"Leg (bone-in or boneless)",
+							"Fairly tender",
+							"Roast at 325–375°F (160–190°C), or butterfly and grill",
+							"The classic roast; rub with garlic, rosemary and lemon."
+						],
+						[
+							"Shoulder",
+							"Tough, fatty",
+							"Slow-roast or [braise](guide:braising-and-stewing)",
+							"Falls apart after a few hours; great for stews and curries."
+						],
+						[
+							"Shanks",
+							"Tough",
+							"Braise",
+							"One per person; braise 2–3 hours until the meat slides off the bone."
+						],
+						[
+							"Ground lamb",
+							"",
+							"Burgers, kofta, meatballs, shepherd's pie",
+							"Cook to 160°F (71°C), like all ground meat."
+						]
+					]
+				},
+				"Doneness temperatures for lamb are the same as beef: see the [doneness chart](guide:doneness-and-food-safety#doneness-chart)."
+			]
+		}
+	],
+	"related": {
+		"guides": ["beef", "doneness-and-food-safety", "braising-and-stewing"]
+	}
+}
