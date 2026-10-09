@@ -1,4 +1,5 @@
 <script lang="ts">
+	import GuideLinks from '$lib/guide/GuideLinks.svelte';
 	import { stepText, stepTimer, type StepTimer } from '$lib/recipes';
 	import { getPan, PANS, panDepthRatio, panRatio, type PanId } from '$lib/recipes/pans';
 	import { formatIngredient, formatYield, isScalable } from '$lib/recipes/scale';
@@ -274,6 +275,10 @@
 					{/each}
 				</ul>
 			</section>
+		{/if}
+
+		{#if recipe.guides?.length}
+			<GuideLinks slugs={recipe.guides} />
 		{/if}
 	</div>
 

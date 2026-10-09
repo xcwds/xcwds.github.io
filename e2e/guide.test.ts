@@ -143,3 +143,19 @@ test('the guide index groups articles by category and links between them', async
 	await page.getByRole('link', { name: 'Braising & Stewing' }).first().click();
 	await expect(page).toHaveURL(/\/guide\/braising-and-stewing$/);
 });
+
+test('recipes and tools link to the Kitchen Guide', async ({ page }) => {
+	await gotoHydrated(page, '/recipes/roast-chicken');
+	const learnMore = page.getByRole('region', { name: 'Learn more' });
+	await learnMore.getByRole('link', { name: /Chicken & Turkey/ }).click();
+	await expect(page).toHaveURL(/\/guide\/chicken-and-turkey$/);
+	await page.getByRole('link', { name: /^Back to/ }).click();
+	await expect(page).toHaveURL(/\/guide$/);
+
+	await gotoHydrated(page, '/utils/oven-time');
+	await page
+		.getByRole('region', { name: 'Learn more' })
+		.getByRole('link', { name: /Oven: Roasting/ })
+		.click();
+	await expect(page).toHaveURL(/\/guide\/oven$/);
+});

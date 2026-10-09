@@ -32,6 +32,12 @@ ids are URLs, so don't rename them. See the `GuideArticle` type in `src/lib/guid
 - `related`: `{ guides?, recipes?, tools? }` (slugs, slugs, `/utils/...` paths), shown as cards at
   the end.
 
+## Links from recipes and tools
+
+Recipes list articles in `guides` (see [classic-recipes.md](classic-recipes.md)), and tools in
+`guides` in `src/lib/utils/tools.ts`; both render as "Learn more" cards (`GuideLinks.svelte`).
+When an article is the natural next read for a recipe or tool, add it there too.
+
 ## Inline text
 
 Any text (paragraphs, list items, tips, table cells) supports `**bold**` and links by id:

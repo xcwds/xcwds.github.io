@@ -1,4 +1,6 @@
 <script lang="ts">
+	import GuideLinks from '$lib/guide/GuideLinks.svelte';
+	import { toolGuides } from '$lib/utils/tools';
 	import { resolve } from '$app/paths';
 	import { saveSettings, settings, settingsStatus } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
@@ -136,4 +138,6 @@
 			>pizza dough recipe</a
 		>.
 	</p>
+
+	<GuideLinks slugs={toolGuides('/utils/pizza-dough')} />
 </main>

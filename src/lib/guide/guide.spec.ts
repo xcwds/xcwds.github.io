@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getRecipe, MAX_STEP_TIMER_MINUTES } from '$lib/recipes';
-import { tools } from '$lib/utils/tools';
+import { toolGuides, tools } from '$lib/utils/tools';
 import {
 	articles,
 	articleTexts,
@@ -96,6 +96,13 @@ describe('guide articles', () => {
 			}
 		}
 	);
+});
+
+describe('tool guides', () => {
+	it('link to articles that exist', () => {
+		for (const tool of tools)
+			for (const slug of toolGuides(tool.path)) expect(getArticle(slug), tool.path).toBeDefined();
+	});
 });
 
 describe('parseInline', () => {

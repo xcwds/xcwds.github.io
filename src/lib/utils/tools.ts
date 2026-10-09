@@ -9,7 +9,8 @@ export const tools = [
 		path: '/utils/pizza-dough',
 		emoji: '🍕',
 		name: 'Pizza Dough Calculator',
-		blurb: 'Ingredient weights from dough balls and hydration.'
+		blurb: 'Ingredient weights from dough balls and hydration.',
+		guides: ['yeast-dough']
 	},
 	{
 		path: '/utils/coffee-timer',
@@ -21,13 +22,15 @@ export const tools = [
 		path: '/utils/cooking-timer',
 		emoji: '⏲️',
 		name: 'Cooking Timer',
-		blurb: 'Several labeled timers at once.'
+		blurb: 'Several labeled timers at once.',
+		guides: ['doneness-and-food-safety', 'eggs']
 	},
 	{
 		path: '/utils/oven-time',
 		emoji: '🌡️',
 		name: 'Oven Time Converter',
-		blurb: 'New cook time when the oven has to be hotter or cooler.'
+		blurb: 'New cook time when the oven has to be hotter or cooler.',
+		guides: ['oven', 'doneness-and-food-safety']
 	},
 	{
 		path: '/utils/url-sanitizer',
@@ -41,4 +44,16 @@ export const tools = [
 		name: 'Weightlifting Calculator',
 		blurb: 'Plate math for bars, dumbbells and kettlebells, plus a workout log.'
 	}
-] as const satisfies readonly (ShortcutTool & { name: string; emoji: string; blurb: string })[];
+] as const satisfies readonly (ShortcutTool & {
+	name: string;
+	emoji: string;
+	blurb: string;
+	/** Kitchen Guide articles shown as "Learn more" on the tool's page (slugs). */
+	guides?: readonly string[];
+})[];
+
+/** The Kitchen Guide articles a tool links to. */
+export function toolGuides(path: string): readonly string[] {
+	const tool = tools.find((t) => t.path === path);
+	return tool && 'guides' in tool ? tool.guides : [];
+}

@@ -7,6 +7,13 @@ export type ChangelogEntry = { id: number; date: string; items: string[] };
 
 export const changelog: ChangelogEntry[] = [
 	{
+		id: 31,
+		date: '2026-10-09',
+		items: [
+			'Recipes and the Oven Time Converter, Cooking Timer and Pizza Dough Calculator now link to the Kitchen Guide articles that go with them.'
+		]
+	},
+	{
 		id: 30,
 		date: '2026-10-09',
 		items: [
