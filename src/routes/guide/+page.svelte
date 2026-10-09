@@ -39,12 +39,12 @@
 				>
 					{group.label}
 				</h2>
-				<ul class="flex flex-col gap-2">
+				<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
 					{#each group.articles as article (article.slug)}
 						<li>
 							<a
 								href={resolve('/guide/[slug]', { slug: article.slug })}
-								class="flex items-center gap-3 rounded-md bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
+								class="flex h-full items-center gap-3 rounded-md bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
 							>
 								<span aria-hidden="true" class="text-xl">{article.emoji}</span>
 								<span class="flex flex-col">

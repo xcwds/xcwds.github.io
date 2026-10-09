@@ -157,3 +157,42 @@ for (const [name, viewport] of Object.entries(viewports)) {
 		}
 	});
 }
+
+test.describe('lists and recipes on a computer', () => {
+	test.use({ viewport: viewports.desktop });
+
+	for (const path of ['/utils', '/recipes']) {
+		test(`${path} shows its cards in a grid`, async ({ page }) => {
+			await gotoHydrated(page, path);
+			const cards = page.locator('main li');
+			const [first, second] = [
+				(await cards.nth(0).boundingBox())!,
+				(await cards.nth(1).boundingBox())!
+			];
+			expect(second.y).toBe(first.y);
+			expect(second.x).toBeGreaterThan(first.x + first.width);
+		});
+	}
+
+	test('recipe ingredients stay in view beside the steps', async ({ page }) => {
+		await gotoHydrated(page, '/recipes/banana-bread');
+		const ingredients = page.getByRole('heading', { name: 'Ingredients' });
+		const steps = page.getByRole('heading', { name: 'Instructions' });
+		const [a, b] = [(await ingredients.boundingBox())!, (await steps.boundingBox())!];
+		expect(b.x).toBeGreaterThan(a.x + a.width);
+		expect(Math.abs(a.y - b.y)).toBeLessThanOrEqual(1);
+
+		await page.getByRole('heading', { name: 'Tips' }).scrollIntoViewIfNeeded();
+		await page.mouse.wheel(0, 2000);
+		await expect(ingredients).toBeInViewport();
+	});
+});
+
+test('on a phone, recipe ingredients come before the steps', async ({ page }) => {
+	await page.setViewportSize(viewports.phone);
+	await gotoHydrated(page, '/recipes/banana-bread');
+	const a = (await page.getByRole('heading', { name: 'Ingredients' }).boundingBox())!;
+	const b = (await page.getByRole('heading', { name: 'Instructions' }).boundingBox())!;
+	expect(b.y).toBeGreaterThan(a.y);
+	expect(Math.abs(a.x - b.x)).toBeLessThanOrEqual(1);
+});

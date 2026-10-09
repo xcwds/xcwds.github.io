@@ -27,12 +27,12 @@
 	{#if results.length === 0}
 		<p class="text-sm text-gray-600 dark:text-gray-400">No recipes match “{query}”.</p>
 	{:else}
-		<ul class="flex flex-col gap-2">
+		<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
 			{#each results as recipe (recipe.slug)}
 				<li>
 					<a
 						href={resolve('/recipes/[slug]', { slug: recipe.slug })}
-						class="flex items-center gap-3 rounded-md bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
+						class="flex h-full items-center gap-3 rounded-md bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
 					>
 						<span aria-hidden="true" class="text-xl">{recipe.emoji ?? '🍽️'}</span>
 						<span class="flex flex-col">

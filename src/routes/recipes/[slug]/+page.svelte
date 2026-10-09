@@ -101,8 +101,11 @@
 	<meta name="description" content={recipe.description} />
 </svelte:head>
 
-<main class="page-wide flex flex-col gap-6 pt-2 pb-6 text-gray-800 sm:pb-12 dark:text-gray-200">
-	<header class="flex flex-col gap-2">
+<!-- On computers (lg+) the ingredients sit in a sticky column beside the steps (#95). -->
+<main
+	class="page-wide flex flex-col gap-6 pt-2 pb-6 text-gray-800 sm:pb-12 lg:grid lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-x-10 dark:text-gray-200"
+>
+	<header class="flex flex-col gap-2 lg:col-span-2">
 		<p>{recipe.description}</p>
 		<dl class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
 			<div class="flex gap-1">
@@ -135,137 +138,147 @@
 	</header>
 
 	{#if recipe.notes?.length}
-		<ul class="flex flex-col gap-1 text-sm">
+		<ul class="flex flex-col gap-1 text-sm lg:col-span-2">
 			{#each recipe.notes as note (note)}
 				<li>{note}</li>
 			{/each}
 		</ul>
 	{/if}
 
-	<section class="flex flex-col gap-3">
-		<h2 class="text-lg font-semibold">Ingredients</h2>
-		{#if scalable}
-			<div class="flex flex-wrap items-center gap-2" data-testid="servings">
-				<button
-					type="button"
-					class="size-11 rounded-full bg-white/70 text-xl hover:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:bg-gray-700"
-					aria-label="Fewer {base.unit}"
-					disabled={target <= stepSize}
-					onclick={() => stepTarget(-1)}>−</button
-				>
-				<output
-					class="min-w-28 text-center font-semibold tabular-nums"
-					aria-live="polite"
-					data-testid="servings-target">{formatYield(target, base)}</output
-				>
-				<button
-					type="button"
-					class="size-11 rounded-full bg-white/70 text-xl hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
-					aria-label="More {base.unit}"
-					onclick={() => stepTarget(1)}>+</button
-				>
-				{#if changed}
+	<div
+		class="flex flex-col gap-6 lg:sticky lg:top-4 lg:max-h-[calc(100svh-2rem)] lg:-m-1 lg:self-start lg:overflow-y-auto lg:p-1"
+		data-testid="ingredients-column"
+	>
+		<section class="flex flex-col gap-3">
+			<h2 class="text-lg font-semibold">Ingredients</h2>
+			{#if scalable}
+				<div class="flex flex-wrap items-center gap-2" data-testid="servings">
 					<button
 						type="button"
-						class="min-h-11 rounded-md bg-white/70 px-3 py-2 text-sm hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
-						onclick={resetScale}
+						class="size-11 rounded-full bg-white/70 text-xl hover:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:bg-gray-700"
+						aria-label="Fewer {base.unit}"
+						disabled={target <= stepSize}
+						onclick={() => stepTarget(-1)}>−</button
 					>
-						Reset to {formatYield(base.amount, base)}{recipe.pan ? `, ${panName(recipe.pan)}` : ''}
-					</button>
-				{/if}
-			</div>
-			{#if recipe.pan}
-				<label class="flex flex-col gap-1 text-sm">
-					<span>Your pan</span>
-					<select
-						value={panId}
-						onchange={(e) => (panId = e.currentTarget.value as PanId)}
-						class="min-h-11 rounded-md border border-gray-300 bg-white px-3 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+					<output
+						class="min-w-28 text-center font-semibold tabular-nums"
+						aria-live="polite"
+						data-testid="servings-target">{formatYield(target, base)}</output
 					>
-						{#each PANS as pan (pan.id)}
-							<option value={pan.id}>{pan.label}{pan.id === recipe.pan ? ' · recipe' : ''}</option>
-						{/each}
-					</select>
-				</label>
-			{/if}
-			{#if changed}
-				<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="scaled-note">
-					Quantities scaled ×{Math.round(factor * 100) / 100}{panChanged
-						? ` for a ${panName(panId)} pan`
-						: ''}.
-					{#if panChanged && recipe.oven}
-						Bake time in this pan: about {formatMinutesRange(
-							asRange(recipe.oven.minutes).map((m) => m * bakeScale) as [number, number]
-						)}, estimated from the batter's depth (the oven step's timer uses it). Start checking
-						early.
-					{:else if panChanged}
-						Times change with the pan; check doneness as you go.
-					{:else}
-						Times and pan sizes are not; check doneness as you go.
-					{/if}
-				</p>
-			{/if}
-		{/if}
-		{#if convertible}
-			<RecipeUnitsToggle {native} />
-			{#if system !== native}
-				<p class="text-sm text-gray-600 dark:text-gray-400" data-testid="units-note">
-					Converted from {native === 'us' ? 'US' : 'metric'} measures; amounts in the steps are as written.
-					Spoon measures stay as spoons.
-				</p>
-			{/if}
-		{/if}
-		<ul class="list-disc pl-6" data-testid="ingredients">
-			{#each ingredients as ingredient, i (i)}
-				<li>
-					{#if ingredient.quantity}<strong class="font-semibold">{ingredient.quantity}</strong
-						>{/if}{ingredient.quantity ? ' ' : ''}{ingredient.text}
-				</li>
-			{/each}
-		</ul>
-	</section>
-
-	{#if recipe.oven}
-		{#key recipe.slug}
-			<OvenPanel oven={recipe.oven} timeScale={bakeScale} bind:activeF={ovenF} />
-		{/key}
-	{/if}
-
-	<section class="flex flex-col gap-2">
-		<h2 class="text-lg font-semibold">Instructions</h2>
-		<ol class="flex list-decimal flex-col gap-2 pl-6">
-			{#each recipe.instructions as step, i (i)}
-				{@const timer = stepTimer(step)}
-				<li>
-					{stepText(step)}
-					{#if timer}
+					<button
+						type="button"
+						class="size-11 rounded-full bg-white/70 text-xl hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
+						aria-label="More {base.unit}"
+						onclick={() => stepTarget(1)}>+</button
+					>
+					{#if changed}
 						<button
 							type="button"
-							class="mt-2 flex min-h-11 items-center gap-2 rounded-full bg-white/70 px-4 text-sm font-medium hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
-							onclick={() => startTimer(timer)}
+							class="min-h-11 rounded-md bg-white/70 px-3 py-2 text-sm hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
+							onclick={resetScale}
 						>
-							<span aria-hidden="true">⏲️</span>
-							Start {formatMinutes(timerMinutes(timer))} timer{timerNote(timer)}
+							Reset to {formatYield(base.amount, base)}{recipe.pan
+								? `, ${panName(recipe.pan)}`
+								: ''}
 						</button>
 					{/if}
-				</li>
-			{/each}
-		</ol>
-	</section>
-
-	{#if recipe.tips?.length}
-		<section class="flex flex-col gap-2">
-			<h2 class="text-lg font-semibold">Tips</h2>
-			<ul class="flex list-disc flex-col gap-1 pl-6">
-				{#each recipe.tips as tip, i (i)}
-					<li>{tip}</li>
+				</div>
+				{#if recipe.pan}
+					<label class="flex flex-col gap-1 text-sm">
+						<span>Your pan</span>
+						<select
+							value={panId}
+							onchange={(e) => (panId = e.currentTarget.value as PanId)}
+							class="min-h-11 rounded-md border border-gray-300 bg-white px-3 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+						>
+							{#each PANS as pan (pan.id)}
+								<option value={pan.id}>{pan.label}{pan.id === recipe.pan ? ' · recipe' : ''}</option
+								>
+							{/each}
+						</select>
+					</label>
+				{/if}
+				{#if changed}
+					<p class="text-sm text-amber-800 dark:text-amber-300" data-testid="scaled-note">
+						Quantities scaled ×{Math.round(factor * 100) / 100}{panChanged
+							? ` for a ${panName(panId)} pan`
+							: ''}.
+						{#if panChanged && recipe.oven}
+							Bake time in this pan: about {formatMinutesRange(
+								asRange(recipe.oven.minutes).map((m) => m * bakeScale) as [number, number]
+							)}, estimated from the batter's depth (the oven step's timer uses it). Start checking
+							early.
+						{:else if panChanged}
+							Times change with the pan; check doneness as you go.
+						{:else}
+							Times and pan sizes are not; check doneness as you go.
+						{/if}
+					</p>
+				{/if}
+			{/if}
+			{#if convertible}
+				<RecipeUnitsToggle {native} />
+				{#if system !== native}
+					<p class="text-sm text-gray-600 dark:text-gray-400" data-testid="units-note">
+						Converted from {native === 'us' ? 'US' : 'metric'} measures; amounts in the steps are as written.
+						Spoon measures stay as spoons.
+					</p>
+				{/if}
+			{/if}
+			<ul class="list-disc pl-6" data-testid="ingredients">
+				{#each ingredients as ingredient, i (i)}
+					<li>
+						{#if ingredient.quantity}<strong class="font-semibold">{ingredient.quantity}</strong
+							>{/if}{ingredient.quantity ? ' ' : ''}{ingredient.text}
+					</li>
 				{/each}
 			</ul>
 		</section>
-	{/if}
+
+		{#if recipe.oven}
+			{#key recipe.slug}
+				<OvenPanel oven={recipe.oven} timeScale={bakeScale} bind:activeF={ovenF} />
+			{/key}
+		{/if}
+	</div>
+
+	<div class="flex flex-col gap-6">
+		<section class="flex flex-col gap-2">
+			<h2 class="text-lg font-semibold">Instructions</h2>
+			<ol class="flex list-decimal flex-col gap-2 pl-6">
+				{#each recipe.instructions as step, i (i)}
+					{@const timer = stepTimer(step)}
+					<li>
+						{stepText(step)}
+						{#if timer}
+							<button
+								type="button"
+								class="mt-2 flex min-h-11 items-center gap-2 rounded-full bg-white/70 px-4 text-sm font-medium hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
+								onclick={() => startTimer(timer)}
+							>
+								<span aria-hidden="true">⏲️</span>
+								Start {formatMinutes(timerMinutes(timer))} timer{timerNote(timer)}
+							</button>
+						{/if}
+					</li>
+				{/each}
+			</ol>
+		</section>
+
+		{#if recipe.tips?.length}
+			<section class="flex flex-col gap-2">
+				<h2 class="text-lg font-semibold">Tips</h2>
+				<ul class="flex list-disc flex-col gap-1 pl-6">
+					{#each recipe.tips as tip, i (i)}
+						<li>{tip}</li>
+					{/each}
+				</ul>
+			</section>
+		{/if}
+	</div>
 
 	{#if recipe.source}
-		<p class="text-sm text-gray-600 dark:text-gray-400">
+		<p class="text-sm text-gray-600 dark:text-gray-400 lg:col-span-2">
 			Source: <a href={recipe.source} class="underline" rel="external noopener">{recipe.source}</a>
 		</p>
 	{/if}

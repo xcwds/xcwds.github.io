@@ -45,14 +45,14 @@
 	{#if related.length}
 		<section class="flex flex-col gap-2" aria-labelledby="related">
 			<h2 id="related" class="text-lg font-semibold">Related</h2>
-			<ul class="flex flex-col gap-2">
+			<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
 				{#each related as item (item.href)}
 					<li>
 						<!-- The hrefs are resolved above; the lint rule can't see that. -->
 						<!-- eslint-disable svelte/no-navigation-without-resolve -->
 						<a
 							href={item.href}
-							class="flex items-center gap-3 rounded-md bg-white/70 px-4 py-3 font-medium hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
+							class="flex h-full items-center gap-3 rounded-md bg-white/70 px-4 py-3 font-medium hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
 						>
 							<span aria-hidden="true" class="text-xl">{item.emoji}</span>
 							{item.name}

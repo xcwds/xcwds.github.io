@@ -6,6 +6,9 @@ import { latestChangelogId } from '../src/lib/changelog';
 import { gotoHydrated } from './helpers';
 import { serveStatic } from './static-server';
 
+// This file tests the service worker, so it runs even where other tests block it (#91).
+test.use({ serviceWorkers: 'allow' });
+
 test.use({ viewport: { width: 390, height: 844 } });
 
 // This test "deploys" a new version by editing the service worker, so it serves its own copy of

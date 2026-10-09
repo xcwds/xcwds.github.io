@@ -44,6 +44,9 @@ Package manager: pnpm.
   wall-clock end times so they stay correct when a phone backgrounds the tab).
 - e2e tests that type into inputs must navigate with `gotoHydrated` from `e2e/helpers.ts`; input sent
   before hydration gets lost or doubled.
+  e2e tests run with service workers blocked (#91: they crashed Chromium on CI); a test file that
+  needs the service worker opts in with `test.use({ serviceWorkers: 'allow' })`, as `pwa`, `update`
+  and `errors` do.
 - The site is an installable PWA: `static/manifest.webmanifest`, icons in `static/icons/` (rendered from `static/icons/icon.svg`; regenerate with
   `node scripts/generate-icons.mjs`), and `src/service-worker.ts`, which precaches every prerendered page for
   offline use. The manifest's `share_target` sends Android shares to `/utils/url-sanitizer`; the service
@@ -62,7 +65,9 @@ Package manager: pnpm.
   variant in `app.css`. Anything tied to the tab bar keeps using `md:`. Every page's `<main>` uses the
   `page-narrow` (tools, Settings, errors) or `page-wide` (Home, lists, recipes) container from `app.css`, and
   `pageWidth` in `src/lib/nav.ts` must name the same one so the header lines up. Breakpoints: phone < `md`,
-  tablet `md`–`lg`, computer `lg`+; `e2e/layout.test.ts` covers each. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
+  tablet `md`–`lg`, computer `lg`+; `e2e/layout.test.ts` covers each. `page-wide` grows to `max-w-5xl` on `lg`,
+  where lists are 3-column grids (2 from `md`) and recipe pages put ingredients in a sticky column beside
+  the steps. Titles and back targets come from `routeInfo` in `src/lib/nav.ts`,
   which reads `tools.ts` and the recipe data, so new tools/recipes need no nav changes. Pages must not render
   their own `<h1>` or back links. In the installed app the header also has a Share button (`src/lib/share.ts`):
   it shares the page's origin + path only (never query or hash) and skips Settings and private
