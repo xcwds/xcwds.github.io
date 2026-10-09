@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# Changelog entries are read as raw text; Prettier would rewrite Markdown emphasis in them.
+/changelog/

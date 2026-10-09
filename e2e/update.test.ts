@@ -2,7 +2,7 @@ import { cp, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
-import { latestChangelogId } from '../src/lib/changelog';
+import { loadChangelog } from '../src/lib/server/changelog';
 import { gotoHydrated } from './helpers';
 import { serveStatic } from './static-server';
 
@@ -200,7 +200,7 @@ test("after an update, the toast links to What's new with only the newer entries
 	// itself, which marks entries seen as it mounts.
 	await page.evaluate(
 		(id) => localStorage.setItem('app:settings:whats-new-seen', JSON.stringify(id)),
-		latestChangelogId - 1
+		loadChangelog()[0].id - 1
 	);
 	await deployNewVersion(page, 'whats-new');
 	await Promise.all([
