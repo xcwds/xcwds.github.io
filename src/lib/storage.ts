@@ -139,6 +139,8 @@ function parseHistory(v: unknown): HistoryEntry[] | undefined {
 }
 
 export type Theme = 'system' | 'light' | 'dark';
+/** Main navigation on tablets and computers: header links ("bar") or a left sidebar. */
+export type NavStyle = 'bar' | 'sidebar';
 
 /** Equipment sets and the active one (#82); the unit is the commercial gym's lb or kg. */
 export type LiftingSettings = LiftingSetup;
@@ -162,6 +164,8 @@ export type Settings = {
 	ovenUnit: TempUnit;
 	/** US or metric for recipe ingredients; null shows each recipe as written. */
 	recipeUnits: UnitSystem | null;
+	/** Navigation style per orientation; phones always keep the tab bar (see app.css). */
+	nav: { portrait: NavStyle; landscape: NavStyle };
 };
 
 export const defaultSettings: Settings = {
@@ -174,7 +178,8 @@ export const defaultSettings: Settings = {
 	pizzaDefaults: { ...doughDefaults },
 	lifting: { unit: 'lb', activeSet: COMMERCIAL_GYM, sets: [] },
 	ovenUnit: 'F',
-	recipeUnits: null
+	recipeUnits: null,
+	nav: { portrait: 'bar', landscape: 'sidebar' }
 };
 
 export const COFFEE_SECONDS = { min: 5, max: 3600 };
@@ -215,6 +220,17 @@ function parseLiftingSettings(v: unknown): LiftingSettings {
 	};
 }
 
+const isNavStyle = (v: unknown): v is NavStyle => v === 'bar' || v === 'sidebar';
+
+function parseNav(v: unknown): Settings['nav'] {
+	const d = defaultSettings.nav;
+	if (!isRecord(v)) return { ...d };
+	return {
+		portrait: isNavStyle(v.portrait) ? v.portrait : d.portrait,
+		landscape: isNavStyle(v.landscape) ? v.landscape : d.landscape
+	};
+}
+
 /** Invalid or missing fields fall back to their defaults, so new settings need no migration. */
 function parseSettings(v: unknown): Settings | undefined {
 	if (!isRecord(v)) return undefined;
@@ -232,7 +248,8 @@ function parseSettings(v: unknown): Settings | undefined {
 		pizzaDefaults: parsePizzaDefaults(v.pizzaDefaults),
 		lifting: parseLiftingSettings(v.lifting),
 		ovenUnit: v.ovenUnit === 'C' ? 'C' : 'F',
-		recipeUnits: v.recipeUnits === 'us' || v.recipeUnits === 'metric' ? v.recipeUnits : null
+		recipeUnits: v.recipeUnits === 'us' || v.recipeUnits === 'metric' ? v.recipeUnits : null,
+		nav: parseNav(v.nav)
 	};
 }
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { activeSection, errorInfo, routeInfo } from './nav';
+import { activeSection, errorInfo, pageWidth, routeInfo } from './nav';
 import { porkChopsPath } from './parody';
 import { recipes } from './recipes';
 import { tools } from './utils/tools';
@@ -56,5 +56,17 @@ describe('activeSection', () => {
 		expect(activeSection('/recipes/pizza-dough')).toBe('/recipes');
 		expect(activeSection('/utils/coffee-timer')).toBe('/utils');
 		expect(activeSection('/utilsx')).toBe('/');
+	});
+});
+
+describe('pageWidth', () => {
+	it('keeps tools and Settings narrow', () => {
+		for (const tool of tools) expect(pageWidth(tool.path)).toBe('narrow');
+		expect(pageWidth('/settings/')).toBe('narrow');
+	});
+
+	it('makes Home, lists and recipes wide', () => {
+		for (const path of ['/', '/recipes', '/utils', `/recipes/${recipes[0].slug}`])
+			expect(pageWidth(path)).toBe('wide');
 	});
 });
