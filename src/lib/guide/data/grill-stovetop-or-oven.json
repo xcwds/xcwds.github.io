@@ -57,7 +57,8 @@
 				{
 					"type": "tip",
 					"text": "No grill? Your oven's broiler is an upside-down grill: put the rack about 4 inches (10 cm) below it and turn the food halfway."
-				}
+				},
+				"More in [Grilling](guide:grilling)."
 			]
 		},
 		{
@@ -77,7 +78,8 @@
 				{
 					"type": "tip",
 					"text": "For thick steaks, chops or chicken breasts on the bone, sear on the stovetop, then move the pan to a 400°F (200°C) oven to finish the middle without burning the outside."
-				}
+				},
+				"More in [Stovetop Cooking](guide:stovetop)."
 			]
 		},
 		{
@@ -93,7 +95,8 @@
 					]
 				},
 				"Always preheat. Give food room on the pan: vegetables in a single layer with space between them brown; piled up, they steam. Use the middle rack unless a recipe says otherwise.",
-				"Have to cook at a different temperature than the recipe says, because something else is in the oven? The [Oven Time Converter](tool:/utils/oven-time) estimates the new time."
+				"Have to cook at a different temperature than the recipe says, because something else is in the oven? The [Oven Time Converter](tool:/utils/oven-time) estimates the new time.",
+				"More in [Oven: Roasting, Baking & Broiling](guide:oven)."
 			]
 		},
 		{
@@ -104,7 +107,7 @@
 					"items": [
 						"**Thin and tender** (steaks, chops, fillets, cutlets): hot and fast, on the grill or in a pan.",
 						"**Thick and tender** (thick steaks, whole tenderloin, bone-in chicken): brown it over high heat, then finish with gentler heat in the oven or on the grill's cool side.",
-						"**Tough cuts with lots of connective tissue** (chuck, brisket, pork shoulder, short ribs): low and slow with liquid (braising), in the oven or on the stovetop, until fork-tender.",
+						"**Tough cuts with lots of connective tissue** (chuck, brisket, pork shoulder, short ribs): low and slow with liquid ([braising](guide:braising-and-stewing)), in the oven or on the stovetop, until fork-tender.",
 						"**Big or many** (whole birds, roasts, a crowd's worth of vegetables): the oven.",
 						"**Want a sauce?** The stovetop, so you can build it in the same pan.",
 						"**Want char and smoke?** The grill, or the broiler as a stand-in."
@@ -115,7 +118,14 @@
 		}
 	],
 	"related": {
-		"guides": ["doneness-and-food-safety"],
+		"guides": [
+			"grilling",
+			"stovetop",
+			"oven",
+			"braising-and-stewing",
+			"air-fryer",
+			"doneness-and-food-safety"
+		],
 		"recipes": ["roast-chicken"],
 		"tools": ["/utils/oven-time", "/utils/cooking-timer"]
 	}

@@ -29,6 +29,8 @@ export type Block =
 	/** Safety: food safety, burns, fire, carbon monoxide. */
 	| { type: 'warning'; text: string }
 	| TableBlock
+	/** Buttons that start Cooking Timer countdowns ("6 min: Runny eggs"). */
+	| { type: 'timers'; timers: { label: string; minutes: number }[] }
 	/** An interactive piece, by name: `doneness` is the doneness chart (DonenessChart.svelte). */
 	| { type: 'widget'; widget: 'doneness' };
 
@@ -138,6 +140,7 @@ export function articleTexts(article: GuideArticle): string[] {
 			if (block.type === 'list') return block.items;
 			if (block.type === 'table') return [...block.columns, ...block.rows.flat()];
 			if (block.type === 'widget') return [];
+			if (block.type === 'timers') return block.timers.map((t) => t.label);
 			return [block.text];
 		})
 	);

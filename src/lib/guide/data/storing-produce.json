@@ -1,0 +1,72 @@
+{
+	"slug": "storing-produce",
+	"name": "Storing & Prepping Produce",
+	"emoji": "🧺",
+	"category": "vegetables",
+	"tags": [
+		"Produce",
+		"Storing",
+		"Fridge",
+		"Counter",
+		"Washing",
+		"Herbs",
+		"Fruit",
+		"Vegetables",
+		"Ripening"
+	],
+	"summary": "What goes in the fridge and what stays on the counter, keeping herbs and greens fresh, and washing produce.",
+	"sections": [
+		{
+			"id": "where",
+			"heading": "Fridge or counter",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Where", "What"],
+					"rows": [
+						[
+							"Fridge (crisper drawer)",
+							"Leafy greens, broccoli, cauliflower, carrots, celery, peppers, zucchini, cucumbers, green beans, mushrooms (in a paper bag), berries, grapes, apples, citrus"
+						],
+						[
+							"Counter",
+							"Tomatoes, bananas, avocados, stone fruit and pears until ripe (then the fridge), whole melons"
+						],
+						[
+							"Cool, dark place (not the fridge)",
+							"Potatoes, sweet potatoes, onions, garlic, winter squash. Keep potatoes and onions apart: onions make potatoes sprout."
+						]
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Bananas, avocados, apples and tomatoes give off ethylene gas, which ripens other produce faster. Ripen an avocado quicker in a paper bag with a banana; keep them away from greens you want to last."
+				}
+			]
+		},
+		{
+			"id": "herbs-and-greens",
+			"heading": "Herbs and greens",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Soft herbs** (parsley, cilantro, mint, dill): trim the stems and stand them in a glass of water in the fridge, loosely covered with a bag. Basil stays on the counter in water; the fridge blackens it.",
+						"**Woody herbs** (rosemary, thyme, sage): wrap in a barely damp paper towel in a bag or container in the fridge.",
+						"**Salad greens**: wash, dry very well (a salad spinner helps), and store in a container lined with paper towels."
+					]
+				}
+			]
+		},
+		{
+			"id": "washing",
+			"heading": "Washing",
+			"blocks": [
+				"Rinse produce under running water just before you use it, not before storing (moisture speeds spoiling). Rub firm produce with your hands or a brush. Soap and produce washes aren't needed. Wash even things you'll peel, like melons and avocados, since the knife carries dirt from the skin into the flesh. Bagged greens labeled \"pre-washed\" don't need washing again."
+			]
+		}
+	],
+	"related": {
+		"guides": ["cooking-vegetables", "potatoes"]
+	}
+}

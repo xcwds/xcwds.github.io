@@ -1,0 +1,90 @@
+{
+	"slug": "cooking-vegetables",
+	"name": "Cooking Vegetables",
+	"emoji": "🥦",
+	"category": "vegetables",
+	"tags": [
+		"Vegetables",
+		"Roasting",
+		"Steaming",
+		"Blanching",
+		"Sautéing",
+		"Broccoli",
+		"Carrots",
+		"Green beans",
+		"Brussels sprouts",
+		"Asparagus",
+		"Squash",
+		"Greens",
+		"Cauliflower"
+	],
+	"summary": "Roasting, sautéing, steaming and blanching, and the best way to cook common vegetables.",
+	"sections": [
+		{
+			"id": "methods",
+			"heading": "The main methods",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Roasting** at 425°F (220°C): browned, sweet and crisp-edged. Toss in oil and salt, spread out on a sheet pan with space between pieces, and turn once halfway. The most flavor for the least work.",
+						"**Sautéing** over medium-high heat: fast and good for tender vegetables (zucchini, peppers, mushrooms, greens). Don't crowd the pan or they steam.",
+						"**Steaming** over simmering water with a lid: keeps color and texture, and works for nearly everything. Season afterwards with butter or oil, salt and lemon.",
+						"**Blanching**: a minute or two in heavily salted boiling water, then straight into ice water. Sets bright color for salads, crudités and freezing, or as a head start before a quick sauté.",
+						"**Grilling**: thick slices or wedges, oiled, over direct medium-high heat. See [Grilling](guide:grilling)."
+					]
+				}
+			]
+		},
+		{
+			"id": "chart",
+			"heading": "Vegetable by vegetable",
+			"blocks": [
+				"Roasting times are at 425°F (220°C) for pieces cut about 1 inch (2.5 cm). Cook until tender when pierced with a knife and browned at the edges.",
+				{
+					"type": "table",
+					"columns": ["Vegetable", "Best ways", "Roast", "Steam"],
+					"rows": [
+						["Broccoli, cauliflower", "Roast, steam, stir-fry", "20–25 min", "5–7 min"],
+						["Brussels sprouts", "Roast (halved, cut side down), sauté", "20–25 min", "7–10 min"],
+						["Carrots, parsnips", "Roast, glaze, steam", "25–35 min", "8–10 min"],
+						[
+							"Potatoes",
+							"Roast, boil, bake, mash: see [Potatoes](guide:potatoes)",
+							"35–45 min",
+							"15–20 min"
+						],
+						["Sweet potatoes", "Roast, bake whole, mash", "25–35 min", "15–20 min"],
+						["Green beans", "Blanch then sauté, roast, steam", "15–20 min", "5–7 min"],
+						["Asparagus", "Roast, grill, steam", "10–15 min", "4–6 min"],
+						["Zucchini, summer squash", "Sauté, grill, roast", "15–20 min", "Gets mushy"],
+						["Winter squash (butternut)", "Roast, purée, soup", "30–40 min", "15–20 min"],
+						["Bell peppers, onions", "Sauté, roast, grill", "20–30 min", "Not ideal"],
+						["Mushrooms", "Sauté in a hot, uncrowded pan; roast", "20–25 min", "Not ideal"],
+						[
+							"Leafy greens (spinach, kale, chard)",
+							"Sauté with garlic, wilt into soups",
+							"Kale chips: 10–15 min at 300°F (150°C)",
+							"2–5 min"
+						],
+						["Corn on the cob", "Boil, grill, roast", "20–25 min in the husk", "5–7 min"]
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Cut pieces the same size so they finish together, and put dense vegetables (potatoes, carrots) in before quicker ones (peppers, zucchini) when roasting a mix."
+				}
+			]
+		},
+		{
+			"id": "seasoning",
+			"heading": "Seasoning",
+			"blocks": [
+				"Vegetables need more salt than you'd think: salt roasting vegetables before they go in, and salt boiling water for blanching until it tastes like the sea. Finish with something bright (lemon juice, vinegar, fresh herbs) or rich (butter, parmesan, toasted nuts). See [Seasoning & Salt](guide:seasoning-and-salt)."
+			]
+		}
+	],
+	"related": {
+		"guides": ["potatoes", "storing-produce", "oven"]
+	}
+}

@@ -1,0 +1,66 @@
+{
+	"slug": "beans-and-lentils",
+	"name": "Beans & Lentils",
+	"emoji": "🫘",
+	"category": "staples",
+	"tags": [
+		"Beans",
+		"Dried beans",
+		"Lentils",
+		"Chickpeas",
+		"Black beans",
+		"Soaking",
+		"Canned beans",
+		"Legumes",
+		"Split peas"
+	],
+	"summary": "Soaking or not, simmering times for dried beans and lentils, salting, and swapping in canned beans.",
+	"sections": [
+		{
+			"id": "soaking",
+			"heading": "To soak or not",
+			"blocks": [
+				"Soaking dried beans overnight in plenty of water shortens cooking and helps them cook evenly; drain and rinse before cooking. No time? A **quick soak**: cover with water, boil for 2 minutes, then let them stand covered off the heat for an hour. Unsoaked beans work too, they just take longer. Lentils and split peas never need soaking."
+			]
+		},
+		{
+			"id": "cooking",
+			"heading": "Cooking",
+			"blocks": [
+				"Cover soaked beans with 2 inches (5 cm) of fresh water, add a pinch of salt and any aromatics (onion, garlic, bay leaf), bring to a boil, then simmer gently, partly covered, until creamy all the way through. Taste several beans: they don't all finish at once.",
+				{
+					"type": "table",
+					"columns": ["Bean", "Simmer (soaked)", "Notes"],
+					"rows": [
+						["Black beans", "1–1 ½ hours", "Hold their shape well"],
+						["Chickpeas", "1 ½–2 hours", "Longer if old; great for hummus when very soft"],
+						["Kidney beans", "1–1 ½ hours", "Must boil hard for 10 minutes first (see below)"],
+						["Pinto beans", "1–1 ½ hours", "Creamy; good for refried beans"],
+						["Cannellini, navy beans", "1–1 ½ hours", "Soups, stews, salads"],
+						["Brown or green lentils", "20–30 minutes", "No soaking; hold their shape"],
+						["Red lentils", "15–20 minutes", "No soaking; fall apart into soups and dal"],
+						["Split peas", "40–60 minutes", "No soaking; for soup"]
+					]
+				},
+				{
+					"type": "warning",
+					"text": "Raw and undercooked kidney beans contain a toxin that causes severe stomach upset. Boil them hard for at least 10 minutes before simmering, and never cook dried kidney beans from raw in a slow cooker: it doesn't get hot enough."
+				},
+				{
+					"type": "tip",
+					"text": "Salt doesn't make beans tough, but acid (tomatoes, vinegar) and very hard water slow softening. Add acidic ingredients once the beans are tender."
+				}
+			]
+		},
+		{
+			"id": "canned",
+			"heading": "Canned beans",
+			"blocks": [
+				"One 15-ounce (425 g) can holds about 1 ½ cups of drained beans, about the same as ½ cup (90–100 g) of dried beans after cooking. Rinse canned beans to remove extra salt and the starchy liquid, unless a recipe uses it (chickpea liquid, aquafaba, whips like egg whites)."
+			]
+		}
+	],
+	"related": {
+		"guides": ["rice-and-grains", "braising-and-stewing"]
+	}
+}

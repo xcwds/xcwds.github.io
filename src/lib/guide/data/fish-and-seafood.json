@@ -1,0 +1,109 @@
+{
+	"slug": "fish-and-seafood",
+	"name": "Fish & Seafood",
+	"emoji": "🐟",
+	"category": "meat",
+	"tags": [
+		"Fish",
+		"Seafood",
+		"Salmon",
+		"Cod",
+		"Tuna",
+		"Tilapia",
+		"Halibut",
+		"Shrimp",
+		"Prawns",
+		"Scallops",
+		"Mussels",
+		"Frozen fish"
+	],
+	"summary": "Which fish to grill, sear or bake, telling when it's done, and cooking shrimp, scallops and mussels.",
+	"sections": [
+		{
+			"id": "types",
+			"heading": "Firm, flaky and oily",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Type", "Examples", "Best cooked"],
+					"rows": [
+						[
+							"Firm, meaty",
+							"Swordfish, tuna, halibut, mahi-mahi, monkfish",
+							"[Grill](guide:grilling), sear, roast. Holds together; tuna is often served rare."
+						],
+						[
+							"Oily, rich",
+							"Salmon, trout, mackerel, sardines",
+							"Grill, roast, [broil](guide:oven#broiling), sear skin-side down. Forgiving, because the fat keeps it moist."
+						],
+						[
+							"Delicate, flaky",
+							"Cod, haddock, tilapia, sole, flounder",
+							"Bake, pan-fry, poach, steam. Falls apart on a grill unless it's in a basket or on foil."
+						]
+					]
+				},
+				{
+					"type": "tip",
+					"text": "The **10-minute rule** is a rough start: about 10 minutes per inch (2.5 cm) of thickness at 400–450°F (200–230°C), then check."
+				}
+			]
+		},
+		{
+			"id": "doneness",
+			"heading": "Is it done?",
+			"blocks": [
+				"Fish is done at 145°F (63°C), when the flesh has turned opaque and flakes easily with a fork. Many cooks take salmon and tuna off earlier, while the center is still translucent; see the [doneness chart](guide:doneness-and-food-safety#doneness-chart) for both.",
+				"Fish cooks fast and goes from moist to dry within a minute or two, so start checking early."
+			]
+		},
+		{
+			"id": "skin",
+			"heading": "Crisp skin",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Pat the skin very dry and season it.",
+						"Heat a little oil in a heavy or nonstick pan over medium-high heat.",
+						"Lay the fish in skin side down, away from you, and press it flat with a spatula for 10 seconds so it doesn't curl.",
+						"Cook without moving it until the skin is crisp and releases easily and the flesh is opaque most of the way up, then turn it for the last minute."
+					]
+				}
+			]
+		},
+		{
+			"id": "shellfish",
+			"heading": "Shrimp, scallops and mussels",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Shrimp** are done when they turn pink and opaque and curl into a loose C; a tight O means overcooked. That takes just 2–3 minutes in a hot pan.",
+						"**Scallops**: pat very dry, sear in a very hot pan for about 2 minutes a side until deeply browned, and stop while the center is still slightly translucent. Pull off the small side muscle first.",
+						"**Mussels and clams**: scrub them, discard any with cracked shells or that stay open when tapped, and steam with a little wine or broth, covered, until they open (5–7 minutes). Discard any that don't open."
+					]
+				}
+			]
+		},
+		{
+			"id": "buying",
+			"heading": "Buying and storing",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"Fresh fish should smell like the sea, not fishy, with firm flesh that springs back.",
+						"Frozen fish, often frozen right on the boat, is frequently better than \"fresh\" fish that has traveled for days. Most \"fresh\" shrimp were frozen and thawed.",
+						"Cook fresh fish within 1–2 days. Thaw frozen fish overnight in the fridge, or sealed in cold water for about 30 minutes."
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["doneness-and-food-safety", "stovetop", "grilling"]
+	}
+}

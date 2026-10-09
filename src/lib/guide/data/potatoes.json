@@ -1,0 +1,99 @@
+{
+	"slug": "potatoes",
+	"name": "Potatoes",
+	"emoji": "🥔",
+	"category": "vegetables",
+	"tags": [
+		"Potatoes",
+		"Russet",
+		"Yukon Gold",
+		"Red potatoes",
+		"Mashed potatoes",
+		"Roast potatoes",
+		"Baked potato",
+		"Fries",
+		"Potato salad"
+	],
+	"summary": "Starchy, waxy and all-purpose potatoes, which to use for what, and how to boil, mash, roast and bake them.",
+	"sections": [
+		{
+			"id": "types",
+			"heading": "Starchy, waxy or in between",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Type", "Examples", "Texture", "Best for"],
+					"rows": [
+						[
+							"Starchy",
+							"Russet, Idaho, Maris Piper",
+							"Fluffy, dry, falls apart",
+							"Baked potatoes, fries, fluffy mash"
+						],
+						[
+							"All-purpose",
+							"Yukon Gold, white",
+							"Creamy, holds its shape fairly well",
+							"Mash, roasting, gratins, nearly anything"
+						],
+						[
+							"Waxy",
+							"Red, fingerling, new potatoes",
+							"Firm, holds its shape",
+							"Potato salad, boiling, soups, roasting whole"
+						]
+					]
+				}
+			]
+		},
+		{
+			"id": "boiling-and-mash",
+			"heading": "Boiling and mashing",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Cut potatoes into even chunks and put them in a pot of **cold**, well-salted water. Starting cold cooks them evenly to the middle.",
+						"Bring to a boil, then simmer until a knife slides in with no resistance, about 15–20 minutes for chunks.",
+						"Drain well and let them steam dry in the pot for a minute or two.",
+						"For mash, warm the butter and milk or cream before adding, and use a masher or ricer. A blender or food processor makes them gluey."
+					]
+				}
+			]
+		},
+		{
+			"id": "roasting",
+			"heading": "Crisp roast potatoes",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Cut into chunks and parboil in salted water for about 8 minutes, until the edges just soften.",
+						"Drain and shake them in the pot to rough up the surfaces: the fluffy edges are what crisp.",
+						"Toss with plenty of oil or fat on a preheated sheet pan and roast at 425°F (220°C) for 35–45 minutes, turning once, until deep golden."
+					]
+				},
+				"Short on time? Skip the parboil: cut smaller, toss in oil and salt, and roast at the same temperature, turning once."
+			]
+		},
+		{
+			"id": "baked",
+			"heading": "Baked potatoes",
+			"blocks": [
+				"Scrub russets, prick them a few times, rub with oil and salt, and bake directly on the rack at 400–425°F (200–220°C) for 45–60 minutes, until a knife slides in easily. Skip the foil if you want crisp skin."
+			]
+		},
+		{
+			"id": "storing",
+			"heading": "Storing",
+			"blocks": [
+				"Keep potatoes somewhere cool, dark and dry, not in the fridge (cold turns their starch to sugar) and away from onions. Cut off green patches and sprouts before cooking: the green parts contain solanine, which is bitter and can upset your stomach in quantity."
+			]
+		}
+	],
+	"related": {
+		"guides": ["cooking-vegetables", "storing-produce"]
+	}
+}

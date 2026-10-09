@@ -21,12 +21,14 @@ ids are URLs, so don't rename them. See the `GuideArticle` type in `src/lib/guid
   the heading slugified. Give an explicit `id` when you might reword the heading later.
 - `blocks[]`: a string (a paragraph), or
   - `{ "type": "widget", "widget": "doneness" }` for the interactive doneness chart
+  - `{ "type": "timers", "timers": [{ "label", "minutes" }] }`: buttons that start Cooking Timer
+    countdowns (up to `MAX_STEP_TIMER_MINUTES`, like recipe step timers), for waits you'd watch
   - `{ "type": "list", "items": [...], "ordered"?: true }`
   - `{ "type": "tip", "text": ... }`
   - `{ "type": "warning", "text": ... }` for safety warnings (food safety, burns, fire)
   - `{ "type": "table", "columns": [...], "rows": [[...]], "caption"?: ... }`. On phones each row
     becomes a card headed by its first cell, so make the first column the row's name and keep
-    tables to about 4 columns.
+    tables to about 4 columns. Empty cells are left out of the cards.
 - `related`: `{ guides?, recipes?, tools? }` (slugs, slugs, `/utils/...` paths), shown as cards at
   the end.
 

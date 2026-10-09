@@ -1,0 +1,75 @@
+{
+	"slug": "seasoning-and-salt",
+	"name": "Seasoning & Salt",
+	"emoji": "🧂",
+	"category": "basics",
+	"tags": [
+		"Salt",
+		"Kosher salt",
+		"Table salt",
+		"Sea salt",
+		"Seasoning",
+		"Acid",
+		"Taste",
+		"Pepper",
+		"Dry brine"
+	],
+	"summary": "Why salt types don't swap spoon for spoon, when to salt, and balancing a dish with acid, fat and heat.",
+	"sections": [
+		{
+			"id": "salt-types",
+			"heading": "Not all salt measures the same",
+			"blocks": [
+				"Salt crystals come in different shapes and sizes, so a spoonful of one weighs much more than a spoonful of another. By volume, table salt is about twice as salty as Diamond Crystal kosher salt; Morton kosher sits in between.",
+				{
+					"type": "table",
+					"columns": ["Salt", "1 tsp weighs about", "Same saltiness as 1 tsp table salt"],
+					"rows": [
+						["Table salt", "6 g", "1 tsp"],
+						["Morton kosher salt", "5 g", "1 ¼ tsp"],
+						["Diamond Crystal kosher salt", "3 g", "2 tsp"],
+						["Flaky sea salt (Maldon)", "2–3 g", "Use for finishing, not measuring"]
+					]
+				},
+				"When a recipe says \"kosher salt\" without a brand, it's hard to know which it means. Start with less, taste, and add more. Weighing salt in grams sidesteps the problem.",
+				"Baking recipes here mean table or fine sea salt by \"salt\"; see [Measuring for Baking](guide:measuring-for-baking#spoons)."
+			]
+		},
+		{
+			"id": "when",
+			"heading": "When to salt",
+			"blocks": [
+				{
+					"type": "list",
+					"items": [
+						"**Meat**: salt thick cuts well ahead, from 45 minutes to a day in the fridge (a dry brine). The salt draws out moisture, dissolves in it, and is reabsorbed, seasoning the meat deeper and drying the surface for better browning. For thin cuts, salt just before cooking.",
+						"**Pasta, potatoes, vegetables, grains**: salt the cooking water; they absorb it as they cook.",
+						"**Soups, sauces and stews**: salt lightly at the start and adjust at the end, since liquid reduces and concentrates the salt.",
+						"**Finishing**: a pinch of flaky salt on a steak, salad or cookies adds crunch and bright bursts of flavor."
+					]
+				}
+			]
+		},
+		{
+			"id": "balance",
+			"heading": "Taste and balance",
+			"blocks": [
+				"Taste as you go, and if something tastes flat, figure out what it needs:",
+				{
+					"type": "list",
+					"items": [
+						"**Dull or bland**: usually salt first.",
+						"**Heavy or one-note**: acid (lemon juice, vinegar, a splash of wine) brightens and lifts it.",
+						"**Too sharp or acidic**: a pinch of sugar, a little fat (butter, cream, olive oil), or more of the base ingredient.",
+						"**Too salty**: add more unsalted liquid or ingredients, or acid and fat to balance. Potatoes don't really absorb salt from a soup.",
+						"**Missing depth**: something savory (umami) like parmesan, soy sauce, tomato paste, anchovy or mushrooms."
+					]
+				},
+				"Grind black pepper fresh; pre-ground pepper loses its aroma quickly."
+			]
+		}
+	],
+	"related": {
+		"guides": ["knife-skills", "pasta", "baking-ingredients"]
+	}
+}

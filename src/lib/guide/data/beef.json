@@ -1,0 +1,203 @@
+{
+	"slug": "beef",
+	"name": "Beef Cuts",
+	"emoji": "🐄",
+	"category": "meat",
+	"tags": [
+		"Beef",
+		"Steak",
+		"Ribeye",
+		"Strip",
+		"Sirloin",
+		"Tenderloin",
+		"Filet mignon",
+		"Flank",
+		"Skirt",
+		"Chuck",
+		"Brisket",
+		"Short ribs",
+		"Ground beef",
+		"Prime",
+		"Choice"
+	],
+	"summary": "Which beef cuts are tender and which are tough, and how to cook each one.",
+	"sections": [
+		{
+			"id": "tender-vs-tough",
+			"heading": "Tender vs. tough",
+			"blocks": [
+				"Where a cut comes from decides how to cook it. Muscles along the back (the rib and loin) barely work, so they're tender and best cooked fast and hot, to the doneness you like. Hard-working muscles (shoulder, chest, legs) are full of connective tissue: tough when cooked fast, wonderfully tender when cooked low and slow until they fall apart.",
+				"Steaks are labeled with US names below; other names include common UK and restaurant names."
+			]
+		},
+		{
+			"id": "steaks",
+			"heading": "Steaks",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Cut", "Also called", "Tenderness", "Best cooked", "Notes"],
+					"rows": [
+						[
+							"Ribeye",
+							"Rib steak (bone-in), Delmonico, Scotch fillet",
+							"Very tender",
+							"[Grill](guide:grilling) or [sear](guide:stovetop#searing)",
+							"Lots of marbling, rich flavor. Forgiving."
+						],
+						[
+							"Strip",
+							"New York strip, Kansas City strip, sirloin (UK)",
+							"Tender",
+							"Grill or sear",
+							"Leaner than ribeye with a good chew and beefy flavor."
+						],
+						[
+							"Tenderloin",
+							"Filet mignon, fillet",
+							"Most tender",
+							"Sear, then finish in the [oven](guide:oven)",
+							"Mild and lean; expensive. Don't cook past medium."
+						],
+						[
+							"T-bone & porterhouse",
+							"",
+							"Tender",
+							"Grill",
+							"A strip and a piece of tenderloin on one bone; the tenderloin side cooks faster."
+						],
+						[
+							"Top sirloin",
+							"Sirloin, rump (UK)",
+							"Fairly tender",
+							"Grill or sear",
+							"Good value; slice thinly."
+						],
+						[
+							"Flank",
+							"",
+							"Chewy",
+							"Grill or sear, hot and fast",
+							"Marinate; cook no more than medium; slice thinly against the grain."
+						],
+						[
+							"Skirt",
+							"Fajita steak",
+							"Chewy",
+							"Grill or sear, very hot",
+							"Thin and fast-cooking; slice against the grain."
+						],
+						[
+							"Flat iron",
+							"Top blade",
+							"Tender",
+							"Grill or sear",
+							"From the shoulder but tender; great value."
+						]
+					]
+				},
+				{
+					"type": "tip",
+					"text": "**Slice against the grain**: look for the lines running through the meat and cut across them. It shortens the fibers, so even chewy cuts like flank and skirt eat tender."
+				}
+			]
+		},
+		{
+			"id": "roasts",
+			"heading": "Roasts",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Cut", "Tenderness", "Best cooked", "Notes"],
+					"rows": [
+						[
+							"Prime rib (rib roast)",
+							"Very tender",
+							"Roast; the [reverse sear](guide:oven#reverse-sear) works well",
+							"The holiday roast. Cook to medium-rare or medium."
+						],
+						[
+							"Whole tenderloin",
+							"Most tender",
+							"Sear, then roast hot",
+							"Cooks fast; take it off early."
+						],
+						[
+							"Top round & eye of round",
+							"Lean, can be tough",
+							"Roast to medium-rare, slice very thin",
+							"Classic roast beef for sandwiches."
+						],
+						[
+							"Tri-tip",
+							"Fairly tender",
+							"Grill or roast",
+							"The grain changes direction partway through; slice each half across it."
+						]
+					]
+				}
+			]
+		},
+		{
+			"id": "braising-cuts",
+			"heading": "Braising cuts",
+			"blocks": [
+				"These are the cheap, flavorful cuts. Cook them low and slow with liquid until fork-tender: see [Braising & Stewing](guide:braising-and-stewing).",
+				{
+					"type": "table",
+					"columns": ["Cut", "Best for", "Notes"],
+					"rows": [
+						[
+							"Chuck (shoulder)",
+							"Pot roast, stew, chili",
+							"The all-purpose braising cut; buy a roast and cube it yourself."
+						],
+						[
+							"Brisket",
+							"Braising, smoking, corned beef",
+							"The flat is leaner, the point is fattier."
+						],
+						["Short ribs", "Braising", "Rich and meaty; brown them well first."],
+						["Shank", "Stews, soups, osso buco", "The marrow in the bone enriches the liquid."],
+						["Oxtail", "Stews, soups", "Lots of gelatin; slow but worth it."]
+					]
+				}
+			]
+		},
+		{
+			"id": "ground-beef",
+			"heading": "Ground beef",
+			"blocks": [
+				"Ground beef is labeled by how lean it is. **80/20** (80% lean, 20% fat, often from chuck) makes the juiciest burgers and meatballs. **85/15** and **90/10** suit tacos, sauces and chili, where you'd pour off extra fat anyway. Leaner beef dries out in burgers.",
+				{
+					"type": "warning",
+					"text": "Grinding spreads surface bacteria through the meat, so cook ground beef to 160°F (71°C), even in burgers you'd like pink. See the [doneness chart](guide:doneness-and-food-safety#doneness-chart)."
+				}
+			]
+		},
+		{
+			"id": "grades",
+			"heading": "Grades",
+			"blocks": [
+				"USDA grades beef mostly by marbling, the flecks of fat in the meat that keep it juicy:",
+				{
+					"type": "list",
+					"items": [
+						"**Prime**: the most marbling; mostly sold to restaurants and at butchers.",
+						"**Choice**: the everyday supermarket grade, with good marbling.",
+						"**Select**: leaner and less forgiving; best braised or marinated."
+					]
+				},
+				"Grade matters most for steaks and roasts cooked quickly; for braising cuts, Choice or Select is fine."
+			]
+		}
+	],
+	"related": {
+		"guides": [
+			"doneness-and-food-safety",
+			"grilling",
+			"braising-and-stewing",
+			"buying-and-storing-meat"
+		]
+	}
+}

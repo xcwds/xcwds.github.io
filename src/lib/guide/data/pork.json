@@ -1,0 +1,109 @@
+{
+	"slug": "pork",
+	"name": "Pork Cuts",
+	"emoji": "🐖",
+	"category": "meat",
+	"tags": [
+		"Pork",
+		"Pork chops",
+		"Tenderloin",
+		"Loin",
+		"Shoulder",
+		"Butt",
+		"Pulled pork",
+		"Belly",
+		"Bacon",
+		"Ribs",
+		"Ham",
+		"Ground pork"
+	],
+	"summary": "Lean loin cuts to cook quickly, fatty shoulder and belly to cook slowly, and why pork can be a little pink.",
+	"sections": [
+		{
+			"id": "pink-pork",
+			"heading": "Pink pork is fine",
+			"blocks": [
+				"Today's pork is much leaner and safer than it was a generation ago, and the USDA lowered its safe temperature for whole cuts (chops, tenderloin, loin roasts) to 145°F (63°C) with a 3-minute rest. At that point the middle is juicy and may still be blushing pink. Cooking chops to 160°F (71°C), as people used to, is why so many remember pork as dry.",
+				{
+					"type": "warning",
+					"text": "Ground pork and sausages are different: cook them to 160°F (71°C). See the [doneness chart](guide:doneness-and-food-safety#doneness-chart)."
+				}
+			]
+		},
+		{
+			"id": "cuts",
+			"heading": "The cuts",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Cut", "Tenderness", "Best cooked", "Notes"],
+					"rows": [
+						[
+							"Tenderloin",
+							"Very tender, very lean",
+							"Sear, then roast at 425°F (220°C)",
+							"Small and quick, about 20 minutes. Don't confuse it with loin."
+						],
+						[
+							"Loin roast",
+							"Tender, lean",
+							"[Roast](guide:oven)",
+							"Brining keeps it juicy. Take it off at 145°F (63°C)."
+						],
+						[
+							"Chops (loin, rib, center-cut)",
+							"Tender",
+							"[Sear](guide:stovetop#searing) or [grill](guide:grilling)",
+							"Buy thick (1 inch (2.5 cm) or more), bone-in if you can; thin chops overcook in a minute."
+						],
+						[
+							"Shoulder (Boston butt, picnic)",
+							"Tough, fatty",
+							"[Braise](guide:braising-and-stewing), slow-roast or smoke",
+							"Pulled pork and carnitas, cooked until fall-apart tender."
+						],
+						[
+							"Belly",
+							"Fatty",
+							"Slow-roast, braise; cured and smoked it's bacon",
+							"Score the skin and roast hot at the end for crackling."
+						],
+						[
+							"Spare ribs & St. Louis ribs",
+							"Tough, fatty",
+							"Low and slow: oven, grill on indirect heat, or smoker",
+							"From the belly side; more meat and fat than baby backs."
+						],
+						[
+							"Baby back ribs",
+							"More tender",
+							"Low and slow, a bit faster than spare ribs",
+							"From the loin; leaner and smaller."
+						],
+						[
+							"Ham",
+							"Varies",
+							"Most are sold cooked: just reheat",
+							"Reheat a store-bought cooked ham to 140°F (60°C) (165°F (74°C) for leftover ham or one cooked elsewhere); a fresh, uncooked ham is roasted like a big roast."
+						]
+					]
+				}
+			]
+		},
+		{
+			"id": "brining",
+			"heading": "Brining lean pork",
+			"blocks": [
+				"Lean cuts (chops, loin) stay juicier after a brine. Dissolve 50 g of salt (3 Tbsp table salt, ¼ cup Morton kosher or ⅓ cup Diamond Crystal kosher) and a tablespoon of sugar in 4 cups (1 liter) of water, submerge the pork, and refrigerate for 30 minutes (chops) to 4 hours (a loin roast). Rinse, pat very dry, and season without extra salt.",
+				{
+					"type": "tip",
+					"text": "Many supermarket cuts are already \"enhanced\" (injected with salt water); the label says so. Don't brine those, or they'll be too salty."
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["doneness-and-food-safety", "braising-and-stewing", "buying-and-storing-meat"],
+		"recipes": ["slow-cooker-pork-carnitas"]
+	}
+}

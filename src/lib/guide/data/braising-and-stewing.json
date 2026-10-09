@@ -1,0 +1,88 @@
+{
+	"slug": "braising-and-stewing",
+	"name": "Braising & Stewing",
+	"emoji": "🍲",
+	"category": "methods",
+	"tags": [
+		"Braise",
+		"Stew",
+		"Pot roast",
+		"Slow cooker",
+		"Pressure cooker",
+		"Instant Pot",
+		"Dutch oven",
+		"Low and slow",
+		"Tough cuts"
+	],
+	"summary": "Low, slow, moist heat that turns tough, cheap cuts tender, in the oven, on the stove, or in a slow or pressure cooker.",
+	"sections": [
+		{
+			"id": "why",
+			"heading": "Why low and slow",
+			"blocks": [
+				"Hard-working muscles (shoulder, chuck, brisket, shanks, short ribs, thighs) are full of connective tissue (collagen) that makes them chewy when cooked quickly. Held around a gentle simmer for a few hours, collagen melts into gelatin: the meat turns tender and the liquid turns silky.",
+				"That's why braises go far past the usual doneness temperatures: tough cuts are ready when they're **fork-tender**, around 195–205°F (90–96°C), not at 145°F (63°C). They're safe long before that."
+			]
+		},
+		{
+			"id": "braise-vs-stew",
+			"heading": "Braise or stew",
+			"blocks": [
+				"A **braise** is large pieces (a pot roast, short ribs, chicken thighs) partly covered by liquid. A **stew** is smaller, even chunks fully covered. The method is the same."
+			]
+		},
+		{
+			"id": "how-to",
+			"heading": "How to braise",
+			"blocks": [
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						"Pat the meat dry, season it well, and brown it in batches in a heavy pot (a Dutch oven is ideal). Browning builds most of the flavor; don't crowd the pot.",
+						"Take the meat out, then soften onions, carrots, celery and garlic in the fat. Stir in tomato paste or spices for a minute.",
+						"Add liquid (stock, wine, beer, tomatoes) and scrape up the browned bits. For a braise, add enough to come about halfway up the meat; for a stew, just cover it.",
+						"Return the meat, bring to a simmer, cover, and cook gently: in a 300–325°F (150–160°C) oven, or on the stovetop at the lowest simmer. The oven heats more evenly and won't scorch the bottom.",
+						"Cook until a fork slides in and twists easily, usually 2–4 hours depending on the cut and size.",
+						"Skim off the fat, and simmer the liquid uncovered to thicken it if needed. Braises taste even better the next day."
+					]
+				},
+				{
+					"type": "tip",
+					"text": "Keep it at a bare simmer. A hard boil tightens the meat fibers and makes it stringy and dry, even though it's sitting in liquid."
+				}
+			]
+		},
+		{
+			"id": "appliances",
+			"heading": "Slow cookers and pressure cookers",
+			"blocks": [
+				{
+					"type": "table",
+					"columns": ["Appliance", "Time", "Tips"],
+					"rows": [
+						[
+							"Slow cooker",
+							"Low 8–10 hours, high 4–6 hours",
+							"Brown the meat in a pan first for flavor. Use less liquid than on the stove: nothing evaporates. Don't start with frozen meat, which lingers too long in the danger zone."
+						],
+						[
+							"Pressure cooker (Instant Pot)",
+							"About a third of the stovetop time",
+							"Brown on the sauté setting first. Needs a minimum amount of thin liquid to come to pressure; check the manual. Let pressure release naturally for meat, so it stays tender."
+						],
+						[
+							"Oven (Dutch oven)",
+							"2–4 hours at 300–325°F (150–160°C)",
+							"The most even heat and the best browning on top. Lid on, or slightly ajar to reduce the liquid."
+						]
+					]
+				}
+			]
+		}
+	],
+	"related": {
+		"guides": ["grill-stovetop-or-oven", "doneness-and-food-safety"],
+		"recipes": ["slow-cooker-pork-carnitas"]
+	}
+}

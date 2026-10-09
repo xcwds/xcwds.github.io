@@ -126,3 +126,20 @@ test('the doneness chart gives pull and done temperatures and starts a rest time
 	await chart.getByRole('button', { name: 'Start 5 min rest timer' }).click();
 	await expect(page.getByTestId('toast')).toContainText('Chicken & turkey resting');
 });
+
+test('an article can start timers, which join the Cooking Timer', async ({ page }) => {
+	await gotoHydrated(page, '/guide/eggs');
+	await page.getByRole('button', { name: '8 min: Jammy eggs' }).click();
+	await expect(page.getByTestId('toast')).toContainText('Started an 8 min timer: Jammy eggs.');
+	await page.goto('/utils/cooking-timer');
+	await expect(page.getByText('Jammy eggs')).toBeVisible();
+});
+
+test('the guide index groups articles by category and links between them', async ({ page }) => {
+	await gotoHydrated(page, '/guide');
+	for (const name of ['Cooking methods', 'Meat, poultry & fish', 'Vegetables'])
+		await expect(page.getByRole('heading', { name })).toBeVisible();
+	await page.getByRole('link', { name: /Beef Cuts/ }).click();
+	await page.getByRole('link', { name: 'Braising & Stewing' }).first().click();
+	await expect(page).toHaveURL(/\/guide\/braising-and-stewing$/);
+});
