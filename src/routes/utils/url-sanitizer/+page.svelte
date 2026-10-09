@@ -76,9 +76,9 @@
 	const nestedLink = (value: string) => (/^https?:\/\//i.test(value) ? parseLink(value) : null);
 
 	const button =
-		'rounded-xl bg-white/70 px-3 py-2 font-medium active:bg-white disabled:opacity-40 dark:bg-gray-800 dark:active:bg-gray-700';
+		'rounded-xl bg-white/70 px-3 py-2 font-medium hover:not-disabled:bg-white active:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700';
 	const primary =
-		'rounded-xl bg-blue-600 px-3 py-3 text-lg font-semibold text-white active:bg-blue-700';
+		'rounded-xl bg-blue-600 px-3 py-3 text-lg font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700';
 	const field =
 		'w-full min-w-0 rounded-md border border-gray-300 bg-white px-2 py-1.5 text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100';
 </script>

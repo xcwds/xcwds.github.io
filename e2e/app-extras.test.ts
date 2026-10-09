@@ -69,95 +69,111 @@ test('keyboard focus is clearly visible', async ({ page }) => {
 	expect(outline.width).toBeGreaterThanOrEqual(3);
 });
 
-test('every control is at least 44×44px on a phone', async ({ page }) => {
-	const pages: [string, ((p: typeof page) => Promise<void>)?][] = [
-		['/'],
-		[
-			'/',
-			async (p) => {
-				await p.evaluate(() =>
-					localStorage.setItem(
-						'app:home:shortcuts',
-						JSON.stringify({
-							pins: ['/utils/coffee-timer', '/utils/cooking-timer'],
-							recent: ['/utils/pizza-dough']
-						})
-					)
-				);
-				await p.reload();
-				await p.getByRole('button', { name: 'Edit' }).click();
-			}
-		],
-		['/recipes'],
-		['/recipes/pizza-dough'],
-		[
-			'/recipes/banana-bread',
-			(p) =>
-				p
-					.getByLabel('Your pan')
-					.selectOption('square-9')
-					.then(() => {})
-		],
-		[
-			'/recipes/chocolate-chip-cookies',
-			async (p) => {
-				await p.getByRole('button', { name: 'More cookies' }).click();
-				await p.getByText('Cooking at a different temperature?').click();
-				await p.getByRole('button', { name: /^Start \d+ min timer/ }).click();
-				await p.getByTestId('timer-tray').waitFor();
-			}
-		],
-		['/guide'],
-		['/guide/grill-stovetop-or-oven'],
-		['/guide/doneness-and-food-safety'],
-		['/guide/measuring-for-baking'],
-		['/guide/beef'],
-		['/guide/eggs'],
-		['/utils'],
-		['/utils/pizza-dough'],
-		['/utils/coffee-timer'],
-		['/utils/oven-time'],
-		['/utils/cooking-timer', (p) => p.getByRole('button', { name: '5 min', exact: true }).click()],
-		[
-			'/utils/url-sanitizer',
-			(p) => p.getByLabel('Paste a link').fill('https://a.com/?utm_source=x&b=1')
-		],
-		['/utils/weightlifting'],
-		['/settings'],
-		[
-			'/settings',
-			async (p) => {
-				await p.getByRole('button', { name: 'Copy Commercial gym' }).click();
-				await p
-					.getByTestId('set-set-1')
-					.getByRole('button', { name: /^Delete / })
-					.click();
-				await p.getByRole('button', { name: 'New set' }).click();
-			}
-		],
-		['/no-such-page'],
-		[porkChopsPath]
-	];
-	const problems: string[] = [];
-	for (const [path, setup] of pages) {
-		await gotoHydrated(page, path);
-		await setup?.(page);
-		const small = await page.evaluate(() =>
-			[...document.querySelectorAll('a, button, input, select, textarea, summary')]
-				.filter((el) => (el as HTMLElement).offsetParent !== null)
-				// Inline text links are exempt (WCAG 2.5.8); checkboxes use their label's hit area.
-				.filter((el) => getComputedStyle(el).display !== 'inline')
-				.map((el) => {
-					const target =
-						(el as HTMLInputElement).type === 'checkbox' ? (el.closest('label') ?? el) : el;
-					const { width, height } = target.getBoundingClientRect();
-					const name = el.getAttribute('aria-label') || el.textContent?.trim() || el.tagName;
-					return { name: name.slice(0, 40), width: Math.round(width), height: Math.round(height) };
-				})
-				.filter(({ width, height }) => width < 44 || height < 44)
-				.map(({ name, width, height }) => `${name} (${width}×${height})`)
-		);
-		problems.push(...small.map((s) => `${path}: ${s}`));
-	}
-	expect(problems).toEqual([]);
-});
+// Phone, tablet portrait and landscape, and computer (#95): each layout has its own controls.
+for (const [name, viewport] of [
+	['a phone', { width: 390, height: 844 }],
+	['a tablet in portrait', { width: 820, height: 1180 }],
+	['a tablet in landscape', { width: 1180, height: 820 }],
+	['a computer', { width: 1440, height: 900 }]
+] as const) {
+	test(`every control is at least 44×44px on ${name}`, async ({ page }) => {
+		await page.setViewportSize(viewport);
+		const pages: [string, ((p: typeof page) => Promise<void>)?][] = [
+			['/'],
+			[
+				'/',
+				async (p) => {
+					await p.evaluate(() =>
+						localStorage.setItem(
+							'app:home:shortcuts',
+							JSON.stringify({
+								pins: ['/utils/coffee-timer', '/utils/cooking-timer'],
+								recent: ['/utils/pizza-dough']
+							})
+						)
+					);
+					await p.reload();
+					await p.getByRole('button', { name: 'Edit' }).click();
+				}
+			],
+			['/recipes'],
+			['/recipes/pizza-dough'],
+			[
+				'/recipes/banana-bread',
+				(p) =>
+					p
+						.getByLabel('Your pan')
+						.selectOption('square-9')
+						.then(() => {})
+			],
+			[
+				'/recipes/chocolate-chip-cookies',
+				async (p) => {
+					await p.getByRole('button', { name: 'More cookies' }).click();
+					await p.getByText('Cooking at a different temperature?').click();
+					await p.getByRole('button', { name: /^Start \d+ min timer/ }).click();
+					await p.getByTestId('timer-tray').waitFor();
+				}
+			],
+			['/guide'],
+			['/guide/grill-stovetop-or-oven'],
+			['/guide/doneness-and-food-safety'],
+			['/guide/measuring-for-baking'],
+			['/guide/beef'],
+			['/guide/eggs'],
+			['/utils'],
+			['/utils/pizza-dough'],
+			['/utils/coffee-timer'],
+			['/utils/oven-time'],
+			[
+				'/utils/cooking-timer',
+				(p) => p.getByRole('button', { name: '5 min', exact: true }).click()
+			],
+			[
+				'/utils/url-sanitizer',
+				(p) => p.getByLabel('Paste a link').fill('https://a.com/?utm_source=x&b=1')
+			],
+			['/utils/weightlifting'],
+			['/settings'],
+			[
+				'/settings',
+				async (p) => {
+					await p.getByRole('button', { name: 'Copy Commercial gym' }).click();
+					await p
+						.getByTestId('set-set-1')
+						.getByRole('button', { name: /^Delete / })
+						.click();
+					await p.getByRole('button', { name: 'New set' }).click();
+				}
+			],
+			['/no-such-page'],
+			[porkChopsPath]
+		];
+		const problems: string[] = [];
+		for (const [path, setup] of pages) {
+			await gotoHydrated(page, path);
+			await setup?.(page);
+			const small = await page.evaluate(() =>
+				[...document.querySelectorAll('a, button, input, select, textarea, summary')]
+					.filter((el) => (el as HTMLElement).offsetParent !== null)
+					// Inline text links are exempt (WCAG 2.5.8); checkboxes use their label's hit area.
+					.filter((el) => getComputedStyle(el).display !== 'inline')
+					.map((el) => {
+						const target =
+							(el as HTMLInputElement).type === 'checkbox' ? (el.closest('label') ?? el) : el;
+						const { width, height } = target.getBoundingClientRect();
+						const name = el.getAttribute('aria-label') || el.textContent?.trim() || el.tagName;
+						return {
+							name: name.slice(0, 40),
+							width: Math.round(width),
+							height: Math.round(height)
+						};
+					})
+					.filter(({ width, height }) => width < 44 || height < 44)
+					.map(({ name, width, height }) => `${name} (${width}×${height})`)
+			);
+			problems.push(...small.map((s) => `${path}: ${s}`));
+		}
+		expect(problems).toEqual([]);
+	});
+}

@@ -7,7 +7,7 @@
 	let { timers }: { timers: CookingTimers } = $props();
 
 	const small =
-		'min-h-11 min-w-11 rounded-xl bg-white/70 px-3 text-sm active:bg-white dark:bg-gray-800 dark:active:bg-gray-700';
+		'min-h-11 min-w-11 rounded-xl bg-white/70 px-3 text-sm hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700';
 </script>
 
 {#if timers.items.length}
@@ -34,7 +34,7 @@
 						</button>
 						<button
 							type="button"
-							class="min-h-11 rounded-xl bg-blue-600 px-3 text-sm font-semibold text-white active:bg-blue-700"
+							class="min-h-11 rounded-xl bg-blue-600 px-3 text-sm font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700"
 							onclick={() => timers.remove(item)}
 						>
 							Stop

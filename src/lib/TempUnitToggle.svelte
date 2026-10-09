@@ -12,7 +12,7 @@
 			aria-checked={settings.ovenUnit === unit}
 			class="rounded-xl px-3 py-2 text-sm font-medium {settings.ovenUnit === unit
 				? 'bg-blue-600 text-white'
-				: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+				: 'bg-white/70 hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700'}"
 			onclick={() => (settings.ovenUnit = unit)}
 		>
 			{unit === 'F' ? 'Fahrenheit (°F)' : 'Celsius (°C)'}

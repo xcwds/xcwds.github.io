@@ -29,7 +29,7 @@
 			<p>This page couldn't load.{detail ? ` (${detail})` : ''}</p>
 			<button
 				type="button"
-				class="rounded-xl bg-blue-600 px-3 py-2 font-semibold text-white active:bg-blue-700"
+				class="rounded-xl bg-blue-600 px-3 py-2 font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700"
 				onclick={() => location.reload()}
 			>
 				Try again

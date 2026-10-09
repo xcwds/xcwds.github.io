@@ -91,7 +91,7 @@
 			<button
 				type="button"
 				onclick={() => adjust(ms)}
-				class="rounded-xl bg-white/70 py-4 text-lg font-medium active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
+				class="rounded-xl bg-white/70 py-4 text-lg font-medium hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700"
 			>
 				{ms < 0 ? '−' : '+'}{Math.abs(ms) / 1000}s
 			</button>
@@ -102,14 +102,14 @@
 		<button
 			type="button"
 			onclick={toggle}
-			class="rounded-xl bg-blue-600 py-6 text-2xl font-semibold text-white active:bg-blue-700"
+			class="rounded-xl bg-blue-600 py-6 text-2xl font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700"
 		>
 			{timer.running ? (over ? 'Stop' : 'Pause') : 'Start'}
 		</button>
 		<button
 			type="button"
 			onclick={() => reset()}
-			class="rounded-xl bg-white/70 py-6 text-2xl font-semibold active:bg-white dark:bg-gray-800 dark:active:bg-gray-700"
+			class="rounded-xl bg-white/70 py-6 text-2xl font-semibold hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700"
 		>
 			Reset
 		</button>

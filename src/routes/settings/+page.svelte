@@ -212,9 +212,9 @@
 
 	const card = 'flex flex-col gap-3 rounded-2xl bg-white/80 p-4 dark:bg-gray-900';
 	const button =
-		'rounded-xl bg-white/70 px-3 py-2 font-medium active:bg-white disabled:opacity-40 dark:bg-gray-800 dark:active:bg-gray-700';
+		'rounded-xl bg-white/70 px-3 py-2 font-medium hover:not-disabled:bg-white active:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700';
 	const primary =
-		'rounded-xl bg-blue-600 px-3 py-2 font-semibold text-white active:bg-blue-700 disabled:opacity-40';
+		'rounded-xl bg-blue-600 px-3 py-2 font-semibold text-white hover:not-disabled:bg-blue-700 active:bg-blue-700 disabled:opacity-40';
 </script>
 
 <svelte:head>
@@ -259,7 +259,7 @@
 						aria-checked={settings.theme === theme.value}
 						class="rounded-xl px-3 py-2 text-sm font-medium {settings.theme === theme.value
 							? 'bg-blue-600 text-white'
-							: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+							: 'bg-white/70 hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700'}"
 						onclick={() => (settings.theme = theme.value)}
 					>
 						{theme.label}
@@ -286,7 +286,7 @@
 								aria-checked={checked}
 								class="rounded-xl px-3 py-2 text-sm font-medium {checked
 									? 'bg-blue-600 text-white'
-									: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+									: 'bg-white/70 hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700'}"
 								onclick={() => (settings.nav[orientation.key] = style.value)}
 							>
 								{style.label}
@@ -322,7 +322,7 @@
 						aria-checked={settings.lifting.unit === unit}
 						class="rounded-xl px-3 py-2 text-sm font-medium {settings.lifting.unit === unit
 							? 'bg-blue-600 text-white'
-							: 'bg-white/70 active:bg-white dark:bg-gray-800 dark:active:bg-gray-700'}"
+							: 'bg-white/70 hover:not-disabled:bg-white active:bg-white dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700'}"
 						onclick={() => (settings.lifting.unit = unit)}
 					>
 						{unit === 'lb' ? 'Pounds (lb)' : 'Kilograms (kg)'}
@@ -526,7 +526,7 @@
 			</ul>
 			<button
 				type="button"
-				class="rounded-xl bg-red-600 px-3 py-2 font-semibold text-white active:bg-red-700 disabled:opacity-40"
+				class="rounded-xl bg-red-600 px-3 py-2 font-semibold text-white hover:not-disabled:bg-red-700 active:bg-red-700 disabled:opacity-40"
 				disabled={!anyData}
 				onclick={clearAll}
 			>

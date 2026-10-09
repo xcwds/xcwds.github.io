@@ -149,7 +149,8 @@
 					<a
 						href={resolve(section.path)}
 						aria-current={active === section.path ? 'page' : undefined}
-						class="rounded-full px-3 py-1.5 text-sm font-medium {active === section.path
+						class="flex min-h-11 items-center rounded-full px-3 text-sm font-medium {active ===
+						section.path
 							? 'bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100'
 							: 'text-gray-700 hover:bg-white/60 dark:text-gray-300 dark:hover:bg-gray-800'}"
 					>
