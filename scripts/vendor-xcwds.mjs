@@ -1,7 +1,7 @@
-// Packs the @xcwds packages from a checkout of xcwds/core into vendor/xcwds/, which package.json
-// installs from until they are published to npm (xcwds/core#26). Run it after changing core:
+// Packs the @xcwds packages from a checkout of xcwds/xcwds into vendor/xcwds/, which package.json
+// installs from until they are published to npm (xcwds/xcwds#26). Run it after changing the framework:
 //
-//   node scripts/vendor-xcwds.mjs ../core && pnpm install --no-frozen-lockfile
+//   node scripts/vendor-xcwds.mjs ../xcwds && pnpm install --no-frozen-lockfile
 //
 // It builds core first, so the tarballs hold current `dist/` folders.
 import { execFileSync } from 'node:child_process';
@@ -24,7 +24,7 @@ export const PACKAGES = [
 	'plugin-changelog'
 ];
 
-const core = resolve(process.argv[2] ?? '../core');
+const core = resolve(process.argv[2] ?? '../xcwds');
 const out = resolve('vendor/xcwds');
 const run = (cmd, args, cwd) => execFileSync(cmd, args, { cwd, stdio: 'inherit' });
 
@@ -35,4 +35,4 @@ mkdirSync(out, { recursive: true });
 for (const name of PACKAGES)
 	run('pnpm', ['pack', '--pack-destination', out], join(core, 'packages', name));
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: core, encoding: 'utf8' }).trim();
-console.log(`Packed ${readdirSync(out).length} packages from xcwds/core ${commit}.`);
+console.log(`Packed ${readdirSync(out).length} packages from xcwds/xcwds ${commit}.`);
