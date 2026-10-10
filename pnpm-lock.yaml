@@ -915,7 +915,7 @@ packages:
         optional: true
 
   '@xcwds/plugin-changelog@file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz':
-    resolution: {integrity: sha512-tQZkEiO1yVD3vkp8k1IsnMnKkyMkA8Z8oT56MXvuoK6co6xcCeM4BKyQ3oT5V3PfUTIURTefbY+b4y4tAgVGyw==, tarball: file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz}
+    resolution: {integrity: sha512-SkN7WVlwNENZvv8Ph+CtmKv/cKtu0XwN47Ss1PySq0oexmPyAGqFeIG9G8XMbttyE0cQkV92YcGgZy45rk0vTQ==, tarball: file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz}
     version: 0.0.0
     engines: {node: '>=22.18'}
     peerDependencies:
@@ -939,7 +939,7 @@ packages:
       svelte: ^5.0.0
 
   '@xcwds/plugin-settings@file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz':
-    resolution: {integrity: sha512-XcjnoQUkQ5gAxBtFlL2Txmv5tdh5GhllNvS+IaN5uNcmMK07oRSkEWmMmkOsa7K3IHnClHjN/IAJaw8KmEuf5A==, tarball: file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz}
+    resolution: {integrity: sha512-htFaF+am3FoTp+WAyqms585D5UGXoqKaGnrZsyYaNT/wFaDtjzFwbaCKcm+cnLktBm6jtwOIBH6VimpOs0jQ+w==, tarball: file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz}
     version: 0.0.0
     engines: {node: '>=22.18'}
     peerDependencies:
@@ -952,7 +952,7 @@ packages:
         optional: true
 
   '@xcwds/plugin-share@file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz':
-    resolution: {integrity: sha512-LYD1MVFMJ9N2XBMfgdqWG4sEt/l89FcXimTedbSonV1ZfE/oOipA5bLRYvF0Dy0NWSCq8Gju3mmBn3FJs2SreQ==, tarball: file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz}
+    resolution: {integrity: sha512-RpCfHf5Bp53T/cvLgb8kD7J3pPyPjWVoLsUTV5cHE4TtDBAgRo9OLysTS4EkIs0DtiU3WzWDYYVm3y+ZZC/cqg==, tarball: file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz}
     version: 0.0.0
     engines: {node: '>=22.18'}
     peerDependencies:
@@ -965,7 +965,7 @@ packages:
         optional: true
 
   '@xcwds/plugin-shell@file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz':
-    resolution: {integrity: sha512-LGX6IPKvZ//gHYTCpjbMbLQeQyOISUX8k/aciHJ9Doy4ZW+xJMwn9/xQvyslqn3MXQ2LdZAUt+0Tm17OgFJZDA==, tarball: file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz}
+    resolution: {integrity: sha512-fMAt6YV0rx6wTLdhclerwi5KYR54dQ70FCQNsGY1qouK33hdFt6Wh8UhmiI1742R6brh4zLSBho/9sORTupHuA==, tarball: file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz}
     version: 0.0.0
     engines: {node: '>=22.18'}
     peerDependencies:
@@ -982,7 +982,7 @@ packages:
       svelte: ^5.0.0
 
   '@xcwds/plugin-timers@file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz':
-    resolution: {integrity: sha512-EwMWOqYvyevdcnnfXoVO4qzK2c0HOmGMjuaX+xAoZtlParM17ZQ6Q3yEjsGnC9VXP2sM9Nm2a5svz0KnYVu18w==, tarball: file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz}
+    resolution: {integrity: sha512-EBn/7ZYvcwmUwswNJnrOfhVBx0IMlx8p9AXzR3ANbeNA+L0cOx62Z2S9ddNgSIjFhrBwwQ41UlaoHuRlvXx6DQ==, tarball: file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz}
     version: 0.0.0
     engines: {node: '>=22.18'}
     peerDependencies:
@@ -995,7 +995,7 @@ packages:
         optional: true
 
   '@xcwds/plugin-tools@file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz':
-    resolution: {integrity: sha512-PxG+v09zGQZ0XcsbvR/FfjC+6EVvbiZmn5ulLLkyRYMYX6U7ZF2DaMk7bw26yq+yndqgh4HOYG7pQA0dRa4ApA==, tarball: file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz}
+    resolution: {integrity: sha512-2R/ttWZxFqtTmbYXZ51Fr4XevdPW8k0T1X8ZveBqMkIBy6niDcE5tzXW+958z17pce8Jg8CWcnuhxJRIT+HMLw==, tarball: file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz}
     version: 0.0.0
     engines: {node: '>=22.18'}
     peerDependencies:
@@ -1008,7 +1008,7 @@ packages:
         optional: true
 
   '@xcwds/plugin-update@file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz':
-    resolution: {integrity: sha512-i36vhDUfKlJn+08jpzCqFuculy6jYPEDRcRSuKmtwnDdXpuag5BAFEiVL6cUaXU4OqFbAMC4AN223/3nEPlB0A==, tarball: file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz}
+    resolution: {integrity: sha512-f3PcUBSZ6F3jG2OLMhQh2Xre2cOaNFUJ8GJdZpmiaqYx6BlBWjAM/Y2UJY8PuXy3fjw3K66Vo+yZABrsjt9REw==, tarball: file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz}
     version: 0.0.0
     engines: {node: '>=22.18'}
     peerDependencies:
@@ -1016,7 +1016,7 @@ packages:
       svelte: ^5.0.0
 
   '@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz':
-    resolution: {integrity: sha512-lFx8M/3R1Lbzq9b2TU1x7YOVhe8MhM90KPqfRRk5fCV20ky/is89odLzQekxWW9wGmaxlipgolRC+55JuRMS3A==, tarball: file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz}
+    resolution: {integrity: sha512-bmb5cjeAO5LIQND01esk7hVipRG5rCh/sx9BD7YXX1EwkfCP1K8uEFzFyUPxtJy5oOJc1SFX0HlIlhJ1bht7HQ==, tarball: file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz}
     version: 0.0.0
     engines: {node: '>=22.18'}
     peerDependencies:
