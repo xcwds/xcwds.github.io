@@ -17,14 +17,14 @@ export function primeAudio() {
 
 /** Plays `count` short beeps and vibrates where supported, per the alarm settings. */
 export function beep(count = 3) {
-	if (settings.vibration) {
+	if (settings.alarm.vibration) {
 		try {
 			navigator.vibrate?.(Array.from({ length: count * 2 - 1 }, (_, i) => (i % 2 ? 150 : 300)));
 		} catch {
 			// Vibration unsupported (e.g. iOS Safari).
 		}
 	}
-	if (!context || !settings.sound) return;
+	if (!context || !settings.alarm.sound) return;
 	const start = context.currentTime + 0.05;
 	for (let i = 0; i < count; i++) {
 		const t = start + i * 0.45;
@@ -45,7 +45,7 @@ export function keepAwake(active: () => boolean) {
 	let sentinel: WakeLockSentinel | undefined;
 
 	async function sync() {
-		const want = settings.keepAwake && active() && document.visibilityState === 'visible';
+		const want = settings.alarm.keepAwake && active() && document.visibilityState === 'visible';
 		try {
 			if (want && !sentinel && 'wakeLock' in navigator) {
 				sentinel = await navigator.wakeLock.request('screen');

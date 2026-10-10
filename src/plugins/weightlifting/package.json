@@ -1,0 +1,11 @@
+{
+	"name": "xcwds-app-weightlifting",
+	"version": "0.0.0",
+	"private": true,
+	"description": "The Weightlifting Calculator: its tool, equipment sets, saved workout and history.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts"
+	}
+}

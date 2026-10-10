@@ -1,0 +1,11 @@
+{
+	"name": "xcwds-app-pizza-dough",
+	"version": "0.0.0",
+	"private": true,
+	"description": "The Pizza Dough Calculator: its tool and saved defaults.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts"
+	}
+}

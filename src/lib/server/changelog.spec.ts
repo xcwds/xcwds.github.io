@@ -3,7 +3,6 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { changelog } from '../changelog';
 import { loadChangelog, parseEntry } from './changelog';
 
 describe('parseEntry', () => {
@@ -144,6 +143,7 @@ describe('loadChangelog', () => {
 
 describe('the app changelog', () => {
 	it('is compiled newest first, and keeps the ids entries had before they moved to files', () => {
+		const changelog = loadChangelog();
 		expect(changelog.length).toBeGreaterThanOrEqual(33);
 		expect(changelog.map((e) => e.id)).toEqual(
 			[...changelog.map((e) => e.id)].sort((a, b) => b - a)

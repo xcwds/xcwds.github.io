@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 
-	// The layout header shows the title (see errorInfo in src/lib/nav.ts); this is the body.
+	// The shell's header shows the title (`@xcwds/plugin-shell`); this is the body.
 	let notFound = $derived(page.status === 404);
 	// SvelteKit's message for unexpected errors says nothing useful; show only messages a page set.
 	let detail = $derived(page.error?.message === 'Internal Error' ? '' : page.error?.message);

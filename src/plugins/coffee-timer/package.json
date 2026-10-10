@@ -1,0 +1,11 @@
+{
+	"name": "xcwds-app-coffee-timer",
+	"version": "0.0.0",
+	"private": true,
+	"description": "The Coffee Timer: its tool, saved brew and default length.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts"
+	}
+}

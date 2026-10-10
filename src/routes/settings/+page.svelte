@@ -6,7 +6,7 @@
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import EquipmentSets from './EquipmentSets.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
-	import { changelog, latestChangelogId } from '$lib/changelog';
+	import { useApp } from '@xcwds/sveltekit';
 	import { reloadShortcuts } from '$lib/home.svelte';
 	import { install, promptInstall } from '$lib/install.svelte';
 	import { reloadSettings, settings } from '$lib/settings.svelte';
@@ -21,14 +21,13 @@
 		defaultSettings,
 		entries,
 		exportData,
-		groups,
+		groups as savedGroups,
 		importData,
 		parseBackup,
 		parseCookingPresets,
 		read,
 		remove,
 		storageWritable,
-		write,
 		type Group,
 		type ParsedBackup,
 		type NavStyle,
@@ -103,6 +102,9 @@
 	let acronymTaps = $state(0);
 	let secret = $derived(Math.floor(acronymTaps / 3) % 2 === 1);
 
+	/** What the app saves, by group (every entry is registered once the plugins have loaded). */
+	const groups = savedGroups();
+
 	const hasData = (group: Group) => {
 		void dataVersion;
 		// Changed settings are saved by an effect after this runs, so compare in memory too.
@@ -119,18 +121,21 @@
 			})
 		: version;
 
-	// --- What's new ---
+	// --- What's new (`@xcwds/plugin-changelog`: it lists the newest 10) ---
+	const changelog = useApp().changelog;
+	const changelogEntries = changelog?.entries ?? [];
 	/** Entries newer than this get a "New" badge for this visit (none on a fresh install). */
-	let seenBefore = $state(latestChangelogId);
-	const RECENT = 10;
+	let seenBefore = $state(changelog?.latest ?? 0);
 
 	/** False when this browser won't let the app save (blocked or full storage). */
 	let writable = $state(true);
 
 	onMount(() => {
 		writable = storageWritable();
-		seenBefore = read(entries.whatsNewSeen) ?? latestChangelogId;
-		if (seenBefore < latestChangelogId) write(entries.whatsNewSeen, latestChangelogId);
+		if (changelog) {
+			seenBefore = changelog.seen();
+			changelog.markSeen();
+		}
 		try {
 			canShareFiles = navigator.canShare?.({ files: [backupFile()] }) ?? false;
 		} catch {
@@ -305,7 +310,11 @@
 						<span class="font-medium">{toggle.label}</span>
 						<span class="text-sm text-gray-600 dark:text-gray-400">{toggle.hint}</span>
 					</span>
-					<input type="checkbox" class="size-6 shrink-0" bind:checked={settings[toggle.key]} />
+					<input
+						type="checkbox"
+						class="size-6 shrink-0"
+						bind:checked={settings.alarm[toggle.key]}
+					/>
 				</label>
 			{/each}
 		</section>
@@ -565,7 +574,7 @@
 		<section class={card} aria-labelledby="whats-new" data-testid="whats-new">
 			<h2 id="whats-new" class="text-lg font-semibold">What's new</h2>
 			<ol class="flex flex-col gap-3 text-sm">
-				{#each changelog.slice(0, RECENT) as entry (entry.id)}
+				{#each changelogEntries as entry (entry.id)}
 					<li data-testid="whats-new-entry">
 						<p class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
 							<time datetime={entry.date}

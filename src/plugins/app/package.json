@@ -1,0 +1,11 @@
+{
+	"name": "xcwds-app",
+	"version": "0.0.0",
+	"private": true,
+	"description": "The app's own: saved data from before @xcwds (its keys, schema version and migrations) and its standalone pages.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts"
+	}
+}

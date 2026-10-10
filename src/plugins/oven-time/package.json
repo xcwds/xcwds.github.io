@@ -1,0 +1,11 @@
+{
+	"name": "xcwds-app-oven-time",
+	"version": "0.0.0",
+	"private": true,
+	"description": "The Oven Time Converter: its tool and the °F/°C setting.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts"
+	}
+}

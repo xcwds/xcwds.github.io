@@ -1,0 +1,11 @@
+{
+	"name": "xcwds-app-recipes",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Recipes and the Kitchen Guide: their pages and the recipe units setting.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts"
+	}
+}

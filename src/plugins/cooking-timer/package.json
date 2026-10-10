@@ -1,0 +1,11 @@
+{
+	"name": "xcwds-app-cooking-timer",
+	"version": "0.0.0",
+	"private": true,
+	"description": "The Cooking Timer: its tool and quick-start presets (the timers are @xcwds/plugin-timers).",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts"
+	}
+}

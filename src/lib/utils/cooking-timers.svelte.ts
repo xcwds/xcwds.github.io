@@ -1,75 +1,64 @@
+import type { TimerItem } from '@xcwds/plugin-timers/client';
+import { getApp } from '@xcwds/sveltekit';
 import { getContext, onMount, setContext } from 'svelte';
-import { browser } from '$app/environment';
-import { markBusy } from '$lib/app-update.svelte';
-import { persist } from '$lib/persist.svelte';
-import { entries } from '$lib/storage';
-import { beep, keepAwake, primeAudio } from './alarm';
 import { formatDuration } from './time';
-import { Timer } from './timer.svelte';
 
 export const MINUTE = 60_000;
 
-export type CookingTimerItem = { id: number; label: string; timer: Timer };
+/** One cooking timer as pages show it: live values from `@xcwds/plugin-timers`. */
+export type CookingTimerItem = {
+	id: number;
+	label: string;
+	timer: {
+		running: boolean;
+		/** Signed remaining time in ms; negative once the timer has run over. */
+		remaining: number;
+		done: boolean;
+		/** Adds (or removes) time; on a finished timer, snoozes it. */
+		add(ms: number): void;
+	};
+};
 
 /**
- * The saved list of labeled cooking timers, shared by the Cooking Timer page and recipe step
- * timers (`app:cooking-timer:timers`). The root layout owns the one instance (see
- * `provideCookingTimers`), so the alarm rings, the screen stays awake and app updates wait on
- * every page, not just the one that started a timer (#66).
+ * The labeled cooking timers, shared by the Cooking Timer page and recipe step timers. They are
+ * `@xcwds/plugin-timers`' timers (saved as `app:cooking-timer:timers`), which ring, keep the
+ * screen awake and hold app updates on every page, not just the one that started a timer (#66).
  */
 export class CookingTimers {
 	items = $state<CookingTimerItem[]>([]);
+	#ringing = $state<number[]>([]);
 
 	constructor() {
-		markBusy('cooking timers', () => this.anyRunning);
-
-		const awake = browser ? keepAwake(() => this.anyRunning) : undefined;
-		$effect(() => {
-			void this.anyRunning;
-			void awake?.sync();
+		onMount(() => {
+			const timers = getApp().timers;
+			return timers?.subscribe((list) => {
+				this.items = list.map((item) => this.#view(item));
+				this.#ringing = list.filter((item) => timers.ringing(item)).map((item) => item.id);
+			});
 		});
+	}
 
-		// Keep beeping until every finished timer is stopped or snoozed.
-		$effect(() => {
-			if (!this.anyRinging) return;
-			beep(2);
-			const interval = setInterval(() => beep(2), 3000);
-			return () => clearInterval(interval);
-		});
-
-		// Timers keep counting across reloads: end times are saved, not remaining ticks.
-		persist(
-			entries.cookingTimers,
-			() => this.items.map(({ id, label, timer }) => ({ id, label, state: timer.toJSON() })),
-			(saved) => {
-				// Also runs when another tab changes the timers; stop the ones being replaced.
-				this.#destroyAll();
-				this.items = saved.map(({ id, label, state }) => {
-					const timer = new Timer(state.duration);
-					timer.restore(state);
-					return { id, label, timer };
-				});
-			},
-			{
-				cleared: () => {
-					this.#destroyAll();
-					this.items = [];
-				}
+	#view(item: TimerItem): CookingTimerItem {
+		const timers = getApp().timers!;
+		const remaining = timers.remaining(item);
+		return {
+			id: item.id,
+			label: item.label,
+			timer: {
+				running: item.state.endsAt !== null,
+				remaining,
+				done: remaining <= 0,
+				add: (ms) => timers.add(item.id, ms)
 			}
-		);
-
-		onMount(() => () => {
-			awake?.destroy();
-			this.#destroyAll();
-		});
+		};
 	}
 
 	ringing(item: CookingTimerItem): boolean {
-		return item.timer.running && item.timer.done;
+		return this.#ringing.includes(item.id);
 	}
 
 	get anyRinging(): boolean {
-		return this.items.some((item) => this.ringing(item));
+		return this.#ringing.length > 0;
 	}
 
 	get anyRunning(): boolean {
@@ -79,29 +68,23 @@ export class CookingTimers {
 	/** Starts a new timer. Call from a tap handler, so the alarm can play sound later (iOS). */
 	add(ms: number, label: string): void {
 		if (ms <= 0) return;
-		primeAudio();
-		const timer = new Timer(ms);
-		timer.start();
-		this.items.push({
-			id: Date.now() + Math.random(),
-			label: label || `${formatDuration(ms)} timer`,
-			timer
-		});
+		getApp().timers?.create(label || `${formatDuration(ms)} timer`, ms);
 	}
 
 	remove(item: CookingTimerItem): void {
-		item.timer.destroy();
-		this.items = this.items.filter((i) => i.id !== item.id);
+		getApp().timers?.remove(item.id);
 	}
 
 	toggle(item: CookingTimerItem): void {
-		primeAudio();
-		if (item.timer.running) item.timer.pause();
-		else item.timer.start();
+		getApp().timers?.toggle(item.id);
 	}
 
-	#destroyAll() {
-		for (const item of this.items) item.timer.destroy();
+	/**
+	 * Says this page lists every timer, so finished ones don't also show as alerts. Call during
+	 * component init.
+	 */
+	showAll(): void {
+		onMount(() => getApp().timers?.show());
 	}
 }
 

@@ -12,6 +12,8 @@
 
 	// Saved timers, shared with recipe step timers; the root layout rings them on every page.
 	const timers = useCookingTimers();
+	// This page lists every cooking timer, so finished ones don't also show as alerts.
+	timers.showAll();
 
 	let label = $state('');
 	let minutes = $state<number | null>(null);

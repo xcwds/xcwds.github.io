@@ -1,7 +1,7 @@
 /**
- * Compiles `changelog/*.md` (one file per What's new entry) into the list `$lib/changelog`
- * exports. Runs in Node only: the Vite plugin in `vite.config.ts` serves the result as
- * `virtual:changelog`, and e2e tests call `loadChangelog()` directly.
+ * Compiles `changelog/*.md` (one file per What's new entry) into the list
+ * `xcwds.config.ts` passes to `@xcwds/plugin-changelog`. Runs in Node only; e2e tests call
+ * `loadChangelog()` directly.
  *
  * A file is a bullet list of items, with optional `id` and `date` frontmatter. Only the entries
  * written before this folder existed set them; for every other file both come from the commit
@@ -9,10 +9,8 @@
  */
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
-import { sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Plugin } from 'vite';
-import type { ChangelogEntry } from '../changelog';
+import type { ChangelogEntry } from '@xcwds/plugin-changelog';
 
 export const CHANGELOG_DIR = fileURLToPath(new URL('../../../changelog', import.meta.url));
 
@@ -191,30 +189,4 @@ export function loadChangelog(dir = CHANGELOG_DIR, strict = !!process.env.CI): C
 	const files = readdirSync(dir).filter(isEntryFile).sort();
 	const parsed = files.map((file) => parseEntry(file, readFileSync(`${dir}/${file}`, 'utf8')));
 	return assignIds(parsed, () => addedTimes(dir, strict));
-}
-
-const VIRTUAL_ID = 'virtual:changelog';
-const RESOLVED_ID = `\0${VIRTUAL_ID}`;
-
-/** Vite plugin serving `loadChangelog()` as `virtual:changelog`, reloading in dev on edits. */
-export function changelogPlugin(dir = CHANGELOG_DIR): Plugin {
-	return {
-		name: 'xcwds-changelog',
-		resolveId: (id) => (id === VIRTUAL_ID ? RESOLVED_ID : undefined),
-		load(id) {
-			if (id !== RESOLVED_ID) return;
-			this.addWatchFile(dir);
-			return `export default ${JSON.stringify(loadChangelog(dir))};`;
-		},
-		configureServer(server) {
-			server.watcher.add(dir);
-			const reload = (file: string) => {
-				if (!file.startsWith(dir + sep)) return;
-				const module = server.moduleGraph.getModuleById(RESOLVED_ID);
-				if (module) server.moduleGraph.invalidateModule(module);
-				server.ws.send({ type: 'full-reload' });
-			};
-			server.watcher.on('add', reload).on('change', reload).on('unlink', reload);
-		}
-	};
 }

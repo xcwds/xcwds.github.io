@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { parseInline, type Inline } from '$lib/guide';
-	import type { tools } from '$lib/utils/tools';
+	import type { ToolPath } from '$lib/utils/tools';
 
 	let { text }: { text: string } = $props();
-
-	type ToolPath = (typeof tools)[number]['path'];
 
 	// guide.spec.ts checks that every link points at a real article, section, recipe or tool.
 	function href(part: Exclude<Inline, { kind: 'text' }>): string {
