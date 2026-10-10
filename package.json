@@ -41,15 +41,50 @@
 		"typescript-eslint": "^8.48.1",
 		"vite": "^7.2.6",
 		"vitest": "^4.0.15",
-		"vitest-browser-svelte": "^2.0.1"
+		"vitest-browser-svelte": "^2.0.1",
+		"@xcwds/testing": "file:vendor/xcwds/xcwds-testing-0.0.0.tgz",
+		"@resvg/resvg-js": "^2.6.2"
 	},
 	"dependencies": {
 		"@tailwindcss/vite": "^4.1.18",
-		"tailwindcss": "^4.1.18"
+		"tailwindcss": "^4.1.18",
+		"@xcwds/core": "file:vendor/xcwds/xcwds-core-0.0.0.tgz",
+		"@xcwds/sveltekit": "file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz",
+		"@xcwds/plugin-shell": "file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz",
+		"@xcwds/plugin-theme": "file:vendor/xcwds/xcwds-plugin-theme-0.0.0.tgz",
+		"@xcwds/plugin-offline": "file:vendor/xcwds/xcwds-plugin-offline-0.0.0.tgz",
+		"@xcwds/plugin-update": "file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz",
+		"@xcwds/plugin-install": "file:vendor/xcwds/xcwds-plugin-install-0.0.0.tgz",
+		"@xcwds/plugin-settings": "file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz",
+		"@xcwds/plugin-tools": "file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz",
+		"@xcwds/plugin-timers": "file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz",
+		"@xcwds/plugin-share": "file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz",
+		"@xcwds/plugin-changelog": "file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz",
+		"xcwds-app": "link:src/plugins/app",
+		"xcwds-app-coffee-timer": "link:src/plugins/coffee-timer",
+		"xcwds-app-cooking-timer": "link:src/plugins/cooking-timer",
+		"xcwds-app-oven-time": "link:src/plugins/oven-time",
+		"xcwds-app-pizza-dough": "link:src/plugins/pizza-dough",
+		"xcwds-app-recipes": "link:src/plugins/recipes",
+		"xcwds-app-url-sanitizer": "link:src/plugins/url-sanitizer",
+		"xcwds-app-weightlifting": "link:src/plugins/weightlifting"
 	},
 	"pnpm": {
 		"overrides": {
-			"vite": "$vite"
+			"vite": "$vite",
+			"@xcwds/core": "file:vendor/xcwds/xcwds-core-0.0.0.tgz",
+			"@xcwds/sveltekit": "file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz",
+			"@xcwds/testing": "file:vendor/xcwds/xcwds-testing-0.0.0.tgz",
+			"@xcwds/plugin-shell": "file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz",
+			"@xcwds/plugin-theme": "file:vendor/xcwds/xcwds-plugin-theme-0.0.0.tgz",
+			"@xcwds/plugin-offline": "file:vendor/xcwds/xcwds-plugin-offline-0.0.0.tgz",
+			"@xcwds/plugin-update": "file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz",
+			"@xcwds/plugin-install": "file:vendor/xcwds/xcwds-plugin-install-0.0.0.tgz",
+			"@xcwds/plugin-settings": "file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz",
+			"@xcwds/plugin-tools": "file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz",
+			"@xcwds/plugin-timers": "file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz",
+			"@xcwds/plugin-share": "file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz",
+			"@xcwds/plugin-changelog": "file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz"
 		}
 	}
 }

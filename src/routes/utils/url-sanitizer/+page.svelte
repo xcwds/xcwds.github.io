@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { useApp } from '@xcwds/sveltekit';
 	import { onMount } from 'svelte';
 	import { toast } from '$lib/toast.svelte';
-	import { readSharedText } from '$lib/utils/share';
 	import { buildLink, isTrackingParam, parseLink, readParams, type Param } from '$lib/utils/url';
 
 	let input = $state('');
@@ -9,6 +9,7 @@
 	let params = $state<Param[]>([]);
 	let canPaste = $state(false);
 	let canShare = $state(false);
+	const app = useApp();
 	let shortcutPrefix = $state('https://xcwds.com/utils/url-sanitizer#url=');
 
 	let cleaned = $derived(url ? buildLink(url, params) : '');
@@ -24,18 +25,10 @@
 
 		shortcutPrefix = `${location.origin}${location.pathname}#url=`;
 
-		// A link shared in from the phone (Android share target or the iPhone Shortcut). Safari
-		// may reuse an open tab and only change the hash, so listen for that too.
-		const receive = () => {
-			const shared = readSharedText(new URL(location.href));
-			if (shared === null) return;
-			load(shared);
-			// Don't leave the link in the address bar or browser history.
-			history.replaceState(history.state, '', location.pathname);
-		};
-		receive();
-		window.addEventListener('hashchange', receive);
-		return () => window.removeEventListener('hashchange', receive);
+		// A link shared in from the phone (Android share target or the iPhone Shortcut), now and
+		// whenever Safari reuses this tab; `@xcwds/plugin-share` keeps it out of the address bar.
+		// Share sheets often put the link in `text` beside a title; `parseLink` finds it.
+		return app.shared?.listen((shared) => load(shared.joined));
 	});
 
 	function load(text: string) {

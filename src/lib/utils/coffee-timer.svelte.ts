@@ -1,6 +1,6 @@
 import { getContext, onMount, setContext } from 'svelte';
 import { browser } from '$app/environment';
-import { markBusy } from '$lib/app-update.svelte';
+import { markBusy } from '$lib/busy';
 import { persist } from '$lib/persist.svelte';
 import { entries } from '$lib/storage';
 import { beep, keepAwake, primeAudio } from './alarm';

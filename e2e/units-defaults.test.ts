@@ -135,5 +135,6 @@ test('saved weightlifting data from before units is upgraded', async ({ page }) 
 	await expect(page.getByTestId('total')).toHaveText('45 lb');
 	// You didn't have 35s.
 	await expect(page.getByRole('button', { name: 'Add 35 lb', exact: true })).toHaveCount(0);
-	expect(await page.evaluate(() => localStorage.getItem('app:version'))).toBe('3');
+	// Upgraded to the current schema (v4 moved the alarm settings when the app moved onto @xcwds).
+	expect(await page.evaluate(() => localStorage.getItem('app:version'))).toBe('4');
 });

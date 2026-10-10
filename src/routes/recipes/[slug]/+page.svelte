@@ -62,6 +62,8 @@
 
 	// Step timers go into the shared Cooking Timer list; the tray below shows them.
 	const timers = useCookingTimers();
+	// This page lists every cooking timer, so finished ones don't also show as alerts.
+	timers.showAll();
 	/** The oven panel's temperature while it's open and in use (°F); oven step timers follow it. */
 	let ovenF = $state<number | undefined>();
 

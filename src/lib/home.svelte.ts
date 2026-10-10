@@ -1,79 +1,26 @@
-import {
-	emptyShortcuts,
-	sameShortcuts,
-	withPinMoved,
-	withPinToggled,
-	withVisit,
-	type HomeShortcuts
-} from './home';
-import { hasUnsavedChanges, saveResult } from './persist.svelte';
-import { entries, latest, read, update } from './storage';
-import { toast } from './toast.svelte';
-import { tools } from './utils/tools';
+import { getApp } from '@xcwds/sveltekit';
+import { emptyShortcuts, type HomeShortcuts } from './home';
 
-const entry = entries.homeShortcuts;
-
-/** Tools pinned to Home and the recently opened ones. Reactive; change it with the functions below. */
+/**
+ * Tools pinned to Home and the recently opened ones, from `@xcwds/plugin-tools` (saved as
+ * `app:home:shortcuts`; opening a tool records it). Reactive; change it with the functions below.
+ */
 export const shortcuts = $state<HomeShortcuts>(emptyShortcuts());
 
-function load() {
-	Object.assign(shortcuts, read(entry) ?? emptyShortcuts());
-}
-
-/** Re-reads the shortcuts after this tab cleared or imported data (other tabs get `storage`). */
-export const reloadShortcuts = load;
+const tools = () => getApp().tools?.shortcuts;
 
 let started = false;
-/** Call once in the browser (root layout): loads the shortcuts and follows other tabs' changes. */
+/** Call once in the browser (root layout): follows the saved shortcuts, here and in other tabs. */
 export function startShortcuts() {
 	if (started) return;
 	started = true;
-	load();
-	window.addEventListener('storage', (event) => {
-		if (event.key === null || event.key === entry.key) load();
-	});
+	tools()?.subscribe((state) => Object.assign(shortcuts, state));
 }
 
-/**
- * Applies `change` to the latest saved shortcuts (so another tab's changes aren't lost) and saves
- * the result, unless nothing changed. Returns whether the result is saved. A failed save is
- * reported (once, see `saveResult`) unless `quiet`: for writes the user didn't ask for.
- */
-function apply(
-	change: (latest: HomeShortcuts) => HomeShortcuts,
-	{ explicit = false, quiet = false } = {}
-): boolean {
-	const unsaved = hasUnsavedChanges(entry);
-	const current = $state.snapshot(shortcuts);
-	// Same starting point as update() below, so "nothing changed" is judged on what it would save.
-	const base = latest(entry, current, { unsaved }) ?? emptyShortcuts();
-	if (sameShortcuts(base, change(base))) {
-		Object.assign(shortcuts, base);
-		return true;
-	}
-	const { value, saved } = update(entry, current, (v) => change(v ?? emptyShortcuts()), {
-		unsaved
-	});
-	Object.assign(shortcuts, value);
-	return quiet ? saved : saveResult(entry, saved, { explicit });
-}
+/** Re-reads the shortcuts after this tab cleared or imported data. */
+export const reloadShortcuts = () => tools()?.reload();
 
-/**
- * Records opening a page; only tools that allow it become "Recently used". Quiet: if storage is
- * blocked, opening a tool shouldn't warn about a save the user never made.
- */
-export function recordVisit(pathname: string) {
-	const path = pathname.replace(/\/+$/, '') || '/';
-	if (!tools.some((t) => t.path === path)) return;
-	apply((s) => withVisit(s, path, tools), { quiet: true });
-}
+/** Pins or unpins a tool, with a toast. */
+export const togglePin = (path: string) => void tools()?.togglePin(path);
 
-export function togglePin(path: string) {
-	const pinned = shortcuts.pins.includes(path);
-	if (apply((s) => withPinToggled(s, path), { explicit: true }))
-		toast(pinned ? 'Removed from Home.' : 'Pinned to Home.');
-}
-
-export function movePin(path: string, by: -1 | 1) {
-	apply((s) => withPinMoved(s, path, by), { explicit: true });
-}
+export const movePin = (path: string, by: -1 | 1) => void tools()?.movePin(path, by);

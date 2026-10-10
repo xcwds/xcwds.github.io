@@ -1,117 +1,19 @@
 @import 'tailwindcss';
-
-/* Dark mode follows the Theme setting (System/Light/Dark), applied to <html> by
-   src/lib/settings.svelte.ts and, before first paint, by the inline script in app.html. */
-@custom-variant dark (&:where([data-color-scheme='dark'], [data-color-scheme='dark'] *));
+/* `dark:` follows the Theme setting (System/Light/Dark): `data-color-scheme` on <html>, set
+   before first paint by @xcwds/plugin-theme. */
+@import '@xcwds/plugin-theme/tailwind.css';
+/* The app shell (#95): the `sidebar:` variant (Settings → Appearance picks header links or a
+   sidebar per orientation; phones keep the tab bar, so anything tied to it uses `md:`), the
+   `page-narrow` / `page-wide` / `page-split` containers every page's <main> uses (its route's
+   width names the same one so the header lines up), and the accessibility baseline: 44×44px
+   controls, a focus ring for keyboard users and the OS "reduce motion" setting. */
+@import '@xcwds/plugin-shell/styles.css';
+@import '@xcwds/plugin-timers/styles.css';
 
 html[data-color-scheme='dark'] {
 	color-scheme: dark;
 }
 
-/* Main navigation (#95). Phones (narrower than `md`) get the bottom tab bar. Wider screens get
-   the header links ("bar") or a left sidebar, picked per orientation in Settings
-   (`data-nav-portrait` / `data-nav-landscape` on <html>, set before first paint by app.html;
-   defaults: bar in portrait, sidebar in landscape). Screens under 500px tall are phones on their
-   side, which keep the header links whatever the setting says. `sidebar:` styles the sidebar
-   layout; anything tied to the tab bar keeps using `md:`. */
-@custom-variant sidebar {
-	@media (width >= 48rem) and (height >= 31.25rem) and (orientation: landscape) {
-		&:where(:root:not([data-nav-landscape='bar']) *) {
-			@slot;
-		}
-	}
-	@media (width >= 48rem) and (height >= 31.25rem) and (orientation: portrait) {
-		&:where([data-nav-portrait='sidebar'] *) {
-			@slot;
-		}
-	}
-}
-
-/* Page containers (#95). Every page's <main> uses one; `pageWidth` in src/lib/nav.ts must name
-   the same width so the header lines up with it. */
-@utility page-narrow {
-	margin-inline: auto;
-	width: 100%;
-	max-width: var(--container-md);
-	padding-inline: --spacing(4);
-	@variant sm {
-		padding-inline: --spacing(8);
-	}
-}
-
-/* Narrow until `xl`, then wide enough for two columns (with or without the sidebar); the page
-   switches to them with a container query (`@container` + `@[50rem]:`), so they only appear
-   when both fit. */
-@utility page-split {
-	margin-inline: auto;
-	width: 100%;
-	max-width: var(--container-md);
-	padding-inline: --spacing(4);
-	@variant sm {
-		padding-inline: --spacing(8);
-	}
-	@variant xl {
-		max-width: var(--container-5xl);
-		padding-inline: --spacing(12);
-	}
-}
-
-@utility page-wide {
-	margin-inline: auto;
-	width: 100%;
-	max-width: var(--container-2xl);
-	padding-inline: --spacing(6);
-	@variant sm {
-		padding-inline: --spacing(12);
-	}
-	/* Computers: room for card grids and the recipe columns. */
-	@variant lg {
-		max-width: var(--container-5xl);
-	}
-}
-
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton/themes/wintry';
-
-/* Accessibility baseline (issue #17). Tap targets: at least 44×44px for controls. Utilities can
-   still set a larger size; checkboxes get their 44px hit area from their <label>. */
-@layer base {
-	button,
-	select,
-	input:not([type='checkbox'], [type='radio'], [type='file'], [type='hidden']),
-	textarea {
-		min-height: 2.75rem;
-	}
-
-	button {
-		min-width: 2.75rem;
-	}
-
-	summary {
-		padding-block: 0.75rem;
-	}
-
-	input[type='checkbox'] {
-		width: 1.5rem;
-		height: 1.5rem;
-	}
-
-	/* A clear focus ring for keyboard users only (mouse/touch clicks don't show it). */
-	:focus-visible {
-		outline: 3px solid var(--color-blue-500);
-		outline-offset: 2px;
-	}
-}
-
-/* Respect the OS "reduce motion" setting. */
-@media (prefers-reduced-motion: reduce) {
-	*,
-	::before,
-	::after {
-		animation-duration: 0.01ms !important;
-		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
-		scroll-behavior: auto !important;
-	}
-}

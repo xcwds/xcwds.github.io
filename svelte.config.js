@@ -1,22 +1,17 @@
 import { mdsvex } from 'mdsvex';
-import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { withXcwds } from '@xcwds/sveltekit/config';
 
+// @xcwds sets up adapter-static (with the `404.html` fallback GitHub Pages serves for unknown
+// URLs, which boots the app and shows src/routes/+error.svelte; the service worker uses it
+// offline too), prerendering of every registered page, and the Content Security Policy.
 /** @type {import('@sveltejs/kit').Config} */
-const config = {
-	// Consult https://svelte.dev/docs/kit/integrations
-	// for more information about preprocessors
+export default await withXcwds({
 	preprocess: [vitePreprocess(), mdsvex()],
-
 	kit: {
-		// GitHub Pages serves 404.html for unknown URLs; it boots the app, which shows
-		// src/routes/+error.svelte. The service worker also uses it offline.
-		adapter: adapter({ fallback: '404.html' }),
 		alias: {
 			$components: 'src/components'
 		}
 	},
 	extensions: ['.svelte', '.svx']
-};
-
-export default config;
+});

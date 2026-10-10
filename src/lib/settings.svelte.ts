@@ -1,7 +1,11 @@
-import { saveResult } from './persist.svelte';
-import { defaultSettings, entries, read, write, type Settings, type Theme } from './storage';
+import { getApp } from '@xcwds/sveltekit';
+import { defaultSettings, parseSettings, type Settings } from './storage';
 
-/** App-wide settings. Reactive: read it anywhere, assign to change it (saved automatically). */
+/**
+ * App-wide settings (`app:settings`, the @xcwds kernel's settings). Reactive: read it anywhere,
+ * assign to change it (saved automatically). The theme and navigation apply themselves
+ * (`@xcwds/plugin-theme`, `@xcwds/plugin-shell`).
+ */
 export const settings = $state<Settings>(structuredClone(defaultSettings));
 
 /**
@@ -10,78 +14,56 @@ export const settings = $state<Settings>(structuredClone(defaultSettings));
  */
 export const settingsStatus = $state({ ready: false });
 
-const THEME_COLORS = { light: '#bfdbfe', dark: '#030712' } as const;
-
-export function resolveTheme(theme: Theme, prefersDark: boolean): 'light' | 'dark' {
-	return theme === 'system' ? (prefersDark ? 'dark' : 'light') : theme;
-}
-
-/** Sets the color scheme on <html> (see the dark variant in app.css) and the browser bar color. */
-function applyTheme(theme: Theme) {
-	const scheme = resolveTheme(theme, matchMedia('(prefers-color-scheme: dark)').matches);
-	document.documentElement.dataset.colorScheme = scheme;
-	document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[scheme]);
-}
-
-/**
- * Sets the navigation style for each orientation on <html> (`data-nav-portrait`,
- * `data-nav-landscape`); the `sidebar` variant in app.css picks the one that applies.
- */
-export function applyNav(nav: Settings['nav']) {
-	const root = document.documentElement;
-	root.dataset.navPortrait = nav.portrait;
-	root.dataset.navLandscape = nav.landscape;
-}
-
-/** Re-reads settings from storage, e.g. after an import or reset. */
-export function reloadSettings() {
-	Object.assign(settings, read(entries.settings) ?? structuredClone(defaultSettings));
-}
-
-let started = false;
-/** JSON of the settings as last loaded or saved, so the same settings aren't written twice. */
+/** JSON of the settings as last loaded or saved, so the same settings aren't saved twice. */
 let lastSaved: string | undefined;
 
+/** Copies the kernel's settings in (they hold only the fields the app knows about). */
+function load(values: unknown) {
+	Object.assign(settings, parseSettings(values) ?? structuredClone(defaultSettings));
+	lastSaved = JSON.stringify(settings);
+}
+
+/** Re-reads the saved settings, e.g. after an import or reset. */
+export function reloadSettings() {
+	const app = getApp();
+	app.settings.load();
+	load(app.settings.get());
+}
+
 /**
- * Saves the settings now rather than in the effect below, for actions that confirm a save
- * (e.g. Save as my defaults). Returns whether it was saved; a failure is reported once.
+ * Saves the settings now rather than in the background, for actions that confirm a save (e.g.
+ * Save as my defaults). Returns whether it was saved; a failure is reported once.
  */
 export function saveSettings(): boolean {
 	const snapshot = $state.snapshot(settings);
 	lastSaved = JSON.stringify(snapshot);
-	return saveResult(entries.settings, write(entries.settings, snapshot), { explicit: true });
+	const app = getApp();
+	app.settings.set(snapshot);
+	return app.settings.save();
 }
 
-/** Call once in the browser (root layout): loads settings, applies the theme, saves changes. */
+let started = false;
+
+/** Call once in the browser (root layout), once the kernel has loaded saved settings. */
 export function startSettings() {
 	if (started) return;
 	started = true;
-	reloadSettings();
-	lastSaved = JSON.stringify(settings);
+	const app = getApp();
+	load(app.settings.get());
 	settingsStatus.ready = true;
-	// Another tab changed the settings (or cleared all data): load them, so a stale copy here
-	// isn't saved over them. `key` is null when storage is cleared.
-	window.addEventListener('storage', (event) => {
-		if (event.key !== null && event.key !== entries.settings.key) return;
-		reloadSettings();
-		lastSaved = JSON.stringify(settings);
+	// Changes from another tab, an import or a reset.
+	app.settings.subscribe((next) => {
+		if (JSON.stringify(parseSettings(next)) !== JSON.stringify($state.snapshot(settings)))
+			load(next);
 	});
-	matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () =>
-		applyTheme(settings.theme)
-	);
 	$effect.root(() => {
 		$effect(() => {
 			// Snapshot reads every nested field, so changes to lists and objects are saved too.
 			const snapshot = $state.snapshot(settings);
-			applyTheme(snapshot.theme);
-			applyNav(snapshot.nav);
-			// Don't recreate saved data just by visiting: only save once something differs.
 			const json = JSON.stringify(snapshot);
 			if (json === lastSaved) return;
-			const untouched = json === JSON.stringify(defaultSettings);
-			if (untouched && read(entries.settings) === undefined) return;
 			lastSaved = json;
-			saveResult(entries.settings, write(entries.settings, snapshot));
+			app.settings.set(snapshot);
 		});
 	});
 }

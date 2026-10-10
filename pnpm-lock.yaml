@@ -6,6 +6,19 @@ settings:
 
 overrides:
   vite: ^7.2.6
+  '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz
+  '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz
+  '@xcwds/testing': file:vendor/xcwds/xcwds-testing-0.0.0.tgz
+  '@xcwds/plugin-shell': file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz
+  '@xcwds/plugin-theme': file:vendor/xcwds/xcwds-plugin-theme-0.0.0.tgz
+  '@xcwds/plugin-offline': file:vendor/xcwds/xcwds-plugin-offline-0.0.0.tgz
+  '@xcwds/plugin-update': file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz
+  '@xcwds/plugin-install': file:vendor/xcwds/xcwds-plugin-install-0.0.0.tgz
+  '@xcwds/plugin-settings': file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz
+  '@xcwds/plugin-tools': file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz
+  '@xcwds/plugin-timers': file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz
+  '@xcwds/plugin-share': file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz
+  '@xcwds/plugin-changelog': file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz
 
 importers:
 
@@ -14,9 +27,69 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      '@xcwds/core':
+        specifier: file:vendor/xcwds/xcwds-core-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/plugin-changelog':
+        specifier: file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+      '@xcwds/plugin-install':
+        specifier: file:vendor/xcwds/xcwds-plugin-install-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-install-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+      '@xcwds/plugin-offline':
+        specifier: file:vendor/xcwds/xcwds-plugin-offline-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-offline-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+      '@xcwds/plugin-settings':
+        specifier: file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz(5746708596fd668458bb91f0cb9db0a1)
+      '@xcwds/plugin-share':
+        specifier: file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz(5746708596fd668458bb91f0cb9db0a1)
+      '@xcwds/plugin-shell':
+        specifier: file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+      '@xcwds/plugin-theme':
+        specifier: file:vendor/xcwds/xcwds-plugin-theme-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-theme-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+      '@xcwds/plugin-timers':
+        specifier: file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz(5746708596fd668458bb91f0cb9db0a1)
+      '@xcwds/plugin-tools':
+        specifier: file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz(5746708596fd668458bb91f0cb9db0a1)
+      '@xcwds/plugin-update':
+        specifier: file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+      '@xcwds/sveltekit':
+        specifier: file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
+      xcwds-app:
+        specifier: link:src/plugins/app
+        version: link:src/plugins/app
+      xcwds-app-coffee-timer:
+        specifier: link:src/plugins/coffee-timer
+        version: link:src/plugins/coffee-timer
+      xcwds-app-cooking-timer:
+        specifier: link:src/plugins/cooking-timer
+        version: link:src/plugins/cooking-timer
+      xcwds-app-oven-time:
+        specifier: link:src/plugins/oven-time
+        version: link:src/plugins/oven-time
+      xcwds-app-pizza-dough:
+        specifier: link:src/plugins/pizza-dough
+        version: link:src/plugins/pizza-dough
+      xcwds-app-recipes:
+        specifier: link:src/plugins/recipes
+        version: link:src/plugins/recipes
+      xcwds-app-url-sanitizer:
+        specifier: link:src/plugins/url-sanitizer
+        version: link:src/plugins/url-sanitizer
+      xcwds-app-weightlifting:
+        specifier: link:src/plugins/weightlifting
+        version: link:src/plugins/weightlifting
     devDependencies:
       '@eslint/compat':
         specifier: ^1.4.0
@@ -27,6 +100,9 @@ importers:
       '@playwright/test':
         specifier: ^1.57.0
         version: 1.57.0
+      '@resvg/resvg-js':
+        specifier: ^2.6.2
+        version: 2.6.2
       '@skeletonlabs/skeleton':
         specifier: ^4.10.0
         version: 4.10.0(tailwindcss@4.1.18)
@@ -48,6 +124,9 @@ importers:
       '@vitest/browser-playwright':
         specifier: ^4.0.15
         version: 4.0.17(playwright@1.57.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))(vitest@4.0.17)
+      '@xcwds/testing':
+        specifier: file:vendor/xcwds/xcwds-testing-0.0.0.tgz
+        version: file:vendor/xcwds/xcwds-testing-0.0.0.tgz(@playwright/test@1.57.0)(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))(vitest@4.0.17)
       eslint:
         specifier: ^9.39.1
         version: 9.39.2(jiti@2.6.1)
@@ -350,6 +429,82 @@ packages:
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
+
+  '@resvg/resvg-js-android-arm-eabi@2.6.2':
+    resolution: {integrity: sha512-FrJibrAk6v29eabIPgcTUMPXiEz8ssrAk7TXxsiZzww9UTQ1Z5KAbFJs+Z0Ez+VZTYgnE5IQJqBcoSiMebtPHA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [android]
+
+  '@resvg/resvg-js-android-arm64@2.6.2':
+    resolution: {integrity: sha512-VcOKezEhm2VqzXpcIJoITuvUS/fcjIw5NA/w3tjzWyzmvoCdd+QXIqy3FBGulWdClvp4g+IfUemigrkLThSjAQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [android]
+
+  '@resvg/resvg-js-darwin-arm64@2.6.2':
+    resolution: {integrity: sha512-nmok2LnAd6nLUKI16aEB9ydMC6Lidiiq2m1nEBDR1LaaP7FGs4AJ90qDraxX+CWlVuRlvNjyYJTNv8qFjtL9+A==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@resvg/resvg-js-darwin-x64@2.6.2':
+    resolution: {integrity: sha512-GInyZLjgWDfsVT6+SHxQVRwNzV0AuA1uqGsOAW+0th56J7Nh6bHHKXHBWzUrihxMetcFDmQMAX1tZ1fZDYSRsw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@resvg/resvg-js-linux-arm-gnueabihf@2.6.2':
+    resolution: {integrity: sha512-YIV3u/R9zJbpqTTNwTZM5/ocWetDKGsro0SWp70eGEM9eV2MerWyBRZnQIgzU3YBnSBQ1RcxRZvY/UxwESfZIw==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+
+  '@resvg/resvg-js-linux-arm64-gnu@2.6.2':
+    resolution: {integrity: sha512-zc2BlJSim7YR4FZDQ8OUoJg5holYzdiYMeobb9pJuGDidGL9KZUv7SbiD4E8oZogtYY42UZEap7dqkkYuA91pg==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@resvg/resvg-js-linux-arm64-musl@2.6.2':
+    resolution: {integrity: sha512-3h3dLPWNgSsD4lQBJPb4f+kvdOSJHa5PjTYVsWHxLUzH4IFTJUAnmuWpw4KqyQ3NA5QCyhw4TWgxk3jRkQxEKg==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@resvg/resvg-js-linux-x64-gnu@2.6.2':
+    resolution: {integrity: sha512-IVUe+ckIerA7xMZ50duAZzwf1U7khQe2E0QpUxu5MBJNao5RqC0zwV/Zm965vw6D3gGFUl7j4m+oJjubBVoftw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@resvg/resvg-js-linux-x64-musl@2.6.2':
+    resolution: {integrity: sha512-UOf83vqTzoYQO9SZ0fPl2ZIFtNIz/Rr/y+7X8XRX1ZnBYsQ/tTb+cj9TE+KHOdmlTFBxhYzVkP2lRByCzqi4jQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@resvg/resvg-js-win32-arm64-msvc@2.6.2':
+    resolution: {integrity: sha512-7C/RSgCa+7vqZ7qAbItfiaAWhyRSoD4l4BQAbVDqRRsRgY+S+hgS3in0Rxr7IorKUpGE69X48q6/nOAuTJQxeQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@resvg/resvg-js-win32-ia32-msvc@2.6.2':
+    resolution: {integrity: sha512-har4aPAlvjnLcil40AC77YDIk6loMawuJwFINEM7n0pZviwMkMvjb2W5ZirsNOZY4aDbo5tLx0wNMREp5Brk+w==}
+    engines: {node: '>= 10'}
+    cpu: [ia32]
+    os: [win32]
+
+  '@resvg/resvg-js-win32-x64-msvc@2.6.2':
+    resolution: {integrity: sha512-ZXtYhtUr5SSaBrUDq7DiyjOFJqBVL/dOBN7N/qmi/pO0IgiWW/f/ue3nbvu9joWE5aAKDoIzy/CxsY0suwGosQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@resvg/resvg-js@2.6.2':
+    resolution: {integrity: sha512-xBaJish5OeGmniDj9cW5PRa/PtmuVU3ziqrbr5xJj901ZDN4TosrVaNZpEiLZAxdfnhAe7uQ7QFWfjPe9d9K2Q==}
+    engines: {node: '>= 10'}
 
   '@rollup/rollup-android-arm-eabi@4.55.1':
     resolution: {integrity: sha512-9R0DM/ykwfGIlNu6+2U09ga0WXeZ9MRC2Ter8jnz8415VbuIykVuc6bhdrbORFZANDmTDvq26mJrEVTl8TdnDg==}
@@ -748,6 +903,137 @@ packages:
 
   '@vitest/utils@4.0.17':
     resolution: {integrity: sha512-RG6iy+IzQpa9SB8HAFHJ9Y+pTzI+h8553MrciN9eC6TFBErqrQaTas4vG+MVj8S4uKk8uTT2p0vgZPnTdxd96w==}
+
+  '@xcwds/core@file:vendor/xcwds/xcwds-core-0.0.0.tgz':
+    resolution: {integrity: sha512-ni0A6k5zVeik+4CL93NjbYxhPZd4Zh098HMFCsR+JF4gT/GX3EfSEuSF6cPsecdDkiA8zwg4KI5aA7MgdjSD3g==, tarball: file:vendor/xcwds/xcwds-core-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@resvg/resvg-js': ^2.6.0
+    peerDependenciesMeta:
+      '@resvg/resvg-js':
+        optional: true
+
+  '@xcwds/plugin-changelog@file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz':
+    resolution: {integrity: sha512-SkN7WVlwNENZvv8Ph+CtmKv/cKtu0XwN47Ss1PySq0oexmPyAGqFeIG9G8XMbttyE0cQkV92YcGgZy45rk0vTQ==, tarball: file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+
+  '@xcwds/plugin-install@file:vendor/xcwds/xcwds-plugin-install-0.0.0.tgz':
+    resolution: {integrity: sha512-WhLruyUG8WzRORJuvSJbq0ElyzX4pnLLfwnSZL6GIUWdZ4KGQ71UFIUAECcl6wJJLDXQiknGihWXoeXnPAz+1w==, tarball: file:vendor/xcwds/xcwds-plugin-install-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+
+  '@xcwds/plugin-offline@file:vendor/xcwds/xcwds-plugin-offline-0.0.0.tgz':
+    resolution: {integrity: sha512-CVUkLvL7UdXd/ipLdXh2KP/A0n7bgDns+wBl4LGYXpsyvDdLsBQQfkooRyA9Tt56LcAUUzedy4mXoeounlzcjQ==, tarball: file:vendor/xcwds/xcwds-plugin-offline-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+
+  '@xcwds/plugin-settings@file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz':
+    resolution: {integrity: sha512-htFaF+am3FoTp+WAyqms585D5UGXoqKaGnrZsyYaNT/wFaDtjzFwbaCKcm+cnLktBm6jtwOIBH6VimpOs0jQ+w==, tarball: file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@sveltejs/kit': ^2.20.0
+      '@xcwds/plugin-shell': ^0.0.0
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+    peerDependenciesMeta:
+      '@xcwds/plugin-shell':
+        optional: true
+
+  '@xcwds/plugin-share@file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz':
+    resolution: {integrity: sha512-RpCfHf5Bp53T/cvLgb8kD7J3pPyPjWVoLsUTV5cHE4TtDBAgRo9OLysTS4EkIs0DtiU3WzWDYYVm3y+ZZC/cqg==, tarball: file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@sveltejs/kit': ^2.20.0
+      '@xcwds/plugin-shell': ^0.0.0
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+    peerDependenciesMeta:
+      '@xcwds/plugin-shell':
+        optional: true
+
+  '@xcwds/plugin-shell@file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz':
+    resolution: {integrity: sha512-fMAt6YV0rx6wTLdhclerwi5KYR54dQ70FCQNsGY1qouK33hdFt6Wh8UhmiI1742R6brh4zLSBho/9sORTupHuA==, tarball: file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@sveltejs/kit': ^2.20.0
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+
+  '@xcwds/plugin-theme@file:vendor/xcwds/xcwds-plugin-theme-0.0.0.tgz':
+    resolution: {integrity: sha512-9ytHZX7yWjNcLWRJd9+tXrfYQy3OJs6dImaLc9jnuJLX2y0Zi3ejpbhPqTwxdaIuv1QzOWcZ7oNEjFHbAX8ATQ==, tarball: file:vendor/xcwds/xcwds-plugin-theme-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+
+  '@xcwds/plugin-timers@file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz':
+    resolution: {integrity: sha512-EBn/7ZYvcwmUwswNJnrOfhVBx0IMlx8p9AXzR3ANbeNA+L0cOx62Z2S9ddNgSIjFhrBwwQ41UlaoHuRlvXx6DQ==, tarball: file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@sveltejs/kit': ^2.20.0
+      '@xcwds/plugin-shell': ^0.0.0
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+    peerDependenciesMeta:
+      '@xcwds/plugin-shell':
+        optional: true
+
+  '@xcwds/plugin-tools@file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz':
+    resolution: {integrity: sha512-2R/ttWZxFqtTmbYXZ51Fr4XevdPW8k0T1X8ZveBqMkIBy6niDcE5tzXW+958z17pce8Jg8CWcnuhxJRIT+HMLw==, tarball: file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@sveltejs/kit': ^2.20.0
+      '@xcwds/plugin-shell': ^0.0.0
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+    peerDependenciesMeta:
+      '@xcwds/plugin-shell':
+        optional: true
+
+  '@xcwds/plugin-update@file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz':
+    resolution: {integrity: sha512-f3PcUBSZ6F3jG2OLMhQh2Xre2cOaNFUJ8GJdZpmiaqYx6BlBWjAM/Y2UJY8PuXy3fjw3K66Vo+yZABrsjt9REw==, tarball: file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@xcwds/sveltekit': ^0.0.0
+      svelte: ^5.0.0
+
+  '@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz':
+    resolution: {integrity: sha512-bmb5cjeAO5LIQND01esk7hVipRG5rCh/sx9BD7YXX1EwkfCP1K8uEFzFyUPxtJy5oOJc1SFX0HlIlhJ1bht7HQ==, tarball: file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@sveltejs/kit': ^2.20.0
+      svelte: ^5.0.0
+      vite: ^7.2.6
+
+  '@xcwds/testing@file:vendor/xcwds/xcwds-testing-0.0.0.tgz':
+    resolution: {integrity: sha512-SIRcW2ccN9WRVMM1C/3tpkdVkXsBiPHbg8L9mkMBGXZXOYtqDk/HiaUYrHA3O2rw4z5IRxtUmrlKDFtPIab7Rg==, tarball: file:vendor/xcwds/xcwds-testing-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@playwright/test': ^1.50.0
+      vitest: ^3.0.0 || ^4.0.0
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
 
   '@zag-js/accordion@1.32.0':
     resolution: {integrity: sha512-sTn7xuaPvuG/YNO8aZIMBC0DMy+IacpxjduYUTdrjHrbvMKHuFdWuh9C7qg7AufM53bF1aWqVGltdIBXD9F8WA==}
@@ -1912,6 +2198,57 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
+  '@resvg/resvg-js-android-arm-eabi@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-android-arm64@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-darwin-arm64@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-darwin-x64@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-linux-arm-gnueabihf@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-linux-arm64-gnu@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-linux-arm64-musl@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-linux-x64-gnu@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-linux-x64-musl@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-win32-arm64-msvc@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-win32-ia32-msvc@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js-win32-x64-msvc@2.6.2':
+    optional: true
+
+  '@resvg/resvg-js@2.6.2':
+    optionalDependencies:
+      '@resvg/resvg-js-android-arm-eabi': 2.6.2
+      '@resvg/resvg-js-android-arm64': 2.6.2
+      '@resvg/resvg-js-darwin-arm64': 2.6.2
+      '@resvg/resvg-js-darwin-x64': 2.6.2
+      '@resvg/resvg-js-linux-arm-gnueabihf': 2.6.2
+      '@resvg/resvg-js-linux-arm64-gnu': 2.6.2
+      '@resvg/resvg-js-linux-arm64-musl': 2.6.2
+      '@resvg/resvg-js-linux-x64-gnu': 2.6.2
+      '@resvg/resvg-js-linux-x64-musl': 2.6.2
+      '@resvg/resvg-js-win32-arm64-msvc': 2.6.2
+      '@resvg/resvg-js-win32-ia32-msvc': 2.6.2
+      '@resvg/resvg-js-win32-x64-msvc': 2.6.2
+
   '@rollup/rollup-android-arm-eabi@4.55.1':
     optional: true
 
@@ -2328,6 +2665,126 @@ snapshots:
     dependencies:
       '@vitest/pretty-format': 4.0.17
       tinyrainbow: 3.0.3
+
+  '@xcwds/core@file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)':
+    optionalDependencies:
+      '@resvg/resvg-js': 2.6.2
+
+  '@xcwds/plugin-changelog@file:vendor/xcwds/xcwds-plugin-changelog-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)':
+    dependencies:
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-install@file:vendor/xcwds/xcwds-plugin-install-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)':
+    dependencies:
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-offline@file:vendor/xcwds/xcwds-plugin-offline-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)':
+    dependencies:
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-settings@file:vendor/xcwds/xcwds-plugin-settings-0.0.0.tgz(5746708596fd668458bb91f0cb9db0a1)':
+    dependencies:
+      '@sveltejs/kit': 2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    optionalDependencies:
+      '@xcwds/plugin-shell': file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-share@file:vendor/xcwds/xcwds-plugin-share-0.0.0.tgz(5746708596fd668458bb91f0cb9db0a1)':
+    dependencies:
+      '@sveltejs/kit': 2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    optionalDependencies:
+      '@xcwds/plugin-shell': file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-shell@file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)':
+    dependencies:
+      '@sveltejs/kit': 2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-theme@file:vendor/xcwds/xcwds-plugin-theme-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)':
+    dependencies:
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-timers@file:vendor/xcwds/xcwds-plugin-timers-0.0.0.tgz(5746708596fd668458bb91f0cb9db0a1)':
+    dependencies:
+      '@sveltejs/kit': 2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    optionalDependencies:
+      '@xcwds/plugin-shell': file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-tools@file:vendor/xcwds/xcwds-plugin-tools-0.0.0.tgz(5746708596fd668458bb91f0cb9db0a1)':
+    dependencies:
+      '@sveltejs/kit': 2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    optionalDependencies:
+      '@xcwds/plugin-shell': file:vendor/xcwds/xcwds-plugin-shell-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/plugin-update@file:vendor/xcwds/xcwds-plugin-update-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)':
+    dependencies:
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      svelte: 5.47.0
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/sveltekit@file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))':
+    dependencies:
+      '@sveltejs/adapter-static': 3.0.10(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))
+      '@sveltejs/kit': 2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      svelte: 5.47.0
+      vite: 7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+
+  '@xcwds/testing@file:vendor/xcwds/xcwds-testing-0.0.0.tgz(@playwright/test@1.57.0)(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))(vitest@4.0.17)':
+    dependencies:
+      '@xcwds/core': file:vendor/xcwds/xcwds-core-0.0.0.tgz(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': file:vendor/xcwds/xcwds-sveltekit-0.0.0.tgz(@resvg/resvg-js@2.6.2)(@sveltejs/kit@2.50.0(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.47.0)(vite@7.3.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2))
+      vitest: 4.0.17(@types/node@24.10.9)(@vitest/browser-playwright@4.0.17)(jiti@2.6.1)(lightningcss@1.30.2)
+    optionalDependencies:
+      '@playwright/test': 1.57.0
+    transitivePeerDependencies:
+      - '@resvg/resvg-js'
+      - '@sveltejs/kit'
+      - svelte
+      - vite
 
   '@zag-js/accordion@1.32.0':
     dependencies:
