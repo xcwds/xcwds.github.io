@@ -13,9 +13,10 @@ Package manager: pnpm.
 
 It runs on the @xcwds framework ([xcwds/xcwds](https://github.com/xcwds/xcwds)): `xcwds.config.ts` holds the
 brand, the storage options and the plugin list, and `@xcwds/sveltekit` generates the manifest, icons,
-head tags and service worker from it (`.xcwds/` is generated; don't edit it). Until the packages are on
-npm (xcwds/xcwds#26) they install from tarballs in `vendor/xcwds/`; after changing the framework, refresh them with
-`node scripts/vendor-xcwds.mjs ../xcwds && pnpm install --no-frozen-lockfile`. The app's own features are
+head tags and service worker from it (`.xcwds/` is generated; don't edit it). The packages come from npm
+(`@xcwds/*`, all on the same `^0.x` range): a framework change reaches the app once it is released, then
+bump the ranges here. To try an unreleased change, point `pnpm.overrides` at
+`link:../xcwds/packages/<name>` locally and never commit that. The app's own features are
 plugins in `src/plugins/<name>/` (linked packages): `index.js` is the build entry (plain JS, run by Node:
 routes, and tools via `tool.js`), `client.ts` the page entry (Vite: registers the plugin's saved data
 and settings fields in the app's namespace, `namespace: ''`). A page entry must not import a build
