@@ -3,6 +3,10 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
 	webServer: { command: 'npm run build && npm run preview', port: 4173 },
 	testDir: 'e2e',
+	// On a CI pull request, Playwright's git diff capture runs `git fetch origin <base> --depth=1`,
+	// which turns ci.yml's full-history checkout into a shallow clone, and the build (started by
+	// webServer after that) then can't number new changelog entries. The report doesn't need it.
+	captureGitInfo: { diff: false },
 	// On CI: annotate failures on the PR and keep an HTML report (uploaded by ci.yml).
 	reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
 	use: {
