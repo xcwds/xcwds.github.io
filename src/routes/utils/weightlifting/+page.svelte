@@ -72,11 +72,16 @@
 	}
 
 	function finished(workout: Workout): boolean {
-		return changeHistory((latest) => {
+		const before = $state.snapshot(history);
+		const saved = changeHistory((latest) => {
 			// Unique even if two workouts finish within the same millisecond.
 			const id = Math.max(Date.now(), (latest[0]?.id ?? 0) + 1);
 			return [{ id, finishedAt: new Date().toISOString(), workout }, ...latest];
 		});
+		// Not saved: the workout stays in the tracker to finish again, so it isn't listed here
+		// too (finishing it again would list it twice) (#133).
+		if (!saved) history = before;
+		return saved;
 	}
 
 	function deleted(entry: HistoryEntry): boolean {

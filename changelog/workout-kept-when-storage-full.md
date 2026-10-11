@@ -1,0 +1,1 @@
+- When your device's storage is full, Finish workout and Repeat now keep your workout on screen instead of losing it. Free up space and tap Finish again.

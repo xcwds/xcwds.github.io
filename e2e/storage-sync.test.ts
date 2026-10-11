@@ -135,9 +135,11 @@ test.describe('when storage is full (#43)', () => {
 		await finishWorkout(page, 'Bench Press');
 		await expect(toasts).toHaveText([SAVE_FAILED]);
 		await expect(page.getByText('Workout saved to history.')).toHaveCount(0);
-		// The workouts are still kept in this tab's history until the app closes.
+		// Neither save worked, so both exercises are still in the workout, ready to finish again,
+		// and the history doesn't list a workout it hasn't saved (#133).
+		await expect(page.getByTestId('exercise')).toHaveCount(2);
 		await tab(page, 'History').click();
-		await expect(entries(page)).toHaveCount(2);
+		await expect(page.getByTestId('history-empty')).toBeVisible();
 	});
 
 	test('Save as my defaults says it could not save', async ({ page }) => {
@@ -167,4 +169,65 @@ test('Settings shows no storage warning normally', async ({ page }) => {
 	await gotoHydrated(page, '/settings');
 	await expect(page.getByRole('heading', { name: 'Your data' })).toBeVisible();
 	await expect(page.getByTestId('storage-warning')).toHaveCount(0);
+});
+
+test.describe('when the history is too big to save (#133)', () => {
+	test.beforeEach(async ({ page }) => {
+		// Only the history fails to save (it's the entry that grows), until the test frees space.
+		await page.addInitScript(() => {
+			const setItem = Storage.prototype.setItem;
+			Storage.prototype.setItem = function (key: string, value: string) {
+				if (key === 'app:workout-history' && sessionStorage.getItem('space') !== 'free')
+					throw new DOMException('full', 'QuotaExceededError');
+				setItem.call(this, key, value);
+			};
+		});
+	});
+
+	const saved = (page: Page) =>
+		page.evaluate(() => localStorage.getItem('app:weightlifting:workout') ?? '');
+
+	test('Finish workout keeps the workout when it can’t save it', async ({ page }) => {
+		await gotoHydrated(page, '/utils/weightlifting');
+		await finishWorkout(page, 'Squat');
+		await expect(page.getByTestId('toast')).toHaveText([SAVE_FAILED]);
+		await expect(page.getByLabel('Exercise 1 name')).toHaveValue('Squat');
+		await expect.poll(() => saved(page)).toContain('Squat');
+		await tab(page, 'History').click();
+		await expect(page.getByTestId('history-empty')).toBeVisible();
+
+		// It's still there after a reload, and finishing it once there's space saves it once.
+		await gotoHydrated(page, '/utils/weightlifting');
+		await tab(page, 'Workout').click();
+		await expect(page.getByLabel('Exercise 1 name')).toHaveValue('Squat');
+		await page.evaluate(() => sessionStorage.setItem('space', 'free'));
+		await page.getByRole('button', { name: 'Finish workout' }).click();
+		await expect(page.getByText('Workout saved to history.')).toBeVisible();
+		await expect(page.getByTestId('exercise')).toHaveCount(0);
+		await tab(page, 'History').click();
+		await expect(entries(page)).toHaveCount(1);
+		await expect(entries(page).first()).toContainText('Squat');
+	});
+
+	test('Repeat keeps the current workout when it can’t save it', async ({ page }) => {
+		await gotoHydrated(page, '/utils/weightlifting');
+		await page.evaluate(() => sessionStorage.setItem('space', 'free'));
+		await finishWorkout(page, 'Squat');
+		await expect(page.getByText('Workout saved to history.')).toBeVisible();
+
+		await page.evaluate(() => sessionStorage.removeItem('space'));
+		await page.getByRole('button', { name: '+ Add exercise' }).click();
+		await page.getByLabel('Exercise 1 name').fill('Row');
+		await page.getByLabel('Row set 1 weight').fill('95');
+		await page.getByLabel('Row set 1 reps').fill('10');
+		await tab(page, 'History').click();
+		await entries(page).first().getByRole('button', { name: 'Repeat' }).click();
+
+		await expect(page.getByTestId('toast').filter({ hasText: SAVE_FAILED })).toBeVisible();
+		await expect(page.getByText('Your current workout was saved to history.')).toHaveCount(0);
+		await expect(page.getByLabel('Exercise 1 name')).toHaveValue('Row');
+		await expect.poll(() => saved(page)).toContain('Row');
+		await tab(page, 'History').click();
+		await expect(entries(page)).toHaveCount(1);
+	});
 });

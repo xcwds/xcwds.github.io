@@ -102,19 +102,26 @@
 		});
 	}
 
-	/** Saves the current workout to the history (if it has anything in it) and starts a new one. */
+	/**
+	 * Saves the current workout to the history (if it has anything in it) and starts a new one.
+	 * When the save fails (onFinish reports it), the workout stays, so it isn't lost (#133).
+	 */
 	function finishWorkout() {
 		if (workoutHasContent(workout)) {
-			// A failed save is reported by onFinish, so only confirm a real one.
-			if (onFinish?.($state.snapshot(workout))) toast('Workout saved to history.');
+			if (onFinish && !onFinish($state.snapshot(workout))) return;
+			toast('Workout saved to history.');
 		}
 		workout = { date: today(), unit: calculatorUnit, exercises: [] };
 	}
 
-	/** Starts a new workout with the same exercises and sets as `source` (dated today). */
+	/**
+	 * Starts a new workout with the same exercises and sets as `source` (dated today). When the
+	 * current workout can't be saved first, it stays instead (#133).
+	 */
 	export function repeat(source: Workout) {
 		if (workoutHasContent(workout) && JSON.stringify(workout) !== repeated) {
-			if (onFinish?.($state.snapshot(workout))) toast('Your current workout was saved to history.');
+			if (onFinish && !onFinish($state.snapshot(workout))) return;
+			toast('Your current workout was saved to history.');
 		}
 		// A plain copy: `source` comes from reactive state, which structuredClone can't copy.
 		useWorkout({ ...$state.snapshot(source), date: today() });
