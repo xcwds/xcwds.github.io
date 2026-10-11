@@ -36,6 +36,8 @@ entry that uses Node modules (`recipes` keeps its name in `name.js` for that rea
   `use.launchOptions.executablePath` to the Chromium under `/opt/pw-browsers/chromium-*/chrome-linux/chrome`.
 - Always open a pull request for work you push (against `main`, linking the issues it addresses),
   unless the user explicitly says not to. Pushing a branch alone is not done.
+- Issue labels follow `.github/labels.md` (the same set in xcwds/xcwds; keep the two copies identical).
+  Label new issues you open with a type and a priority from it.
 - After opening a PR, review it yourself adversarially (look for what's broken, unsafe or missing, not
   just style), and post that review following "Reviewing a PR" below. If it finds anything, fix it,
   push, reply to each thread with the fixing commit, resolve it, and review again. Allow at most 3
