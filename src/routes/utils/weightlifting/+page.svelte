@@ -73,14 +73,21 @@
 
 	function finished(workout: Workout): boolean {
 		const before = $state.snapshot(history);
+		const wasUnsaved = hasUnsavedChanges(entries.workoutHistory);
 		const saved = changeHistory((latest) => {
 			// Unique even if two workouts finish within the same millisecond.
 			const id = Math.max(Date.now(), (latest[0]?.id ?? 0) + 1);
 			return [{ id, finishedAt: new Date().toISOString(), workout }, ...latest];
 		});
-		// Not saved: the workout stays in the tracker to finish again, so it isn't listed here
-		// too (finishing it again would list it twice) (#133).
-		if (!saved) history = before;
+		if (!saved) {
+			// The workout stays in the tracker to finish again, so it isn't listed here too
+			// (finishing it again would list it twice) (#133). Nothing is written back: this tab's
+			// copy can lag another tab's save, and storage still holds what it had, so unless this
+			// tab was already ahead of it, the next change starts from storage again.
+			history = before;
+			savedHistory.markSaved();
+			if (!wasUnsaved) saveResult(entries.workoutHistory, true);
+		}
 		return saved;
 	}
 

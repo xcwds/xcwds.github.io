@@ -229,5 +229,9 @@ test.describe('when the history is too big to save (#133)', () => {
 		await expect.poll(() => saved(page)).toContain('Row');
 		await tab(page, 'History').click();
 		await expect(entries(page)).toHaveCount(1);
+		// The failed save leaves the saved history as it was.
+		expect(await page.evaluate(() => localStorage.getItem('app:workout-history'))).toContain(
+			'Squat'
+		);
 	});
 });
