@@ -3,7 +3,7 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
 	webServer: {
 		command:
-			'env | sort | cut -c1-90 | grep -v GITHUB_; git -C changelog rev-parse --is-shallow-repository --git-dir; npm run build && npm run preview',
+			'env | sort | cut -c1-90 | grep -v GITHUB_ >&2; git -C changelog rev-parse --is-shallow-repository --git-dir >&2; npm run build && npm run preview',
 		port: 4173
 	},
 	testDir: 'e2e',
