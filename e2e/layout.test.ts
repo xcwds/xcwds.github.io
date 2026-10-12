@@ -109,7 +109,8 @@ test.describe('with the sidebar', () => {
 		'/utils/coffee-timer',
 		'/utils/weightlifting',
 		'/utils/url-sanitizer',
-		'/utils/self-control'
+		'/utils/self-control',
+		'/utils/self-control/sos'
 	]) {
 		test(`the header lines up with the page on ${path}`, async ({ page }) => {
 			await gotoHydrated(page, path);

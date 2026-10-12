@@ -6,4 +6,12 @@
  * @typedef {{ slug: string; title: string; emoji: string; blurb: string; width: 'narrow' | 'wide' }} Page
  * @type {Page[]}
  */
-export const pages = [];
+export const pages = [
+	{
+		slug: 'sos',
+		title: 'Urge SOS',
+		emoji: '🌊',
+		blurb: 'Ride out a craving, right now.',
+		width: 'narrow'
+	}
+];

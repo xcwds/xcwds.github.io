@@ -7,6 +7,7 @@ import {
 	type Habit,
 	type SelfControlPrefs
 } from '$lib/self-control/habits';
+import { parseLog, parseSession, type SosSession, type UrgeEntry } from '$lib/self-control/sos';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
 import { getApp } from '@xcwds/sveltekit';
 import {
@@ -320,6 +321,13 @@ export const entries = {
 		'self-control:prefs',
 		'Self-Control preferences',
 		parsePrefs
+	),
+	selfControlLog: entry<UrgeEntry[]>('self-control:log', 'Self-Control urge log', parseLog),
+	// The Urge SOS session in progress (#149), so reopening the app returns to it.
+	selfControlSos: entry<SosSession>(
+		'self-control:sos',
+		'Self-Control session in progress',
+		parseSession
 	)
 } satisfies Record<string, Entry<unknown>>;
 
