@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import {
 		DEFAULT_EMOJI,
 		HABIT_KINDS,
@@ -37,6 +38,10 @@
 	let tried = $state(false);
 	let problem = $derived(tried ? nameProblem(name) : undefined);
 	const id = $props.id();
+	let nameField: HTMLInputElement | undefined = $state();
+
+	// The button that opened the form is gone, so focus moves here instead of to the page.
+	onMount(() => nameField?.focus());
 
 	function submit(e: SubmitEvent) {
 		e.preventDefault();
@@ -60,6 +65,7 @@
 		<label class="flex flex-col gap-1 text-sm">
 			<span>Habit</span>
 			<input
+				bind:this={nameField}
 				bind:value={name}
 				maxlength={NAME_MAX}
 				autocomplete="off"

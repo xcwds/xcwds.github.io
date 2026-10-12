@@ -16,6 +16,8 @@ test('add, rename, archive, restore and delete habits, kept across reloads (#148
 	await page.getByRole('button', { name: 'Add a habit' }).click();
 	await page.getByRole('button', { name: '📱 Doomscrolling' }).click();
 	await expect(page.getByLabel('Habit', { exact: true })).toHaveValue('Doomscrolling');
+	// The button that opened the form is gone; focus is on the form, not lost.
+	await expect(page.getByLabel('Habit', { exact: true })).toBeFocused();
 	await page.getByRole('button', { name: 'Add habit' }).click();
 	await expect(page.getByText('Habit added.')).toBeVisible();
 
