@@ -185,3 +185,39 @@ test('Urge SOS: a slip is logged kindly with a note, against the chosen habit (#
 	await expect(page.getByText('Snacking deleted.')).toBeVisible();
 	expect(await log(page)).toBeNull();
 });
+
+test('Urge SOS: the writing techniques, with answers kept through a reload and a name for self-talk (#149)', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: 'Zoom out' }).click();
+	// No timer to choose for a writing technique.
+	await expect(page.getByRole('button', { name: '5 min', exact: true })).toHaveCount(0);
+	await page.getByRole('button', { name: 'Start', exact: true }).click();
+	await expect(page.getByRole('heading', { name: 'Zoom out' })).toBeVisible();
+	await page.getByLabel(/What is it, in plain words\?/).fill('sugar and fat');
+
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(page.getByLabel(/What is it, in plain words\?/)).toHaveValue('sugar and fat');
+	await page.getByRole('button', { name: 'Done' }).click();
+	await page.getByRole('button', { name: 'Partly' }).click();
+	const [saved] = await log(page);
+	expect(saved).toMatchObject({ technique: 'zoom-out', outcome: 'partly' });
+	expect(JSON.stringify(saved)).not.toContain('sugar');
+
+	// Self-talk asks for your name once and uses it.
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: 'Talk to yourself like a friend' }).click();
+	await page.getByRole('button', { name: 'Start', exact: true }).click();
+	await page.getByRole('button', { name: 'Use my name' }).click();
+	await expect(page.getByRole('alert')).toHaveText('Type your name first.');
+	await page.getByLabel(/Your name, for these prompts/).fill('Alex');
+	await page.getByRole('button', { name: 'Use my name' }).click();
+	await expect(page.getByText('Name saved.')).toBeVisible();
+	await expect(page.getByTestId('your-name')).toHaveCount(0);
+	await expect(page.getByText('"Alex wants to…, but Alex knows…"')).toBeVisible();
+	expect(
+		await page.evaluate(() => JSON.parse(localStorage.getItem('app:self-control:prefs')!).name)
+	).toBe('Alex');
+});

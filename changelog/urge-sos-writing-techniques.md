@@ -1,0 +1,1 @@
+- Urge SOS has three more techniques: Zoom out (describe the craving coldly), See it plainly (picture the unappealing reality) and Talk to yourself like a friend.

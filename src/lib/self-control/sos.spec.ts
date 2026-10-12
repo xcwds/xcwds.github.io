@@ -9,8 +9,9 @@ import {
 	parseLog,
 	parseSession,
 	rate,
-	startSurf,
+	startSession,
 	surfPrompt,
+	techniquePrompts,
 	type UrgeEntry
 } from './sos';
 
@@ -60,7 +61,7 @@ describe('the urge log', () => {
 
 describe('a surfing session', () => {
 	it('ends at a wall-clock time and tracks the peak and last rating', () => {
-		const s = startSurf({ habit: 'h1', intensity: 6, minutes: 10 }, 1000);
+		const s = startSession({ habit: 'h1', intensity: 6, technique: 'surf', minutes: 10 }, 1000);
 		expect(s).toEqual({
 			step: 'surf',
 			technique: 'surf',
@@ -91,11 +92,13 @@ describe('a surfing session', () => {
 		expect(finish({ ...rated, last: 10 }, 'gave-in', 'id4')).toMatchObject({ peak: 10, end: 10 });
 		// A habit deleted since the session began isn't logged against.
 		expect(finish(rated, 'rode-out', 'id5', undefined, () => false)).not.toHaveProperty('habit');
-		expect(startSurf({ intensity: 2, minutes: 5 }, 1000)).not.toHaveProperty('habit');
+		expect(startSession({ intensity: 2, technique: 'surf', minutes: 5 }, 1000)).not.toHaveProperty(
+			'habit'
+		);
 	});
 
 	it('round-trips through storage and refuses broken ones', () => {
-		const s = startSurf({ intensity: 4, minutes: 5 }, 5000);
+		const s = startSession({ intensity: 4, technique: 'surf', minutes: 5 }, 5000);
 		expect(parseSession(JSON.parse(JSON.stringify(s)))).toEqual(s);
 		expect(parseSession({ ...s, step: 'sprint' })).toBeUndefined();
 		expect(parseSession({ ...s, peak: 12 })).toBeUndefined();
@@ -109,5 +112,44 @@ describe('a surfing session', () => {
 		expect(surfPrompt(60_000)).toBe(SURF_PROMPTS[1]);
 		expect(surfPrompt(SURF_PROMPTS.length * 60_000)).toBe(SURF_PROMPTS[0]);
 		expect(surfPrompt(-5)).toBe(SURF_PROMPTS[0]);
+	});
+
+	it('has writing techniques with no timer, whose answers stay in the session', () => {
+		const s = startSession({ intensity: 5, technique: 'zoom-out', minutes: 10 }, 2000);
+		expect(s).toMatchObject({ step: 'prompts', technique: 'zoom-out', endsAt: 2000 });
+		const answered = { ...s, answers: ['sugar and fat', ''] };
+		expect(parseSession(answered)).toEqual(answered);
+		// Answers are never logged.
+		expect(finish(answered, 'rode-out', 'id')).not.toHaveProperty('answers');
+		expect(finish(answered, 'rode-out', 'id').technique).toBe('zoom-out');
+		// A timer only goes with surfing; outcome works for either.
+		expect(parseSession({ ...s, step: 'surf' })).toBeUndefined();
+		expect(
+			parseSession({
+				...startSession({ intensity: 1, technique: 'surf', minutes: 5 }, 1),
+				step: 'prompts'
+			})
+		).toBeUndefined();
+		expect(parseSession({ ...s, step: 'outcome' })).toMatchObject({ step: 'outcome' });
+		expect(parseSession({ ...s, answers: [3] })).not.toHaveProperty('answers');
+		expect(parseSession({ ...s, technique: 'sprint' })).toBeUndefined();
+	});
+
+	it('words the prompts for your name and the habit', () => {
+		const friend = techniquePrompts('friend', { name: 'Alex' });
+		expect(friend.prompts[0]).toBe(
+			'Write it in the third person: "Alex wants to…, but Alex knows…"'
+		);
+		expect(techniquePrompts('friend', {}).prompts[0]).toMatch(/using your name/);
+		const plainly = techniquePrompts('plainly', { kind: 'start' });
+		expect(plainly.optional).toBe(true);
+		expect(plainly.prompts[0]).toBe('What does skipping it really look like, right now?');
+		// A habit you're starting gets its own examples, not the snacking and scrolling ones.
+		expect(plainly.intro).toMatch(/the plan that didn't happen/);
+		expect(plainly.intro).not.toMatch(/wrapper/);
+		expect(techniquePrompts('plainly', { kind: 'cut-back' }).intro).toMatch(
+			/giving in: the greasy wrapper/
+		);
+		expect(techniquePrompts('zoom-out', {}).prompts).toHaveLength(3);
 	});
 });

@@ -4,17 +4,28 @@
 	import { onMount } from 'svelte';
 	import { markBusy } from '$lib/busy';
 	import { persist, saveResult } from '$lib/persist.svelte';
-	import { activeHabits, habitById, randomId, type Habit } from '$lib/self-control/habits';
 	import {
+		activeHabits,
+		habitById,
+		NAME_MAX,
+		randomId,
+		type Habit
+	} from '$lib/self-control/habits';
+	import {
+		ANSWER_MAX,
 		DEFAULT_SURF_MINUTES,
 		NOTE_MAX,
+		SESSION_TECHNIQUES,
 		SURF_MINUTES,
+		TECHNIQUE_LABELS,
 		appendEntry,
 		finish,
 		rate,
-		startSurf,
+		startSession,
 		surfPrompt,
+		techniquePrompts,
 		type Outcome,
+		type SessionTechnique,
 		type SosSession
 	} from '$lib/self-control/sos';
 	import { settingsStatus } from '$lib/settings.svelte';
@@ -35,6 +46,12 @@
 	let habit = $state<string | undefined>();
 	let intensity = $state(5);
 	let minutes = $state(DEFAULT_SURF_MINUTES);
+	let technique = $state<SessionTechnique>('surf');
+
+	// Your name for self-talk (asked once, optional, kept in `app:self-control:prefs`).
+	let name = $state<string | undefined>();
+	let nameDraft = $state('');
+	let nameError = $state<string | undefined>();
 
 	// While surfing: "Rate it now".
 	let rating = $state<number | undefined>();
@@ -45,6 +62,11 @@
 	const surfing = $derived(session?.step === 'surf');
 	const kind = $derived(session?.habit ? habitById(habits, session.habit)?.kind : undefined);
 	const remaining = $derived(session ? session.endsAt - now : 0);
+	const writing = $derived(
+		session && session.technique !== 'surf'
+			? techniquePrompts(session.technique, { name, kind })
+			: undefined
+	);
 
 	// Per window: another tab's session is its own.
 	persist(
@@ -55,7 +77,9 @@
 	);
 
 	$effect(() => {
-		if (settingsStatus.ready) habits = read(entries.selfControlHabits) ?? [];
+		if (!settingsStatus.ready) return;
+		habits = read(entries.selfControlHabits) ?? [];
+		name = read(entries.selfControlPrefs)?.name;
 	});
 
 	markBusy('self-control-sos', () => surfing);
@@ -89,12 +113,36 @@
 		gaveIn = false;
 		note = '';
 		now = Date.now();
-		session = startSurf({ habit, intensity, minutes }, now);
+		session = startSession({ habit, intensity, technique, minutes }, now);
 	}
 
 	function saveRating() {
 		if (session && rating !== undefined) session = rate(session, rating);
 		rating = undefined;
+	}
+
+	function answer(i: number, text: string) {
+		if (!session) return;
+		const answers = [...(session.answers ?? [])];
+		answers[i] = text;
+		session = { ...session, answers: Array.from(answers, (a) => a ?? '') };
+	}
+
+	function saveName() {
+		const trimmed = nameDraft.trim();
+		nameError = !trimmed
+			? 'Type your name first.'
+			: [...trimmed].length > NAME_MAX
+				? `Keep it to ${NAME_MAX} characters.`
+				: undefined;
+		if (nameError) return;
+		const result = update(entries.selfControlPrefs, undefined, (latest) => ({
+			...latest,
+			name: trimmed
+		}));
+		if (!saveResult(entries.selfControlPrefs, result.saved, { explicit: true })) return;
+		name = trimmed;
+		toast('Name saved.');
 	}
 
 	function passed() {
@@ -162,6 +210,49 @@
 				Urges rise, peak and fade, often within minutes. Watching one without acting on it, like a
 				wave you ride instead of fight, is called urge surfing.
 			</p>
+		</section>
+	{:else if session?.step === 'prompts' && writing}
+		<section aria-labelledby="prompts-heading" class="flex flex-col gap-4" data-testid="prompts">
+			<h2 id="prompts-heading" class="text-lg font-semibold">
+				{TECHNIQUE_LABELS[session.technique]}
+			</h2>
+			<p>{writing.intro}</p>
+			{#if session.technique === 'friend' && name === undefined}
+				<div class="{card} flex flex-col gap-2" data-testid="your-name">
+					<label class="flex flex-col gap-1">
+						<span>Your name, for these prompts (optional, saved on this device)</span>
+						<input
+							type="text"
+							class={field}
+							bind:value={nameDraft}
+							aria-invalid={nameError ? true : undefined}
+							aria-describedby={nameError ? 'name-error' : undefined}
+						/>
+					</label>
+					{#if nameError}
+						<p id="name-error" role="alert" class="text-sm text-red-700 dark:text-red-400">
+							{nameError}
+						</p>
+					{/if}
+					<button type="button" class={button} onclick={saveName}>Use my name</button>
+				</div>
+			{/if}
+			{#each writing.prompts as prompt, i (i)}
+				<label class="flex flex-col gap-1">
+					<span>{prompt}{writing.optional ? ' (optional)' : ''}</span>
+					<textarea
+						rows="3"
+						class={field}
+						maxlength={ANSWER_MAX}
+						value={session.answers?.[i] ?? ''}
+						oninput={(e) => answer(i, e.currentTarget.value)}
+					></textarea>
+				</label>
+			{/each}
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				What you write here stays on this page until you finish; it isn't saved to your log.
+			</p>
+			<button type="button" class={primary} onclick={passed}>Done</button>
 		</section>
 	{:else if session?.step === 'outcome'}
 		<section aria-labelledby="outcome-heading" class="flex flex-col gap-4" data-testid="outcome">
@@ -244,21 +335,40 @@
 				<input type="range" min="0" max="10" step="1" bind:value={intensity} class="min-h-11" />
 			</label>
 			<fieldset class="flex flex-col gap-2">
-				<legend class="mb-2">Surf it for</legend>
-				<div class="grid grid-cols-4 gap-2">
-					{#each SURF_MINUTES as m (m)}
+				<legend class="mb-2">Pick a technique</legend>
+				<div class="grid grid-cols-2 gap-2">
+					{#each SESSION_TECHNIQUES as t (t)}
 						<button
 							type="button"
-							class={toggle(minutes === m)}
-							aria-pressed={minutes === m}
-							onclick={() => (minutes = m)}>{m} min</button
+							class={toggle(technique === t)}
+							aria-pressed={technique === t}
+							onclick={() => (technique = t)}>{TECHNIQUE_LABELS[t]}</button
 						>
 					{/each}
 				</div>
 			</fieldset>
-			<button type="button" class={primary} onclick={start}>Start surfing</button>
+			{#if technique === 'surf'}
+				<fieldset class="flex flex-col gap-2">
+					<legend class="mb-2">Surf it for</legend>
+					<div class="grid grid-cols-4 gap-2">
+						{#each SURF_MINUTES as m (m)}
+							<button
+								type="button"
+								class={toggle(minutes === m)}
+								aria-pressed={minutes === m}
+								onclick={() => (minutes = m)}>{m} min</button
+							>
+						{/each}
+					</div>
+				</fieldset>
+			{/if}
+			<button type="button" class={primary} onclick={start}
+				>{technique === 'surf' ? 'Start surfing' : 'Start'}</button
+			>
 			<p class="text-sm text-gray-600 dark:text-gray-400">
-				You'll watch the urge rise and fall instead of acting on it, then note how it went.
+				{technique === 'surf'
+					? "You'll watch the urge rise and fall instead of acting on it, then note how it went."
+					: "You'll answer a few short prompts, then note how it went."}
 			</p>
 		</section>
 	{/if}

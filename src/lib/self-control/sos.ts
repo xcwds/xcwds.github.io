@@ -2,6 +2,7 @@
  * Urge SOS (#149): the urge log every session ends in, and the session in progress. Pure types,
  * validators and helpers; the page saves them through `persist()` and `update()`.
  */
+import { givingIn, type HabitKind } from './habits';
 
 /** Every technique the log can record, including the ones still to come (#149). */
 export const TECHNIQUES = ['surf', 'sprint', 'zoom-out', 'plainly', 'friend'] as const;
@@ -28,20 +29,84 @@ export type UrgeEntry = {
 
 /** The SOS session in progress, saved per window so reopening the app returns to it. */
 export type SosSession = {
-	step: 'surf' | 'outcome';
+	/** Surfing (with its timer), writing to a technique's prompts, or saying how it went. */
+	step: 'surf' | 'prompts' | 'outcome';
 	habit?: string;
-	technique: 'surf';
+	technique: SessionTechnique;
 	start: number;
 	peak: number;
 	last: number;
-	/** When it started, and when the surf timer ends (ms since the epoch). */
+	/** When it started, and when the surf timer ends (ms since the epoch; `startedAt` without one). */
 	startedAt: number;
 	endsAt: number;
+	/** What you wrote to the prompts, kept only until the session ends (never logged). */
+	answers?: string[];
 };
+
+/** The techniques you can pick so far (the urge sprint comes later, #149). */
+export const SESSION_TECHNIQUES = ['surf', 'zoom-out', 'plainly', 'friend'] as const;
+export type SessionTechnique = (typeof SESSION_TECHNIQUES)[number];
+
+export const TECHNIQUE_LABELS: Record<SessionTechnique, string> = {
+	surf: 'Surf it',
+	'zoom-out': 'Zoom out',
+	plainly: 'See it plainly',
+	friend: 'Talk to yourself like a friend'
+};
+
+/** What you'd write in a prompt technique: what it's for, and its prompts. */
+export type PromptTechnique = { intro: string; prompts: string[]; optional?: boolean };
+
+/**
+ * The prompts for a writing technique, worded for the habit's kind (for one you're starting, the
+ * urge is to skip it) and, for self-talk, your name when you've given it.
+ */
+export function techniquePrompts(
+	technique: Exclude<SessionTechnique, 'surf'>,
+	{ name, kind }: { name?: string; kind?: HabitKind }
+): PromptTechnique {
+	const giving = givingIn(kind);
+	switch (technique) {
+		case 'zoom-out':
+			return {
+				intro:
+					'Describe the craving coldly, like a scientist would. The pull fades with the detail.',
+				prompts: [
+					"What is it, in plain words? (e.g. 'a bright rectangle', 'sugar and fat')",
+					'What will it be like 10 minutes after?',
+					'Would I recommend this to a friend right now?'
+				]
+			};
+		case 'plainly':
+			return {
+				intro: `Picture the unappealing reality of ${giving}: ${
+					kind === 'start'
+						? 'the plan that didn\'t happen and the "tomorrow, then" feeling'
+						: 'the greasy wrapper and the heavy feeling, the stiff neck and the lost hour'
+				}. Skip any prompt that doesn't help.`,
+				optional: true,
+				prompts: [
+					`What does ${giving} really look like, right now?`,
+					'And how will you feel an hour later?'
+				]
+			};
+		case 'friend':
+			return {
+				intro: 'Talk to yourself the way you would to a friend. A little distance makes it easier.',
+				prompts: [
+					name
+						? `Write it in the third person: "${name} wants to…, but ${name} knows…"`
+						: 'Write it in the third person, using your name: "Sam wants to…, but Sam knows…"',
+					'What would someone you admire do right now?'
+				]
+			};
+	}
+}
 
 /** Newest entries kept (about 600 KB at most, #146). */
 export const LOG_MAX = 2000;
 export const NOTE_MAX = 280;
+export const ANSWER_MAX = 500;
 export const SURF_MINUTES = [5, 10, 15, 20] as const;
 export const DEFAULT_SURF_MINUTES = 10;
 
@@ -103,29 +168,46 @@ export function logWithout(log: readonly UrgeEntry[], habitId: string): UrgeEntr
 
 export function parseSession(v: unknown): SosSession | undefined {
 	if (!isRecord(v)) return undefined;
-	const { step, habit, technique, start, peak, last, startedAt, endsAt } = v;
-	if (step !== 'surf' && step !== 'outcome') return undefined;
-	if (technique !== 'surf') return undefined;
+	const { step, habit, technique, start, peak, last, startedAt, endsAt, answers } = v;
+	if (step !== 'surf' && step !== 'prompts' && step !== 'outcome') return undefined;
+	if (!SESSION_TECHNIQUES.includes(technique as SessionTechnique)) return undefined;
+	// Surfing has a timer; the writing techniques have prompts.
+	if ((step === 'surf') !== (technique === 'surf') && step !== 'outcome') return undefined;
 	if (!isIntensity(start) || !isIntensity(peak) || !isIntensity(last)) return undefined;
 	if (!isTime(startedAt) || !isTime(endsAt) || endsAt < startedAt) return undefined;
-	const session: SosSession = { step, technique, start, peak, last, startedAt, endsAt };
+	const session: SosSession = {
+		step,
+		technique: technique as SessionTechnique,
+		start,
+		peak,
+		last,
+		startedAt,
+		endsAt
+	};
 	if (isId(habit)) session.habit = habit;
+	if (
+		Array.isArray(answers) &&
+		answers.length <= 5 &&
+		answers.every((a) => typeof a === 'string' && a.length <= ANSWER_MAX)
+	)
+		session.answers = answers;
 	return session;
 }
 
-/** A new surfing session, starting now. */
-export function startSurf(
-	fields: { habit?: string; intensity: number; minutes: number },
+/** A new session with the technique you picked, starting now (`minutes` is surfing's). */
+export function startSession(
+	fields: { habit?: string; intensity: number; technique: SessionTechnique; minutes: number },
 	now = Date.now()
 ): SosSession {
+	const surf = fields.technique === 'surf';
 	const session: SosSession = {
-		step: 'surf',
-		technique: 'surf',
+		step: surf ? 'surf' : 'prompts',
+		technique: fields.technique,
 		start: fields.intensity,
 		peak: fields.intensity,
 		last: fields.intensity,
 		startedAt: now,
-		endsAt: now + fields.minutes * 60_000
+		endsAt: surf ? now + fields.minutes * 60_000 : now
 	};
 	if (fields.habit) session.habit = fields.habit;
 	return session;
