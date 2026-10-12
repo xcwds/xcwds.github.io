@@ -71,6 +71,9 @@ importers:
       xcwds-app-recipes:
         specifier: link:src/plugins/recipes
         version: link:src/plugins/recipes
+      xcwds-app-self-control:
+        specifier: link:src/plugins/self-control
+        version: link:src/plugins/self-control
       xcwds-app-url-sanitizer:
         specifier: link:src/plugins/url-sanitizer
         version: link:src/plugins/url-sanitizer

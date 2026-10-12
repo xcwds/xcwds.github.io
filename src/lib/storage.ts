@@ -1,6 +1,12 @@
 import { doughDefaults, isDoughValue, type DoughInput } from '$lib/utils/dough';
 import type { TempUnit } from '$lib/utils/oven';
 import type { UnitSystem } from '$lib/recipes/units';
+import {
+	parseHabits,
+	parsePrefs,
+	type Habit,
+	type SelfControlPrefs
+} from '$lib/self-control/habits';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
 import { getApp } from '@xcwds/sveltekit';
 import {
@@ -307,7 +313,14 @@ export const entries = {
 		'lifting-tab'
 	),
 	// Its own group, so clearing the calculator's data in Settings never wipes past workouts.
-	workoutHistory: entry<HistoryEntry[]>('workout-history', 'Workout history', parseHistory)
+	workoutHistory: entry<HistoryEntry[]>('workout-history', 'Workout history', parseHistory),
+	// Self-Control (#146) is private: its own group, so it can be cleared on its own.
+	selfControlHabits: entry<Habit[]>('self-control:habits', 'Self-Control habits', parseHabits),
+	selfControlPrefs: entry<SelfControlPrefs>(
+		'self-control:prefs',
+		'Self-Control preferences',
+		parsePrefs
+	)
 } satisfies Record<string, Entry<unknown>>;
 
 /**
@@ -348,6 +361,7 @@ const GROUP_LABELS: Record<string, string> = {
 	'cooking-timer': 'Cooking Timer',
 	weightlifting: 'Weightlifting Calculator',
 	'workout-history': 'Workout History',
+	'self-control': 'Self-Control',
 	settings: 'Settings',
 	home: 'Home shortcuts'
 };

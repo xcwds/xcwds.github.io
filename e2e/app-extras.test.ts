@@ -134,6 +134,15 @@ for (const [name, viewport] of [
 				(p) => p.getByLabel('Paste a link').fill('https://a.com/?utm_source=x&b=1')
 			],
 			['/utils/weightlifting'],
+			[
+				'/utils/self-control',
+				async (p) => {
+					await p.getByRole('button', { name: 'Add a habit' }).click();
+					await p.getByRole('button', { name: '🍪 Snacking' }).click();
+					await p.getByRole('button', { name: 'Add habit' }).click();
+					await p.getByRole('button', { name: 'Add a habit' }).click();
+				}
+			],
 			['/settings'],
 			[
 				'/settings',

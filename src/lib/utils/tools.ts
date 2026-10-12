@@ -3,6 +3,7 @@ import { tool as coffeeTimer } from '../../plugins/coffee-timer/tool.js';
 import { tool as cookingTimer } from '../../plugins/cooking-timer/tool.js';
 import { tool as ovenTime } from '../../plugins/oven-time/tool.js';
 import { tool as pizzaDough } from '../../plugins/pizza-dough/tool.js';
+import { tool as selfControl } from '../../plugins/self-control/tool.js';
 import { tool as urlSanitizer } from '../../plugins/url-sanitizer/tool.js';
 import { tool as weightlifting } from '../../plugins/weightlifting/tool.js';
 
@@ -23,7 +24,8 @@ export const tools = [
 	cookingTimer,
 	ovenTime,
 	urlSanitizer,
-	weightlifting
+	weightlifting,
+	selfControl
 ] as (Tool & { path: ToolPath })[];
 
 /** A tool's page. */
@@ -33,7 +35,8 @@ export type ToolPath =
 	| '/utils/cooking-timer'
 	| '/utils/oven-time'
 	| '/utils/url-sanitizer'
-	| '/utils/weightlifting';
+	| '/utils/weightlifting'
+	| '/utils/self-control';
 
 /** The Kitchen Guide articles a tool links to. */
 export function toolGuides(path: string): readonly string[] {
