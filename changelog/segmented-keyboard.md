@@ -1,0 +1,1 @@
+- Choices like the theme, units and Weightlifting's tabs work with the keyboard: Tab reaches the selected one, and the arrow keys change it.

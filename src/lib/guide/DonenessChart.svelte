@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { segmented } from '$lib/segmented';
 	import { settings } from '$lib/settings.svelte';
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import { toast } from '$lib/toast.svelte';
@@ -37,7 +38,12 @@
 	class="flex flex-col gap-4 rounded-xl bg-white/40 p-4 dark:bg-gray-900/60"
 	data-testid="doneness"
 >
-	<div class="grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Meat">
+	<div
+		class="grid grid-cols-2 gap-2 sm:grid-cols-3"
+		role="radiogroup"
+		use:segmented
+		aria-label="Meat"
+	>
 		{#each MEATS as m (m.id)}
 			<button
 				type="button"
@@ -53,7 +59,7 @@
 	</div>
 
 	{#if meat.sizes.length > 1}
-		<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Size">
+		<div class="grid grid-cols-2 gap-2" role="radiogroup" use:segmented aria-label="Size">
 			{#each meat.sizes as s (s.id)}
 				<button
 					type="button"
@@ -68,7 +74,7 @@
 		</div>
 	{/if}
 
-	<div class="flex flex-col gap-2" role="radiogroup" aria-label="Doneness">
+	<div class="flex flex-col gap-2" role="radiogroup" use:segmented aria-label="Doneness">
 		{#each meat.levels as l (l.id)}
 			<button
 				type="button"

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
+	import { segmented } from '$lib/segmented';
 	import { entries, update } from '$lib/storage';
 	import type { HistoryEntry, Workout } from '$lib/utils/lifting';
 	import History from './History.svelte';
@@ -35,6 +36,16 @@
 		const pair = (id === 'plates' && tab === 'workout') || (id === 'workout' && tab === 'plates');
 		return pair ? 'hidden @[50rem]:block' : 'hidden';
 	}
+
+	/** The panels a tab shows: side by side, Plates shows the workout too. */
+	const controls = (id: Tab) =>
+		split && id === 'plates' ? 'lifting-panel-plates lifting-panel-workout' : `lifting-panel-${id}`;
+	const tabpanel = (id: Tab) =>
+		({
+			role: 'tabpanel',
+			id: `lifting-panel-${id}`,
+			'aria-labelledby': `lifting-tab-${id}`
+		}) as const;
 
 	// The open tab is per window, so it doesn't follow other windows.
 	persist(
@@ -109,12 +120,14 @@
 	class="page-split @container flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200"
 >
 	<div class="flex flex-col gap-6" bind:clientWidth={width}>
-		<div class="grid grid-cols-3 gap-2 @[50rem]:grid-cols-2" role="tablist">
+		<div class="grid grid-cols-3 gap-2 @[50rem]:grid-cols-2" role="tablist" use:segmented>
 			{#each tabs as t (t.id)}
 				<button
 					type="button"
 					role="tab"
+					id="lifting-tab-{t.id}"
 					aria-selected={shown === t.id}
+					aria-controls={controls(t.id)}
 					class="{toggle(shown === t.id)} py-3 text-base {t.id === 'workout'
 						? '@[50rem]:hidden'
 						: ''}"
@@ -132,12 +145,12 @@
 				? 'hidden'
 				: '@[50rem]:grid @[50rem]:grid-cols-2 @[50rem]:items-start @[50rem]:gap-10'}
 		>
-			<div class={panel('plates')}><PlateCalculator bind:total /></div>
-			<div class={panel('workout')}>
+			<div {...tabpanel('plates')} class={panel('plates')}><PlateCalculator bind:total /></div>
+			<div {...tabpanel('workout')} class={panel('workout')}>
 				<WorkoutTracker bind:this={tracker} calculatorWeight={total} onFinish={finished} />
 			</div>
 		</div>
-		<div class={panel('history')}>
+		<div {...tabpanel('history')} class={panel('history')}>
 			<History {history} onRepeat={repeat} onDelete={deleted} />
 		</div>
 	</div>

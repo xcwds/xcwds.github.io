@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { segmented } from '$lib/segmented';
 	import { settings } from '$lib/settings.svelte';
 	import { entries, read, write } from '$lib/storage';
 	import { toast } from '$lib/toast.svelte';
@@ -444,7 +445,12 @@
 				<span>New set name</span>
 				<input class={field} placeholder="Home gym" bind:value={newName} />
 			</label>
-			<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="New set units">
+			<div
+				class="grid grid-cols-2 gap-2"
+				role="radiogroup"
+				use:segmented
+				aria-label="New set units"
+			>
 				{#each WEIGHT_UNITS as unit (unit)}
 					<button
 						type="button"

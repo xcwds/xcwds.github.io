@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { persist } from '$lib/persist.svelte';
+	import { segmented } from '$lib/segmented';
 	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { entries } from '$lib/storage';
 	import {
@@ -182,7 +183,7 @@
 
 	<!-- Your own sets have their own unit; only the commercial gym switches. -->
 	{#if set.id === COMMERCIAL_GYM}
-		<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Units">
+		<div class="grid grid-cols-2 gap-2" role="radiogroup" use:segmented aria-label="Units">
 			{#each WEIGHT_UNITS as u (u)}
 				<button
 					type="button"
