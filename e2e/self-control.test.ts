@@ -177,7 +177,7 @@ test('Urge SOS: a slip is logged kindly with a note, against the chosen habit (#
 
 	// Deleting the habit deletes its log entries too.
 	page.on('dialog', (dialog) => dialog.accept());
-	await page.getByRole('link', { name: 'Back to Self-Control' }).click();
+	await page.getByTestId('sos-done').getByRole('link', { name: 'Done' }).click();
 	await page.getByRole('button', { name: 'Edit Snacking' }).click();
 	await page.getByRole('button', { name: 'Delete habit' }).click();
 	await expect(page.getByText('Snacking deleted.')).toBeVisible();

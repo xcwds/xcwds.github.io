@@ -207,7 +207,7 @@
 					Saved. Next time is a fresh start.
 				{/if}
 			</p>
-			<a href={resolve('/utils/self-control')} class="{button} text-center">Back to Self-Control</a>
+			<a href={resolve('/utils/self-control')} class="{button} text-center">Done</a>
 		</section>
 	{:else}
 		<section aria-labelledby="check-in-heading" class="flex flex-col gap-4" data-testid="check-in">
