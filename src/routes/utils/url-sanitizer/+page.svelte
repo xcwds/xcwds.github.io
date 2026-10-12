@@ -2,21 +2,37 @@
 	import { useApp } from '@xcwds/sveltekit';
 	import { onMount } from 'svelte';
 	import { toast } from '$lib/toast.svelte';
-	import { buildLink, isTrackingParam, parseLink, readParams, type Param } from '$lib/utils/url';
+	import {
+		buildLink,
+		isTrackingParam,
+		parseLink,
+		readParams,
+		trackingPathSegment,
+		unwrapRedirect,
+		type Param
+	} from '$lib/utils/url';
 
 	let input = $state('');
 	let url = $state<URL | null>(null);
 	let params = $state<Param[]>([]);
+	/** The redirect wrapper `url` was unwrapped from (#137). */
+	let unwrappedFrom = $state<string | null>(null);
+	/** Amazon's `/ref=…` path segment, shown like a param (#137). */
+	let pathSegment = $state<string | null>(null);
+	let keepPath = $state(false);
 	let canPaste = $state(false);
 	let canShare = $state(false);
 	const app = useApp();
 	let shortcutPrefix = $state('https://xcwds.com/utils/url-sanitizer#url=');
 
-	let cleaned = $derived(url ? buildLink(url, params) : '');
-	let removed = $derived(params.filter((p) => !p.keep).length);
+	let cleaned = $derived(url ? buildLink(url, params, !keepPath) : '');
+	let total = $derived(params.length + (pathSegment ? 1 : 0));
+	let removed = $derived(params.filter((p) => !p.keep).length + (pathSegment && !keepPath ? 1 : 0));
 	/** From the param's current name, so renaming one updates its badge and the warning (#68). */
 	const isTracking = (param: Param) => url !== null && isTrackingParam(param.key, url.hostname);
-	let trackingKept = $derived(params.filter((p) => isTracking(p) && p.keep).length);
+	let trackingKept = $derived(
+		params.filter((p) => isTracking(p) && p.keep).length + (pathSegment && keepPath ? 1 : 0)
+	);
 	let invalid = $derived(input.trim() !== '' && !url);
 
 	onMount(() => {
@@ -31,10 +47,16 @@
 		return app.shared?.listen((shared) => load(shared.joined));
 	});
 
-	function load(text: string) {
+	/** Cleans the link in `text`, unwrapping known redirect links unless `unwrap` is false. */
+	function load(text: string, unwrap = true) {
 		input = text;
-		url = parseLink(text);
+		const parsed = parseLink(text);
+		const inner = parsed && unwrap ? unwrapRedirect(parsed) : null;
+		unwrappedFrom = inner?.via ?? null;
+		url = inner?.url ?? parsed;
 		params = url ? readParams(url) : [];
+		pathSegment = url ? trackingPathSegment(url) : null;
+		keepPath = false;
 	}
 
 	async function paste() {
@@ -45,8 +67,9 @@
 		}
 	}
 
-	function setAll(keep: (param: Param) => boolean) {
+	function setAll(keep: (param: Param) => boolean, path: boolean) {
 		for (const param of params) param.keep = keep(param);
+		keepPath = path;
 	}
 
 	async function copy() {
@@ -120,6 +143,14 @@
 					aria-label="Clean link"
 				>
 					<h2 class="text-lg font-semibold">Clean link</h2>
+					{#if unwrappedFrom}
+						<div class="flex flex-col gap-2 text-sm" data-testid="unwrapped">
+							<p>Unwrapped a {unwrappedFrom} redirect. This is the link it leads to.</p>
+							<button type="button" class="{button} self-start" onclick={() => load(input, false)}>
+								Use the redirect link instead
+							</button>
+						</div>
+					{/if}
 					<p class="text-base break-all" data-testid="cleaned">{cleaned}</p>
 					<div class="grid gap-2 {canShare ? 'grid-cols-3' : 'grid-cols-2'}">
 						<button type="button" class={primary} onclick={copy}>Copy</button>
@@ -145,27 +176,54 @@
 
 		<div class="contents @[50rem]:flex @[50rem]:flex-col @[50rem]:gap-6">
 			{#if url}
-				{#if params.length}
+				{#if total}
 					<section class="flex flex-col gap-3">
 						<div class="flex items-baseline justify-between">
 							<h2 class="text-lg font-semibold">Params</h2>
 							<span class="text-sm text-gray-600 dark:text-gray-400">
-								{removed} of {params.length} removed
+								{removed} of {total} removed
 							</span>
 						</div>
 						<div class="grid grid-cols-3 gap-2 text-sm">
-							<button type="button" class={button} onclick={() => setAll((p) => !isTracking(p))}>
+							<button
+								type="button"
+								class={button}
+								onclick={() => setAll((p) => !isTracking(p), false)}
+							>
 								Remove tracking
 							</button>
-							<button type="button" class={button} onclick={() => setAll(() => false)}>
+							<button type="button" class={button} onclick={() => setAll(() => false, false)}>
 								Remove all
 							</button>
-							<button type="button" class={button} onclick={() => setAll(() => true)}
+							<button type="button" class={button} onclick={() => setAll(() => true, true)}
 								>Keep all</button
 							>
 						</div>
 
 						<ul class="flex flex-col gap-2">
+							{#if pathSegment}
+								<li
+									class="flex items-center gap-2 rounded-xl p-3 {keepPath
+										? 'bg-white/80 dark:bg-gray-900'
+										: 'bg-white/30 dark:bg-gray-900/40'}"
+									data-testid="path-segment"
+								>
+									<label class="flex min-h-11 min-w-11 shrink-0 items-center justify-center">
+										<input type="checkbox" bind:checked={keepPath} class="size-6" />
+										<span class="sr-only">Keep the /{pathSegment} path segment</span>
+									</label>
+									<span
+										class="min-w-0 flex-1 font-mono text-sm break-all {keepPath
+											? ''
+											: 'line-through opacity-60'}">/{pathSegment}</span
+									>
+									<span
+										class="shrink-0 rounded-full bg-amber-200 px-2 py-0.5 text-xs text-amber-900 dark:bg-amber-800 dark:text-amber-100"
+									>
+										tracking
+									</span>
+								</li>
+							{/if}
 							{#each params as param (param.id)}
 								{@const nested = nestedLink(param.value)}
 								<li
