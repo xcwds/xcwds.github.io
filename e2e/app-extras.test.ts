@@ -159,6 +159,18 @@ for (const [name, viewport] of [
 					await p.getByRole('button', { name: 'Gave in' }).click();
 				}
 			],
+			[
+				'/utils/self-control/sos',
+				async (p) => {
+					await p.getByRole('button', { name: 'Back' }).click();
+					await p.getByRole('button', { name: 'Gave in' }).click();
+					await p.getByRole('button', { name: 'Save', exact: true }).click();
+					await p.getByRole('link', { name: 'Done' }).click();
+					await p.goto('/utils/self-control/sos');
+					await p.getByRole('button', { name: 'Talk to yourself like a friend' }).click();
+					await p.getByRole('button', { name: 'Start', exact: true }).click();
+				}
+			],
 			['/settings'],
 			[
 				'/settings',

@@ -17,9 +17,13 @@ export type Habit = {
 	archived: boolean;
 };
 
-/** What the hub remembers about you: for now, whether you've seen the "not therapy" note. */
+/**
+ * What Self-Control remembers about you: whether you've seen the "not therapy" note, and the
+ * name self-talk prompts use (#149, optional).
+ */
 export type SelfControlPrefs = {
 	noteSeen?: boolean;
+	name?: string;
 };
 
 export const HABIT_KINDS: readonly { id: HabitKind; label: string }[] = [
@@ -87,7 +91,11 @@ export function parseHabits(v: unknown): Habit[] | undefined {
 
 export function parsePrefs(v: unknown): SelfControlPrefs | undefined {
 	if (!isRecord(v)) return undefined;
-	return typeof v.noteSeen === 'boolean' ? { noteSeen: v.noteSeen } : {};
+	const prefs: SelfControlPrefs = {};
+	if (typeof v.noteSeen === 'boolean') prefs.noteSeen = v.noteSeen;
+	if (typeof v.name === 'string' && !nameProblem(v.name) && v.name === v.name.trim())
+		prefs.name = v.name;
+	return prefs;
 }
 
 /** A new habit, with an id no other habit has. */

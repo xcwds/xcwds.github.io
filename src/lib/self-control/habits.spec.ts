@@ -106,6 +106,9 @@ describe('habits', () => {
 	it('reads the note flag from prefs', () => {
 		expect(parsePrefs({ noteSeen: true })).toEqual({ noteSeen: true });
 		expect(parsePrefs({ noteSeen: 'yes' })).toEqual({});
+		expect(parsePrefs({ noteSeen: true, name: 'Alex' })).toEqual({ noteSeen: true, name: 'Alex' });
+		expect(parsePrefs({ name: ' Alex ' })).toEqual({});
+		expect(parsePrefs({ name: 'x'.repeat(41) })).toEqual({});
 		expect(parsePrefs([])).toBeUndefined();
 	});
 });
