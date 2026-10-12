@@ -1,0 +1,1 @@
+- Self-Control has Urge SOS, for riding out a craving in the moment: check in, surf the urge with a timer and gentle prompts, then note how it went in your private log.

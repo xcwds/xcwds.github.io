@@ -143,6 +143,22 @@ for (const [name, viewport] of [
 					await p.getByRole('button', { name: 'Add a habit' }).click();
 				}
 			],
+			['/utils/self-control/sos'],
+			[
+				'/utils/self-control/sos',
+				async (p) => {
+					await p.getByRole('button', { name: 'Start surfing' }).click();
+					await p.getByRole('button', { name: 'Rate it now' }).click();
+				}
+			],
+			[
+				'/utils/self-control/sos',
+				// The session from the step before is still running.
+				async (p) => {
+					await p.getByRole('button', { name: 'It passed' }).click();
+					await p.getByRole('button', { name: 'Gave in' }).click();
+				}
+			],
 			['/settings'],
 			[
 				'/settings',

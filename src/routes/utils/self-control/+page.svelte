@@ -121,6 +121,11 @@
 </svelte:head>
 
 <main class="page-narrow flex flex-col gap-6 pt-2 pb-4 text-gray-800 sm:pb-8 dark:text-gray-200">
+	<a
+		href={resolve('/utils/self-control/sos' as '/')}
+		class="{primary} py-4 text-center text-lg"
+		data-testid="sos-button">🌊 I have an urge right now</a
+	>
 	<section aria-labelledby="habits-heading" class="flex flex-col gap-3">
 		<h2 id="habits-heading" class="text-lg font-semibold">Your habits</h2>
 		{#if active.length === 0 && adding === undefined}

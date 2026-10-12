@@ -95,3 +95,93 @@ test('Self-Control stays private: never under Recently used (#148)', async ({ pa
 	await gotoHydrated(page, '/');
 	await expect(page.getByTestId('pinned').getByRole('link')).toHaveText([/Self-Control$/]);
 });
+
+const log = (page: Page) =>
+	page.evaluate(() => JSON.parse(localStorage.getItem('app:self-control:log') ?? 'null'));
+
+test('Urge SOS: surf an urge with a timer that survives a reload, then log it (#149)', async ({
+	page
+}) => {
+	await page.clock.install({ time: new Date('2026-01-01T20:00:00') });
+	await gotoHydrated(page, '/utils/self-control');
+	await page.getByTestId('sos-button').click();
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Urge SOS$/);
+
+	await page.getByLabel(/How strong is it\?/).fill('6');
+	await page.getByRole('button', { name: '5 min', exact: true }).click();
+	await page.getByRole('button', { name: 'Start surfing' }).click();
+	await expect(page.getByTestId('surf-time')).toHaveText('5:00');
+	await expect(page.getByTestId('surf-prompt')).toHaveText(
+		'Notice where you feel it in your body.'
+	);
+
+	await page.clock.runFor(61_000);
+	await expect(page.getByTestId('surf-prompt')).toHaveText(/^Breathe out slowly/);
+	await page.getByRole('button', { name: 'Rate it now' }).click();
+	await page.getByLabel(/How strong is it now\?/).fill('8');
+	await page.getByRole('button', { name: 'Save rating' }).click();
+
+	// A reload mid-surf picks up where it was.
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(page.getByTestId('surf')).toBeVisible();
+	await expect(page.getByTestId('surf-time')).toHaveText(/^3:5\d$/);
+
+	// The timer runs out on its own.
+	await page.clock.runFor(4 * 60_000);
+	await expect(page.getByRole('heading', { name: 'Did you ride it out?' })).toBeVisible();
+	// Passing 10 on the way down to 2 doesn't make 10 the peak.
+	await page.getByLabel(/How strong is it now\?/).fill('10');
+	await page.getByLabel(/How strong is it now\?/).fill('2');
+	await page.getByRole('button', { name: 'Yes' }).click();
+	await expect(page.getByTestId('sos-done')).toContainText('You rode it out.');
+	await expect(page.getByText('Saved to your log.')).toBeVisible();
+
+	const [saved] = await log(page);
+	expect(saved).toMatchObject({
+		start: 6,
+		peak: 8,
+		end: 2,
+		technique: 'surf',
+		outcome: 'rode-out'
+	});
+	expect(saved).not.toHaveProperty('habit');
+	expect(await page.evaluate(() => localStorage.getItem('app:self-control:sos'))).toBeNull();
+});
+
+test('Urge SOS: a slip is logged kindly with a note, against the chosen habit (#149)', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/utils/self-control');
+	await page.getByRole('button', { name: 'Add a habit' }).click();
+	await page.getByRole('button', { name: '🍪 Snacking' }).click();
+	await page.getByRole('button', { name: 'Add habit' }).click();
+	await page.getByTestId('sos-button').click();
+
+	await page.getByRole('button', { name: '🍪 Snacking' }).click();
+	await page.getByRole('button', { name: 'Start surfing' }).click();
+	await page.getByRole('button', { name: 'It passed' }).click();
+	await page.getByRole('button', { name: 'Gave in' }).click();
+	await expect(page.getByTestId('gave-in')).toContainText("That's okay.");
+	await page.getByLabel('What might help next time? (optional)').fill('Fruit on the counter');
+	await page.getByRole('button', { name: 'Save' }).click();
+	await expect(page.getByTestId('sos-done')).toContainText('Next time is a fresh start.');
+
+	const habitId = await page.evaluate(
+		() => JSON.parse(localStorage.getItem('app:self-control:habits')!)[0].id
+	);
+	const [saved] = await log(page);
+	expect(saved).toMatchObject({
+		habit: habitId,
+		outcome: 'gave-in',
+		note: 'Fruit on the counter'
+	});
+
+	// Deleting the habit deletes its log entries too.
+	page.on('dialog', (dialog) => dialog.accept());
+	await page.getByTestId('sos-done').getByRole('link', { name: 'Done' }).click();
+	await page.getByRole('button', { name: 'Edit Snacking' }).click();
+	await page.getByRole('button', { name: 'Delete habit' }).click();
+	await expect(page.getByText('Snacking deleted.')).toBeVisible();
+	expect(await log(page)).toBeNull();
+});
