@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { segmented } from '$lib/segmented';
 	import { resolve } from '$app/paths';
 	import { persist } from '$lib/persist.svelte';
+	import { segmented } from '$lib/segmented';
 	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { entries } from '$lib/storage';
 	import {

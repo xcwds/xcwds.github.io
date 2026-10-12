@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { segmented } from '$lib/segmented';
 	import { onMount } from 'svelte';
 	import { version } from '$app/environment';
 	import Acronym from '$lib/Acronym.svelte';
@@ -10,6 +9,7 @@
 	import { useApp } from '@xcwds/sveltekit';
 	import { reloadShortcuts } from '$lib/home.svelte';
 	import { install, promptInstall } from '$lib/install.svelte';
+	import { segmented } from '$lib/segmented';
 	import { reloadSettings, settings } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { doughDefaults } from '$lib/utils/dough';

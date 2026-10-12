@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { segmented } from '$lib/segmented';
 	import type { UnitSystem } from '$lib/recipes/units';
+	import { segmented } from '$lib/segmented';
 	import { settings } from '$lib/settings.svelte';
 
 	/**

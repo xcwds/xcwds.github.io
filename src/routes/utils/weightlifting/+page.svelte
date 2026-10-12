@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { segmented } from '$lib/segmented';
 	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
+	import { segmented } from '$lib/segmented';
 	import { entries, update } from '$lib/storage';
 	import type { HistoryEntry, Workout } from '$lib/utils/lifting';
 	import History from './History.svelte';

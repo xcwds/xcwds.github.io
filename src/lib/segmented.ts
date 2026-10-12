@@ -1,5 +1,6 @@
 /** The options of a segmented control: radio buttons in a radio group, or tabs in a tab list. */
 const OPTIONS = '[role="radio"], [role="tab"]';
+const GROUPS = '[role="radiogroup"], [role="tablist"]';
 
 const isOn = (el: Element) =>
 	el.getAttribute('aria-checked') === 'true' || el.getAttribute('aria-selected') === 'true';
@@ -14,7 +15,11 @@ const disabled = (el: Element) =>
  * that are disabled or hidden are skipped.
  */
 export function segmented(group: HTMLElement) {
-	const options = () => [...group.querySelectorAll<HTMLElement>(OPTIONS)];
+	// Only this group's own options, not those of a group nested inside it.
+	const options = () =>
+		[...group.querySelectorAll<HTMLElement>(OPTIONS)].filter(
+			(el) => el.parentElement?.closest(GROUPS) === group
+		);
 	/** The options the keyboard can reach. */
 	const reachable = () => options().filter((el) => !disabled(el) && el.getClientRects().length > 0);
 
