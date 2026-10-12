@@ -87,6 +87,10 @@ describe('a surfing session', () => {
 			'Charge the phone in the kitchen'
 		);
 		expect(finish(rated, 'gave-in', 'id3', '   ')).not.toHaveProperty('note');
+		// The closing rating counts toward the peak only once it's saved.
+		expect(finish({ ...rated, last: 10 }, 'gave-in', 'id4')).toMatchObject({ peak: 10, end: 10 });
+		// A habit deleted since the session began isn't logged against.
+		expect(finish(rated, 'rode-out', 'id5', undefined, () => false)).not.toHaveProperty('habit');
 		expect(startSurf({ intensity: 2, minutes: 5 }, 1000)).not.toHaveProperty('habit');
 	});
 

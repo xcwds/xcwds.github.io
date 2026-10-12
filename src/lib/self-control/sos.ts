@@ -142,23 +142,26 @@ export const rate = (session: SosSession, intensity: number): SosSession => ({
 export const surfPrompt = (elapsed: number): string =>
 	SURF_PROMPTS[Math.floor(Math.max(0, elapsed) / 60_000) % SURF_PROMPTS.length]!;
 
-/** The log entry a finished session makes. */
+/** The log entry a finished session makes, given which habits still exist. */
 export function finish(
 	session: SosSession,
 	outcome: Outcome,
 	id: string,
-	note?: string
+	note?: string,
+	habitExists: (id: string) => boolean = () => true
 ): UrgeEntry {
 	const entry: UrgeEntry = {
 		id,
 		at: session.startedAt,
 		start: session.start,
-		peak: session.peak,
+		// The closing rating counts once, here: the slider passes through values on its way.
+		peak: Math.max(session.peak, session.last),
 		end: session.last,
 		technique: session.technique,
 		outcome
 	};
-	if (session.habit) entry.habit = session.habit;
+	// A habit deleted since the session began takes its log with it, so this one isn't its.
+	if (session.habit && habitExists(session.habit)) entry.habit = session.habit;
 	const trimmed = note?.trim().slice(0, NOTE_MAX);
 	if (trimmed) entry.note = trimmed;
 	return entry;

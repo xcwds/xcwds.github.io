@@ -130,6 +130,8 @@ test('Urge SOS: surf an urge with a timer that survives a reload, then log it (#
 	// The timer runs out on its own.
 	await page.clock.runFor(4 * 60_000);
 	await expect(page.getByRole('heading', { name: 'Did you ride it out?' })).toBeVisible();
+	// Passing 10 on the way down to 2 doesn't make 10 the peak.
+	await page.getByLabel(/How strong is it now\?/).fill('10');
 	await page.getByLabel(/How strong is it now\?/).fill('2');
 	await page.getByRole('button', { name: 'Yes' }).click();
 	await expect(page.getByTestId('sos-done')).toContainText('You rode it out.');

@@ -103,7 +103,14 @@
 
 	function save(outcome: Outcome) {
 		if (!session) return;
-		const entry = finish(session, outcome, randomId(), outcome === 'gave-in' ? note : undefined);
+		const saved = read(entries.selfControlHabits) ?? [];
+		const entry = finish(
+			session,
+			outcome,
+			randomId(),
+			outcome === 'gave-in' ? note : undefined,
+			(id) => habitById(saved, id) !== undefined
+		);
 		const result = update(entries.selfControlLog, undefined, (latest) =>
 			appendEntry(latest ?? [], entry)
 		);
@@ -167,7 +174,8 @@
 					max="10"
 					step="1"
 					value={session.last}
-					oninput={(e) => session && (session = rate(session, e.currentTarget.valueAsNumber))}
+					oninput={(e) =>
+						session && (session = { ...session, last: e.currentTarget.valueAsNumber })}
 					class="min-h-11"
 				/>
 			</label>
