@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { segmented } from '$lib/segmented';
 	import { settings } from '$lib/settings.svelte';
 	import { TEMP_UNITS } from '$lib/utils/oven';
 </script>
 
 <!-- The oven converter's unit (a tool default in Settings); recipes' oven panel shares it. -->
-<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Temperature units">
+<div class="grid grid-cols-2 gap-2" role="radiogroup" use:segmented aria-label="Temperature units">
 	{#each TEMP_UNITS as unit (unit)}
 		<button
 			type="button"

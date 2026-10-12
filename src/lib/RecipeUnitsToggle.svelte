@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { segmented } from '$lib/segmented';
 	import type { UnitSystem } from '$lib/recipes/units';
 	import { settings } from '$lib/settings.svelte';
 
@@ -28,6 +29,7 @@
 <div
 	class="grid gap-2 {options.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}"
 	role="radiogroup"
+	use:segmented
 	aria-label="Recipe units"
 >
 	{#each options as option (option ?? 'written')}

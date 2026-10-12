@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { segmented } from '$lib/segmented';
 	import { onMount } from 'svelte';
 	import { version } from '$app/environment';
 	import Acronym from '$lib/Acronym.svelte';
@@ -256,7 +257,7 @@
 
 		<section class={card} aria-labelledby="appearance">
 			<h2 id="appearance" class="text-lg font-semibold">Appearance</h2>
-			<div class="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Theme">
+			<div class="grid grid-cols-3 gap-2" role="radiogroup" use:segmented aria-label="Theme">
 				{#each themes as theme (theme.value)}
 					<button
 						type="button"
@@ -281,6 +282,7 @@
 					<div
 						class="grid flex-1 grid-cols-2 gap-2"
 						role="radiogroup"
+						use:segmented
 						aria-label="Navigation in {orientation.label.toLowerCase()}"
 					>
 						{#each navStyles as style (style.value)}
@@ -323,7 +325,12 @@
 			<h2 id="tool-defaults" class="text-lg font-semibold">Tool defaults</h2>
 
 			<h3 class="font-semibold">Weightlifting Calculator</h3>
-			<div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Weightlifting units">
+			<div
+				class="grid grid-cols-2 gap-2"
+				role="radiogroup"
+				use:segmented
+				aria-label="Weightlifting units"
+			>
 				{#each WEIGHT_UNITS as unit (unit)}
 					<button
 						type="button"
