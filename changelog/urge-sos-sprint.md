@@ -1,0 +1,1 @@
+- Urge SOS has Sprint: do one quick action that breaks the cue, then wait out a 5-minute delay before deciding. You can also change or forget the name the self-talk prompts use.

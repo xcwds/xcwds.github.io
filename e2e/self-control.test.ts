@@ -221,3 +221,52 @@ test('Urge SOS: the writing techniques, with answers kept through a reload and a
 		await page.evaluate(() => JSON.parse(localStorage.getItem('app:self-control:prefs')!).name)
 	).toBe('Alex');
 });
+
+test('Urge SOS: sprint, then wait out a 5-minute delay that survives a reload (#149)', async ({
+	page
+}) => {
+	await page.clock.install({ time: new Date('2026-01-01T21:00:00') });
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: 'Sprint' }).click();
+	await page.getByRole('button', { name: 'Start', exact: true }).click();
+	await page.getByRole('button', { name: 'Drink a glass of water' }).click();
+	await expect(page.getByTestId('delay')).toContainText('Drink a glass of water: done.');
+	await expect(page.getByTestId('delay-time')).toHaveText('5:00');
+
+	await page.clock.runFor(60_000);
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(page.getByTestId('delay-time')).toHaveText(/^3:5\d|4:00$/);
+
+	await page.clock.runFor(4 * 60_000);
+	await expect(page.getByRole('heading', { name: 'Did you ride it out?' })).toBeVisible();
+	await page.getByRole('button', { name: 'Yes' }).click();
+	const [saved] = await log(page);
+	expect(saved).toMatchObject({ technique: 'sprint', outcome: 'rode-out' });
+	expect(saved).not.toHaveProperty('action');
+});
+
+test('Urge SOS: change or forget the name self-talk uses (#149)', async ({ page }) => {
+	await page.addInitScript(() => {
+		if (!localStorage.getItem('app:self-control:prefs'))
+			localStorage.setItem('app:self-control:prefs', JSON.stringify({ name: 'Alex' }));
+	});
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: 'Talk to yourself like a friend' }).click();
+	await page.getByRole('button', { name: 'Start', exact: true }).click();
+	await expect(page.getByTestId('your-name')).toHaveText(/Using your name, Alex\./);
+
+	await page.getByRole('button', { name: 'Change' }).click();
+	await expect(page.getByLabel(/Your name, for these prompts/)).toHaveValue('Alex');
+	await page.getByLabel(/Your name, for these prompts/).fill('Sam');
+	await page.getByRole('button', { name: 'Use my name' }).click();
+	await expect(page.getByText('"Sam wants to…, but Sam knows…"')).toBeVisible();
+
+	await page.getByRole('button', { name: 'Change' }).click();
+	await page.getByRole('button', { name: 'Forget my name' }).click();
+	await expect(page.getByText('Name forgotten.')).toBeVisible();
+	await expect(page.getByText(/using your name: "Sam wants to/)).toBeVisible();
+	expect(
+		await page.evaluate(() => JSON.parse(localStorage.getItem('app:self-control:prefs')!))
+	).not.toHaveProperty('name');
+});

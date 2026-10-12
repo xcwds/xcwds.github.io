@@ -29,26 +29,46 @@ export type UrgeEntry = {
 
 /** The SOS session in progress, saved per window so reopening the app returns to it. */
 export type SosSession = {
-	/** Surfing (with its timer), writing to a technique's prompts, or saying how it went. */
-	step: 'surf' | 'prompts' | 'outcome';
+	/**
+	 * Surfing (with its timer), writing to a technique's prompts, picking a sprint action, waiting
+	 * out the delay after it (with its timer), or saying how it went.
+	 */
+	step: SosStep;
 	habit?: string;
 	technique: SessionTechnique;
 	start: number;
 	peak: number;
 	last: number;
-	/** When it started, and when the surf timer ends (ms since the epoch; `startedAt` without one). */
+	/** When it started, and when its timer ends (ms since the epoch; `startedAt` without one). */
 	startedAt: number;
 	endsAt: number;
 	/** What you wrote to the prompts, kept only until the session ends (never logged). */
 	answers?: string[];
+	/** The sprint action you picked. */
+	action?: string;
 };
 
-/** The techniques you can pick so far (the urge sprint comes later, #149). */
-export const SESSION_TECHNIQUES = ['surf', 'zoom-out', 'plainly', 'friend'] as const;
+export type SosStep = 'surf' | 'prompts' | 'sprint' | 'delay' | 'outcome';
+
+/** The steps each technique goes through before "Did you ride it out?". */
+const STEPS: Record<SessionTechnique, readonly SosStep[]> = {
+	surf: ['surf'],
+	sprint: ['sprint', 'delay'],
+	'zoom-out': ['prompts'],
+	plainly: ['prompts'],
+	friend: ['prompts']
+};
+
+/** Steps that count down to `endsAt`. */
+export const isTimed = (step: SosStep | undefined): boolean => step === 'surf' || step === 'delay';
+
+/** The techniques you can pick. */
+export const SESSION_TECHNIQUES = ['surf', 'sprint', 'zoom-out', 'plainly', 'friend'] as const;
 export type SessionTechnique = (typeof SESSION_TECHNIQUES)[number];
 
 export const TECHNIQUE_LABELS: Record<SessionTechnique, string> = {
 	surf: 'Surf it',
+	sprint: 'Sprint',
 	'zoom-out': 'Zoom out',
 	plainly: 'See it plainly',
 	friend: 'Talk to yourself like a friend'
@@ -62,7 +82,7 @@ export type PromptTechnique = { intro: string; prompts: string[]; optional?: boo
  * urge is to skip it) and, for self-talk, your name when you've given it.
  */
 export function techniquePrompts(
-	technique: Exclude<SessionTechnique, 'surf'>,
+	technique: Exclude<SessionTechnique, 'surf' | 'sprint'>,
 	{ name, kind }: { name?: string; kind?: HabitKind }
 ): PromptTechnique {
 	const giving = givingIn(kind);
@@ -107,6 +127,8 @@ export function techniquePrompts(
 export const LOG_MAX = 2000;
 export const NOTE_MAX = 280;
 export const ANSWER_MAX = 500;
+export const ACTION_MAX = 80;
+export const DELAY_MINUTES = 5;
 export const SURF_MINUTES = [5, 10, 15, 20] as const;
 export const DEFAULT_SURF_MINUTES = 10;
 
@@ -168,15 +190,15 @@ export function logWithout(log: readonly UrgeEntry[], habitId: string): UrgeEntr
 
 export function parseSession(v: unknown): SosSession | undefined {
 	if (!isRecord(v)) return undefined;
-	const { step, habit, technique, start, peak, last, startedAt, endsAt, answers } = v;
-	if (step !== 'surf' && step !== 'prompts' && step !== 'outcome') return undefined;
+	const { step, habit, technique, start, peak, last, startedAt, endsAt, answers, action } = v;
 	if (!SESSION_TECHNIQUES.includes(technique as SessionTechnique)) return undefined;
-	// Surfing has a timer; the writing techniques have prompts.
-	if ((step === 'surf') !== (technique === 'surf') && step !== 'outcome') return undefined;
+	// Each technique has its own steps; every one ends in the outcome.
+	if (step !== 'outcome' && !STEPS[technique as SessionTechnique].includes(step as SosStep))
+		return undefined;
 	if (!isIntensity(start) || !isIntensity(peak) || !isIntensity(last)) return undefined;
 	if (!isTime(startedAt) || !isTime(endsAt) || endsAt < startedAt) return undefined;
 	const session: SosSession = {
-		step,
+		step: step as SosStep,
 		technique: technique as SessionTechnique,
 		start,
 		peak,
@@ -191,6 +213,8 @@ export function parseSession(v: unknown): SosSession | undefined {
 		answers.every((a) => typeof a === 'string' && a.length <= ANSWER_MAX)
 	)
 		session.answers = answers;
+	if (typeof action === 'string' && action.trim() && action.length <= ACTION_MAX)
+		session.action = action;
 	return session;
 }
 
@@ -201,7 +225,7 @@ export function startSession(
 ): SosSession {
 	const surf = fields.technique === 'surf';
 	const session: SosSession = {
-		step: surf ? 'surf' : 'prompts',
+		step: STEPS[fields.technique][0]!,
 		technique: fields.technique,
 		start: fields.intensity,
 		peak: fields.intensity,
@@ -248,3 +272,24 @@ export function finish(
 	if (trimmed) entry.note = trimmed;
 	return entry;
 }
+
+/**
+ * Physical, trigger-breaking actions for the urge sprint: do one in the next 20 seconds, then
+ * wait out the delay.
+ */
+export const SPRINT_ACTIONS: readonly string[] = [
+	'Put the phone in another room',
+	'Stand up and walk',
+	'Drink a glass of water',
+	'Wash your face',
+	'Step outside',
+	'Brush your teeth'
+];
+
+/** `session` after you picked a sprint action: the delay timer starts now. */
+export const startDelay = (session: SosSession, action: string, now = Date.now()): SosSession => ({
+	...session,
+	step: 'delay',
+	action: action.slice(0, ACTION_MAX),
+	endsAt: now + DELAY_MINUTES * 60_000
+});

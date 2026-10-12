@@ -170,6 +170,18 @@ for (const [name, viewport] of [
 					await p.getByRole('button', { name: 'Start', exact: true }).click();
 				}
 			],
+			[
+				'/utils/self-control/sos',
+				// Leave the writing step for the sprint's action list.
+				async (p) => {
+					await p.getByRole('button', { name: 'Done' }).click();
+					await p.getByRole('button', { name: 'Yes' }).click();
+					await gotoHydrated(p, '/utils/self-control/sos');
+					await p.getByRole('button', { name: 'Sprint' }).click();
+					await p.getByRole('button', { name: 'Start', exact: true }).click();
+				}
+			],
+			['/utils/self-control/sos', (p) => p.getByRole('button', { name: 'Step outside' }).click()],
 			['/settings'],
 			[
 				'/settings',
