@@ -15,8 +15,9 @@ html[data-color-scheme='dark'] {
 }
 
 /* Base rules the app used to get from Skeleton (#134): Tailwind's preflight leaves buttons with
-   the default arrow cursor, and the rest keep the neutral grays for scrollbars, selection and the
-   tap flash. */
+   the default arrow cursor and disabled controls undimmed, and the rest keep the page background
+   (seen when iOS bounces past the content) and the neutral grays for scrollbars, selection and the
+   tap flash. Utilities such as `disabled:opacity-40` still win over this layer. */
 @layer base {
 	:root {
 		color-scheme: light;
@@ -24,6 +25,18 @@ html[data-color-scheme='dark'] {
 			light-dark(oklch(97% 0 0), oklch(20.5% 0 0));
 		scrollbar-width: thin;
 		-webkit-tap-highlight-color: #7373734d;
+	}
+
+	body {
+		background-color: light-dark(oklch(98.5% 0 0), oklch(14.5% 0 0));
+	}
+
+	:disabled {
+		opacity: 0.5;
+	}
+
+	:disabled > * {
+		pointer-events: none;
 	}
 
 	::selection {
