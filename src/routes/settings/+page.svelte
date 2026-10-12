@@ -5,7 +5,9 @@
 	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
 	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
 	import EquipmentSets from './EquipmentSets.svelte';
+	import Privacy from './Privacy.svelte';
 	import { ACRONYM, BRAND, SECRET_ACRONYM } from '$lib/brand';
+	import { backupFileName } from '@xcwds/plugin-settings';
 	import { useApp } from '@xcwds/sveltekit';
 	import { reloadShortcuts } from '$lib/home.svelte';
 	import { install, promptInstall } from '$lib/install.svelte';
@@ -123,7 +125,10 @@
 		: version;
 
 	// --- What's new (`@xcwds/plugin-changelog`: it lists the newest 10) ---
-	const changelog = useApp().changelog;
+	const app = useApp();
+	const changelog = app.changelog;
+	/** `settings()`'s options in xcwds.config.ts: the backup file's name and the source link. */
+	const pageOptions = app.settingsPage?.options;
 	const changelogEntries = changelog?.entries ?? [];
 	/** Entries newer than this get a "New" badge for this visit (none on a fresh install). */
 	let seenBefore = $state(changelog?.latest ?? 0);
@@ -146,12 +151,11 @@
 
 	function backupFile() {
 		const now = new Date();
-		const date = [now.getFullYear(), now.getMonth() + 1, now.getDate()]
-			.map((n) => String(n).padStart(2, '0'))
-			.join('-');
-		return new File([JSON.stringify(exportData(now), null, '\t')], `xcwds-backup-${date}.json`, {
-			type: 'application/json'
-		});
+		return new File(
+			[JSON.stringify(exportData(now), null, '\t')],
+			backupFileName(pageOptions?.backupName ?? 'backup', now),
+			{ type: 'application/json' }
+		);
 	}
 
 	function download() {
@@ -550,6 +554,11 @@
 			</button>
 		</section>
 
+		<section class={card} aria-labelledby="privacy">
+			<h2 id="privacy" class="text-lg font-semibold">Privacy</h2>
+			<Privacy />
+		</section>
+
 		<section class={card} aria-labelledby="about">
 			<h2 id="about" class="text-lg font-semibold">About</h2>
 			<dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
@@ -567,14 +576,14 @@
 				</dd>
 				<dt class="text-gray-600 dark:text-gray-400">Version</dt>
 				<dd data-testid="version">{built}</dd>
-				<dt class="text-gray-600 dark:text-gray-400">Source</dt>
-				<dd>
-					<a
-						class="underline"
-						href="https://github.com/xcwds/xcwds.github.io"
-						rel="external noopener">github.com/xcwds/xcwds.github.io</a
-					>
-				</dd>
+				{#if pageOptions?.source}
+					<dt class="text-gray-600 dark:text-gray-400">Source</dt>
+					<dd>
+						<a class="underline" href={pageOptions.source} rel="external noopener"
+							>{pageOptions.source.replace(/^https:\/\//, '')}</a
+						>
+					</dd>
+				{/if}
 			</dl>
 		</section>
 
