@@ -13,3 +13,25 @@
 html[data-color-scheme='dark'] {
 	color-scheme: dark;
 }
+
+/* Base rules the app used to get from Skeleton (#134): Tailwind's preflight leaves buttons with
+   the default arrow cursor, and the rest keep the neutral grays for scrollbars, selection and the
+   tap flash. */
+@layer base {
+	:root {
+		color-scheme: light;
+		scrollbar-color: light-dark(oklch(87% 0 0), oklch(37.1% 0 0))
+			light-dark(oklch(97% 0 0), oklch(20.5% 0 0));
+		scrollbar-width: thin;
+		-webkit-tap-highlight-color: #7373734d;
+	}
+
+	::selection {
+		background-color: #73737380;
+	}
+
+	button:not(:disabled),
+	[role='button']:not(:disabled) {
+		cursor: pointer;
+	}
+}
