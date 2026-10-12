@@ -6,7 +6,6 @@
 	import { persist, saveResult } from '$lib/persist.svelte';
 	import {
 		activeHabits,
-		givingIn,
 		habitById,
 		NAME_MAX,
 		randomId,
@@ -65,7 +64,7 @@
 	const remaining = $derived(session ? session.endsAt - now : 0);
 	const writing = $derived(
 		session && session.technique !== 'surf'
-			? techniquePrompts(session.technique, { name, givingIn: givingIn(kind) })
+			? techniquePrompts(session.technique, { name, kind })
 			: undefined
 	);
 
@@ -240,7 +239,7 @@
 			{/if}
 			{#each writing.prompts as prompt, i (i)}
 				<label class="flex flex-col gap-1">
-					<span>{prompt}</span>
+					<span>{prompt}{writing.optional ? ' (optional)' : ''}</span>
 					<textarea
 						rows="3"
 						class={field}

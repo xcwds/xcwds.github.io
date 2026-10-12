@@ -2,6 +2,7 @@
  * Urge SOS (#149): the urge log every session ends in, and the session in progress. Pure types,
  * validators and helpers; the page saves them through `persist()` and `update()`.
  */
+import { givingIn, type HabitKind } from './habits';
 
 /** Every technique the log can record, including the ones still to come (#149). */
 export const TECHNIQUES = ['surf', 'sprint', 'zoom-out', 'plainly', 'friend'] as const;
@@ -57,13 +58,14 @@ export const TECHNIQUE_LABELS: Record<SessionTechnique, string> = {
 export type PromptTechnique = { intro: string; prompts: string[]; optional?: boolean };
 
 /**
- * The prompts for a writing technique. `name` is yours for self-talk (or "you"); `givingIn` is
- * how the habit says it ("giving in", or "skipping it" for one you're starting).
+ * The prompts for a writing technique, worded for the habit's kind (for one you're starting, the
+ * urge is to skip it) and, for self-talk, your name when you've given it.
  */
 export function techniquePrompts(
 	technique: Exclude<SessionTechnique, 'surf'>,
-	{ name, givingIn }: { name?: string; givingIn: string }
+	{ name, kind }: { name?: string; kind?: HabitKind }
 ): PromptTechnique {
+	const giving = givingIn(kind);
 	switch (technique) {
 		case 'zoom-out':
 			return {
@@ -77,25 +79,27 @@ export function techniquePrompts(
 			};
 		case 'plainly':
 			return {
-				intro: `Picture the unappealing reality of ${givingIn}: the greasy wrapper and the heavy feeling, the stiff neck and the lost hour. Optional; skip any prompt that doesn't help.`,
+				intro: `Picture the unappealing reality of ${giving}: ${
+					kind === 'start'
+						? 'the plan that didn\'t happen and the "tomorrow, then" feeling'
+						: 'the greasy wrapper and the heavy feeling, the stiff neck and the lost hour'
+				}. Skip any prompt that doesn't help.`,
 				optional: true,
 				prompts: [
-					`What does ${givingIn} really look like, right now?`,
+					`What does ${giving} really look like, right now?`,
 					'And how will you feel an hour later?'
 				]
 			};
-		case 'friend': {
-			const who = name ?? 'You';
+		case 'friend':
 			return {
 				intro: 'Talk to yourself the way you would to a friend. A little distance makes it easier.',
 				prompts: [
 					name
-						? `Write it in the third person: "${who} wants to…, but ${who} knows…"`
+						? `Write it in the third person: "${name} wants to…, but ${name} knows…"`
 						: 'Write it in the third person, using your name: "Sam wants to…, but Sam knows…"',
 					'What would someone you admire do right now?'
 				]
 			};
-		}
 	}
 }
 

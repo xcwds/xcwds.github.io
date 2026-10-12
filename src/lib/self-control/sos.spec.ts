@@ -136,16 +136,20 @@ describe('a surfing session', () => {
 	});
 
 	it('words the prompts for your name and the habit', () => {
-		const friend = techniquePrompts('friend', { name: 'Alex', givingIn: 'giving in' });
+		const friend = techniquePrompts('friend', { name: 'Alex' });
 		expect(friend.prompts[0]).toBe(
 			'Write it in the third person: "Alex wants to…, but Alex knows…"'
 		);
-		expect(techniquePrompts('friend', { givingIn: 'giving in' }).prompts[0]).toMatch(
-			/using your name/
-		);
-		const plainly = techniquePrompts('plainly', { givingIn: 'skipping it' });
+		expect(techniquePrompts('friend', {}).prompts[0]).toMatch(/using your name/);
+		const plainly = techniquePrompts('plainly', { kind: 'start' });
 		expect(plainly.optional).toBe(true);
 		expect(plainly.prompts[0]).toBe('What does skipping it really look like, right now?');
-		expect(techniquePrompts('zoom-out', { givingIn: 'giving in' }).prompts).toHaveLength(3);
+		// A habit you're starting gets its own examples, not the snacking and scrolling ones.
+		expect(plainly.intro).toMatch(/the plan that didn't happen/);
+		expect(plainly.intro).not.toMatch(/wrapper/);
+		expect(techniquePrompts('plainly', { kind: 'cut-back' }).intro).toMatch(
+			/giving in: the greasy wrapper/
+		);
+		expect(techniquePrompts('zoom-out', {}).prompts).toHaveLength(3);
 	});
 });
