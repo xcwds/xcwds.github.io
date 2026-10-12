@@ -118,6 +118,8 @@
 		rating = undefined;
 		gaveIn = false;
 		note = '';
+		editingName = false;
+		nameError = undefined;
 		now = Date.now();
 		session = startSession({ habit, intensity, technique, minutes }, now);
 	}
