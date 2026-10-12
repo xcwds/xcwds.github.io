@@ -27,6 +27,21 @@ const TRACKING_KEYS = new Set(
 		'irclickid',
 		'rb_clickid',
 		'wickedid',
+		'gad_source',
+		'gad_campaignid',
+		// Branch deep links
+		'_branch_match_id',
+		'_branch_referrer',
+		// Facebook share links
+		'mibextid',
+		'fb_action_ids',
+		'fb_action_types',
+		'fb_ref',
+		'fb_source',
+		'action_object_map',
+		'action_type_map',
+		'action_ref_map',
+		'__tn__',
 		// Email and marketing platforms
 		'mc_cid',
 		'mc_eid',
@@ -48,6 +63,16 @@ const TRACKING_KEYS = new Set(
 		'trkcampaign',
 		'ss_source',
 		'ss_campaign_id',
+		'ck_subscriber_id',
+		'__s',
+		'_bta_tid',
+		'_bta_c',
+		'wt_mc',
+		'wt_zmc',
+		'nr_email_referer',
+		// Microsoft and Bing shares
+		'ocid',
+		'cvid',
 		// Analytics and cross-domain linking
 		'_ga',
 		'_gl',
@@ -93,25 +118,89 @@ const TRACKING_PREFIXES = [
 	'ga_',
 	'vero_',
 	'pd_rd_',
-	'pf_rd_'
+	'pf_rd_',
+	// Facebook's `__cft__[0]`, `__cft__[1]`…
+	'__cft__'
 ];
 
 /**
- * Keys that are only share tracking on some sites (e.g. Twitter/X's `s` and `t`); elsewhere they
- * are often meaningful. An entry ending in `.` matches that domain under any TLD (`amazon.co.uk`).
+ * Keys that are only tracking on some sites (e.g. Twitter/X's `s` and `t`); elsewhere they are
+ * often meaningful. An entry ending in `.` matches that domain under any TLD (`amazon.co.uk`).
  */
-const HOST_SPECIFIC = new Map<string, string[]>([
-	['si', ['youtube.com', 'youtu.be', 'spotify.com']],
-	['s', ['twitter.com', 'x.com']],
-	['t', ['twitter.com', 'x.com']],
-	['feature', ['youtube.com', 'youtu.be']],
-	['pp', ['youtube.com', 'youtu.be']],
-	['tag', ['amazon.']],
-	['linkcode', ['amazon.']],
-	['linkid', ['amazon.']],
-	['content-id', ['amazon.']],
-	['ref_', ['amazon.']]
-]);
+const SITE_TRACKERS: [hosts: string[], keys: string[]][] = [
+	[['youtube.com', 'youtu.be', 'spotify.com'], ['si']],
+	[
+		['twitter.com', 'x.com'],
+		['s', 't']
+	],
+	[
+		['youtube.com', 'youtu.be'],
+		['feature', 'pp']
+	],
+	[
+		['amazon.'],
+		// Not `th` or `psc`, which pick the product variant.
+		[
+			'tag',
+			'linkCode',
+			'linkId',
+			'content-id',
+			'ref_',
+			'qid',
+			'sr',
+			'crid',
+			'sprefix',
+			'dib',
+			'dib_tag',
+			'_encoding'
+		]
+	],
+	// Search result tracking; `q` is the search itself.
+	[
+		['google.'],
+		[
+			'ved',
+			'ei',
+			'sxsrf',
+			'gs_lcp',
+			'gs_lp',
+			'sca_esv',
+			'sca_upv',
+			'oq',
+			'aqs',
+			'rlz',
+			'sourceid',
+			'uact',
+			'sclient'
+		]
+	],
+	[['linkedin.com'], ['trackingId', 'refId', 'lipi', 'midToken', 'midSig', 'trkEmail', 'rcm']],
+	[
+		['tiktok.com'],
+		[
+			'_r',
+			'_t',
+			'u_code',
+			'preview_pb',
+			'share_item_id',
+			'share_link_id',
+			'social_sharing',
+			'sec_user_id'
+		]
+	],
+	[
+		['threads.net', 'threads.com', 'instagram.com'],
+		['xmt', 'slof']
+	]
+];
+
+/** Lowercased key → the hosts it is tracking on. */
+const HOST_SPECIFIC = new Map<string, string[]>();
+for (const [hosts, keys] of SITE_TRACKERS)
+	for (const key of keys) {
+		const k = key.toLowerCase();
+		HOST_SPECIFIC.set(k, [...(HOST_SPECIFIC.get(k) ?? []), ...hosts]);
+	}
 
 export function isTrackingParam(key: string, hostname = ''): boolean {
 	const k = key.toLowerCase();

@@ -62,6 +62,82 @@ describe('isTrackingParam', () => {
 	});
 });
 
+describe('more trackers (#137)', () => {
+	/** The params `readParams` drops from `link`. */
+	const dropped = (link: string) =>
+		readParams(new URL(link))
+			.filter((p) => !p.keep)
+			.map((p) => p.key);
+	/** The params it keeps. */
+	const kept = (link: string) =>
+		readParams(new URL(link))
+			.filter((p) => p.keep)
+			.map((p) => p.key);
+
+	it('drops ad, deep-link, Facebook, email and Microsoft trackers anywhere', () => {
+		const keys = [
+			'gad_source',
+			'gad_campaignid',
+			'_branch_match_id',
+			'_branch_referrer',
+			'mibextid',
+			'fb_action_ids',
+			'fb_action_types',
+			'fb_ref',
+			'fb_source',
+			'action_object_map',
+			'action_type_map',
+			'action_ref_map',
+			'__tn__',
+			'__cft__[0]',
+			'ck_subscriber_id',
+			'__s',
+			'_bta_tid',
+			'_bta_c',
+			'wt_mc',
+			'wt_zmc',
+			'nr_email_referer',
+			'ocid',
+			'cvid'
+		];
+		for (const key of keys) expect(isTrackingParam(key, 'example.com'), key).toBe(true);
+	});
+
+	it('cleans Google search links but keeps the search', () => {
+		const link =
+			'https://www.google.com/search?q=svelte&oq=svel&gs_lcp=abc&sca_esv=1&ei=x&ved=y&sxsrf=z&sourceid=chrome&ie=UTF-8';
+		expect(kept(link)).toEqual(['q', 'ie']);
+		expect(dropped('https://www.google.co.uk/search?q=a&rlz=1C1&aqs=chrome..69i57&uact=5')).toEqual(
+			['rlz', 'aqs', 'uact']
+		);
+		// Elsewhere these names can mean something.
+		expect(kept('https://example.com/?ei=1&oq=2&ved=3')).toEqual(['ei', 'oq', 'ved']);
+	});
+
+	it('cleans LinkedIn, TikTok, Threads and Instagram share links', () => {
+		expect(
+			dropped(
+				'https://www.linkedin.com/posts/x?trackingId=a&refId=b&lipi=c&midToken=d&midSig=e&trkEmail=f&rcm=g'
+			)
+		).toHaveLength(7);
+		expect(
+			kept(
+				'https://www.tiktok.com/@a/video/1?_r=1&_t=2&u_code=3&preview_pb=0&share_item_id=4&share_link_id=5&social_sharing=1&sec_user_id=6&lang=en'
+			)
+		).toEqual(['lang']);
+		expect(dropped('https://www.threads.net/@a/post/b?xmt=1&slof=1')).toEqual(['xmt', 'slof']);
+		expect(dropped('https://www.instagram.com/p/a/?xmt=1&slof=1')).toEqual(['xmt', 'slof']);
+		expect(kept('https://example.com/?_r=1&_t=2&rcm=3&xmt=4')).toEqual(['_r', '_t', 'rcm', 'xmt']);
+	});
+
+	it("cleans Amazon search tracking but keeps the product's variant", () => {
+		const link =
+			'https://www.amazon.com/dp/B0?qid=1&sr=8-3&crid=X&sprefix=ab&dib=e&dib_tag=se&_encoding=UTF8&th=1&psc=1';
+		expect(kept(link)).toEqual(['th', 'psc']);
+		expect(kept('https://example.com/?sr=1&qid=2')).toEqual(['sr', 'qid']);
+	});
+});
+
 describe('readParams / buildLink', () => {
 	const url = new URL(
 		'https://www.youtube.com/watch?v=abc123&si=XYZ&utm_source=share&list=PL1&list=PL2#t=30'
