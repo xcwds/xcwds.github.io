@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-	webServer: { command: 'npm run build && npm run preview', port: 4173 },
+	webServer: { command: 'pnpm build && pnpm preview', port: 4173 },
 	testDir: 'e2e',
 	// On a CI pull request, Playwright's git diff capture runs `git fetch origin <base> --depth=1`,
 	// which turns ci.yml's full-history checkout into a shallow clone, and the build (started by
