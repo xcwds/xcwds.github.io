@@ -1,0 +1,2 @@
+- Pages load faster: the app's stylesheet is less than half its old size.
+- Kitchen Guide tables on tablets and computers show their column and row headings in bold, as intended.

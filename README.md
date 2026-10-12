@@ -27,10 +27,9 @@ Static site generation:
 - `sveltekit`
 - `@sveltejs/adapter-static`
 
-UI components:
+Styling:
 
 - `tailwindcss`
-- `skeleton`
 
 ## Development
 
