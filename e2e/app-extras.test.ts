@@ -162,11 +162,10 @@ for (const [name, viewport] of [
 			[
 				'/utils/self-control/sos',
 				async (p) => {
-					await p.getByRole('button', { name: 'Back' }).click();
+					// Finish the session from the step before, then start a writing technique.
 					await p.getByRole('button', { name: 'Gave in' }).click();
 					await p.getByRole('button', { name: 'Save', exact: true }).click();
-					await p.getByRole('link', { name: 'Done' }).click();
-					await p.goto('/utils/self-control/sos');
+					await gotoHydrated(p, '/utils/self-control/sos');
 					await p.getByRole('button', { name: 'Talk to yourself like a friend' }).click();
 					await p.getByRole('button', { name: 'Start', exact: true }).click();
 				}
