@@ -56,6 +56,15 @@ test('sharing a tool never sends what was typed into it (#89)', async ({ page })
 	expect(JSON.stringify(data)).not.toContain('private.example');
 });
 
+test('private tools have no Share button in the installed app (#148)', async ({ page }) => {
+	await asInstalledApp(page);
+	await gotoHydrated(page, '/utils/coffee-timer');
+	await expect(page.getByRole('button', { name: /^Share / })).toBeVisible();
+	await gotoHydrated(page, '/utils/self-control');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Self-Control$/);
+	await expect(page.getByRole('button', { name: /^Share / })).toHaveCount(0);
+});
+
 test('without a share sheet it copies the link instead (#89)', async ({ page, context }) => {
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 	await asInstalledApp(page, { canShare: false });

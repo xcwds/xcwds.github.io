@@ -1,0 +1,9 @@
+/**
+ * Self-Control's tools, each a private sub-page of the hub (#146). A tool lands by adding itself
+ * here (the build registers its route and the hub shows its card) and its page under
+ * `src/routes/utils/self-control/`. Titles stay generic: never a habit's name.
+ *
+ * @typedef {{ slug: string; title: string; emoji: string; blurb: string; width: 'narrow' | 'wide' }} Page
+ * @type {Page[]}
+ */
+export const pages = [];

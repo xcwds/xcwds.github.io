@@ -15,6 +15,7 @@ import app from 'xcwds-app';
 import ovenTime from 'xcwds-app-oven-time';
 import pizzaDough from 'xcwds-app-pizza-dough';
 import recipes from 'xcwds-app-recipes';
+import selfControl from 'xcwds-app-self-control';
 import urlSanitizer from 'xcwds-app-url-sanitizer';
 import weightlifting from 'xcwds-app-weightlifting';
 import { loadChangelog } from './src/lib/server/changelog';
@@ -60,6 +61,7 @@ export default defineConfig({
 		ovenTime(),
 		urlSanitizer(),
 		weightlifting(),
+		selfControl(),
 		recipes(),
 		share({ target: '/utils/url-sanitizer', exclude: ['/settings'] }),
 		settings({

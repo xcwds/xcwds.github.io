@@ -66,6 +66,7 @@
 		"xcwds-app-oven-time": "link:src/plugins/oven-time",
 		"xcwds-app-pizza-dough": "link:src/plugins/pizza-dough",
 		"xcwds-app-recipes": "link:src/plugins/recipes",
+		"xcwds-app-self-control": "link:src/plugins/self-control",
 		"xcwds-app-url-sanitizer": "link:src/plugins/url-sanitizer",
 		"xcwds-app-weightlifting": "link:src/plugins/weightlifting"
 	},

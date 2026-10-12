@@ -1,0 +1,1 @@
+- New in Utils: Self-Control, a private place for the habits you're working on. Add, rename, archive and delete habits; tools for riding out cravings are on the way.
