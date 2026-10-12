@@ -24,6 +24,10 @@
 		startSession,
 		surfPrompt,
 		techniquePrompts,
+		isTimed,
+		startDelay,
+		DELAY_MINUTES,
+		SPRINT_ACTIONS,
 		type Outcome,
 		type SessionTechnique,
 		type SosSession
@@ -52,6 +56,7 @@
 	let name = $state<string | undefined>();
 	let nameDraft = $state('');
 	let nameError = $state<string | undefined>();
+	let editingName = $state(false);
 
 	// While surfing: "Rate it now".
 	let rating = $state<number | undefined>();
@@ -59,11 +64,12 @@
 	let gaveIn = $state(false);
 	let note = $state('');
 
-	const surfing = $derived(session?.step === 'surf');
+	/** Surfing or waiting out a sprint's delay: a timer is counting. */
+	const timed = $derived(isTimed(session?.step));
 	const kind = $derived(session?.habit ? habitById(habits, session.habit)?.kind : undefined);
 	const remaining = $derived(session ? session.endsAt - now : 0);
 	const writing = $derived(
-		session && session.technique !== 'surf'
+		session && session.technique !== 'surf' && session.technique !== 'sprint'
 			? techniquePrompts(session.technique, { name, kind })
 			: undefined
 	);
@@ -82,19 +88,19 @@
 		name = read(entries.selfControlPrefs)?.name;
 	});
 
-	markBusy('self-control-sos', () => surfing);
-	const awake = browser ? keepAwake(() => surfing) : undefined;
+	markBusy('self-control-sos', () => timed);
+	const awake = browser ? keepAwake(() => timed) : undefined;
 	$effect(() => {
-		void surfing;
+		void timed;
 		void awake?.sync();
 	});
 
 	// Counts against the saved end time, so it stays right when the phone backgrounds the tab.
 	$effect(() => {
-		if (!surfing) return;
+		if (!timed) return;
 		const tick = () => {
 			now = Date.now();
-			if (session?.step === 'surf' && now >= session.endsAt) {
+			if (session && isTimed(session.step) && now >= session.endsAt) {
 				beep(3);
 				session = { ...session, step: 'outcome' };
 			}
@@ -112,6 +118,8 @@
 		rating = undefined;
 		gaveIn = false;
 		note = '';
+		editingName = false;
+		nameError = undefined;
 		now = Date.now();
 		session = startSession({ habit, intensity, technique, minutes }, now);
 	}
@@ -142,7 +150,27 @@
 		}));
 		if (!saveResult(entries.selfControlPrefs, result.saved, { explicit: true })) return;
 		name = trimmed;
+		editingName = false;
 		toast('Name saved.');
+	}
+
+	function forgetName() {
+		const result = update(entries.selfControlPrefs, undefined, (latest) => {
+			const next = { ...latest };
+			delete next.name;
+			return next;
+		});
+		if (!saveResult(entries.selfControlPrefs, result.saved, { explicit: true })) return;
+		name = undefined;
+		nameDraft = '';
+		editingName = false;
+		toast('Name forgotten.');
+	}
+
+	function pickAction(action: string) {
+		primeAudio();
+		now = Date.now();
+		if (session) session = startDelay(session, action, now);
 	}
 
 	function passed() {
@@ -217,7 +245,20 @@
 				{TECHNIQUE_LABELS[session.technique]}
 			</h2>
 			<p>{writing.intro}</p>
-			{#if session.technique === 'friend' && name === undefined}
+			{#if session.technique === 'friend' && name !== undefined && !editingName}
+				<p class="flex flex-wrap items-center gap-2 text-sm" data-testid="your-name">
+					Using your name, {name}.
+					<button
+						type="button"
+						class="{button} text-sm"
+						onclick={() => {
+							nameDraft = name ?? '';
+							nameError = undefined;
+							editingName = true;
+						}}>Change</button
+					>
+				</p>
+			{:else if session.technique === 'friend'}
 				<div class="{card} flex flex-col gap-2" data-testid="your-name">
 					<label class="flex flex-col gap-1">
 						<span>Your name, for these prompts (optional, saved on this device)</span>
@@ -234,7 +275,12 @@
 							{nameError}
 						</p>
 					{/if}
-					<button type="button" class={button} onclick={saveName}>Use my name</button>
+					<div class="grid {name === undefined ? 'grid-cols-1' : 'grid-cols-2'} gap-2">
+						<button type="button" class={button} onclick={saveName}>Use my name</button>
+						{#if name !== undefined}
+							<button type="button" class={button} onclick={forgetName}>Forget my name</button>
+						{/if}
+					</div>
 				</div>
 			{/if}
 			{#each writing.prompts as prompt, i (i)}
@@ -253,6 +299,28 @@
 				What you write here stays on this page until you finish; it isn't saved to your log.
 			</p>
 			<button type="button" class={primary} onclick={passed}>Done</button>
+		</section>
+	{:else if session?.step === 'sprint'}
+		<section aria-labelledby="sprint-heading" class="flex flex-col gap-4" data-testid="sprint">
+			<h2 id="sprint-heading" class="text-lg font-semibold">Sprint</h2>
+			<p>Do one of these in the next 20 seconds. Moving breaks the pull of the cue.</p>
+			<div class="grid gap-2">
+				{#each SPRINT_ACTIONS as action (action)}
+					<button type="button" class={button} onclick={() => pickAction(action)}>{action}</button>
+				{/each}
+			</div>
+		</section>
+	{:else if session?.step === 'delay'}
+		<section aria-labelledby="delay-heading" class="flex flex-col gap-4" data-testid="delay">
+			<h2 id="delay-heading" class="text-lg font-semibold">Now wait it out</h2>
+			<p>
+				{session.action ? `${session.action}: done.` : ''} If you still want it in {DELAY_MINUTES} minutes,
+				decide then.
+			</p>
+			<p class="text-center font-mono text-4xl tabular-nums" role="timer" data-testid="delay-time">
+				{formatDuration(remaining)}
+			</p>
+			<button type="button" class={primary} onclick={passed}>Decide now</button>
 		</section>
 	{:else if session?.step === 'outcome'}
 		<section aria-labelledby="outcome-heading" class="flex flex-col gap-4" data-testid="outcome">
@@ -368,7 +436,9 @@
 			<p class="text-sm text-gray-600 dark:text-gray-400">
 				{technique === 'surf'
 					? "You'll watch the urge rise and fall instead of acting on it, then note how it went."
-					: "You'll answer a few short prompts, then note how it went."}
+					: technique === 'sprint'
+						? `You'll do one quick action, then wait ${DELAY_MINUTES} minutes before deciding.`
+						: "You'll answer a few short prompts, then note how it went."}
 			</p>
 		</section>
 	{/if}

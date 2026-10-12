@@ -10,6 +10,9 @@ import {
 	parseSession,
 	rate,
 	startSession,
+	startDelay,
+	isTimed,
+	SPRINT_ACTIONS,
 	surfPrompt,
 	techniquePrompts,
 	type UrgeEntry
@@ -151,5 +154,26 @@ describe('a surfing session', () => {
 			/giving in: the greasy wrapper/
 		);
 		expect(techniquePrompts('zoom-out', {}).prompts).toHaveLength(3);
+	});
+
+	it('sprints: pick an action, then a delay timer counts down', () => {
+		const s = startSession({ intensity: 7, technique: 'sprint', minutes: 10 }, 1000);
+		expect(s).toMatchObject({ step: 'sprint', technique: 'sprint', endsAt: 1000 });
+		expect(isTimed(s.step)).toBe(false);
+		const waiting = startDelay(s, SPRINT_ACTIONS[2]!, 5000);
+		expect(waiting).toMatchObject({
+			step: 'delay',
+			action: 'Drink a glass of water',
+			startedAt: 1000,
+			endsAt: 5000 + 5 * 60_000
+		});
+		expect(isTimed(waiting.step)).toBe(true);
+		expect(parseSession(JSON.parse(JSON.stringify(waiting)))).toEqual(waiting);
+		// Sprint steps go with the sprint only.
+		expect(parseSession({ ...waiting, technique: 'surf' })).toBeUndefined();
+		expect(parseSession({ ...s, step: 'prompts' })).toBeUndefined();
+		expect(parseSession({ ...waiting, action: 'x'.repeat(81) })).not.toHaveProperty('action');
+		expect(finish(waiting, 'rode-out', 'id')).toMatchObject({ technique: 'sprint' });
+		expect(finish(waiting, 'rode-out', 'id')).not.toHaveProperty('action');
 	});
 });
