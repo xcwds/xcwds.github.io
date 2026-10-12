@@ -18,6 +18,10 @@ concurrency:
   group: 'pages'
   cancel-in-progress: false
 
+# Read-only by default; only the deploy job gets the Pages permissions it needs.
+permissions:
+  contents: read
+
 jobs:
   # Type check, lint, unit and e2e tests (ci.yml); nothing deploys unless they pass.
   checks:
@@ -29,17 +33,17 @@ jobs:
     steps:
       # Full history: the changelog build numbers entries by the commit that added them.
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 10
+        # The version comes from `packageManager` in package.json.
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Install Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .tool-versions
           cache: pnpm
@@ -52,7 +56,7 @@ jobs:
         run: pnpm run build
 
       - name: Upload Artifacts
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:
           path: 'build/'
 
@@ -71,4 +75,4 @@ jobs:
     steps:
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
