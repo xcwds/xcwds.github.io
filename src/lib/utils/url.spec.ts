@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { buildLink, isTrackingParam, parseLink, readParams } from './url';
+import {
+	buildLink,
+	isTrackingParam,
+	parseLink,
+	readParams,
+	trackingPathSegment,
+	unwrapRedirect
+} from './url';
 
 describe('parseLink', () => {
 	it('finds a link inside shared text', () => {
@@ -135,6 +142,75 @@ describe('more trackers (#137)', () => {
 			'https://www.amazon.com/dp/B0?qid=1&sr=8-3&crid=X&sprefix=ab&dib=e&dib_tag=se&_encoding=UTF8&th=1&psc=1';
 		expect(kept(link)).toEqual(['th', 'psc']);
 		expect(kept('https://example.com/?sr=1&qid=2')).toEqual(['sr', 'qid']);
+	});
+});
+
+describe('unwrapRedirect (#137)', () => {
+	const unwrap = (link: string) => {
+		const found = unwrapRedirect(new URL(link));
+		return found && [found.via, found.url.href];
+	};
+	const target = 'https://news.example.org/story?id=7&utm_source=x';
+	const enc = encodeURIComponent(target);
+
+	it('unwraps the known redirect links', () => {
+		expect(unwrap(`https://www.google.com/url?sa=t&q=${enc}&usg=abc`)).toEqual(['Google', target]);
+		expect(unwrap(`https://www.google.co.uk/url?url=${enc}`)).toEqual(['Google', target]);
+		expect(unwrap(`https://l.facebook.com/l.php?u=${enc}&h=AT0`)).toEqual(['Facebook', target]);
+		expect(unwrap(`https://lm.facebook.com/l.php?u=${enc}`)).toEqual(['Facebook', target]);
+		expect(unwrap(`https://l.instagram.com/?u=${enc}&e=AT0`)).toEqual(['Instagram', target]);
+		expect(unwrap(`https://www.youtube.com/redirect?event=video&q=${enc}`)).toEqual([
+			'YouTube',
+			target
+		]);
+		expect(unwrap(`https://out.reddit.com/t3_abc?url=${enc}&token=x`)).toEqual(['Reddit', target]);
+	});
+
+	it('unwraps a wrapper inside a wrapper, naming the outer one', () => {
+		const inner = `https://l.facebook.com/l.php?u=${enc}`;
+		expect(unwrap(`https://www.google.com/url?q=${encodeURIComponent(inner)}`)).toEqual([
+			'Google',
+			target
+		]);
+	});
+
+	it('leaves everything else alone', () => {
+		// Google search, other Google hosts and look-alike domains.
+		expect(unwrap(`https://www.google.com/search?q=${enc}`)).toBeNull();
+		expect(unwrap(`https://mail.google.com/url?q=${enc}`)).toBeNull();
+		expect(unwrap(`https://www.google.com.example.net/url?q=${enc}`)).toBeNull();
+		expect(unwrap(`https://facebook.com/l.php?u=${enc}`)).toBeNull();
+		expect(unwrap(`https://www.youtube.com/watch?v=1&q=${enc}`)).toBeNull();
+		// Not an http(s) link, or no link at all.
+		expect(unwrap('https://www.google.com/url?q=javascript:alert(1)')).toBeNull();
+		expect(unwrap('https://www.google.com/url?q=hello')).toBeNull();
+		expect(unwrap('https://l.instagram.com/')).toBeNull();
+	});
+});
+
+describe("Amazon's /ref= path segment (#137)", () => {
+	it('finds a trailing ref segment on Amazon only', () => {
+		expect(trackingPathSegment(new URL('https://www.amazon.com/dp/B0/ref=sr_1_3?th=1'))).toBe(
+			'ref=sr_1_3'
+		);
+		expect(trackingPathSegment(new URL('https://www.amazon.co.uk/gp/product/B0/ref=ppx_o/'))).toBe(
+			'ref=ppx_o'
+		);
+		expect(trackingPathSegment(new URL('https://www.amazon.com/dp/B0'))).toBeNull();
+		expect(trackingPathSegment(new URL('https://www.amazon.com/ref=a/dp/B0'))).toBeNull();
+		expect(trackingPathSegment(new URL('https://example.com/dp/B0/ref=sr_1_3'))).toBeNull();
+	});
+
+	it('drops it from the cleaned link only when asked', () => {
+		const url = new URL('https://www.amazon.com/Some-Thing/dp/B0/ref=sr_1_3?th=1&qid=2#x');
+		const params = readParams(url);
+		expect(buildLink(url, params, true)).toBe('https://www.amazon.com/Some-Thing/dp/B0?th=1#x');
+		expect(buildLink(url, params)).toBe(
+			'https://www.amazon.com/Some-Thing/dp/B0/ref=sr_1_3?th=1#x'
+		);
+		expect(buildLink(new URL('https://www.amazon.com/ref=nav_logo'), [], true)).toBe(
+			'https://www.amazon.com/'
+		);
 	});
 });
 

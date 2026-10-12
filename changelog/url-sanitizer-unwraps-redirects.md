@@ -1,0 +1,2 @@
+- The URL Sanitizer unwraps Google, Facebook, Instagram, YouTube and Reddit redirect links straight away, with a button to go back to the redirect link.
+- On Amazon links it also drops the `/ref=…` part of the address, which you can put back like a param.

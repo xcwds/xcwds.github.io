@@ -125,7 +125,7 @@ const TRACKING_PREFIXES = [
 
 /**
  * Keys that are only tracking on some sites (e.g. Twitter/X's `s` and `t`); elsewhere they are
- * often meaningful. An entry ending in `.` matches that domain under any TLD (`amazon.co.uk`).
+ * often meaningful. Hosts match as in `onHost`.
  */
 const SITE_TRACKERS: [hosts: string[], keys: string[]][] = [
 	[['youtube.com', 'youtu.be', 'spotify.com'], ['si']],
@@ -202,18 +202,115 @@ for (const [hosts, keys] of SITE_TRACKERS)
 		HOST_SPECIFIC.set(k, [...(HOST_SPECIFIC.get(k) ?? []), ...hosts]);
 	}
 
+/**
+ * Whether `hostname` is on one of `hosts`: the domain or a subdomain of it. An entry ending in `.`
+ * matches that domain under any TLD (`amazon.` matches `www.amazon.co.uk`).
+ */
+function onHost(hostname: string, hosts: string[]): boolean {
+	const host = hostname.toLowerCase();
+	return hosts.some((h) =>
+		h.endsWith('.')
+			? host.startsWith(h) || host.includes(`.${h}`)
+			: host === h || host.endsWith(`.${h}`)
+	);
+}
+
 export function isTrackingParam(key: string, hostname = ''): boolean {
 	const k = key.toLowerCase();
 	const hosts = HOST_SPECIFIC.get(k);
-	if (hosts) {
-		const host = hostname.toLowerCase();
-		return hosts.some((h) =>
-			h.endsWith('.')
-				? host.startsWith(h) || host.includes(`.${h}`)
-				: host === h || host.endsWith(`.${h}`)
-		);
-	}
+	if (hosts) return onHost(hostname, hosts);
 	return TRACKING_KEYS.has(k) || TRACKING_PREFIXES.some((prefix) => k.startsWith(prefix));
+}
+
+/**
+ * Redirect wrappers whose only job is to log the click: the real link is in one of their params.
+ * Hosts match exactly (no other subdomains), so `l.facebook.com` doesn't catch `facebook.com`.
+ */
+const REDIRECTS: {
+	name: string;
+	hosts: (host: string) => boolean;
+	path: RegExp;
+	keys: string[];
+}[] = [
+	{
+		name: 'Google',
+		// www.google.com, google.co.uk… but not mail.google.com or google.com.example.net.
+		hosts: (host) => /^(?:www\.)?google\.[a-z]{2,3}(?:\.[a-z]{2})?$/.test(host),
+		path: /^\/url$/,
+		keys: ['q', 'url']
+	},
+	{
+		name: 'Facebook',
+		hosts: (host) => ['l.facebook.com', 'lm.facebook.com', 'l.messenger.com'].includes(host),
+		path: /^\/l\.php$/,
+		keys: ['u']
+	},
+	{
+		name: 'Instagram',
+		hosts: (host) => host === 'l.instagram.com',
+		path: /^\/?$/,
+		keys: ['u']
+	},
+	{
+		name: 'YouTube',
+		hosts: (host) => ['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(host),
+		path: /^\/redirect$/,
+		keys: ['q']
+	},
+	{
+		name: 'Reddit',
+		hosts: (host) => host === 'out.reddit.com',
+		path: /^\//,
+		keys: ['url']
+	}
+];
+
+/** Parses an http(s) link exactly as given, or null. */
+function httpLink(text: string): URL | null {
+	try {
+		const url = new URL(text);
+		return url.protocol === 'http:' || url.protocol === 'https:' ? url : null;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * The link a known redirect wrapper (Google's `/url?q=`, Facebook's `l.php?u=`…) points to, and
+ * whose wrapper it was, or null for anything else (#137). The wrapper itself is the tracking, so
+ * the page cleans the real link instead. Wrappers inside wrappers are unwrapped too.
+ */
+export function unwrapRedirect(url: URL): { url: URL; via: string } | null {
+	let current: URL = url;
+	let via: string | null = null;
+	// A few levels at most, so a link that wraps itself can't loop.
+	for (let i = 0; i < 5; i++) {
+		const next = redirectTarget(current);
+		if (!next) break;
+		via ??= next.via;
+		current = next.url;
+	}
+	return via ? { url: current, via } : null;
+}
+
+/** One level of `unwrapRedirect`. */
+function redirectTarget(url: URL): { url: URL; via: string } | null {
+	const host = url.hostname.toLowerCase();
+	const wrapper = REDIRECTS.find((r) => r.hosts(host) && r.path.test(url.pathname));
+	for (const key of wrapper?.keys ?? []) {
+		const target = httpLink(url.searchParams.get(key)?.trim() ?? '');
+		if (wrapper && target) return { url: target, via: wrapper.name };
+	}
+	return null;
+}
+
+/**
+ * Amazon's tracking path segment: product links end in `/ref=sr_1_3` (or `/ref=…`), which says
+ * where the click came from. Returns that last segment (without its slash), or null (#137).
+ */
+export function trackingPathSegment(url: URL): string | null {
+	if (!onHost(url.hostname, ['amazon.'])) return null;
+	return url.pathname.match(/\/(ref=[^/]*)\/?$/)?.[1] ?? null;
 }
 
 const TRAILING_PUNCTUATION = '.,;:!?”’»›';
@@ -279,11 +376,14 @@ export function readParams(url: URL, removeTracking = true): Param[] {
 }
 
 /**
- * Rebuilds the link from the kept params; the #fragment is kept. Unedited params come through
+ * Rebuilds the link from the kept params, without Amazon's `/ref=…` segment when
+ * `dropPathSegment` is set; the #fragment is kept. Unedited params come through
  * exactly as shared (no `%20` → `+`, no `flag` → `flag=`); only edited ones are re-encoded.
  */
-export function buildLink(url: URL, params: Param[]): string {
+export function buildLink(url: URL, params: Param[], dropPathSegment = false): string {
 	const next = new URL(url.href);
+	const segment = dropPathSegment && trackingPathSegment(url);
+	if (segment) next.pathname = next.pathname.replace(/\/ref=[^/]*\/?$/, '') || '/';
 	const kept: string[] = [];
 	for (const param of params) {
 		if (!param.keep || param.key === '') continue;

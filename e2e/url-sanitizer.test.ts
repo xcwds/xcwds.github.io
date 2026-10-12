@@ -42,9 +42,15 @@ test('unwraps redirect links and copies the result', async ({ page, context }) =
 		.fill(
 			'https://www.google.com/url?q=https%3A%2F%2Fnews.example.org%2Fstory%3Fid%3D7%26utm_campaign%3Dx&sa=D'
 		);
-	await page.getByRole('button', { name: /news\.example\.org/ }).click();
 
+	// Unwrapped straight away (#137), with a way back to the redirect link.
 	const cleaned = page.getByTestId('cleaned');
+	await expect(cleaned).toHaveText('https://news.example.org/story?id=7');
+	await expect(page.getByTestId('unwrapped')).toContainText('Unwrapped a Google redirect.');
+	await page.getByRole('button', { name: 'Use the redirect link instead' }).click();
+	await expect(page.getByTestId('unwrapped')).toHaveCount(0);
+	await expect(cleaned).toContainText('https://www.google.com/url?q=');
+	await page.getByRole('button', { name: /news\.example\.org/ }).click();
 	await expect(cleaned).toHaveText('https://news.example.org/story?id=7');
 	await page.getByRole('button', { name: 'Copy' }).click();
 	await expect(page.getByTestId('toast')).toHaveText('Link copied.');
@@ -84,4 +90,20 @@ test('renaming a param updates its tracking badge, warning and "Remove tracking"
 	await expect(warning).toBeVisible();
 	await page.getByRole('button', { name: 'Remove tracking' }).click();
 	await expect(cleaned).toHaveText('https://example.com/?page=x');
+});
+
+test("drops Amazon's /ref= path segment and can put it back (#137)", async ({ page }) => {
+	await gotoHydrated(page, '/utils/url-sanitizer');
+	await page
+		.getByLabel('Paste a link')
+		.fill('https://www.amazon.com/Some-Thing/dp/B0ABC/ref=sr_1_3?th=1&qid=99');
+	const cleaned = page.getByTestId('cleaned');
+	await expect(cleaned).toHaveText('https://www.amazon.com/Some-Thing/dp/B0ABC?th=1');
+	await expect(page.getByText('2 of 3 removed')).toBeVisible();
+
+	await page.getByLabel('Keep the /ref=sr_1_3 path segment').check();
+	await expect(cleaned).toHaveText('https://www.amazon.com/Some-Thing/dp/B0ABC/ref=sr_1_3?th=1');
+	await expect(page.getByText('1 known tracking param is still in the link.')).toBeVisible();
+	await page.getByRole('button', { name: 'Remove tracking' }).click();
+	await expect(cleaned).toHaveText('https://www.amazon.com/Some-Thing/dp/B0ABC?th=1');
 });
