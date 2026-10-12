@@ -1,0 +1,1 @@
+- The URL Sanitizer catches more trackers: newer Google Ads tags, Facebook, Branch, email-platform and Bing share tags, and the extras Google search, LinkedIn, TikTok, Threads, Instagram and Amazon add to shared links.
