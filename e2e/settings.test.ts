@@ -95,3 +95,18 @@ test('importing a file that is not a backup shows an error', async ({ page }) =>
 	await expect(page.getByRole('alert')).toHaveText("This file isn't a backup from this site.");
 	await expect(page.getByTestId('import-preview')).toHaveCount(0);
 });
+
+test('Privacy says the app contacts no server, and About links the source from the config (#135)', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/settings');
+	const privacy = page.getByRole('region', { name: 'Privacy' });
+	await expect(privacy).toContainText('xcwds never contacts a server.');
+	await privacy.getByText(/^Plugins \(\d+\)$/).click();
+	await expect(privacy.getByText('@xcwds/plugin-settings')).toBeVisible();
+	await expect(privacy.getByText('No network').first()).toBeVisible();
+	const about = page.getByRole('region', { name: 'About' });
+	await expect(
+		about.getByRole('link', { name: 'github.com/xcwds/xcwds.github.io' })
+	).toHaveAttribute('href', 'https://github.com/xcwds/xcwds.github.io');
+});

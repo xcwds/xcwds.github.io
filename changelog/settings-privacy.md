@@ -1,0 +1,1 @@
+- Settings has a new Privacy section confirming that xcwds never contacts a server.
