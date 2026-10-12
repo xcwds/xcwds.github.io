@@ -1,4 +1,3 @@
-import { mdsvex } from 'mdsvex';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { withXcwds } from '@xcwds/sveltekit/config';
 
@@ -7,11 +6,5 @@ import { withXcwds } from '@xcwds/sveltekit/config';
 // offline too), prerendering of every registered page, and the Content Security Policy.
 /** @type {import('@sveltejs/kit').Config} */
 export default await withXcwds({
-	preprocess: [vitePreprocess(), mdsvex()],
-	kit: {
-		alias: {
-			$components: 'src/components'
-		}
-	},
-	extensions: ['.svelte', '.svx']
+	preprocess: [vitePreprocess()]
 });

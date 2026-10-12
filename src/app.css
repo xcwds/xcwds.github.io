@@ -13,7 +13,3 @@
 html[data-color-scheme='dark'] {
 	color-scheme: dark;
 }
-
-@import '@skeletonlabs/skeleton';
-@import '@skeletonlabs/skeleton-svelte';
-@import '@skeletonlabs/skeleton/themes/wintry';

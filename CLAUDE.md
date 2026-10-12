@@ -8,7 +8,7 @@ The app icon (`icon.svg` at the repo root, the "multi-tool X") must stay neutral
 or revealing text. Some tools will be private (e.g. planned feminine-care tools), and the icon shows on
 home screens and in app switchers.
 
-SvelteKit static site (adapter-static, Tailwind, Skeleton) deployed to GitHub Pages from `main`.
+SvelteKit static site (adapter-static, Tailwind) deployed to GitHub Pages from `main`.
 Package manager: pnpm.
 
 It runs on the @xcwds framework ([xcwds/xcwds](https://github.com/xcwds/xcwds)): `xcwds.config.ts` holds the
@@ -103,7 +103,7 @@ entry that uses Node modules (`recipes` keeps its name in `name.js` for that rea
   `parseSettings`, and an `app.settings.field` call in the owning plugin's `client.ts`), backups
   (export/import/clear via `storage.ts`) and About. Dark mode uses `data-color-scheme` on `<html>` (the
   `dark` variant from `@xcwds/plugin-theme/tailwind.css`), set before first paint by `@xcwds/plugin-theme`'s
-  head script. Don't use `data-theme`; Skeleton owns it.
+  head script. Don't use `data-theme` for it.
 - App updates (`@xcwds/plugin-update`): the service worker never calls `skipWaiting()` on install; a new
   version waits until the user taps Update in the banner (`UpdateBanner.svelte` from the plugin). Anything a
   reload would interrupt must call `markBusy(name, () => isBusy)` from `src/lib/busy.ts` (the coffee timer
