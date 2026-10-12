@@ -215,7 +215,7 @@ test('Urge SOS: the writing techniques, with answers kept through a reload and a
 	await page.getByLabel(/Your name, for these prompts/).fill('Alex');
 	await page.getByRole('button', { name: 'Use my name' }).click();
 	await expect(page.getByText('Name saved.')).toBeVisible();
-	await expect(page.getByTestId('your-name')).toHaveCount(0);
+	await expect(page.getByTestId('your-name')).toHaveText(/Using your name, Alex\./);
 	await expect(page.getByText('"Alex wants to…, but Alex knows…"')).toBeVisible();
 	expect(
 		await page.evaluate(() => JSON.parse(localStorage.getItem('app:self-control:prefs')!).name)
