@@ -68,6 +68,20 @@ export function byTechnique(log: readonly UrgeEntry[]): TechniqueStat[] {
 	);
 }
 
+/** The habit most give-ins with `cue` belong to (for planning against it), if any. */
+export function habitForCue(log: readonly UrgeEntry[], cue: string): string | undefined {
+	const counts = new Map<string, number>();
+	for (const e of log)
+		if (
+			e.habit &&
+			e.outcome === 'gave-in' &&
+			Object.values(e.cues ?? {}).some((l) => l.includes(cue))
+		)
+			counts.set(e.habit, (counts.get(e.habit) ?? 0) + 1);
+	// Ties go to the habit seen first.
+	return [...counts].sort((a, b) => b[1] - a[1])[0]?.[0];
+}
+
 /** Share of urges ridden out, 0–1, or undefined for a week with none. */
 export const rodeOutShare = (s: Summary): number | undefined =>
 	s.urges ? s.rodeOut / s.urges : undefined;

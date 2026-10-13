@@ -3,6 +3,7 @@ import {
 	REFLECTIONS_KEPT,
 	byTechnique,
 	encouragement,
+	habitForCue,
 	hardWeek,
 	parseReflections,
 	rodeOutShare,
@@ -67,6 +68,19 @@ describe('weekly review', () => {
 			{ technique: 'surf', urges: 2, rodeOut: 1 }
 		]);
 		expect(byTechnique([])).toEqual([]);
+	});
+
+	it('finds the habit a risky cue belongs to', () => {
+		const kitchen = { where: ['Kitchen'] };
+		const log = [
+			urge(1, 'gave-in', { habit: 'a', cues: kitchen }),
+			urge(1, 'gave-in', { habit: 'b', cues: kitchen }),
+			urge(1, 'gave-in', { habit: 'b', cues: kitchen }),
+			urge(1, 'rode-out', { habit: 'a', cues: kitchen }),
+			urge(1, 'rode-out', { habit: 'a', cues: kitchen })
+		];
+		expect(habitForCue(log, 'Kitchen')).toBe('b');
+		expect(habitForCue(log, 'Bed')).toBeUndefined();
 	});
 
 	it('encourages, and is gentle about hard weeks', () => {

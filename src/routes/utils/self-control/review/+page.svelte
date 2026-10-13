@@ -8,6 +8,7 @@
 		REFLECTION_MAX,
 		byTechnique,
 		encouragement,
+		habitForCue,
 		hardWeek,
 		rodeOutShare,
 		summarize,
@@ -115,11 +116,17 @@
 		return undefined;
 	}
 
-	/** The Environment Designer, planning for `cue` (for the habit shown, if any). */
-	const planLink = (cue: string) =>
-		`${resolve('/utils/self-control/environment' as '/')}#${new URLSearchParams(
-			filter ? { habit: filter, cue } : { cue }
-		)}`;
+	/**
+	 * The habit to plan for `cue` in: the one shown, or else the habit most of this week's
+	 * give-ins with that cue belong to.
+	 */
+	const habitFor = (cue: string): string | undefined => filter ?? habitForCue(thisWeek.log, cue);
+
+	/** The fragment that opens the Environment Designer planning for `cue`. */
+	const planHash = (cue: string) => {
+		const habit = habitFor(cue);
+		return String(new URLSearchParams(habit ? { habit, cue } : { cue }));
+	};
 
 	const outcomeLine = (s: Summary) =>
 		s.urges ? `rode out ${s.rodeOut}, partly ${s.partly}, gave in ${s.gaveIn}` : 'none logged';
@@ -273,7 +280,11 @@
 									Your plan: if {plan.cue}, then I will {plan.action}.
 								</p>
 							{:else}
-								<a class="{button} self-start" href={planLink(cues[0]!)}>Make a plan</a>
+								<a
+									class="{button} self-start"
+									href="{resolve('/utils/self-control/environment' as '/')}#{planHash(cues[0]!)}"
+									>Make a plan</a
+								>
 							{/if}
 						</li>
 					{/each}

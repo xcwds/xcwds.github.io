@@ -755,7 +755,7 @@ test.describe('Weekly review (#153)', () => {
 		await expect(page.getByTestId('last-week-outcomes')).toHaveText(
 			'rode out 1, partly 1, gave in 0'
 		);
-		await expect(page.getByTestId('avg-peak')).toHaveText('5.5 / 10 (last week 4)');
+		await expect(page.getByTestId('avg-peak')).toHaveText('6 / 10 (last week 4)');
 		await expect(page.getByTestId('what-helps').getByRole('listitem')).toHaveText([
 			'Surf it: rode out 2 of 2',
 			'Sprint: rode out 0 of 1'
@@ -791,6 +791,37 @@ test.describe('Weekly review (#153)', () => {
 		await expect(page.getByTestId('encouragement')).toHaveText('You rode out 2 of 5 urges.');
 		// That's a new week for reflections too.
 		await expect(reflection.getByLabel('What went well?')).toHaveValue('');
+	});
+
+	test('"Make a plan" opens the habit the risky moment came from', async ({ page }) => {
+		await page.clock.install({ time: new Date('2026-10-14T12:00:00') });
+		await gotoHydrated(page, '/utils/self-control');
+		for (const starter of ['📱 Doomscrolling', '🍪 Snacking']) {
+			await page.getByRole('button', { name: 'Add a habit' }).click();
+			await page.getByRole('button', { name: starter }).click();
+			await page.getByRole('button', { name: 'Add habit' }).click();
+		}
+		await page.evaluate(() => {
+			const habits = JSON.parse(localStorage.getItem('app:self-control:habits')!);
+			const snacking = habits[1].id;
+			const log = [1, 2].map((i) => ({
+				id: `u${i}`,
+				at: new Date(`2026-10-13T0${i}:00`).getTime(),
+				habit: snacking,
+				start: 5,
+				outcome: 'gave-in',
+				cues: { where: ['Kitchen'], feeling: ['Bored'] }
+			}));
+			localStorage.setItem('app:self-control:log', JSON.stringify(log));
+		});
+		await gotoHydrated(page, '/utils/self-control/review');
+		await page.getByTestId('risky-week').getByRole('link', { name: 'Make a plan' }).click();
+		await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Environment Designer$/);
+		await expect(page.getByRole('button', { name: '🍪 Snacking' })).toHaveAttribute(
+			'aria-pressed',
+			'true'
+		);
+		await expect(page.getByLabel('If…')).toHaveValue('Kitchen');
 	});
 
 	test("a hard week gets a kind word, and the reflection shows last week's plan", async ({
