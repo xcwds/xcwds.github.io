@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import BackOnline from '$lib/BackOnline.svelte';
 	import TimerAlert from '$lib/TimerAlert.svelte';
+	import SosAlert from '$lib/self-control/SosAlert.svelte';
 	import { startShortcuts } from '$lib/home.svelte';
 	import { startInstallSupport } from '$lib/install.svelte';
 	import { startSettings } from '$lib/settings.svelte';
@@ -37,6 +38,7 @@
 		{#snippet notices()}
 			<PluginTimerAlert openLabel="Open Cooking Timer" />
 			<TimerAlert />
+			<SosAlert />
 			<UpdateBanner />
 			<OfflineNotice />
 			<BackOnline />
