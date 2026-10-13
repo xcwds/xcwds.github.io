@@ -66,9 +66,10 @@ entry that uses Node modules (`recipes` keeps its name in `name.js` for that rea
   repo root, the `brand.icon`), and `src/service-worker.ts` imports the generated worker, where
   `@xcwds/plugin-offline` precaches every prerendered page for offline use. `@xcwds/plugin-share`'s `target`
   makes the manifest's `share_target` send Android shares to `/utils/url-sanitizer`; the service worker
-  moves the shared link from `?query` to the fragment so it never reaches the server, and the page reads
-  it with `app.shared.listen`. The iPhone Shortcut opens `#url=<encoded link>` directly. Keep shared links
-  out of query strings.
+  moves the shared link from `?query` to the fragment, and the page reads it with `app.shared.listen`.
+  Opened cold without the worker, that one request does reach the server with the query (on GitHub
+  Pages, its logs), as `@xcwds/plugin-share`'s README says. The iPhone Shortcut opens
+  `#url=<encoded link>` directly. Keep shared links out of query strings.
 - Unknown URLs: the adapter writes `build/404.html` (a `fallback` that boots the app), GitHub Pages serves
   it for any missing path, and the service worker serves it for offline navigations it has no cache for.
   The app then renders `src/routes/+error.svelte`, titled by the shell.

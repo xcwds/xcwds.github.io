@@ -23,7 +23,7 @@
 	});
 
 	const small =
-		'min-h-11 min-w-11 rounded-lg bg-white/70 px-2 text-sm hover:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:bg-gray-700';
+		'min-h-11 min-w-11 rounded-lg bg-white/70 px-2 text-sm hover:not-disabled:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700';
 
 	const sections = [
 		{

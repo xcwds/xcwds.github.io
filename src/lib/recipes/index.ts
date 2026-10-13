@@ -26,8 +26,9 @@ export type StepTimer = {
 };
 
 /**
- * Step timers ring only while a page showing them is open, and keep the screen awake while they
- * run, so they're for waits you'd watch, not fridge rests or slow cookers measured in hours.
+ * Step timers are the app's cooking timers: they ring on every page and keep the screen awake
+ * while they run, so they're for waits you'd watch, not fridge rests or slow cookers measured in
+ * hours.
  */
 export const MAX_STEP_TIMER_MINUTES = 180;
 

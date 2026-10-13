@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import {
 		activeSet,
 		formatWeight,
 		workoutHasContent,
 		workoutToText,
 		type Exercise,
+		type WorkoutSet,
 		type Workout
 	} from '$lib/utils/lifting';
 	import { persist } from '$lib/persist.svelte';
@@ -67,7 +68,55 @@
 	let nextId = 1;
 	const id = () => nextId++;
 
+	/**
+	 * What ✕ last removed, shown as an Undo row in its place until the next removal or a new
+	 * workout. No timer, so it can't vanish before you reach it.
+	 */
+	type Removed =
+		| { kind: 'exercise'; index: number; exercise: Exercise }
+		| { kind: 'set'; exerciseId: number; index: number; set: WorkoutSet };
+	let removed = $state<Removed | undefined>();
+	let undoButton = $state<HTMLButtonElement | undefined>();
+
+	const forget = () => (removed = undefined);
+
+	/** The ✕ you tapped is gone, so focus moves to Undo. */
+	async function remember(next: Removed) {
+		removed = next;
+		await tick();
+		undoButton?.focus();
+	}
+
+	function removeExercise(index: number) {
+		const [exercise] = workout.exercises.splice(index, 1);
+		if (exercise) remember({ kind: 'exercise', index, exercise: $state.snapshot(exercise) });
+	}
+
+	function removeSet(exercise: Exercise, index: number) {
+		const [set] = exercise.sets.splice(index, 1);
+		if (set) remember({ kind: 'set', exerciseId: exercise.id, index, set: $state.snapshot(set) });
+	}
+
+	/** Puts back what was removed; focus goes to its ✕, since Undo is gone. */
+	async function undo() {
+		const r = removed;
+		forget();
+		let back: string | undefined;
+		if (r?.kind === 'exercise') {
+			workout.exercises.splice(Math.min(r.index, workout.exercises.length), 0, r.exercise);
+			back = `exercise-${r.exercise.id}`;
+		} else if (r?.kind === 'set') {
+			const exercise = workout.exercises.find((e) => e.id === r.exerciseId);
+			if (!exercise) return;
+			exercise.sets.splice(Math.min(r.index, exercise.sets.length), 0, r.set);
+			back = `set-${r.set.id}`;
+		}
+		await tick();
+		if (back) document.querySelector<HTMLElement>(`[data-remove="${back}"]`)?.focus();
+	}
+
 	const useWorkout = (next: Workout) => {
+		forget();
 		workout = next;
 		nextId = 1 + Math.max(0, ...next.exercises.flatMap((e) => [e.id, ...e.sets.map((s) => s.id)]));
 	};
@@ -111,6 +160,7 @@
 			if (!onFinish($state.snapshot(workout))) return;
 			toast('Workout saved to history.');
 		}
+		forget();
 		workout = { date: today(), unit: calculatorUnit, exercises: [] };
 	}
 
@@ -164,7 +214,23 @@
 		</p>
 	{/if}
 
+	{#snippet undoRow(label: string)}
+		<div
+			class="flex items-center justify-between gap-2 rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800"
+			role="status"
+			data-testid="undo-row"
+		>
+			<span class="min-w-0 break-words">{label} removed.</span>
+			<button type="button" class="{button} shrink-0" bind:this={undoButton} onclick={undo}
+				>Undo</button
+			>
+		</div>
+	{/snippet}
+
 	{#each workout.exercises as exercise, e (exercise.id)}
+		{#if removed?.kind === 'exercise' && removed.index === e}
+			{@render undoRow(removed.exercise.name || 'Exercise')}
+		{/if}
 		<div class="{card} flex flex-col gap-3" data-testid="exercise">
 			<div class="flex items-center gap-2">
 				<input
@@ -178,7 +244,8 @@
 					type="button"
 					aria-label="Remove {exercise.name || `exercise ${e + 1}`}"
 					class="{button} shrink-0"
-					onclick={() => workout.exercises.splice(e, 1)}>✕</button
+					data-remove="exercise-{exercise.id}"
+					onclick={() => removeExercise(e)}>✕</button
 				>
 			</div>
 			<table class="w-full text-sm">
@@ -221,13 +288,17 @@
 									type="button"
 									aria-label="Remove set {i + 1}"
 									class="{button} px-2 py-1"
-									onclick={() => exercise.sets.splice(i, 1)}>✕</button
+									data-remove="set-{set.id}"
+									onclick={() => removeSet(exercise, i)}>✕</button
 								>
 							</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
+			{#if removed?.kind === 'set' && removed.exerciseId === exercise.id}
+				{@render undoRow(`Set ${removed.index + 1}`)}
+			{/if}
 			<div class="grid grid-cols-2 gap-2 text-sm">
 				<button type="button" class={button} onclick={() => addSet(exercise)}>+ Set</button>
 				<button
@@ -241,6 +312,9 @@
 			</div>
 		</div>
 	{/each}
+	{#if removed?.kind === 'exercise' && removed.index >= workout.exercises.length}
+		{@render undoRow(removed.exercise.name || 'Exercise')}
+	{/if}
 
 	<button type="button" class={button} onclick={addExercise}>+ Add exercise</button>
 
