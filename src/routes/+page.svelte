@@ -7,7 +7,7 @@
 	import { recipes } from '$lib/recipes';
 	import { tools } from '$lib/utils/tools';
 
-	const toolAt = (path: string) => tools.find((t) => t.path === path);
+	const toolAt = (path: string) => tools().find((t) => t.path === path);
 	let pinned = $derived(shortcuts.pins.map(toolAt).filter((t) => t !== undefined));
 	// Recently used tools that aren't already pinned.
 	let recent = $derived(
@@ -42,7 +42,9 @@
 			path: '/utils',
 			emoji: '🧰',
 			name: 'Utils',
-			blurb: tools.map((tool) => tool.name).join(', ')
+			blurb: tools()
+				.map((tool) => tool.name)
+				.join(', ')
 		}
 	] as const;
 </script>
@@ -82,7 +84,7 @@
 				{#each pinned as tool, i (tool.path)}
 					<li class="flex items-stretch gap-2">
 						<a
-							href={resolve(tool.path)}
+							href={resolve(tool.path as '/')}
 							class="flex flex-1 items-center gap-3 rounded-xl bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
 						>
 							<span aria-hidden="true" class="text-2xl">{tool.emoji}</span>
@@ -128,7 +130,7 @@
 				{#each recent as tool (tool.path)}
 					<li>
 						<a
-							href={resolve(tool.path)}
+							href={resolve(tool.path as '/')}
 							class="flex h-full items-center gap-3 rounded-xl bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
 						>
 							<span aria-hidden="true" class="text-2xl">{tool.emoji}</span>

@@ -12,6 +12,13 @@ test('manifest is installable and its icons load', async ({ request }) => {
 	const manifest = await (await request.get('/manifest.webmanifest')).json();
 	expect(manifest.display).toBe('standalone');
 	expect(manifest.share_target.action).toBe('/utils/url-sanitizer');
+	// Recipes, then the tools marked `shortcut: true`; never a private tool.
+	expect(manifest.shortcuts.map((s: { url: string }) => s.url)).toEqual([
+		'/recipes',
+		'/utils/coffee-timer',
+		'/utils/cooking-timer',
+		'/utils/url-sanitizer'
+	]);
 	const sizes = manifest.icons.map((icon: { sizes: string }) => icon.sizes);
 	expect(sizes).toEqual(expect.arrayContaining(['192x192', '512x512']));
 	for (const icon of manifest.icons) {

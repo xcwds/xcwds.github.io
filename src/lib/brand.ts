@@ -1,3 +1,4 @@
+/** The brand, also `brand` in xcwds.config.ts (which imports it from here). */
 export const BRAND = 'xcwds';
 export const TAGLINE = 'Everyday tools that never phone home.';
 /** What xcwds stands for. */

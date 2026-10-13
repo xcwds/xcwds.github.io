@@ -5,5 +5,6 @@ export const tool = {
 	emoji: '🧼',
 	name: 'URL Sanitizer',
 	blurb: 'Strip tracking params from a link before sharing it.',
-	width: 'split'
+	width: 'split',
+	shortcut: true
 };

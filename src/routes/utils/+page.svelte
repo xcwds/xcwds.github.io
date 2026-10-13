@@ -10,11 +10,11 @@
 
 <main class="page-wide flex flex-col gap-6 pt-2 pb-6 sm:pb-12">
 	<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-		{#each tools as tool (tool.path)}
+		{#each tools() as tool (tool.path)}
 			{@const pinned = shortcuts.pins.includes(tool.path)}
 			<li class="flex items-stretch gap-2">
 				<a
-					href={resolve(tool.path)}
+					href={resolve(tool.path as '/')}
 					class="flex flex-1 items-center gap-3 rounded-md bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
 				>
 					<span aria-hidden="true" class="text-2xl">{tool.emoji}</span>

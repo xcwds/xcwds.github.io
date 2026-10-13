@@ -1,6 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import type { App } from '@xcwds/core';
+import type { TestApp } from '@xcwds/testing';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { getRecipe, MAX_STEP_TIMER_MINUTES } from '$lib/recipes';
 import { toolGuides, tools } from '$lib/utils/tools';
+import { toolsApp } from '$lib/utils/tools-app';
 import {
 	articles,
 	articleTexts,
@@ -15,7 +18,15 @@ import {
 	type GuideArticle
 } from './index';
 
-const isTool = (path: string) => tools.some((tool) => tool.path === path);
+// The tools come from the app's plugins, as on the page.
+let app: TestApp | undefined;
+vi.mock('@xcwds/sveltekit', () => ({ getApp: (): App => app! }));
+beforeAll(async () => {
+	app = await toolsApp();
+});
+afterAll(() => app?.close());
+
+const isTool = (path: string) => tools().some((tool) => tool.path === path);
 
 /** Every inline link and `related` entry in an article that points nowhere. */
 function brokenLinks(article: GuideArticle): string[] {
@@ -100,7 +111,7 @@ describe('guide articles', () => {
 
 describe('tool guides', () => {
 	it('link to articles that exist', () => {
-		for (const tool of tools)
+		for (const tool of tools())
 			for (const slug of toolGuides(tool.path)) expect(getArticle(slug), tool.path).toBeDefined();
 	});
 });

@@ -4,5 +4,6 @@ export const tool = {
 	path: '/utils/cooking-timer',
 	emoji: '⏲️',
 	name: 'Cooking Timer',
-	blurb: 'Several labeled timers at once.'
+	blurb: 'Several labeled timers at once.',
+	shortcut: true
 };
