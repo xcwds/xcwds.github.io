@@ -27,5 +27,12 @@ export const pages = [
 		emoji: '⚖️',
 		blurb: 'Weigh now against later.',
 		width: 'narrow'
+	},
+	{
+		slug: 'cues',
+		title: 'Cue Audit',
+		emoji: '🔍',
+		blurb: 'Log urges and spot what sets them off.',
+		width: 'narrow'
 	}
 ];

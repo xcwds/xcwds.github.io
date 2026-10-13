@@ -2,6 +2,7 @@
  * Self-Control's habits (#148): the habits you're working on, which every self-control tool
  * attaches its data to. Pure types, validators and helpers; saving goes through `data.ts`.
  */
+import { CUSTOM_MAX, parseCues, type Cues } from './cues';
 
 export type HabitKind = 'stop' | 'cut-back' | 'start';
 
@@ -18,12 +19,13 @@ export type Habit = {
 };
 
 /**
- * What Self-Control remembers about you: whether you've seen the "not therapy" note, and the
- * name self-talk prompts use (#149, optional).
+ * What Self-Control remembers about you: whether you've seen the "not therapy" note, the name
+ * self-talk prompts use (#149, optional), and your own cue chips (#147).
  */
 export type SelfControlPrefs = {
 	noteSeen?: boolean;
 	name?: string;
+	cues?: Cues;
 };
 
 export const HABIT_KINDS: readonly { id: HabitKind; label: string }[] = [
@@ -95,6 +97,8 @@ export function parsePrefs(v: unknown): SelfControlPrefs | undefined {
 	if (typeof v.noteSeen === 'boolean') prefs.noteSeen = v.noteSeen;
 	if (typeof v.name === 'string' && !nameProblem(v.name) && v.name === v.name.trim())
 		prefs.name = v.name;
+	const cues = parseCues(v.cues, CUSTOM_MAX);
+	if (cues) prefs.cues = cues;
 	return prefs;
 }
 

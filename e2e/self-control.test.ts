@@ -456,3 +456,107 @@ test('Decision Seesaw: weigh both sides per habit, see it tilt and show up in Ur
 	await expect(card).toContainText('Energy all afternoon');
 	await expect(card).not.toContainText('Comfort');
 });
+
+test('Cue Audit: log urges with what set them off, see patterns, edit and delete (#147)', async ({
+	page
+}) => {
+	await page.clock.install({ time: new Date('2026-03-04T20:30:00') });
+	await gotoHydrated(page, '/utils/self-control');
+	await page.getByRole('button', { name: 'Add a habit' }).click();
+	await page.getByRole('button', { name: '🍪 Snacking' }).click();
+	await page.getByRole('button', { name: 'Add habit' }).click();
+	await page.getByRole('link', { name: /Cue Audit/ }).click();
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Cue Audit$/);
+	await expect(page.getByTestId('patterns-wait')).toHaveText(
+		'Log a few more to see patterns (0 of 5).'
+	);
+
+	const form = page.getByRole('region', { name: 'Log an urge' });
+	// Validation stays inline.
+	await form.getByRole('button', { name: 'Log it' }).click();
+	await expect(form.getByRole('alert')).toHaveText('Pick how it went.');
+
+	const logUrge = async (outcome: string, cues: Record<string, string[]>, own?: string) => {
+		await form.getByRole('button', { name: '🍪 Snacking' }).click();
+		await form.getByRole('button', { name: outcome, exact: true }).click();
+		const fields = form.getByTestId('cue-fields');
+		if (!(await fields.evaluate((d) => (d as HTMLDetailsElement).open)))
+			await form.getByText('What was going on? (optional)').click();
+		for (const [field, chips] of Object.entries(cues))
+			for (const chip of chips)
+				await form
+					.getByTestId(`cue-${field}`)
+					.getByRole('button', { name: chip, exact: true })
+					.click();
+		if (own) {
+			await form.getByRole('textbox', { name: 'Your own: Where' }).fill(own);
+			await form.getByRole('button', { name: 'Add your own: Where' }).click();
+		}
+		await form.getByRole('button', { name: 'Log it' }).click();
+		await expect(page.getByText('Logged.').last()).toBeVisible();
+	};
+
+	await logUrge('Gave in', { where: ['Kitchen'], feeling: ['Bored'] });
+	await logUrge('Gave in', { where: ['Kitchen'], feeling: ['Bored', 'Tired'] });
+	await logUrge('Rode it out', { feeling: ['Tired'] });
+	await logUrge('Partly', { feeling: ['Bored'] }, 'Office');
+	await expect(page.getByTestId('patterns-wait')).toHaveText(
+		'Log a few more to see patterns (4 of 5).'
+	);
+	// Your own chip is offered first next time.
+	await form.getByText('What was going on? (optional)').click();
+	await expect(form.getByTestId('cue-where').getByRole('button').first()).toHaveText('Office');
+	await logUrge('Gave in', { where: ['Office'] });
+
+	const patterns = page.getByTestId('patterns');
+	await expect(patterns.getByRole('listitem').filter({ hasText: '8pm–12am' })).toContainText(
+		'5 urges'
+	);
+	await expect(patterns.getByRole('listitem').filter({ hasText: 'Wed' })).toContainText('5 urges');
+	await expect(page.getByTestId('top-cues')).toContainText('Bored: 60% of urges, gave in 2 of 3');
+	await expect(page.getByTestId('top-cues')).toContainText('Kitchen: 40% of urges, gave in 2 of 2');
+	await expect(page.getByTestId('riskiest')).toContainText('Kitchen + Bored: gave in 2 times');
+
+	// Edit the newest urge, then delete it; both stick across a reload.
+	const urges = page.getByTestId('urge');
+	await expect(urges).toHaveCount(5);
+	await urges
+		.first()
+		.getByRole('button', { name: /^Edit the urge/ })
+		.click();
+	await urges.first().getByRole('button', { name: 'Rode it out' }).click();
+	await urges.first().getByTestId('cue-feeling').getByRole('button', { name: 'Stressed' }).click();
+	await urges.first().getByRole('button', { name: 'Save' }).click();
+	await expect(page.getByText('Saved.')).toBeVisible();
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(urges.first()).toContainText('Rode it out');
+	await expect(urges.first().getByTestId('urge-cues')).toHaveText('Office · Stressed');
+	await urges
+		.first()
+		.getByRole('button', { name: /^Edit the urge/ })
+		.click();
+	await urges.first().getByRole('button', { name: 'Delete' }).click();
+	await expect(page.getByText('Deleted.')).toBeVisible();
+	await expect(urges).toHaveCount(4);
+	expect(await log(page)).toHaveLength(4);
+});
+
+test('Urge SOS: add what set it off after an urge, in the Cue Audit (#147)', async ({ page }) => {
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: 'Start surfing' }).click();
+	await page.getByRole('button', { name: 'It passed' }).click();
+	await page.getByRole('button', { name: 'Yes' }).click();
+	await page.getByRole('link', { name: 'Add what set it off' }).click();
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Cue Audit$/);
+	await expect(page).toHaveURL(/\/utils\/self-control\/cues$/);
+
+	const urge = page.getByTestId('urge');
+	await expect(urge.getByTestId('cue-fields')).toHaveAttribute('open', '');
+	await urge.getByTestId('cue-trigger').getByRole('button', { name: 'A notification' }).click();
+	await urge.getByRole('button', { name: 'Save' }).click();
+	await expect(urge.getByTestId('urge-cues')).toHaveText('A notification');
+	await expect(urge).toContainText('Surf it');
+	const [saved] = await log(page);
+	expect(saved).toMatchObject({ technique: 'surf', cues: { trigger: ['A notification'] } });
+});

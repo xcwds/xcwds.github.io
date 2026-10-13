@@ -44,8 +44,9 @@
 
 	let habits = $state<Habit[]>([]);
 	let session = $state<SosSession | undefined>();
-	/** What you just saved, for the closing screen. */
+	/** What you just saved, for the closing screen, and its log entry. */
 	let done = $state<Outcome | undefined>();
+	let doneId = $state<string | undefined>();
 	let now = $state(Date.now());
 
 	// The check-in.
@@ -195,6 +196,7 @@
 		if (!saveResult(entries.selfControlLog, result.saved, { explicit: true })) return;
 		session = undefined;
 		done = outcome;
+		doneId = entry.id;
 		toast('Saved to your log.');
 	}
 </script>
@@ -376,6 +378,12 @@
 					Saved. Next time is a fresh start.
 				{/if}
 			</p>
+			{#if doneId}
+				<a
+					href="{resolve('/utils/self-control/cues' as '/')}#edit={encodeURIComponent(doneId)}"
+					class="{button} text-center">Add what set it off</a
+				>
+			{/if}
 			<a href={resolve('/utils/self-control')} class="{button} text-center">Done</a>
 		</section>
 	{:else}

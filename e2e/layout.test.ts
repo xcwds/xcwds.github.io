@@ -112,7 +112,8 @@ test.describe('with the sidebar', () => {
 		'/utils/self-control',
 		'/utils/self-control/sos',
 		'/utils/self-control/why',
-		'/utils/self-control/seesaw'
+		'/utils/self-control/seesaw',
+		'/utils/self-control/cues'
 	]) {
 		test(`the header lines up with the page on ${path}`, async ({ page }) => {
 			await gotoHydrated(page, path);
