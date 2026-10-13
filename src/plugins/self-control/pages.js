@@ -34,5 +34,12 @@ export const pages = [
 		emoji: '🔍',
 		blurb: 'Log urges and spot what sets them off.',
 		width: 'narrow'
+	},
+	{
+		slug: 'environment',
+		title: 'Environment Designer',
+		emoji: '🏡',
+		blurb: 'Make the habit harder and the better choice easy.',
+		width: 'narrow'
 	}
 ];

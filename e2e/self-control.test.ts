@@ -566,3 +566,144 @@ test('Urge SOS: add what set it off after an urge, in the Cue Audit (#147)', asy
 		cues: { trigger: ['A notification'] }
 	});
 });
+
+test('Environment Designer: a checklist per habit and if-then plans shown in Urge SOS (#152)', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/utils/self-control/environment');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Environment Designer$/);
+	await expect(page.getByRole('link', { name: 'Add a habit' })).toBeVisible();
+
+	await gotoHydrated(page, '/utils/self-control');
+	for (const starter of ['🍪 Snacking', '📱 Doomscrolling']) {
+		await page.getByRole('button', { name: 'Add a habit' }).click();
+		await page.getByRole('button', { name: starter }).click();
+		await page.getByRole('button', { name: 'Add habit' }).click();
+	}
+	await page.getByRole('link', { name: /Environment Designer/ }).click();
+
+	// Snacking is the first habit: its starter list plus the generic one.
+	const progress = page.getByTestId('checklist-progress');
+	await expect(progress).toHaveText('0 of 12 done');
+	await page.getByRole('checkbox', { name: 'Put fruit on the counter' }).check();
+	await expect(progress).toHaveText('1 of 12 done');
+	await page
+		.getByRole('button', { name: 'Not for me: Buy single portions, not family packs' })
+		.click();
+	await expect(progress).toHaveText('1 of 11 done');
+	await page.getByTestId('hidden-items').getByText('Not for me (1)').click();
+	await page
+		.getByRole('button', { name: 'Restore: Buy single portions, not family packs' })
+		.click();
+	await expect(progress).toHaveText('1 of 12 done');
+
+	// Your own items, with inline validation.
+	await page.getByRole('button', { name: 'Add', exact: true }).click();
+	await expect(page.getByTestId('checklist').getByRole('alert')).toHaveText(
+		'Write something first.'
+	);
+	await page.getByLabel('Add your own').fill('Keep nuts in the desk drawer');
+	await page.getByLabel('Group').selectOption({ label: 'Make the better option easy' });
+	await page.getByRole('button', { name: 'Add', exact: true }).click();
+	await expect(page.getByTestId('group-easy')).toContainText('Keep nuts in the desk drawer');
+	await expect(progress).toHaveText('1 of 13 done');
+	await page.getByRole('button', { name: 'Delete: Keep nuts in the desk drawer' }).click();
+	await expect(progress).toHaveText('1 of 12 done');
+	// Up to 30 of your own per habit.
+	await page.evaluate(() => {
+		const key = 'app:self-control:plan';
+		const env = JSON.parse(localStorage.getItem(key)!);
+		const [habit] = Object.keys(env);
+		env[habit!].custom = Array.from({ length: 30 }, (_, i) => ({
+			id: `c${i}`,
+			group: 'hide',
+			text: `Item ${i}`
+		}));
+		localStorage.setItem(key, JSON.stringify(env));
+	});
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await page.getByLabel('Add your own').fill('One more');
+	await page.getByRole('button', { name: 'Add', exact: true }).click();
+	await expect(page.getByTestId('checklist').getByRole('alert')).toHaveText(
+		"That's 30 of your own already. Delete one first."
+	);
+	await page.evaluate(() => {
+		const key = 'app:self-control:plan';
+		const env = JSON.parse(localStorage.getItem(key)!);
+		for (const plan of Object.values(env) as { custom: unknown[] }[]) plan.custom = [];
+		localStorage.setItem(key, JSON.stringify(env));
+	});
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(progress).toHaveText('1 of 12 done');
+
+	// An if-then plan, with an action from what you've done.
+	const form = page.getByTestId('plan-form');
+	await form.getByRole('button', { name: 'Add plan' }).click();
+	await expect(form.getByRole('alert')).toHaveText([
+		'Write something first.',
+		'Write something first.'
+	]);
+	await form.getByLabel('If…').fill('I get home hungry');
+	await form.getByRole('button', { name: 'Put fruit on the counter' }).click();
+	await form.getByRole('button', { name: 'Add plan' }).click();
+	const plan = page.getByTestId('plan');
+	await expect(plan).toHaveText(/If I get home hungry, then I will put fruit on the counter\./);
+	await plan.getByRole('button', { name: /^Star:/ }).click();
+	await expect(plan.getByRole('button', { name: /^Star:/ })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+
+	// Each habit has its own, kept across a reload.
+	await page.getByRole('button', { name: '📱 Doomscrolling' }).click();
+	await expect(page.getByTestId('plan')).toHaveCount(0);
+	await expect(
+		page.getByRole('checkbox', { name: 'Turn off non-essential notifications' })
+	).toBeVisible();
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(page.getByRole('checkbox', { name: 'Put fruit on the counter' })).toBeChecked();
+	await expect(plan).toHaveCount(1);
+
+	// Urge SOS shows the starred plan for the habit.
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: '🍪 Snacking' }).click();
+	await page.getByRole('button', { name: 'Start surfing' }).click();
+	await expect(page.getByTestId('sos-plans')).toContainText(
+		'If I get home hungry, then I will put fruit on the counter.'
+	);
+});
+
+test('Cue Audit: plan for a top cue in the Environment Designer (#147, #152)', async ({ page }) => {
+	await gotoHydrated(page, '/utils/self-control');
+	await page.getByRole('button', { name: 'Add a habit' }).click();
+	await page.getByRole('button', { name: '🍪 Snacking' }).click();
+	await page.getByRole('button', { name: 'Add habit' }).click();
+	await page.evaluate(() => {
+		const habit = JSON.parse(localStorage.getItem('app:self-control:habits')!)[0].id;
+		const log = Array.from({ length: 5 }, (_, i) => ({
+			id: `u${i}`,
+			at: Date.now() - i * 3_600_000,
+			habit,
+			start: 5,
+			outcome: 'gave-in',
+			cues: { where: ['Kitchen'] }
+		}));
+		localStorage.setItem('app:self-control:log', JSON.stringify(log));
+	});
+	await gotoHydrated(page, '/utils/self-control/cues');
+	// Planning needs a habit: every urge together has no link.
+	await expect(page.getByRole('link', { name: /^Plan for this/ })).toHaveCount(0);
+	await page.getByRole('button', { name: '🍪 Snacking' }).last().click();
+	await page.getByRole('link', { name: 'Plan for this: Kitchen' }).click();
+
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Environment Designer$/);
+	await expect(page).toHaveURL(/\/utils\/self-control\/environment$/);
+	await expect(page.getByLabel('If…')).toHaveValue('Kitchen');
+	// The items that help with the cue stand out.
+	await expect(
+		page.getByTestId('checklist-item').filter({ hasText: '(helps with Kitchen)' })
+	).toHaveCount(4);
+});

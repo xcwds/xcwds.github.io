@@ -8,6 +8,7 @@ import {
 	type SelfControlPrefs
 } from '$lib/self-control/habits';
 import { parseLog, parseSession, type SosSession, type UrgeEntry } from '$lib/self-control/sos';
+import { parseEnvironment, type Environment } from '$lib/self-control/environment';
 import { parseSeesaw, type Seesaw } from '$lib/self-control/seesaw';
 import { parseWhy, type Why } from '$lib/self-control/why';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
@@ -334,7 +335,13 @@ export const entries = {
 	// Your reasons and notes to yourself (#150).
 	selfControlWhy: entry<Why>('self-control:why', 'Self-Control reasons', parseWhy),
 	// The Decision Seesaw per habit (#151).
-	selfControlSeesaw: entry<Seesaw>('self-control:seesaw', 'Self-Control seesaws', parseSeesaw)
+	selfControlSeesaw: entry<Seesaw>('self-control:seesaw', 'Self-Control seesaws', parseSeesaw),
+	// Environment checklists and if-then plans per habit (#152).
+	selfControlPlan: entry<Environment>(
+		'self-control:plan',
+		'Self-Control environment and plans',
+		parseEnvironment
+	)
 } satisfies Record<string, Entry<unknown>>;
 
 /**

@@ -38,6 +38,7 @@
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
 	import { formatDuration } from '$lib/utils/time';
 	import { button, card, field, primary } from '../styles';
+	import PlanCard from './PlanCard.svelte';
 	import SeesawCard from './SeesawCard.svelte';
 	import WhyCard from './WhyCard.svelte';
 	import { toggle } from '../../weightlifting/styles';
@@ -453,6 +454,7 @@
 		</section>
 	{/if}
 	{#if session && session.step !== 'outcome'}
+		<PlanCard habit={session.habit} />
 		<WhyCard habit={session.habit} />
 		<SeesawCard habit={session.habit} />
 	{/if}
