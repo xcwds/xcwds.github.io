@@ -41,5 +41,12 @@ export const pages = [
 		emoji: '🏡',
 		blurb: 'Make the habit harder and the better choice easy.',
 		width: 'narrow'
+	},
+	{
+		slug: 'review',
+		title: 'Weekly review',
+		emoji: '📅',
+		blurb: "See what's working, week by week.",
+		width: 'wide'
 	}
 ];

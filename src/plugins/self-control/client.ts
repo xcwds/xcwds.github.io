@@ -1,6 +1,6 @@
 /**
  * The page entry: the Self-Control tool and the habits, preferences, urge log, reasons, seesaws,
- * and environment plans it saves.
+ * environment plans and weekly reflections it saves.
  */
 import { definePlugin } from '@xcwds/core';
 import { addHabitData } from '$lib/self-control/data';
@@ -22,7 +22,8 @@ export default definePlugin(
 			entries.selfControlSos,
 			entries.selfControlWhy,
 			entries.selfControlSeesaw,
-			entries.selfControlPlan
+			entries.selfControlPlan,
+			entries.selfControlReview
 		]);
 		addHabitData({ entry: entries.selfControlLog, without: logWithout });
 		addHabitData({ entry: entries.selfControlWhy, without: whyWithout });
