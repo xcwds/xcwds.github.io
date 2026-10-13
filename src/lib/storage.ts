@@ -8,6 +8,8 @@ import {
 	type SelfControlPrefs
 } from '$lib/self-control/habits';
 import { parseLog, parseSession, type SosSession, type UrgeEntry } from '$lib/self-control/sos';
+import { parseSeesaw, type Seesaw } from '$lib/self-control/seesaw';
+import { parseWhy, type Why } from '$lib/self-control/why';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
 import { getApp } from '@xcwds/sveltekit';
 import {
@@ -328,7 +330,11 @@ export const entries = {
 		'self-control:sos',
 		'Self-Control session in progress',
 		parseSession
-	)
+	),
+	// Your reasons and notes to yourself (#150).
+	selfControlWhy: entry<Why>('self-control:why', 'Self-Control reasons', parseWhy),
+	// The Decision Seesaw per habit (#151).
+	selfControlSeesaw: entry<Seesaw>('self-control:seesaw', 'Self-Control seesaws', parseSeesaw)
 } satisfies Record<string, Entry<unknown>>;
 
 /**

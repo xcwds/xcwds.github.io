@@ -38,6 +38,8 @@
 	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
 	import { formatDuration } from '$lib/utils/time';
 	import { button, card, field, primary } from '../styles';
+	import SeesawCard from './SeesawCard.svelte';
+	import WhyCard from './WhyCard.svelte';
 	import { toggle } from '../../weightlifting/styles';
 
 	let habits = $state<Habit[]>([]);
@@ -441,6 +443,10 @@
 						: "You'll answer a few short prompts, then note how it went."}
 			</p>
 		</section>
+	{/if}
+	{#if session && session.step !== 'outcome'}
+		<WhyCard habit={session.habit} />
+		<SeesawCard habit={session.habit} />
 	{/if}
 </main>
 

@@ -1,0 +1,1 @@
+- Self-Control: the Decision Seesaw weighs what giving in gets you now against what it costs you later, and the same for holding off, per habit. It tilts toward the heavier side, and Urge SOS shows what's at stake later when an urge hits.
