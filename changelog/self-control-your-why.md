@@ -1,0 +1,1 @@
+- Self-Control: Your why keeps the reasons you're working on a habit, per habit and in general, plus a note to your future self. Star the ones that hit hardest, and Urge SOS shows them when an urge hits.
