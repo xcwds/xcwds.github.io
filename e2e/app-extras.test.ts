@@ -147,6 +147,20 @@ for (const [name, viewport] of [
 			['/utils/self-control/why'],
 			['/utils/self-control/seesaw'],
 			[
+				'/utils/self-control/cues',
+				async (p) => {
+					await p.getByText('What was going on? (optional)').click();
+				}
+			],
+			[
+				'/utils/self-control/cues',
+				async (p) => {
+					await p.getByRole('button', { name: 'Gave in' }).click();
+					await p.getByRole('button', { name: 'Log it' }).click();
+					await p.getByRole('button', { name: /^Edit the urge/ }).click();
+				}
+			],
+			[
 				'/utils/self-control/seesaw',
 				async (p) => {
 					await p.getByTestId('side-give-now').getByRole('textbox').fill('Comfort');

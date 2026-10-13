@@ -1,0 +1,2 @@
+- Self-Control: the Cue Audit logs an urge in a few taps, with where you were, what you were doing and feeling, and what set it off. After a few, it shows when urges hit, your top cues and your riskiest moments.
+- Self-Control: after Urge SOS, "Add what set it off" adds those details to the urge you just logged.

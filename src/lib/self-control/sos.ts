@@ -2,6 +2,7 @@
  * Urge SOS (#149): the urge log every session ends in, and the session in progress. Pure types,
  * validators and helpers; the page saves them through `persist()` and `update()`.
  */
+import { parseCues, type Cues } from './cues';
 import { givingIn, type HabitKind } from './habits';
 
 /** Every technique the log can record, including the ones still to come (#149). */
@@ -11,7 +12,7 @@ export type Technique = (typeof TECHNIQUES)[number];
 export const OUTCOMES = ['rode-out', 'partly', 'gave-in'] as const;
 export type Outcome = (typeof OUTCOMES)[number];
 
-/** One urge, as the log keeps it (shared with the Cue Audit, #147). */
+/** One urge, as the log keeps it: from Urge SOS, or logged by hand in the Cue Audit (#147). */
 export type UrgeEntry = {
 	id: string;
 	/** When the session started (ms since the epoch). */
@@ -21,9 +22,12 @@ export type UrgeEntry = {
 	start: number;
 	peak?: number;
 	end?: number;
-	technique: Technique;
+	/** How you rode it out in Urge SOS; none when it was logged by hand. */
+	technique?: Technique;
 	outcome: Outcome;
-	/** "What might help next time?", after giving in. */
+	/** What was going on (#147). */
+	cues?: Cues;
+	/** "What might help next time?", after giving in, or the Cue Audit's note. */
 	note?: string;
 };
 
@@ -149,20 +153,17 @@ const isId = (v: unknown): v is string => typeof v === 'string' && v !== '' && v
 
 function parseEntry(v: unknown): UrgeEntry | undefined {
 	if (!isRecord(v)) return undefined;
-	const { id, at, habit, start, peak, end, technique, outcome, note } = v;
+	const { id, at, habit, start, peak, end, technique, outcome, cues, note } = v;
 	if (!isId(id) || !isTime(at) || !isIntensity(start)) return undefined;
-	if (!TECHNIQUES.includes(technique as Technique)) return undefined;
+	if (technique !== undefined && !TECHNIQUES.includes(technique as Technique)) return undefined;
 	if (!OUTCOMES.includes(outcome as Outcome)) return undefined;
-	const entry: UrgeEntry = {
-		id,
-		at,
-		start,
-		technique: technique as Technique,
-		outcome: outcome as Outcome
-	};
+	const entry: UrgeEntry = { id, at, start, outcome: outcome as Outcome };
+	if (technique !== undefined) entry.technique = technique as Technique;
 	if (isId(habit)) entry.habit = habit;
 	if (isIntensity(peak)) entry.peak = peak;
 	if (isIntensity(end)) entry.end = end;
+	const parsedCues = parseCues(cues);
+	if (parsedCues) entry.cues = parsedCues;
 	if (typeof note === 'string' && note.trim() && note.length <= NOTE_MAX) entry.note = note;
 	return entry;
 }
