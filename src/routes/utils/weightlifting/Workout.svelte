@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import {
 		activeSet,
 		formatWeight,
@@ -68,23 +68,23 @@
 	let nextId = 1;
 	const id = () => nextId++;
 
-	/** What ✕ last removed, shown as an Undo row in its place for a few seconds. */
+	/**
+	 * What ✕ last removed, shown as an Undo row in its place until the next removal or a new
+	 * workout. No timer, so it can't vanish before you reach it.
+	 */
 	type Removed =
 		| { kind: 'exercise'; index: number; exercise: Exercise }
 		| { kind: 'set'; exerciseId: number; index: number; set: WorkoutSet };
 	let removed = $state<Removed | undefined>();
-	let undoTimer: ReturnType<typeof setTimeout> | undefined;
-	const UNDO_MS = 8000;
+	let undoButton = $state<HTMLButtonElement | undefined>();
 
-	function forget() {
-		clearTimeout(undoTimer);
-		removed = undefined;
-	}
+	const forget = () => (removed = undefined);
 
-	function remember(next: Removed) {
-		clearTimeout(undoTimer);
+	/** The ✕ you tapped is gone, so focus moves to Undo. */
+	async function remember(next: Removed) {
 		removed = next;
-		undoTimer = setTimeout(() => (removed = undefined), UNDO_MS);
+		await tick();
+		undoButton?.focus();
 	}
 
 	function removeExercise(index: number) {
@@ -97,18 +97,23 @@
 		if (set) remember({ kind: 'set', exerciseId: exercise.id, index, set: $state.snapshot(set) });
 	}
 
-	function undo() {
+	/** Puts back what was removed; focus goes to its ✕, since Undo is gone. */
+	async function undo() {
 		const r = removed;
 		forget();
+		let back: string | undefined;
 		if (r?.kind === 'exercise') {
 			workout.exercises.splice(Math.min(r.index, workout.exercises.length), 0, r.exercise);
+			back = `exercise-${r.exercise.id}`;
 		} else if (r?.kind === 'set') {
 			const exercise = workout.exercises.find((e) => e.id === r.exerciseId);
-			exercise?.sets.splice(Math.min(r.index, exercise.sets.length), 0, r.set);
+			if (!exercise) return;
+			exercise.sets.splice(Math.min(r.index, exercise.sets.length), 0, r.set);
+			back = `set-${r.set.id}`;
 		}
+		await tick();
+		if (back) document.querySelector<HTMLElement>(`[data-remove="${back}"]`)?.focus();
 	}
-
-	onMount(() => () => clearTimeout(undoTimer));
 
 	const useWorkout = (next: Workout) => {
 		forget();
@@ -216,7 +221,9 @@
 			data-testid="undo-row"
 		>
 			<span class="min-w-0 break-words">{label} removed.</span>
-			<button type="button" class="{button} shrink-0" onclick={undo}>Undo</button>
+			<button type="button" class="{button} shrink-0" bind:this={undoButton} onclick={undo}
+				>Undo</button
+			>
 		</div>
 	{/snippet}
 
@@ -237,6 +244,7 @@
 					type="button"
 					aria-label="Remove {exercise.name || `exercise ${e + 1}`}"
 					class="{button} shrink-0"
+					data-remove="exercise-{exercise.id}"
 					onclick={() => removeExercise(e)}>✕</button
 				>
 			</div>
@@ -280,6 +288,7 @@
 									type="button"
 									aria-label="Remove set {i + 1}"
 									class="{button} px-2 py-1"
+									data-remove="set-{set.id}"
 									onclick={() => removeSet(exercise, i)}>✕</button
 								>
 							</td>

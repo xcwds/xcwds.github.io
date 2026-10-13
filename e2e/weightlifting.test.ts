@@ -90,8 +90,11 @@ test('removing an exercise or a set can be undone (#140)', async ({ page }) => {
 	await expect(page.getByTestId('exercise')).toHaveCount(1);
 	const undo = page.getByTestId('undo-row');
 	await expect(undo).toContainText('Squat removed.');
-	await undo.getByRole('button', { name: 'Undo' }).click();
+	// The ✕ is gone, so focus moves to Undo, and back to the restored ✕ after.
+	await expect(undo.getByRole('button', { name: 'Undo' })).toBeFocused();
+	await page.keyboard.press('Enter');
 	await expect(undo).toHaveCount(0);
+	await expect(page.getByRole('button', { name: 'Remove Squat' })).toBeFocused();
 	await expect(page.getByLabel('Exercise 1 name')).toHaveValue('Squat');
 	await expect(page.getByLabel('Squat set 1 weight')).toHaveValue('135');
 
