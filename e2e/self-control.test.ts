@@ -408,7 +408,7 @@ test('Decision Seesaw: weigh both sides per habit, see it tilt and show up in Ur
 	// Snacking is the first habit, so it's shown.
 	await add('give-now', 'Comfort', 'Hugely');
 	await expect(lean).toHaveText('Leans toward giving in');
-	await add('give-later', 'Sugar crash');
+	await add('give-later', 'Sugar crash', 'Hugely');
 	await expect(lean).toHaveText('Balanced');
 	await add('hold-later', 'Energy all afternoon', 'Hugely');
 	await expect(lean).toHaveText('Leans toward holding off');
