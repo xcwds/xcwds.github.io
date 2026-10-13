@@ -609,6 +609,34 @@ test('Environment Designer: a checklist per habit and if-then plans shown in Urg
 	await expect(progress).toHaveText('1 of 13 done');
 	await page.getByRole('button', { name: 'Delete: Keep nuts in the desk drawer' }).click();
 	await expect(progress).toHaveText('1 of 12 done');
+	// Up to 30 of your own per habit.
+	await page.evaluate(() => {
+		const key = 'app:self-control:plan';
+		const env = JSON.parse(localStorage.getItem(key)!);
+		const [habit] = Object.keys(env);
+		env[habit!].custom = Array.from({ length: 30 }, (_, i) => ({
+			id: `c${i}`,
+			group: 'hide',
+			text: `Item ${i}`
+		}));
+		localStorage.setItem(key, JSON.stringify(env));
+	});
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await page.getByLabel('Add your own').fill('One more');
+	await page.getByRole('button', { name: 'Add', exact: true }).click();
+	await expect(page.getByTestId('checklist').getByRole('alert')).toHaveText(
+		"That's 30 of your own already. Delete one first."
+	);
+	await page.evaluate(() => {
+		const key = 'app:self-control:plan';
+		const env = JSON.parse(localStorage.getItem(key)!);
+		for (const plan of Object.values(env) as { custom: unknown[] }[]) plan.custom = [];
+		localStorage.setItem(key, JSON.stringify(env));
+	});
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(progress).toHaveText('1 of 12 done');
 
 	// An if-then plan, with an action from what you've done.
 	const form = page.getByTestId('plan-form');

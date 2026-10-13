@@ -1,5 +1,6 @@
 <script lang="ts">
 	import {
+		CUSTOM_MAX,
 		GROUPS,
 		GROUP_LABELS,
 		TEXT_MAX,
@@ -49,7 +50,11 @@
 
 	function add(event: SubmitEvent) {
 		event.preventDefault();
-		error = textProblem(draft);
+		error =
+			textProblem(draft) ??
+			(plan.custom.length >= CUSTOM_MAX
+				? `That's ${CUSTOM_MAX} of your own already. Delete one first.`
+				: undefined);
 		if (error) return;
 		if (onAdd(group, draft)) draft = '';
 	}
