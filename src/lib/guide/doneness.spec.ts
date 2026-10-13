@@ -3,7 +3,11 @@ import { doneness, formatInternal, formatRise, MEATS, type Meat } from './donene
 
 const meat = (id: string) => MEATS.find((m) => m.id === id)!;
 const pick = (m: Meat, size: string, level: string) =>
-	doneness(m, m.sizes.find((s) => s.id === size)!, m.levels.find((l) => l.id === level)!);
+	doneness(
+		m,
+		m.sizes.find((s) => s.id === size)!,
+		m.levels.find((l) => l.id === level)!
+	);
 
 describe('doneness data', () => {
 	it('uses the USDA safe minimums', () => {
