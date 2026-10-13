@@ -74,6 +74,41 @@ test('tracks a workout and copies it as text', async ({ page, context }) => {
 	);
 });
 
+test('removing an exercise or a set can be undone (#140)', async ({ page }) => {
+	await gotoHydrated(page, '/utils/weightlifting');
+	await page.getByRole('tab', { name: 'Workout' }).click();
+	await page.getByRole('button', { name: '+ Add exercise' }).click();
+	await page.getByLabel('Exercise 1 name').fill('Squat');
+	await page.getByLabel('Squat set 1 weight').fill('135');
+	await page.getByRole('button', { name: '+ Add exercise' }).click();
+	await page.getByLabel('Exercise 2 name').fill('Deadlift');
+	await page.getByLabel('Deadlift set 1 weight').fill('185');
+	await page.getByRole('button', { name: '+ Set', exact: true }).nth(1).click();
+	await page.getByLabel('Deadlift set 2 reps').fill('3');
+
+	await page.getByRole('button', { name: 'Remove Squat' }).click();
+	await expect(page.getByTestId('exercise')).toHaveCount(1);
+	const undo = page.getByTestId('undo-row');
+	await expect(undo).toContainText('Squat removed.');
+	await undo.getByRole('button', { name: 'Undo' }).click();
+	await expect(undo).toHaveCount(0);
+	await expect(page.getByLabel('Exercise 1 name')).toHaveValue('Squat');
+	await expect(page.getByLabel('Squat set 1 weight')).toHaveValue('135');
+
+	await page.getByRole('button', { name: 'Remove set 2' }).click();
+	await expect(undo).toContainText('Set 2 removed.');
+	await undo.getByRole('button', { name: 'Undo' }).click();
+	await expect(page.getByLabel('Deadlift set 2 reps')).toHaveValue('3');
+
+	// The last exercise's Undo shows where it was, and the restored workout is saved.
+	await page.getByRole('button', { name: 'Remove Deadlift' }).click();
+	await undo.getByRole('button', { name: 'Undo' }).click();
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(page.getByLabel('Exercise 2 name')).toHaveValue('Deadlift');
+	await expect(page.getByLabel('Deadlift set 2 reps')).toHaveValue('3');
+});
+
 test('a huge target weight answers right away instead of freezing the page (#32)', async ({
 	page
 }) => {

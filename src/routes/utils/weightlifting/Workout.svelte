@@ -6,6 +6,7 @@
 		workoutHasContent,
 		workoutToText,
 		type Exercise,
+		type WorkoutSet,
 		type Workout
 	} from '$lib/utils/lifting';
 	import { persist } from '$lib/persist.svelte';
@@ -67,7 +68,50 @@
 	let nextId = 1;
 	const id = () => nextId++;
 
+	/** What ✕ last removed, shown as an Undo row in its place for a few seconds. */
+	type Removed =
+		| { kind: 'exercise'; index: number; exercise: Exercise }
+		| { kind: 'set'; exerciseId: number; index: number; set: WorkoutSet };
+	let removed = $state<Removed | undefined>();
+	let undoTimer: ReturnType<typeof setTimeout> | undefined;
+	const UNDO_MS = 8000;
+
+	function forget() {
+		clearTimeout(undoTimer);
+		removed = undefined;
+	}
+
+	function remember(next: Removed) {
+		clearTimeout(undoTimer);
+		removed = next;
+		undoTimer = setTimeout(() => (removed = undefined), UNDO_MS);
+	}
+
+	function removeExercise(index: number) {
+		const [exercise] = workout.exercises.splice(index, 1);
+		if (exercise) remember({ kind: 'exercise', index, exercise: $state.snapshot(exercise) });
+	}
+
+	function removeSet(exercise: Exercise, index: number) {
+		const [set] = exercise.sets.splice(index, 1);
+		if (set) remember({ kind: 'set', exerciseId: exercise.id, index, set: $state.snapshot(set) });
+	}
+
+	function undo() {
+		const r = removed;
+		forget();
+		if (r?.kind === 'exercise') {
+			workout.exercises.splice(Math.min(r.index, workout.exercises.length), 0, r.exercise);
+		} else if (r?.kind === 'set') {
+			const exercise = workout.exercises.find((e) => e.id === r.exerciseId);
+			exercise?.sets.splice(Math.min(r.index, exercise.sets.length), 0, r.set);
+		}
+	}
+
+	onMount(() => () => clearTimeout(undoTimer));
+
 	const useWorkout = (next: Workout) => {
+		forget();
 		workout = next;
 		nextId = 1 + Math.max(0, ...next.exercises.flatMap((e) => [e.id, ...e.sets.map((s) => s.id)]));
 	};
@@ -111,6 +155,7 @@
 			if (!onFinish($state.snapshot(workout))) return;
 			toast('Workout saved to history.');
 		}
+		forget();
 		workout = { date: today(), unit: calculatorUnit, exercises: [] };
 	}
 
@@ -164,7 +209,21 @@
 		</p>
 	{/if}
 
+	{#snippet undoRow(label: string)}
+		<div
+			class="flex items-center justify-between gap-2 rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800"
+			role="status"
+			data-testid="undo-row"
+		>
+			<span class="min-w-0 break-words">{label} removed.</span>
+			<button type="button" class="{button} shrink-0" onclick={undo}>Undo</button>
+		</div>
+	{/snippet}
+
 	{#each workout.exercises as exercise, e (exercise.id)}
+		{#if removed?.kind === 'exercise' && removed.index === e}
+			{@render undoRow(removed.exercise.name || 'Exercise')}
+		{/if}
 		<div class="{card} flex flex-col gap-3" data-testid="exercise">
 			<div class="flex items-center gap-2">
 				<input
@@ -178,7 +237,7 @@
 					type="button"
 					aria-label="Remove {exercise.name || `exercise ${e + 1}`}"
 					class="{button} shrink-0"
-					onclick={() => workout.exercises.splice(e, 1)}>✕</button
+					onclick={() => removeExercise(e)}>✕</button
 				>
 			</div>
 			<table class="w-full text-sm">
@@ -221,13 +280,16 @@
 									type="button"
 									aria-label="Remove set {i + 1}"
 									class="{button} px-2 py-1"
-									onclick={() => exercise.sets.splice(i, 1)}>✕</button
+									onclick={() => removeSet(exercise, i)}>✕</button
 								>
 							</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
+			{#if removed?.kind === 'set' && removed.exerciseId === exercise.id}
+				{@render undoRow(`Set ${removed.index + 1}`)}
+			{/if}
 			<div class="grid grid-cols-2 gap-2 text-sm">
 				<button type="button" class={button} onclick={() => addSet(exercise)}>+ Set</button>
 				<button
@@ -241,6 +303,9 @@
 			</div>
 		</div>
 	{/each}
+	{#if removed?.kind === 'exercise' && removed.index >= workout.exercises.length}
+		{@render undoRow(removed.exercise.name || 'Exercise')}
+	{/if}
 
 	<button type="button" class={button} onclick={addExercise}>+ Add exercise</button>
 

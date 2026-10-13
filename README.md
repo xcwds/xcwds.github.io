@@ -10,16 +10,22 @@ accounts, no server, and your data stays on your device (back it up from Setting
 ## What's inside
 
 - **Recipes**: classic back-pocket recipes with a servings scaler and an oven temperature converter.
+- **Kitchen Guide**: general know-how next to the recipes: methods, meat, baking, doneness and basics.
 - **Utils**:
   - Pizza Dough Calculator: baker's percentages, in grams.
   - Coffee Timer and Cooking Timer: keep running in the background, with alarms.
+  - Oven Time Converter: a new cook time when the oven has to be hotter or cooler.
   - URL Sanitizer: strips tracking parameters. Share links to it straight from other apps.
   - Weightlifting Calculator: plate math for bars, dumbbells and kettlebells, plus a workout log.
-- **Settings**: theme, timer alarm options, data backup/import, and app updates.
+- **Settings**: theme, layout, recipe units, tool defaults, timer alarms, and data backup/import.
 
 New tools are requested as GitHub issues.
 
 ## Tech stack
+
+The app runs on [@xcwds](https://github.com/xcwds/xcwds), a plugin-based framework for private,
+offline-first PWAs: it provides the shell (header, tabs, toasts), storage and settings, the service
+worker, updates and most of the app chrome. The app's own features are plugins in `src/plugins/`.
 
 Static site generation:
 
