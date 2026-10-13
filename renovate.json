@@ -1,6 +1,6 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+	"extends": ["config:recommended", "helpers:pinGitHubActionDigests", "group:allNonMajor"],
 	"packageRules": [
 		{
 			"description": "The @xcwds packages move together: a partial bump can load two kernels (xcwds/xcwds#53).",
