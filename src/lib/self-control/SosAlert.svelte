@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { browser } from '$app/environment';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 	import { markBusy } from '$lib/busy';
 	import { isTimed, type SosSession } from '$lib/self-control/sos';
 	import { settingsStatus } from '$lib/settings.svelte';
 	import { entries, read, write } from '$lib/storage';
-	import { beep } from '$lib/utils/alarm';
+	import { beep, keepAwake } from '$lib/utils/alarm';
 
 	/**
 	 * Urge SOS's timer (surfing, or a sprint's delay) when you've left its page (#149): it rings
@@ -32,6 +34,13 @@
 	});
 
 	markBusy('self-control-sos-away', () => timed);
+	// Keeps the screen on while it counts, as the page does, so it can ring.
+	const awake = browser ? keepAwake(() => timed) : undefined;
+	$effect(() => {
+		void timed;
+		void awake?.sync();
+	});
+	onMount(() => () => awake?.destroy());
 
 	// Counts against the saved end time, like the page.
 	$effect(() => {
