@@ -549,7 +549,7 @@ export function workoutToText(workout: Workout): string {
 		const sets = exercise.sets.filter((s) => s.reps || s.weight);
 		if (!exercise.name.trim() && sets.length === 0) continue;
 		lines.push('', exercise.name.trim() || 'Exercise');
-		for (let i = 0; i < sets.length; ) {
+		for (let i = 0; i < sets.length;) {
 			let n = 1;
 			while (
 				i + n < sets.length &&
