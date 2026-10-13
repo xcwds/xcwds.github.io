@@ -246,6 +246,45 @@ test('Urge SOS: sprint, then wait out a 5-minute delay that survives a reload (#
 	expect(saved).not.toHaveProperty('action');
 });
 
+test('Urge SOS: the timer rings and says so discreetly on other pages (#149)', async ({ page }) => {
+	await page.clock.install({ time: new Date('2026-01-01T22:00:00') });
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: '5 min', exact: true }).click();
+	await page.getByRole('button', { name: 'Start surfing' }).click();
+	await expect(page.getByTestId('surf-time')).toHaveText('5:00');
+
+	const alert = page.getByTestId('sos-alert');
+	await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Home' }).click();
+	await expect(page).toHaveURL(/\/$/);
+	await page.clock.runFor(4 * 60_000);
+	await expect(alert).toHaveCount(0);
+	await page.clock.runFor(61_000);
+	await expect(alert).toHaveText(/Your timer is done/);
+	// Private: it names neither the tool nor the urge.
+	await expect(alert).not.toContainText(/Self-Control|urge|SOS/i);
+
+	// Dismissed, it stays gone; the session waits on its page.
+	await alert.getByRole('button', { name: 'Dismiss' }).click();
+	await expect(alert).toHaveCount(0);
+	await page.clock.runFor(2_000);
+	await expect(alert).toHaveCount(0);
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await expect(page.getByRole('heading', { name: 'Did you ride it out?' })).toBeVisible();
+
+	// Open takes you there.
+	await page.getByRole('button', { name: 'Yes' }).click();
+	await expect(page.getByTestId('sos-done')).toBeVisible();
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: 'Sprint' }).click();
+	await page.getByRole('button', { name: 'Start', exact: true }).click();
+	await page.getByRole('button', { name: 'Drink a glass of water' }).click();
+	await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Utils' }).click();
+	await page.clock.runFor(5 * 60_000 + 1_000);
+	await alert.getByRole('link', { name: 'Open timer' }).click();
+	await expect(page.getByRole('heading', { name: 'Did you ride it out?' })).toBeVisible();
+	await expect(alert).toHaveCount(0);
+});
+
 test('Urge SOS: change or forget the name self-talk uses (#149)', async ({ page }) => {
 	await page.addInitScript(() => {
 		if (!localStorage.getItem('app:self-control:prefs'))
