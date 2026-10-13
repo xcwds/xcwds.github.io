@@ -144,6 +144,15 @@ for (const [name, viewport] of [
 				}
 			],
 			['/utils/self-control/sos'],
+			['/utils/self-control/why'],
+			[
+				'/utils/self-control/why',
+				async (p) => {
+					await p.getByLabel('Add a reason').fill('Sleep');
+					await p.getByRole('button', { name: 'Add', exact: true }).click();
+					await p.getByRole('button', { name: 'Edit: Sleep' }).click();
+				}
+			],
 			[
 				'/utils/self-control/sos',
 				async (p) => {

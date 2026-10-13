@@ -8,6 +8,7 @@ import {
 	type SelfControlPrefs
 } from '$lib/self-control/habits';
 import { parseLog, parseSession, type SosSession, type UrgeEntry } from '$lib/self-control/sos';
+import { parseWhy, type Why } from '$lib/self-control/why';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
 import { getApp } from '@xcwds/sveltekit';
 import {
@@ -328,7 +329,9 @@ export const entries = {
 		'self-control:sos',
 		'Self-Control session in progress',
 		parseSession
-	)
+	),
+	// Your reasons and notes to yourself (#150).
+	selfControlWhy: entry<Why>('self-control:why', 'Self-Control reasons', parseWhy)
 } satisfies Record<string, Entry<unknown>>;
 
 /**
