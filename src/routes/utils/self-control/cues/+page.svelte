@@ -126,10 +126,22 @@
 
 	function edit(id: string, fields: LogFields): boolean {
 		const next = checked(fields);
-		if (!change((latest) => latest.map((e) => (e.id === id ? editEntry(e, next) : e))))
-			return false;
-		rememberChips(next.cues);
+		let found = false;
+		const ok = change((latest) =>
+			latest.map((e) => {
+				if (e.id !== id) return e;
+				found = true;
+				return editEntry(e, next);
+			})
+		);
+		if (!ok) return false;
 		editing = undefined;
+		// Another tab may have deleted it meanwhile.
+		if (!found) {
+			toast('That urge was deleted elsewhere.');
+			return true;
+		}
+		rememberChips(next.cues);
 		toast('Saved.');
 		return true;
 	}

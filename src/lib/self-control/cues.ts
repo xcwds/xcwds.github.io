@@ -149,7 +149,8 @@ export function toLocalInput(at: number): string {
 
 /** A `datetime-local` input's value as ms since the epoch, or undefined if it isn't one. */
 export function fromLocalInput(value: string): number | undefined {
-	const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);
+	// Browsers may add seconds (and milliseconds); the log keeps minutes.
+	const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?$/.exec(value);
 	if (!match) return undefined;
 	const [y, mo, d, h, mi] = match.slice(1).map(Number) as [number, number, number, number, number];
 	const at = new Date(y, mo - 1, d, h, mi).getTime();

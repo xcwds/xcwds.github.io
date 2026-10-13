@@ -96,7 +96,8 @@
 
 	function submit(event: SubmitEvent) {
 		event.preventDefault();
-		const at = fromLocalInput(time);
+		// An untouched time keeps its seconds (Urge SOS saves them).
+		const at = initial && time === toLocalInput(initial.at) ? initial.at : fromLocalInput(time);
 		errors = {
 			time:
 				at === undefined

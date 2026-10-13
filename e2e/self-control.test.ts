@@ -551,6 +551,7 @@ test('Urge SOS: add what set it off after an urge, in the Cue Audit (#147)', asy
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Cue Audit$/);
 	await expect(page).toHaveURL(/\/utils\/self-control\/cues$/);
 
+	const [before] = await log(page);
 	const urge = page.getByTestId('urge');
 	await expect(urge.getByTestId('cue-fields')).toHaveAttribute('open', '');
 	await urge.getByTestId('cue-trigger').getByRole('button', { name: 'A notification' }).click();
@@ -558,5 +559,10 @@ test('Urge SOS: add what set it off after an urge, in the Cue Audit (#147)', asy
 	await expect(urge.getByTestId('urge-cues')).toHaveText('A notification');
 	await expect(urge).toContainText('Surf it');
 	const [saved] = await log(page);
-	expect(saved).toMatchObject({ technique: 'surf', cues: { trigger: ['A notification'] } });
+	// An untouched time keeps the session's exact start.
+	expect(saved).toMatchObject({
+		at: before.at,
+		technique: 'surf',
+		cues: { trigger: ['A notification'] }
+	});
 });

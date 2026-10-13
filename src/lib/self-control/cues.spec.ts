@@ -157,6 +157,8 @@ describe('logging by hand', () => {
 		const when = at(2026, 3, 8, 1, 30);
 		expect(toLocalInput(when)).toBe('2026-03-08T01:30');
 		expect(fromLocalInput('2026-03-08T01:30')).toBe(when);
+		expect(fromLocalInput('2026-03-08T01:30:15')).toBe(when);
+		expect(fromLocalInput('2026-03-08T01:30:15.250')).toBe(when);
 		expect(fromLocalInput('')).toBeUndefined();
 		expect(fromLocalInput('2026-03-08')).toBeUndefined();
 	});
