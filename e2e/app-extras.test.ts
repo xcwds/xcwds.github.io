@@ -156,6 +156,7 @@ for (const [name, viewport] of [
 					await p.getByRole('button', { name: 'Add plan' }).click();
 				}
 			],
+			['/utils/self-control/review'],
 			[
 				'/utils/self-control/cues',
 				async (p) => {

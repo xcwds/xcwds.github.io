@@ -1,6 +1,7 @@
 import { doughDefaults, isDoughValue, type DoughInput } from '$lib/utils/dough';
 import type { TempUnit } from '$lib/utils/oven';
 import type { UnitSystem } from '$lib/recipes/units';
+import { isWeekDay, type WeekDay } from '$lib/week';
 import {
 	parseHabits,
 	parsePrefs,
@@ -9,6 +10,7 @@ import {
 } from '$lib/self-control/habits';
 import { parseLog, parseSession, type SosSession, type UrgeEntry } from '$lib/self-control/sos';
 import { parseEnvironment, type Environment } from '$lib/self-control/environment';
+import { parseReflections, type Reflections } from '$lib/self-control/review';
 import { parseSeesaw, type Seesaw } from '$lib/self-control/seesaw';
 import { parseWhy, type Why } from '$lib/self-control/why';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
@@ -180,6 +182,8 @@ export type Settings = {
 	recipeUnits: UnitSystem | null;
 	/** Navigation style per orientation; phones always keep the tab bar (see app.css). */
 	nav: { portrait: NavStyle; landscape: NavStyle };
+	/** The day weeks start on (1 Monday … 7 Sunday); null follows the locale (`$lib/week`). */
+	weekStart: WeekDay | null;
 };
 
 export const defaultSettings: Settings = {
@@ -191,7 +195,8 @@ export const defaultSettings: Settings = {
 	lifting: { unit: 'lb', activeSet: COMMERCIAL_GYM, sets: [] },
 	ovenUnit: 'F',
 	recipeUnits: null,
-	nav: { portrait: 'bar', landscape: 'sidebar' }
+	nav: { portrait: 'bar', landscape: 'sidebar' },
+	weekStart: null
 };
 
 export const COFFEE_SECONDS = { min: 5, max: 3600 };
@@ -238,6 +243,8 @@ export const parseOvenUnit = (v: unknown): TempUnit | undefined =>
 	v === 'C' || v === 'F' ? v : undefined;
 export const parseRecipeUnits = (v: unknown): UnitSystem | null | undefined =>
 	v === 'us' || v === 'metric' || v === null ? v : undefined;
+export const parseWeekStart = (v: unknown): WeekDay | null | undefined =>
+	v === null || isWeekDay(v) ? v : undefined;
 
 /**
  * The app's settings as the kernel reads them: each field parsed on its own, a missing or invalid
@@ -262,7 +269,8 @@ export function parseSettings(v: unknown): Settings | undefined {
 		lifting: parseLiftingSettings(v.lifting),
 		ovenUnit: parseOvenUnit(v.ovenUnit) ?? 'F',
 		recipeUnits: parseRecipeUnits(v.recipeUnits) ?? null,
-		nav: { portrait: navStyle('portrait'), landscape: navStyle('landscape') }
+		nav: { portrait: navStyle('portrait'), landscape: navStyle('landscape') },
+		weekStart: parseWeekStart(v.weekStart) ?? null
 	};
 }
 
@@ -341,6 +349,12 @@ export const entries = {
 		'self-control:plan',
 		'Self-Control environment and plans',
 		parseEnvironment
+	),
+	// Weekly review reflections, by week (#153).
+	selfControlReview: entry<Reflections>(
+		'self-control:review',
+		'Self-Control weekly reflections',
+		parseReflections
 	)
 } satisfies Record<string, Entry<unknown>>;
 

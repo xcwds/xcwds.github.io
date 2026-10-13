@@ -1,0 +1,2 @@
+- Self-Control: the Weekly review compares this week with last week, shows which Urge SOS techniques help you most and your riskiest moments with their plans, charts the share of urges you rode out over 12 weeks, and keeps a short reflection for each week.
+- Settings: "Week starts on" picks the first day of the week, or follows where you are.

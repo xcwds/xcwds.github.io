@@ -707,3 +707,116 @@ test('Cue Audit: plan for a top cue in the Environment Designer (#147, #152)', a
 		page.getByTestId('checklist-item').filter({ hasText: '(helps with Kitchen)' })
 	).toHaveCount(4);
 });
+
+test.describe('Weekly review (#153)', () => {
+	// Weeks follow the locale until Settings says otherwise: Monday here.
+	test.use({ locale: 'de-DE' });
+
+	test('sums up this week against last, shows what helps, and saves a reflection', async ({
+		page
+	}) => {
+		// Wednesday 14 October 2026.
+		await page.clock.install({ time: new Date('2026-10-14T12:00:00') });
+		await gotoHydrated(page, '/utils/self-control');
+		await page.evaluate(() => {
+			const t = (s: string) => new Date(s).getTime();
+			const kitchenBored = { where: ['Kitchen'], feeling: ['Bored'] };
+			const log = [
+				{ id: 'a', at: t('2026-10-06T09:00'), start: 3, outcome: 'rode-out' },
+				{ id: 'b', at: t('2026-10-11T10:00'), start: 5, outcome: 'partly' }, // Sunday
+				{
+					id: 'c',
+					at: t('2026-10-12T08:00'),
+					start: 4,
+					peak: 6,
+					technique: 'surf',
+					outcome: 'rode-out'
+				},
+				{ id: 'd', at: t('2026-10-12T20:00'), start: 6, technique: 'surf', outcome: 'rode-out' },
+				{
+					id: 'e',
+					at: t('2026-10-13T21:00'),
+					start: 7,
+					technique: 'sprint',
+					outcome: 'gave-in',
+					cues: kitchenBored
+				},
+				{ id: 'f', at: t('2026-10-14T11:00'), start: 5, outcome: 'gave-in', cues: kitchenBored }
+			];
+			localStorage.setItem('app:self-control:log', JSON.stringify(log));
+		});
+		await page.getByRole('link', { name: /Weekly review/ }).click();
+		await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Weekly review$/);
+
+		await expect(page.getByTestId('encouragement')).toHaveText('You rode out 2 of 4 urges.');
+		await expect(page.getByTestId('this-week-outcomes')).toHaveText(
+			'rode out 2, partly 0, gave in 2'
+		);
+		await expect(page.getByTestId('last-week-outcomes')).toHaveText(
+			'rode out 1, partly 1, gave in 0'
+		);
+		await expect(page.getByTestId('avg-peak')).toHaveText('5.5 / 10 (last week 4)');
+		await expect(page.getByTestId('what-helps').getByRole('listitem')).toHaveText([
+			'Surf it: rode out 2 of 2',
+			'Sprint: rode out 0 of 1'
+		]);
+		const risky = page.getByTestId('risky-week');
+		await expect(risky).toContainText('Kitchen + Bored: gave in 2 times');
+		await expect(risky.getByRole('link', { name: 'Make a plan' })).toHaveAttribute(
+			'href',
+			/environment#cue=Kitchen$/
+		);
+		await expect(page.getByTestId('weeks-list').getByRole('listitem').first()).toContainText(
+			'50% ridden out'
+		);
+
+		// A reflection, kept across a reload.
+		const reflection = page.getByTestId('reflection');
+		await reflection.getByLabel('What went well?').fill('Surfing in the morning');
+		await reflection.getByLabel("What's one change for next week?").fill('Fruit on the counter');
+		await reflection.getByRole('button', { name: 'Save reflection' }).click();
+		await expect(page.getByText('Reflection saved.')).toBeVisible();
+		await page.reload();
+		await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+		await expect(reflection.getByLabel('What went well?')).toHaveValue('Surfing in the morning');
+		await expect(reflection.getByRole('button', { name: 'Save reflection' })).toBeDisabled();
+
+		// Weeks starting on Sunday move Sunday's urge into this week.
+		await gotoHydrated(page, '/settings');
+		await page.getByLabel('Week starts on').selectOption({ label: 'Sunday' });
+		await gotoHydrated(page, '/utils/self-control/review');
+		await expect(page.getByTestId('this-week-outcomes')).toHaveText(
+			'rode out 2, partly 1, gave in 2'
+		);
+		await expect(page.getByTestId('encouragement')).toHaveText('You rode out 2 of 5 urges.');
+		// That's a new week for reflections too.
+		await expect(reflection.getByLabel('What went well?')).toHaveValue('');
+	});
+
+	test("a hard week gets a kind word, and the reflection shows last week's plan", async ({
+		page
+	}) => {
+		await page.clock.install({ time: new Date('2026-10-14T12:00:00') });
+		await gotoHydrated(page, '/utils/self-control');
+		await page.evaluate(() => {
+			const t = (s: string) => new Date(s).getTime();
+			const log = ['gave-in', 'gave-in', 'rode-out'].map((outcome, i) => ({
+				id: `u${i}`,
+				at: t(`2026-10-13T0${i + 1}:00`),
+				start: 5,
+				outcome
+			}));
+			localStorage.setItem('app:self-control:log', JSON.stringify(log));
+			localStorage.setItem(
+				'app:self-control:review',
+				JSON.stringify({ '2026-10-05': { change: 'Phone out of the bedroom' } })
+			);
+		});
+		await gotoHydrated(page, '/utils/self-control/review');
+		await expect(page.getByTestId('hard-week')).toContainText('A tough week happens');
+		await expect(page.getByTestId('last-change')).toHaveText(
+			'Last week you planned: Phone out of the bedroom'
+		);
+		await expect(page.getByTestId('what-helps')).toContainText('Work through an urge');
+	});
+});
