@@ -214,7 +214,9 @@
 						</form>
 					{:else}
 						<p class="break-words">
-							{#if reason.starred}<span aria-label="Starred">⭐</span>{/if}
+							{#if reason.starred}<span aria-hidden="true">⭐</span><span class="sr-only"
+									>Starred:
+								</span>{/if}
 							{reason.text}
 						</p>
 						<div class="grid grid-cols-4 gap-2 text-sm">
