@@ -4,5 +4,6 @@ export const tool = {
 	path: '/utils/coffee-timer',
 	emoji: '☕',
 	name: 'Coffee Timer',
-	blurb: '90-second countdown with quick adjustments.'
+	blurb: '90-second countdown with quick adjustments.',
+	shortcut: true
 };

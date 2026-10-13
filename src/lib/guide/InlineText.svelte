@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { parseInline, type Inline } from '$lib/guide';
-	import type { ToolPath } from '$lib/utils/tools';
 
 	let { text }: { text: string } = $props();
 
@@ -13,7 +12,7 @@
 		}
 		if (part.kind === 'recipe') return resolve('/recipes/[slug]', { slug: part.slug });
 		if (part.kind === 'external') return part.url;
-		return resolve(part.path as ToolPath);
+		return resolve(part.path as '/');
 	}
 </script>
 

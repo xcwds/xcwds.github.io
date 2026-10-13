@@ -18,12 +18,13 @@ import recipes from 'xcwds-app-recipes';
 import selfControl from 'xcwds-app-self-control';
 import urlSanitizer from 'xcwds-app-url-sanitizer';
 import weightlifting from 'xcwds-app-weightlifting';
+import { BRAND, TAGLINE } from './src/lib/brand';
 import { loadChangelog } from './src/lib/server/changelog';
 
 export default defineConfig({
 	brand: {
-		name: 'xcwds',
-		tagline: 'Everyday tools that never phone home.',
+		name: BRAND,
+		tagline: TAGLINE,
 		description:
 			'Everyday tools that never phone home: recipes, kitchen and gym tools, and a URL sanitizer.',
 		icon: 'icon.svg',
@@ -32,14 +33,8 @@ export default defineConfig({
 	},
 	// Backups made before the move onto @xcwds say `xcwds.com`; keep importing them.
 	storage: { appName: 'xcwds.com' },
-	manifest: {
-		shortcuts: [
-			{ name: 'URL Sanitizer', url: '/utils/url-sanitizer' },
-			{ name: 'Coffee Timer', url: '/utils/coffee-timer' },
-			{ name: 'Cooking Timer', url: '/utils/cooking-timer' },
-			{ name: 'Recipes', url: '/recipes' }
-		]
-	},
+	// The manifest's shortcuts: Recipes (the recipes plugin), then each tool with `shortcut: true`
+	// in its `tool.js`. Setting `manifest.shortcuts` here would replace them all.
 	plugins: [
 		// The app's own saved data from before @xcwds: its keys, schema version and migrations.
 		app(),
@@ -54,7 +49,7 @@ export default defineConfig({
 		theme(),
 		tools({ path: '/utils', title: 'Utils', storageKey: 'app:home:shortcuts' }),
 		timers({ page: '/utils/cooking-timer', storageKey: 'app:cooking-timer:timers' }),
-		// Tools, in the order /utils lists them.
+		// Tools, in the order /utils and Home list them (`src/lib/utils/tools.ts` reads it).
 		pizzaDough(),
 		coffeeTimer(),
 		cookingTimer(),

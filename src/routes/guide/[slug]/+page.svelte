@@ -19,8 +19,8 @@
 			return { href: resolve('/recipes/[slug]', { slug }), emoji: r.emoji ?? '🍽️', name: r.name };
 		}),
 		...(article.related?.tools ?? []).map((path) => {
-			const t = tools.find((tool) => tool.path === path)!;
-			return { href: resolve(t.path), emoji: t.emoji, name: t.name };
+			const t = tools().find((tool) => tool.path === path)!;
+			return { href: resolve(t.path as '/'), emoji: t.emoji, name: t.name };
 		})
 	]);
 </script>

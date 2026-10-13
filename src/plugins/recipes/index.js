@@ -31,6 +31,16 @@ export const build = definePlugin(
 		app.route({ path: '/guide', title: 'Kitchen Guide' });
 		for (const { slug, name, emoji } of load('guide'))
 			app.route({ path: `/guide/${slug}`, title: name, emoji, parent: '/guide' });
+		// Recipes heads the manifest's shortcuts; the tools with `shortcut: true` follow.
+		app.addHook('onManifest', (manifest) => {
+			// The manifest's scope is the base path plus "/".
+			const scope = typeof manifest.scope === 'string' ? manifest.scope : '/';
+			const existing = Array.isArray(manifest.shortcuts) ? manifest.shortcuts : [];
+			return {
+				...manifest,
+				shortcuts: [{ name: 'Recipes', url: `${scope.replace(/\/$/, '')}/recipes` }, ...existing]
+			};
+		});
 	},
 	{ name: NAME, network: false }
 );
