@@ -1,0 +1,2 @@
+- Self-Control: the Environment Designer has a checklist per habit for hiding the cue, adding friction and making the better option easy, plus if-then plans. Urge SOS shows your starred plans.
+- Self-Control: each top cue in the Cue Audit links to "Plan for this", which starts a plan for that cue and highlights the changes that help with it.

@@ -216,7 +216,7 @@
 		</fieldset>
 	{/if}
 
-	<Patterns log={filtered} />
+	<Patterns log={filtered} habit={filter} />
 
 	<section aria-labelledby="entries-heading" class="flex flex-col gap-3">
 		<h2 id="entries-heading" class="text-lg font-semibold">Log</h2>

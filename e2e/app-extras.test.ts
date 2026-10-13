@@ -147,6 +147,16 @@ for (const [name, viewport] of [
 			['/utils/self-control/why'],
 			['/utils/self-control/seesaw'],
 			[
+				'/utils/self-control/environment',
+				// Snacking, from the hub's step before.
+				async (p) => {
+					await p.getByRole('checkbox', { name: 'Put fruit on the counter' }).check();
+					await p.getByLabel('If…').fill('Bored');
+					await p.getByRole('button', { name: 'Stand up and walk' }).click();
+					await p.getByRole('button', { name: 'Add plan' }).click();
+				}
+			],
+			[
 				'/utils/self-control/cues',
 				async (p) => {
 					await p.getByText('What was going on? (optional)').click();

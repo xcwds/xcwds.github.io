@@ -10,11 +10,15 @@
 		riskiest,
 		topCues
 	} from '$lib/self-control/cues';
+	import { resolve } from '$app/paths';
 	import type { UrgeEntry } from '$lib/self-control/sos';
-	import { card } from '../styles';
+	import { button, card } from '../styles';
 
-	/** When, where and why urges hit, once there are enough of them. */
-	let { log }: { log: UrgeEntry[] } = $props();
+	/**
+	 * When, where and why urges hit, once there are enough of them. For one habit, each top cue
+	 * links to the Environment Designer (#152) to plan for it.
+	 */
+	let { log, habit }: { log: UrgeEntry[]; habit?: string } = $props();
 
 	const hours = $derived(byHourBlock(log));
 	const days = $derived(byWeekday(log));
@@ -67,9 +71,20 @@
 						<h4 class="text-gray-600 dark:text-gray-400">{CUE_LABELS[field]}</h4>
 						<ul class="flex flex-col gap-1">
 							{#each stats as stat (stat.cue)}
-								<li>
-									<strong>{stat.cue}</strong>: {percent(stat.urges)} of urges, gave in {stat.gaveIn}
-									of {stat.urges}
+								<li class="flex items-center gap-2">
+									<span class="min-w-0 flex-1"
+										><strong>{stat.cue}</strong>: {percent(stat.urges)} of urges, gave in {stat.gaveIn}
+										of {stat.urges}</span
+									>
+									{#if habit}
+										<a
+											class="{button} shrink-0"
+											href="{resolve(
+												'/utils/self-control/environment' as '/'
+											)}#habit={encodeURIComponent(habit)}&cue={encodeURIComponent(stat.cue)}"
+											aria-label="Plan for this: {stat.cue}">Plan for this</a
+										>
+									{/if}
 								</li>
 							{/each}
 						</ul>
