@@ -430,6 +430,7 @@ test('Decision Seesaw: weigh both sides per habit, see it tilt and show up in Ur
 	await page.getByRole('button', { name: 'Edit: Feeling left out' }).click();
 	await side('hold-now').getByRole('button', { name: 'Delete' }).click();
 	await expect(side('hold-now').getByTestId('seesaw-item')).toHaveCount(0);
+	await expect(page.getByText('Deleted.')).toBeVisible();
 
 	// Each habit has its own seesaw, kept across a reload.
 	await page.getByRole('button', { name: '📱 Doomscrolling' }).click();

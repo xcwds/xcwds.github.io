@@ -15,6 +15,7 @@
 	} from '$lib/self-control/seesaw';
 	import { settingsStatus } from '$lib/settings.svelte';
 	import { entries, read, update } from '$lib/storage';
+	import { toast } from '$lib/toast.svelte';
 	import { card } from '../styles';
 	import { toggle } from '../../weightlifting/styles';
 	import SeesawSide from './SeesawSide.svelte';
@@ -61,7 +62,11 @@
 		change((list) => [...list, newItem({ side, text, weight }, list)]);
 	const edit = (id: string, patch: Partial<Pick<SeesawItem, 'text' | 'weight'>>) =>
 		change((list) => list.map((i) => (i.id === id ? { ...i, ...patch } : i)));
-	const remove = (id: string) => change((list) => list.filter((i) => i.id !== id));
+	function remove(id: string): boolean {
+		const ok = change((list) => list.filter((i) => i.id !== id));
+		if (ok) toast('Deleted.');
+		return ok;
+	}
 </script>
 
 <svelte:head>
