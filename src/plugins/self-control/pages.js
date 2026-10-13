@@ -20,5 +20,12 @@ export const pages = [
 		emoji: '💡',
 		blurb: 'The reasons that matter to you.',
 		width: 'narrow'
+	},
+	{
+		slug: 'seesaw',
+		title: 'Decision Seesaw',
+		emoji: '⚖️',
+		blurb: 'Weigh now against later.',
+		width: 'narrow'
 	}
 ];

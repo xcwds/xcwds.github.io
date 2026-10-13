@@ -379,3 +379,79 @@ test('Your why: reasons per habit and in general, starred first in Urge SOS (#15
 		/I want to feel in charge of my day/
 	]);
 });
+
+test('Decision Seesaw: weigh both sides per habit, see it tilt and show up in Urge SOS (#151)', async ({
+	page
+}) => {
+	await gotoHydrated(page, '/utils/self-control/seesaw');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Decision Seesaw$/);
+	await expect(page.getByRole('link', { name: 'Add a habit' })).toBeVisible();
+
+	await gotoHydrated(page, '/utils/self-control');
+	for (const starter of ['🍪 Snacking', '📱 Doomscrolling']) {
+		await page.getByRole('button', { name: 'Add a habit' }).click();
+		await page.getByRole('button', { name: starter }).click();
+		await page.getByRole('button', { name: 'Add habit' }).click();
+	}
+	await page.getByRole('link', { name: /Decision Seesaw/ }).click();
+	const lean = page.getByTestId('lean');
+	await expect(lean).toHaveText(/^Empty/);
+
+	const side = (id: string) => page.getByTestId(`side-${id}`);
+	const add = async (id: string, text: string, weight?: string) => {
+		await side(id).getByRole('textbox').fill(text);
+		if (weight)
+			await side(id).getByRole('group').last().getByRole('button', { name: weight }).click();
+		await side(id).getByRole('button', { name: 'Add' }).click();
+	};
+
+	// Snacking is the first habit, so it's shown.
+	await add('give-now', 'Comfort', 'Hugely');
+	await expect(lean).toHaveText('Leans toward giving in');
+	await add('give-later', 'Sugar crash');
+	await expect(lean).toHaveText('Balanced');
+	await add('hold-later', 'Energy all afternoon', 'Hugely');
+	await expect(lean).toHaveText('Leans toward holding off');
+	await add('hold-now', 'Boredom', 'A little');
+
+	// Validation stays inline.
+	await side('hold-now').getByRole('button', { name: 'Add' }).click();
+	await expect(side('hold-now').getByRole('alert')).toHaveText('Write something first.');
+
+	// Reweigh, edit and delete.
+	await side('give-now')
+		.getByRole('group', { name: 'How much: Comfort' })
+		.getByRole('button', { name: 'A little' })
+		.click();
+	await page.getByRole('button', { name: 'Edit: Boredom' }).click();
+	await side('hold-now').getByLabel('Edit').fill('Feeling left out');
+	await side('hold-now').getByRole('button', { name: 'Save' }).click();
+	await expect(side('hold-now')).toContainText('Feeling left out');
+	await page.getByRole('button', { name: 'Edit: Feeling left out' }).click();
+	await side('hold-now').getByRole('button', { name: 'Delete' }).click();
+	await expect(side('hold-now').getByTestId('seesaw-item')).toHaveCount(0);
+
+	// Each habit has its own seesaw, kept across a reload.
+	await page.getByRole('button', { name: '📱 Doomscrolling' }).click();
+	await expect(page.getByTestId('seesaw-item')).toHaveCount(0);
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(side('give-now')).toContainText('Comfort');
+	await expect(
+		side('give-now').getByRole('group', { name: 'How much: Comfort' }).getByRole('button', {
+			name: 'A little'
+		})
+	).toHaveAttribute('aria-pressed', 'true');
+	await expect(lean).toHaveText('Leans toward holding off');
+
+	// Urge SOS shows the later side for the habit.
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await page.getByRole('button', { name: '🍪 Snacking' }).click();
+	await page.getByRole('button', { name: 'Start surfing' }).click();
+	const card = page.getByTestId('sos-seesaw');
+	await card.getByText('Your seesaw').click();
+	await expect(card).toContainText('Giving in costs you later');
+	await expect(card).toContainText('Sugar crash');
+	await expect(card).toContainText('Energy all afternoon');
+	await expect(card).not.toContainText('Comfort');
+});
