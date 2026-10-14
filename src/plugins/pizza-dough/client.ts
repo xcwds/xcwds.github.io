@@ -9,7 +9,9 @@ export default definePlugin(
 		app.tools?.add(tool);
 		app.settings.field('pizzaDefaults', {
 			default: defaultSettings.pizzaDefaults,
-			parse: parsePizzaDefaults
+			parse: parsePizzaDefaults,
+			label: 'Pizza Dough Calculator',
+			section: 'tool-defaults'
 		});
 	},
 	{ name: NAME, namespace: '', dependencies: ['@xcwds/plugin-tools'], network: false }

@@ -9,6 +9,8 @@
    controls, a focus ring for keyboard users and the OS "reduce motion" setting. */
 @import '@xcwds/plugin-shell/styles.css';
 @import '@xcwds/plugin-timers/styles.css';
+@import '@xcwds/plugin-settings/styles.css';
+@import '@xcwds/plugin-changelog/styles.css';
 
 html[data-color-scheme='dark'] {
 	color-scheme: dark;

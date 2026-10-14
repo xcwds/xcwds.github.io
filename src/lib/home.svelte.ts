@@ -17,9 +17,6 @@ export function startShortcuts() {
 	tools()?.subscribe((state) => Object.assign(shortcuts, state));
 }
 
-/** Re-reads the shortcuts after this tab cleared or imported data. */
-export const reloadShortcuts = () => tools()?.reload();
-
 /** Pins or unpins a tool, with a toast. */
 export const togglePin = (path: string) => void tools()?.togglePin(path);
 
