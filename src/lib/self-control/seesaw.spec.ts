@@ -4,7 +4,7 @@ import type { App } from '@xcwds/core';
 import app from 'xcwds-app';
 import selfControl from 'xcwds-app-self-control';
 import { describe, expect, it, vi } from 'vitest';
-import { entries, groups, read, write } from '../storage';
+import { entries, read, write } from '../storage';
 import { removeHabitData } from './data';
 import {
 	ITEMS_PER_SIDE,
@@ -24,6 +24,10 @@ import {
 	type Side,
 	type Weight
 } from './seesaw';
+import { getApp } from '@xcwds/sveltekit';
+
+/** Settings → Your data's groups. */
+const groups = () => getApp().storage.groups();
 
 let current: App | undefined;
 vi.mock('@xcwds/sveltekit', () => ({

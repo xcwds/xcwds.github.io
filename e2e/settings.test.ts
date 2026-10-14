@@ -92,7 +92,7 @@ test('importing a file that is not a backup shows an error', async ({ page }) =>
 		mimeType: 'application/json',
 		buffer: Buffer.from(JSON.stringify({ hello: 'world' }))
 	});
-	await expect(page.getByRole('alert')).toHaveText("This file isn't a backup from this site.");
+	await expect(page.getByRole('alert')).toHaveText("This file isn't a backup from this app.");
 	await expect(page.getByTestId('import-preview')).toHaveCount(0);
 });
 

@@ -50,3 +50,8 @@ html[data-color-scheme='dark'] {
 		cursor: pointer;
 	}
 }
+
+/* Settings' Install section (@xcwds/plugin-install) comes without a card; match the others. */
+.xcwds-install {
+	@apply rounded-2xl bg-(--xcwds-shell-card) p-4;
+}

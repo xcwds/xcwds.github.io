@@ -392,38 +392,6 @@ export function registerEntries(storage: StorageScope, list: Entry<unknown>[]): 
 		});
 }
 
-/** Labels for the groups Settings → Your data clears one at a time, in the order it lists them. */
-const GROUP_LABELS: Record<string, string> = {
-	'coffee-timer': 'Coffee Timer',
-	'cooking-timer': 'Cooking Timer',
-	weightlifting: 'Weightlifting Calculator',
-	'workout-history': 'Workout History',
-	'self-control': 'Self-Control',
-	settings: 'Settings',
-	home: 'Home shortcuts'
-};
-
-export type Group = { id: string; label: string; entries: KernelEntry<unknown>[] };
-
-export function groupOf(e: KernelEntry<unknown>): string {
-	return e.key.slice(PREFIX.length).split(':')[0]!;
-}
-
-/** Everything the app saves, grouped by the first segment of the key (`app:<group>:...`). */
-export function groups(): Group[] {
-	const all = getApp().storage.entries();
-	const ids = [...new Set(all.map(groupOf))].sort((a, b) => {
-		const order = Object.keys(GROUP_LABELS);
-		const rank = (id: string) => (order.includes(id) ? order.indexOf(id) : order.length);
-		return rank(a) - rank(b);
-	});
-	return ids.map((id) => ({
-		id,
-		label: GROUP_LABELS[id] ?? id,
-		entries: all.filter((e) => groupOf(e) === id)
-	}));
-}
-
 const RENAMED_EQUIPMENT: Record<string, string> = {
 	'barbell-45': 'barbell',
 	'barbell-25': 'barbell-light'
