@@ -22,7 +22,8 @@ describe('tools', () => {
 			'/utils/oven-time',
 			'/utils/url-sanitizer',
 			'/utils/weightlifting',
-			'/utils/self-control'
+			'/utils/self-control',
+			'/utils/last-done'
 		]);
 	});
 
