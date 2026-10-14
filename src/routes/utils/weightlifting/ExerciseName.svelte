@@ -23,6 +23,8 @@
 	const id = $props.id();
 	/** Each option's height: the app's 44px tap target. */
 	const OPTION = 44;
+	/** The list's gap above it (`mt-1`) and its top and bottom borders. */
+	const EDGES = 6;
 
 	let open = $state(false);
 	/** The highlighted option, or -1 for none. */
@@ -54,16 +56,26 @@
 			input.parentElement?.scrollIntoView({ block: 'nearest' });
 			return;
 		}
-		const want = suggest(value, suggestions).length * OPTION;
+		const want = suggest(value, suggestions).length * OPTION + EDGES;
 		const rect = input.getBoundingClientRect();
 		const overflow = rect.bottom + want - area.bottom;
 		// Up far enough to show the list, never so far the field leaves the top.
 		const by = Math.min(overflow, rect.top - area.top - 8);
 		if (by > 0) window.scrollBy(0, by);
 		else if (rect.top < area.top) window.scrollBy(0, rect.top - area.top - 8);
-		const below = area.bottom - input.getBoundingClientRect().bottom;
+		const below = area.bottom - input.getBoundingClientRect().bottom - EDGES;
 		room = Math.max(1, Math.min(MAX_SUGGESTIONS, Math.floor(below / OPTION)));
 	}
+
+	// Fits again when the visible area changes while the list is open: the keyboard still sliding
+	// in after the first keystroke, a rotation, or the keyboard changing height.
+	$effect(() => {
+		const vv = window.visualViewport;
+		if (!expanded || !vv) return;
+		const refit = () => void fit();
+		vv.addEventListener('resize', refit);
+		return () => vv.removeEventListener('resize', refit);
+	});
 
 	function show() {
 		open = value.trim() !== '';

@@ -345,4 +345,24 @@ test.describe('exercise name suggestions (#209)', () => {
 		expect(field.y).toBeGreaterThanOrEqual(visible.top);
 		expect(last.y + last.height).toBeLessThanOrEqual(visible.bottom + 1);
 	});
+
+	test('fits again when the keyboard takes more room while the list is open', async ({ page }) => {
+		await page.getByRole('button', { name: '+ Add exercise' }).click();
+		const name = page.getByRole('combobox', { name: 'Exercise 2 name' });
+		await name.pressSequentially('squ');
+		await expect(page.getByRole('option')).toHaveCount(3);
+		// The keyboard finishes sliding in: the visible area shrinks under the open list.
+		await page.setViewportSize({ width: 390, height: 420 });
+		const options = page.getByRole('option');
+		await expect(async () => {
+			const bottom = await page.evaluate(() => {
+				const vv = window.visualViewport!;
+				const tabs = document.querySelector('[data-shell-nav="tabs"]')!.getBoundingClientRect();
+				return Math.min(vv.offsetTop + vv.height, tabs.top);
+			});
+			const last = (await options.last().boundingBox())!;
+			expect(last.y + last.height).toBeLessThanOrEqual(bottom + 1);
+		}).toPass();
+		expect((await name.boundingBox())!.y).toBeGreaterThanOrEqual(0);
+	});
 });
