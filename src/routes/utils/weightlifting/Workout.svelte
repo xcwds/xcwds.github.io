@@ -13,6 +13,7 @@
 	import { settings, settingsStatus } from '$lib/settings.svelte';
 	import { toast } from '$lib/toast.svelte';
 	import { entries } from '$lib/storage';
+	import ExerciseName from './ExerciseName.svelte';
 	import { button, card, field, primary } from './styles';
 
 	let {
@@ -232,11 +233,10 @@
 			{@render undoRow(removed.exercise.name || 'Exercise')}
 		{/if}
 		<div class="{card} flex flex-col gap-3" data-testid="exercise">
-			<div class="flex items-center gap-2">
-				<input
-					aria-label="Exercise {e + 1} name"
-					placeholder="Exercise"
-					list="exercise-suggestions"
+			<div class="flex items-start gap-2">
+				<ExerciseName
+					label="Exercise {e + 1} name"
+					suggestions={SUGGESTIONS}
 					bind:value={exercise.name}
 					class="{field} text-lg font-medium"
 				/>
@@ -336,12 +336,6 @@
 			>
 		{/if}
 	</div>
-
-	<datalist id="exercise-suggestions">
-		{#each SUGGESTIONS as name (name)}
-			<option value={name}></option>
-		{/each}
-	</datalist>
 
 	<p class="text-sm text-gray-600 dark:text-gray-400">
 		The workout is saved on this device until you start a new one. "+ Set @" uses the weight from

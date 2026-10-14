@@ -135,6 +135,16 @@ for (const [name, viewport] of [
 			],
 			['/utils/weightlifting'],
 			[
+				'/utils/weightlifting',
+				// The exercise name's suggestions, open (#209).
+				async (p) => {
+					await p.getByRole('tab', { name: 'Workout' }).click();
+					await p.getByRole('button', { name: '+ Add exercise' }).click();
+					await p.getByRole('combobox', { name: 'Exercise 1 name' }).pressSequentially('squ');
+					await p.getByRole('option', { name: 'Squat', exact: true }).waitFor();
+				}
+			],
+			[
 				'/utils/self-control',
 				async (p) => {
 					await p.getByRole('button', { name: 'Add a habit' }).click();
@@ -244,7 +254,11 @@ for (const [name, viewport] of [
 			await gotoHydrated(page, path);
 			await setup?.(page);
 			const small = await page.evaluate(() =>
-				[...document.querySelectorAll('a, button, input, select, textarea, summary')]
+				[
+					...document.querySelectorAll(
+						'a, button, input, select, textarea, summary, [role="option"]'
+					)
+				]
 					.filter((el) => (el as HTMLElement).offsetParent !== null)
 					// Inline text links are exempt (WCAG 2.5.8); checkboxes use their label's hit area.
 					.filter((el) => getComputedStyle(el).display !== 'inline')

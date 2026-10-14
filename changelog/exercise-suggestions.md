@@ -1,0 +1,1 @@
+- Weightlifting: exercise name suggestions now show right under the field instead of over your phone's keyboard.
