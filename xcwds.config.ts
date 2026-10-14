@@ -12,6 +12,7 @@ import update from '@xcwds/plugin-update';
 import coffeeTimer from 'xcwds-app-coffee-timer';
 import cookingTimer from 'xcwds-app-cooking-timer';
 import app from 'xcwds-app';
+import lastDone from 'xcwds-app-last-done';
 import ovenTime from 'xcwds-app-oven-time';
 import pizzaDough from 'xcwds-app-pizza-dough';
 import recipes from 'xcwds-app-recipes';
@@ -57,6 +58,7 @@ export default defineConfig({
 		urlSanitizer(),
 		weightlifting(),
 		selfControl(),
+		lastDone(),
 		recipes(),
 		share({ target: '/utils/url-sanitizer', exclude: ['/settings'] }),
 		settings({
@@ -73,6 +75,7 @@ export default defineConfig({
 				weightlifting: 'Weightlifting Calculator',
 				'workout-history': 'Workout History',
 				'self-control': 'Self-Control',
+				'last-done': 'Last done',
 				settings: 'Settings',
 				tools: 'Home shortcuts',
 				changelog: "What's new"

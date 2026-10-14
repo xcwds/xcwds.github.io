@@ -168,6 +168,24 @@ for (const [name, viewport] of [
 			],
 			['/utils/self-control/review'],
 			[
+				'/utils/last-done',
+				async (p) => {
+					await p.getByRole('button', { name: 'Add something' }).click();
+					await p.getByLabel('Name').fill('Vacuum');
+					await p.getByRole('button', { name: 'Add', exact: true }).click();
+					await p.getByRole('button', { name: 'Done: Vacuum' }).click();
+					await p.getByRole('button', { name: 'Done earlier: Vacuum' }).click();
+				}
+			],
+			[
+				'/utils/last-done',
+				// The thing's page, with its history, from the step before.
+				async (p) => {
+					await p.getByRole('link', { name: 'Vacuum' }).click();
+					await p.getByTestId('history').waitFor();
+				}
+			],
+			[
 				'/utils/self-control/cues',
 				async (p) => {
 					await p.getByText('What was going on? (optional)').click();
