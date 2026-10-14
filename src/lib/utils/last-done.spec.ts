@@ -8,6 +8,7 @@ import {
 	everyLabel,
 	fromInputs,
 	gaps,
+	timeInput,
 	median,
 	nameProblem,
 	parseItems,
@@ -128,6 +129,7 @@ describe('dates', () => {
 		expect(fromInputs('2026-10-03', '07:30')).toEqual(at(2026, 10, 3, 7, 30));
 		expect(fromInputs('2026-02-30', '')).toBeUndefined();
 		expect(fromInputs('', '')).toBeUndefined();
+		expect(timeInput(at(2026, 10, 3, 7, 5))).toBe('07:05');
 	});
 });
 

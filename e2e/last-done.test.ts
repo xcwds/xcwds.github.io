@@ -83,6 +83,8 @@ test('a thing’s page shows how often it is done, and edits its history', async
 		.first()
 		.getByRole('button', { name: /^Change / })
 		.click();
+	// It keeps its time (noon, as logged without one).
+	await expect(page.getByLabel('Time (optional)')).toHaveValue('12:00');
 	await page.getByLabel('Date').fill(daysAgo(9));
 	await page.getByRole('button', { name: 'Save' }).click();
 	await expect(page.getByTestId('since')).toContainText('Last done 9 days ago');
@@ -90,6 +92,35 @@ test('a thing’s page shows how often it is done, and edits its history', async
 	// Back to the list with the browser's Back button.
 	await page.goBack();
 	await expect(thing(page, 'Dog food')).toBeVisible();
+});
+
+test('logging something earlier today with no time works before noon', async ({ page }) => {
+	await page.clock.install({ time: new Date(2026, 9, 14, 8, 30) });
+	await gotoHydrated(page, '/utils/last-done');
+	await add(page, 'Feed the cat');
+	await page.getByRole('button', { name: 'Done earlier: Feed the cat' }).click();
+	await page.getByRole('button', { name: 'Log it' }).click();
+	await expect(page.getByTestId('undo-row')).toContainText('Logged Feed the cat.');
+	await expect(thing(page, 'Feed the cat').getByTestId('since')).toHaveText('today');
+});
+
+test('the search box stays while a search is active', async ({ page }) => {
+	page.on('dialog', (dialog) => dialog.accept());
+	await gotoHydrated(page, '/utils/last-done');
+	await page.evaluate(() =>
+		localStorage.setItem(
+			'app:last-done:items',
+			JSON.stringify(Array.from({ length: 9 }, (_, i) => ({ id: `t${i}`, name: `Thing ${i}` })))
+		)
+	);
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await page.getByRole('searchbox', { name: 'Search' }).fill('Thing 3');
+	await expect(things(page)).toHaveCount(1);
+	await things(page).getByRole('link').click();
+	await page.getByRole('button', { name: 'Edit' }).click();
+	await page.getByRole('button', { name: 'Delete…' }).click();
+	await expect(page.getByRole('searchbox', { name: 'Search' })).toHaveValue('Thing 3');
 });
 
 test('overdue things come first; edit and delete a thing', async ({ page }) => {

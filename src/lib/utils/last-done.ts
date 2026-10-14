@@ -271,3 +271,7 @@ export const dayInput = (date: Date): string =>
 	[date.getFullYear(), date.getMonth() + 1, date.getDate()]
 		.map((n) => String(n).padStart(2, '0'))
 		.join('-');
+
+/** `date`'s local time as `HH:MM`, for a time input. */
+export const timeInput = (date: Date): string =>
+	[date.getHours(), date.getMinutes()].map((n) => String(n).padStart(2, '0')).join(':');

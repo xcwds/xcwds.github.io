@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { dayInput, fromInputs } from '$lib/utils/last-done';
+	import { dayInput, fromInputs, timeInput } from '$lib/utils/last-done';
 	import { button, field, primary } from './styles';
 
 	let {
 		label,
 		initial,
 		submitLabel = 'Log it',
+		withTime = false,
 		onSubmit,
 		onCancel
 	}: {
@@ -15,6 +16,8 @@
 		/** The date and time to start from (today when logging something you forgot). */
 		initial: Date;
 		submitLabel?: string;
+		/** Start with `initial`'s time filled in (when changing a logged time). */
+		withTime?: boolean;
 		/** Saves it; returns whether it was saved (the form stays open if not). */
 		onSubmit: (at: Date) => boolean;
 		onCancel: () => void;
@@ -22,7 +25,8 @@
 
 	// svelte-ignore state_referenced_locally
 	let day = $state(dayInput(initial));
-	let time = $state('');
+	// svelte-ignore state_referenced_locally
+	let time = $state(withTime ? timeInput(initial) : '');
 	let error = $state('');
 	const id = $props.id();
 	let dayField: HTMLInputElement | undefined = $state();
@@ -30,7 +34,10 @@
 
 	function submit(e: SubmitEvent) {
 		e.preventDefault();
-		const at = fromInputs(day, time);
+		let at = fromInputs(day, time);
+		// No time means noon, which is still ahead on a morning: today then means now.
+		const now = new Date();
+		if (at && !time && day === dayInput(now) && at > now) at = now;
 		if (!at) {
 			error = 'Pick a date.';
 			return;

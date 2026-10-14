@@ -189,8 +189,8 @@
 	function remove(item: LastDoneItem) {
 		if (!confirm(`Delete “${item.name}” and its history?`)) return;
 		const ok =
-			changeLog((latest) => latest.filter((e) => e.itemId !== item.id)) &&
-			changeItems((latest) => latest.filter((i) => i.id !== item.id));
+			changeItems((latest) => latest.filter((i) => i.id !== item.id)) &&
+			changeLog((latest) => latest.filter((e) => e.itemId !== item.id));
 		if (!ok) return;
 		toast(`Deleted ${item.name}.`);
 		void goto(resolve('/utils/last-done'));
@@ -357,6 +357,7 @@
 										label="Change {when(new Date(entry.at))}"
 										initial={new Date(entry.at)}
 										submitLabel="Save"
+										withTime
 										onSubmit={(at) => moveEntry(entry, at)}
 										onCancel={() => (earlier = undefined)}
 									/>
@@ -405,7 +406,7 @@
 		{:else}
 			<div class="flex flex-wrap items-center gap-2">
 				<button type="button" class={primary} onclick={() => (adding = true)}>Add something</button>
-				{#if items.length > 8}
+				{#if items.length > 8 || query}
 					<label class="min-w-0 flex-1">
 						<span class="sr-only">Search</span>
 						<input
