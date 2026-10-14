@@ -120,6 +120,8 @@ describe('saved data', () => {
 		label: 'Test reasons',
 		namespace: '',
 		group: 'self-control',
+		backup: true,
+		sensitive: false,
 		parse: (v) =>
 			typeof v === 'object' && v !== null ? (v as Record<string, string[]>) : undefined
 	};
