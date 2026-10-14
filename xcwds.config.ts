@@ -64,7 +64,19 @@ export default defineConfig({
 			backupName: 'xcwds-backup',
 			// The tab bar shows Settings' emoji; its header doesn't.
 			emoji: '',
-			width: 'split'
+			width: 'split',
+			sections: { appearance: 'Appearance', timers: 'Timers', 'tool-defaults': 'Tool defaults' },
+			// Your data's groups, in the order it lists them.
+			groups: {
+				'coffee-timer': 'Coffee Timer',
+				timers: 'Cooking Timer',
+				weightlifting: 'Weightlifting Calculator',
+				'workout-history': 'Workout History',
+				'self-control': 'Self-Control',
+				settings: 'Settings',
+				tools: 'Home shortcuts',
+				changelog: "What's new"
+			}
 		}),
 		offline(),
 		update({ marker: 'app:just-updated' }),

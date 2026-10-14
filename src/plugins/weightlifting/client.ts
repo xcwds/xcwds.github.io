@@ -18,7 +18,9 @@ export default definePlugin(
 		]);
 		app.settings.field('lifting', {
 			default: defaultSettings.lifting,
-			parse: parseLiftingSettings
+			parse: parseLiftingSettings,
+			label: 'Weightlifting Calculator',
+			section: 'tool-defaults'
 		});
 	},
 	{ name: NAME, namespace: '', dependencies: ['@xcwds/plugin-tools'], network: false }

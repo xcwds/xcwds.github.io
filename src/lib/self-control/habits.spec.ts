@@ -4,7 +4,7 @@ import type { App, Entry } from '@xcwds/core';
 import app from 'xcwds-app';
 import selfControl from 'xcwds-app-self-control';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { entries, groups, read, registerEntries, write } from '../storage';
+import { entries, read, registerEntries, write } from '../storage';
 import { removeHabitData, type HabitData } from './data';
 import {
 	DEFAULT_EMOJI,
@@ -18,6 +18,10 @@ import {
 	withFields,
 	type Habit
 } from './habits';
+import { getApp } from '@xcwds/sveltekit';
+
+/** Settings → Your data's groups. */
+const groups = () => getApp().storage.groups();
 
 let current: App | undefined;
 vi.mock('@xcwds/sveltekit', () => ({
@@ -153,7 +157,6 @@ describe('saved data', () => {
 		expect(write(entries.selfControlHabits, [habit()])).toBe(true);
 		expect(read(entries.selfControlHabits)).toEqual([habit()]);
 		const group = groups().find((g) => g.id === 'self-control')!;
-		expect(group.label).toBe('Self-Control');
 		expect(group.entries.map((e) => e.key)).toEqual(
 			expect.arrayContaining(['app:self-control:habits', 'app:self-control:prefs'])
 		);

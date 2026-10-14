@@ -9,7 +9,6 @@
 	import TimerAlert from '$lib/TimerAlert.svelte';
 	import SosAlert from '$lib/self-control/SosAlert.svelte';
 	import { startShortcuts } from '$lib/home.svelte';
-	import { startInstallSupport } from '$lib/install.svelte';
 	import { startSettings } from '$lib/settings.svelte';
 	import { provideCoffeeTimer } from '$lib/utils/coffee-timer.svelte';
 	import { provideCookingTimers } from '$lib/utils/cooking-timers.svelte';
@@ -28,7 +27,6 @@
 
 	onMount(() => {
 		startShortcuts();
-		startInstallSupport();
 	});
 </script>
 

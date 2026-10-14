@@ -99,10 +99,12 @@ entry that uses Node modules (`recipes` keeps its name in `name.js` for that rea
   go through the kernel's `app.storage`). Changing a saved shape or key needs a new migration in
   `migrations` and a `SCHEMA_VERSION` bump (the app's namespace, saved as `app:version`; v4 moved the alarm
   settings to `@xcwds/plugin-timers`' `alarm` field). Backups say `app: 'xcwds.com'` (`storage.appName`).
-- `/settings` holds app-wide settings (`settings` in `src/lib/settings.svelte.ts` mirrors the kernel's
-  `app.settings`, saved as `app:settings`; a new field needs a default in `defaultSettings`, a parser in
-  `parseSettings`, and an `app.settings.field` call in the owning plugin's `client.ts`), backups
-  (export/import/clear via `storage.ts`) and About. Dark mode uses `data-color-scheme` on `<html>` (the
+- `/settings` is `@xcwds/plugin-settings`' `<SettingsPage>` (#135): app-wide settings (`settings` in
+  `src/lib/settings.svelte.ts` mirrors the kernel's `app.settings`, saved as `app:settings`; a new field
+  needs a default in `defaultSettings`, a parser in `parseSettings`, and an `app.settings.field` call
+  with a `label` and `section` in the owning plugin's `client.ts`; the route registers a component for
+  it from `src/routes/settings/controls/` with `app.settingsPage.control`), backups, clearing data
+  (groups named in `xcwds.config.ts`), Privacy and About (the route adds the acronym). Dark mode uses `data-color-scheme` on `<html>` (the
   `dark` variant from `@xcwds/plugin-theme/tailwind.css`), set before first paint by `@xcwds/plugin-theme`'s
   head script. Don't use `data-theme` for it.
 - App updates (`@xcwds/plugin-update`): the service worker never calls `skipWaiting()` on install; a new
@@ -129,8 +131,8 @@ entry that uses Node modules (`recipes` keeps its name in `name.js` for that rea
 - Feedback and app chrome: show confirmations with `toast()` from `src/lib/toast.svelte.ts` (the shell's
   toasts; not per-tool button text); keep validation errors inline next to their control. Toasts, timer
   alerts, the update banner and the offline notice share the shell's `notices` stack in the root layout.
-  Install support (`@xcwds/plugin-install`, mirrored by `install.svelte.ts`) shows an Install button /
-  iPhone steps in Settings and hides once installed.
+  Install support (`@xcwds/plugin-install`) adds an Install button / iPhone steps to Settings and
+  hides once installed.
 - Accessibility baseline lives in `app.css`: 44px minimum controls, a visible `:focus-visible` ring and
   reduced-motion support. `e2e/app-extras.test.ts` audits tap targets on every page at phone, tablet
   (portrait and landscape) and computer sizes; add new pages to it. Buttons that darken on `active:` also

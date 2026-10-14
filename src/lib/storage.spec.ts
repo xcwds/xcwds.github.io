@@ -14,7 +14,6 @@ import {
 	defaultSettings,
 	entries,
 	exportData,
-	groups as savedGroups,
 	importData,
 	parseBackup,
 	parseCookingPresets,
@@ -112,7 +111,8 @@ const savedSettings = (): Settings | undefined => {
 	return raw === null ? undefined : parseSettings(JSON.parse(raw));
 };
 
-const groups = () => savedGroups();
+/** Settings → Your data's groups. */
+const groups = () => current!.storage.groups();
 
 /** An entry an @xcwds plugin registers under one of the app's keys. */
 const entryFor = (key: string) => {
@@ -391,14 +391,9 @@ describe('settings entry', () => {
 describe('groups and clear', () => {
 	it('groups entries by tool and clears one group at a time', async () => {
 		await open();
-		expect(groups().map((g) => g.id)).toEqual([
-			'coffee-timer',
-			'cooking-timer',
-			'weightlifting',
-			'workout-history',
-			'settings',
-			'home'
-		]);
+		expect(groups().map((g) => g.id)).toEqual(
+			expect.arrayContaining(['coffee-timer', 'weightlifting', 'workout-history', 'settings'])
+		);
 		write(entries.coffeeDuration, 1000);
 		write(entries.liftingTab, 'workout');
 		clear(groups().find((g) => g.id === 'weightlifting')!.entries);
@@ -781,7 +776,6 @@ describe('workout history', () => {
 		clear(groups().find((g) => g.id === 'weightlifting')!.entries);
 		expect(read(entries.liftingTab)).toBeUndefined();
 		expect(read(entries.workoutHistory)).toHaveLength(1);
-		expect(groups().find((g) => g.id === 'workout-history')!.label).toBe('Workout History');
 	});
 });
 

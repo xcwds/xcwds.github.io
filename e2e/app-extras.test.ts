@@ -17,7 +17,7 @@ test('shows an offline notice and a toast when back online', async ({ page, cont
 test('Settings offers an install button when the browser can prompt', async ({ page }) => {
 	await gotoHydrated(page, '/settings');
 	const section = page.getByTestId('install');
-	await expect(section).toContainText('Install app');
+	await expect(section).toContainText('Install the app');
 
 	// Simulate Chrome's beforeinstallprompt; the user accepts.
 	await page.evaluate(() => {
@@ -29,7 +29,7 @@ test('Settings offers an install button when the browser can prompt', async ({ p
 		});
 		window.dispatchEvent(event);
 	});
-	await section.getByRole('button', { name: 'Install xcwds' }).click();
+	await section.getByRole('button', { name: 'Install app' }).click();
 	expect(await page.evaluate(() => (window as unknown as { prompted: boolean }).prompted)).toBe(
 		true
 	);
@@ -260,11 +260,13 @@ for (const [name, viewport] of [
 					)
 				]
 					.filter((el) => (el as HTMLElement).offsetParent !== null)
-					// Inline text links are exempt (WCAG 2.5.8); checkboxes use their label's hit area.
+					// Inline text links are exempt (WCAG 2.5.8); checkboxes and radio buttons use their
+					// label's hit area.
 					.filter((el) => getComputedStyle(el).display !== 'inline')
 					.map((el) => {
-						const target =
-							(el as HTMLInputElement).type === 'checkbox' ? (el.closest('label') ?? el) : el;
+						const target = ['checkbox', 'radio'].includes((el as HTMLInputElement).type)
+							? (el.closest('label') ?? el)
+							: el;
 						const { width, height } = target.getBoundingClientRect();
 						const name = el.getAttribute('aria-label') || el.textContent?.trim() || el.tagName;
 						return {
