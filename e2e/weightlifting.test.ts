@@ -266,3 +266,103 @@ test('plates loaded on a kg set survive a reload while the commercial gym is in 
 	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
 	await expect(page.getByTestId('total')).toHaveText('60 kg');
 });
+
+test.describe('exercise name suggestions (#209)', () => {
+	test.beforeEach(async ({ page }) => {
+		await gotoHydrated(page, '/utils/weightlifting');
+		await page.getByRole('tab', { name: 'Workout' }).click();
+		await page.getByRole('button', { name: '+ Add exercise' }).click();
+	});
+
+	test('lists matches in the page, and a tap fills the name', async ({ page }) => {
+		const name = page.getByRole('combobox', { name: 'Exercise 1 name' });
+		await expect(name).toHaveAttribute('autocomplete', 'off');
+		await expect(page.locator('datalist')).toHaveCount(0);
+		await name.pressSequentially('squ');
+		const list = page.getByRole('listbox', { name: 'Suggestions' });
+		await expect(list.getByRole('option')).toHaveText(['Squat', 'Front Squat', 'Goblet Squat']);
+		await expect(name).toHaveAttribute('aria-expanded', 'true');
+		await list.getByRole('option', { name: 'Goblet Squat' }).click();
+		await expect(name).toHaveValue('Goblet Squat');
+		await expect(name).toBeFocused();
+		await expect(list).toBeHidden();
+		await expect(name).toHaveAttribute('aria-expanded', 'false');
+	});
+
+	test('works from the keyboard', async ({ page }) => {
+		const name = page.getByRole('combobox', { name: 'Exercise 1 name' });
+		await name.pressSequentially('squ');
+		await name.press('ArrowDown');
+		await name.press('ArrowDown');
+		await expect(name).toHaveAttribute(
+			'aria-activedescendant',
+			(await page.getByRole('option', { name: 'Front Squat' }).getAttribute('id'))!
+		);
+		await name.press('Enter');
+		await expect(name).toHaveValue('Front Squat');
+
+		await name.fill('');
+		await name.pressSequentially('press');
+		await expect(page.getByRole('option')).toHaveText([
+			'Bench Press',
+			'Overhead Press',
+			'Incline Dumbbell Press'
+		]);
+		await name.press('Escape');
+		await expect(page.getByRole('listbox', { name: 'Suggestions' })).toBeHidden();
+		await expect(name).toHaveValue('press');
+	});
+
+	test('keeps a name of your own, and never lists more than 5', async ({ page }) => {
+		const name = page.getByRole('combobox', { name: 'Exercise 1 name' });
+		await name.pressSequentially('Cable Fly');
+		await expect(page.getByRole('option')).toHaveCount(0);
+		await name.press('Tab');
+		await expect(name).toHaveValue('Cable Fly');
+
+		await name.fill('');
+		await name.pressSequentially('e');
+		await expect(page.getByRole('option')).toHaveCount(5);
+		await name.fill('');
+		await expect(page.getByRole('option')).toHaveCount(0);
+	});
+
+	test('stays inside the visible area above the keyboard', async ({ page }) => {
+		// A phone with its keyboard open: the visible area is about half the screen.
+		await page.setViewportSize({ width: 390, height: 420 });
+		await page.getByRole('button', { name: '+ Add exercise' }).click();
+		const name = page.getByRole('combobox', { name: 'Exercise 2 name' });
+		await name.pressSequentially('squ');
+		const options = page.getByRole('option');
+		await expect(options.first()).toBeVisible();
+		const visible = await page.evaluate(() => {
+			const vv = window.visualViewport!;
+			const tabs = document.querySelector('[data-shell-nav="tabs"]')!.getBoundingClientRect();
+			return { top: vv.offsetTop, bottom: Math.min(vv.offsetTop + vv.height, tabs.top) };
+		});
+		const field = (await name.boundingBox())!;
+		const last = (await options.last().boundingBox())!;
+		expect(field.y).toBeGreaterThanOrEqual(visible.top);
+		expect(last.y + last.height).toBeLessThanOrEqual(visible.bottom + 1);
+	});
+
+	test('fits again when the keyboard takes more room while the list is open', async ({ page }) => {
+		await page.getByRole('button', { name: '+ Add exercise' }).click();
+		const name = page.getByRole('combobox', { name: 'Exercise 2 name' });
+		await name.pressSequentially('squ');
+		await expect(page.getByRole('option')).toHaveCount(3);
+		// The keyboard finishes sliding in: the visible area shrinks under the open list.
+		await page.setViewportSize({ width: 390, height: 420 });
+		const options = page.getByRole('option');
+		await expect(async () => {
+			const bottom = await page.evaluate(() => {
+				const vv = window.visualViewport!;
+				const tabs = document.querySelector('[data-shell-nav="tabs"]')!.getBoundingClientRect();
+				return Math.min(vv.offsetTop + vv.height, tabs.top);
+			});
+			const last = (await options.last().boundingBox())!;
+			expect(last.y + last.height).toBeLessThanOrEqual(bottom + 1);
+		}).toPass();
+		expect((await name.boundingBox())!.y).toBeGreaterThanOrEqual(0);
+	});
+});
