@@ -288,6 +288,8 @@ function entry<T>(
 		// Entries are grouped by the first segment of their key (`app:<group>:...`).
 		group: key.split(':')[0]!,
 		namespace: '',
+		backup: true,
+		sensitive: false,
 		...(legacyKey ? { legacyKey } : {})
 	};
 }

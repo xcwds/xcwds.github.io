@@ -34,7 +34,7 @@ export default defineConfig({
 	// Backups made before the move onto @xcwds say `xcwds.com`; keep importing them.
 	storage: { appName: 'xcwds.com' },
 	// The manifest's shortcuts: Recipes (the recipes plugin), then each tool with `shortcut: true`
-	// in its `tool.js`. Setting `manifest.shortcuts` here would replace them all.
+	// in its `tool.js`. Shortcuts set in `manifest.shortcuts` here would come before them.
 	plugins: [
 		// The app's own saved data from before @xcwds: its keys, schema version and migrations.
 		app(),

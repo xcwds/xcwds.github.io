@@ -179,6 +179,8 @@ describe('update', () => {
 		label: 'Test',
 		group: 'test',
 		namespace: '',
+		backup: true,
+		sensitive: false,
 		parse: (v: unknown) => v as number[]
 	};
 	const push = (n: number) => (latest: number[] | undefined) => [...(latest ?? []), n];
@@ -425,7 +427,8 @@ describe('backups', () => {
 				[entries.coffeeDuration.key]: 120_000,
 				[KEYS.settings]: { ...defaultSettings, theme: 'dark' }
 			},
-			unclaimed: {}
+			unclaimed: {},
+			unclaimedVersions: {}
 		});
 	});
 
