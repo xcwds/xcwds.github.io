@@ -23,13 +23,6 @@ function load(values: unknown) {
 	lastSaved = JSON.stringify(settings);
 }
 
-/** Re-reads the saved settings, e.g. after an import or reset. */
-export function reloadSettings() {
-	const app = getApp();
-	app.settings.load();
-	load(app.settings.get());
-}
-
 /**
  * Saves the settings now rather than in the background, for actions that confirm a save (e.g.
  * Save as my defaults). Returns whether it was saved; a failure is reported once.

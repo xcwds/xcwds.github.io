@@ -1,0 +1,1 @@
+- Settings now shares its layout with other xcwds apps. A backup import that doesn't fit leaves your data as it was, and Your data can clear which updates you've seen in What's new.

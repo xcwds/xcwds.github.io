@@ -7,7 +7,9 @@ export default definePlugin(
 	(app) => {
 		app.settings.field('recipeUnits', {
 			default: defaultSettings.recipeUnits,
-			parse: parseRecipeUnits
+			parse: parseRecipeUnits,
+			label: 'Recipes',
+			section: 'tool-defaults'
 		});
 	},
 	{ name: NAME, namespace: '', network: false }

@@ -9,7 +9,9 @@ export default definePlugin(
 		app.tools?.add(tool);
 		app.settings.field('cookingPresets', {
 			default: defaultSettings.cookingPresets,
-			parse: parseCookingPresets
+			parse: parseCookingPresets,
+			label: 'Cooking Timer',
+			section: 'tool-defaults'
 		});
 	},
 	{
