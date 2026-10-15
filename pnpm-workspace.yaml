@@ -1,2 +1,8 @@
-onlyBuiltDependencies:
-  - esbuild
+# Only these dependencies may run install scripts; Vite needs esbuild's.
+allowBuilds:
+  esbuild: true
+# One Vite for the app and every package that peers on it.
+overrides:
+  vite: $vite
+engineStrict: true
+dedupePeerDependents: false
