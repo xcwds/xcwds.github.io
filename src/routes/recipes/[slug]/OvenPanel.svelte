@@ -25,6 +25,9 @@
 	let {
 		oven,
 		timeScale = 1,
+		// `$bindable()` is a rune that makes the prop bindable, not a value to read; the effect below
+		// writes `activeF` back to the parent. ESLint 10's no-useless-assignment can't see that.
+		// eslint-disable-next-line no-useless-assignment
 		activeF = $bindable()
 	}: { oven: RecipeOven; timeScale?: number; activeF?: number | undefined } = $props();
 
