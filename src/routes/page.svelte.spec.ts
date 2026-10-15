@@ -5,7 +5,7 @@ import Page from './+page.svelte';
 
 describe('/+page.svelte', () => {
 	it('links to each section', async () => {
-		render(Page);
+		await render(Page);
 
 		await expect.element(page.getByRole('link', { name: /Recipes/ })).toBeInTheDocument();
 		await expect.element(page.getByRole('link', { name: /Utils/ })).toBeInTheDocument();
