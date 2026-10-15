@@ -13,6 +13,12 @@ import { parseEnvironment, type Environment } from '$lib/self-control/environmen
 import { parseReflections, type Reflections } from '$lib/self-control/review';
 import { parseSeesaw, type Seesaw } from '$lib/self-control/seesaw';
 import { parseWhy, type Why } from '$lib/self-control/why';
+import {
+	parseItems as parseLastDoneItems,
+	parseLog as parseLastDoneLog,
+	type LastDoneEntry,
+	type LastDoneItem
+} from '$lib/utils/last-done';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
 import { getApp } from '@xcwds/sveltekit';
 import {
@@ -357,7 +363,10 @@ export const entries = {
 		'self-control:review',
 		'Self-Control weekly reflections',
 		parseReflections
-	)
+	),
+	// Last done (#218): the things you track, and when you did each.
+	lastDoneItems: entry<LastDoneItem[]>('last-done:items', 'Last done things', parseLastDoneItems),
+	lastDoneLog: entry<LastDoneEntry[]>('last-done:log', 'Last done history', parseLastDoneLog)
 } satisfies Record<string, Entry<unknown>>;
 
 /**

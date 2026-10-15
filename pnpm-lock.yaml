@@ -62,6 +62,9 @@ importers:
       xcwds-app-cooking-timer:
         specifier: link:src/plugins/cooking-timer
         version: link:src/plugins/cooking-timer
+      xcwds-app-last-done:
+        specifier: link:src/plugins/last-done
+        version: link:src/plugins/last-done
       xcwds-app-oven-time:
         specifier: link:src/plugins/oven-time
         version: link:src/plugins/oven-time
