@@ -17,7 +17,7 @@ test('shows an offline notice and a toast when back online', async ({ page, cont
 test('Settings offers an install button when the browser can prompt', async ({ page }) => {
 	await gotoHydrated(page, '/settings');
 	const section = page.getByTestId('install');
-	await expect(section).toContainText('Install app');
+	await expect(section).toContainText('Install the app');
 
 	// Simulate Chrome's beforeinstallprompt; the user accepts.
 	await page.evaluate(() => {
@@ -29,7 +29,7 @@ test('Settings offers an install button when the browser can prompt', async ({ p
 		});
 		window.dispatchEvent(event);
 	});
-	await section.getByRole('button', { name: 'Install xcwds' }).click();
+	await section.getByRole('button', { name: 'Install app' }).click();
 	expect(await page.evaluate(() => (window as unknown as { prompted: boolean }).prompted)).toBe(
 		true
 	);
@@ -168,6 +168,24 @@ for (const [name, viewport] of [
 			],
 			['/utils/self-control/review'],
 			[
+				'/utils/last-done',
+				async (p) => {
+					await p.getByRole('button', { name: 'Add something' }).click();
+					await p.getByLabel('Name').fill('Vacuum');
+					await p.getByRole('button', { name: 'Add', exact: true }).click();
+					await p.getByRole('button', { name: 'Done: Vacuum' }).click();
+					await p.getByRole('button', { name: 'Done earlier: Vacuum' }).click();
+				}
+			],
+			[
+				'/utils/last-done',
+				// The thing's page, with its history, from the step before.
+				async (p) => {
+					await p.getByRole('link', { name: 'Vacuum' }).click();
+					await p.getByTestId('history').waitFor();
+				}
+			],
+			[
 				'/utils/self-control/cues',
 				async (p) => {
 					await p.getByText('What was going on? (optional)').click();
@@ -260,11 +278,13 @@ for (const [name, viewport] of [
 					)
 				]
 					.filter((el) => (el as HTMLElement).offsetParent !== null)
-					// Inline text links are exempt (WCAG 2.5.8); checkboxes use their label's hit area.
+					// Inline text links are exempt (WCAG 2.5.8); checkboxes and radio buttons use their
+					// label's hit area.
 					.filter((el) => getComputedStyle(el).display !== 'inline')
 					.map((el) => {
-						const target =
-							(el as HTMLInputElement).type === 'checkbox' ? (el.closest('label') ?? el) : el;
+						const target = ['checkbox', 'radio'].includes((el as HTMLInputElement).type)
+							? (el.closest('label') ?? el)
+							: el;
 						const { width, height } = target.getBoundingClientRect();
 						const name = el.getAttribute('aria-label') || el.textContent?.trim() || el.tagName;
 						return {

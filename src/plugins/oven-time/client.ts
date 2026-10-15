@@ -7,7 +7,12 @@ import { tool } from './tool.js';
 export default definePlugin(
 	(app) => {
 		app.tools?.add(tool);
-		app.settings.field('ovenUnit', { default: defaultSettings.ovenUnit, parse: parseOvenUnit });
+		app.settings.field('ovenUnit', {
+			default: defaultSettings.ovenUnit,
+			parse: parseOvenUnit,
+			label: 'Oven Time Converter',
+			section: 'tool-defaults'
+		});
 	},
 	{ name: NAME, namespace: '', dependencies: ['@xcwds/plugin-tools'], network: false }
 );

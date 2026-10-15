@@ -3,7 +3,7 @@ import { HOME_GYM, gotoHydrated, seedLifting } from './helpers';
 
 test.use({ viewport: { width: 390, height: 844 } });
 
-const defaults = (page: Page) => page.getByTestId('tool-defaults');
+const defaults = (page: Page) => page.getByTestId('settings-tool-defaults');
 
 test('weightlifting switches to kg plates and bars', async ({ page }) => {
 	await gotoHydrated(page, '/utils/weightlifting');

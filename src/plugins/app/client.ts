@@ -13,7 +13,9 @@ export default definePlugin(
 		for (const migration of migrations) app.storage.migration(migration);
 		app.settings.field('weekStart', {
 			default: defaultSettings.weekStart,
-			parse: parseWeekStart
+			parse: parseWeekStart,
+			label: 'Week starts on',
+			section: 'appearance'
 		});
 	},
 	{ name: NAME, namespace: '', network: false }
