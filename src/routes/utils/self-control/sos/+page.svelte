@@ -296,8 +296,7 @@
 						class={field}
 						maxlength={ANSWER_MAX}
 						value={session.answers?.[i] ?? ''}
-						oninput={(e) => answer(i, e.currentTarget.value)}
-					></textarea>
+						oninput={(e) => answer(i, e.currentTarget.value)}></textarea>
 				</label>
 			{/each}
 			<p class="text-sm text-gray-600 dark:text-gray-400">

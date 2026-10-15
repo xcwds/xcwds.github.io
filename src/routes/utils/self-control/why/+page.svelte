@@ -290,8 +290,7 @@
 					bind:value={note}
 					maxlength={WHY_NOTE_MAX * 2}
 					aria-invalid={noteError ? 'true' : undefined}
-					aria-describedby={noteError ? 'note-error' : undefined}
-				></textarea>
+					aria-describedby={noteError ? 'note-error' : undefined}></textarea>
 			</label>
 			{#if noteError}
 				<p id="note-error" role="alert" class="text-sm text-red-700 dark:text-red-400">
