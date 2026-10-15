@@ -120,8 +120,7 @@
 					autocapitalize="off"
 					autocomplete="off"
 					spellcheck="false"
-					class="{field} text-base break-all"
-				></textarea>
+					class="{field} text-base break-all"></textarea>
 				<div class="flex gap-2">
 					{#if canPaste}
 						<button type="button" class="{button} flex-1" onclick={paste}>Paste</button>

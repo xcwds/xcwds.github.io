@@ -232,8 +232,7 @@
 					bind:value={note}
 					maxlength={NOTE_MAX * 2}
 					aria-invalid={errors.note ? 'true' : undefined}
-					aria-describedby={errors.note ? `${id}-note-error` : undefined}
-				></textarea>
+					aria-describedby={errors.note ? `${id}-note-error` : undefined}></textarea>
 			</label>
 			{#if errors.note}
 				<p id="{id}-note-error" role="alert" class="-mt-3 text-sm text-red-700 dark:text-red-400">

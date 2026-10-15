@@ -1,46 +1,43 @@
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
 import { gotoHydrated } from './helpers';
 
 // Segmented controls behave like the radio groups and tabs they're announced as (#138).
 test.use({ viewport: { width: 390, height: 844 } });
 
-const scheme = (page: Page) => page.evaluate(() => document.documentElement.dataset.colorScheme);
 const tabStops = (group: Locator) => group.locator('[tabindex="0"]');
 
-test('the theme control is one Tab stop and the arrow keys change it', async ({ page }) => {
-	await page.emulateMedia({ colorScheme: 'light' });
+// The theme and navigation pickers are native radio buttons now (@xcwds/plugin-settings, #135).
+test('the weightlifting units control is one Tab stop and the arrow keys change it', async ({
+	page
+}) => {
 	await gotoHydrated(page, '/settings');
-	const theme = page.getByRole('radiogroup', { name: 'Theme' });
-	await expect(tabStops(theme)).toHaveCount(1);
-	await expect(tabStops(theme)).toHaveAccessibleName('System');
+	const units = page.getByRole('radiogroup', { name: 'Weightlifting units' });
+	await expect(tabStops(units)).toHaveCount(1);
+	await expect(tabStops(units)).toHaveAccessibleName('Pounds (lb)');
 
 	// Tab reaches the checked option and then leaves the group.
-	await page.getByRole('heading', { name: 'Appearance' }).click();
+	await page.getByRole('heading', { name: 'Weightlifting Calculator' }).click();
 	await page.keyboard.press('Tab');
-	const system = theme.getByRole('radio', { name: 'System' });
-	await expect(system).toBeFocused();
+	const lb = units.getByRole('radio', { name: 'Pounds (lb)' });
+	await expect(lb).toBeFocused();
 	await page.keyboard.press('Tab');
-	await expect(page.getByRole('radiogroup', { name: 'Theme' }).locator(':focus')).toHaveCount(0);
+	await expect(units.locator(':focus')).toHaveCount(0);
 	await page.keyboard.press('Shift+Tab');
-	await expect(system).toBeFocused();
+	await expect(lb).toBeFocused();
 
 	await page.keyboard.press('ArrowRight');
-	const light = theme.getByRole('radio', { name: 'Light' });
-	await expect(light).toBeFocused();
-	await expect(light).toHaveAttribute('aria-checked', 'true');
-	await page.keyboard.press('End');
-	const dark = theme.getByRole('radio', { name: 'Dark' });
-	await expect(dark).toHaveAttribute('aria-checked', 'true');
-	await expect.poll(() => scheme(page)).toBe('dark');
-	await expect(tabStops(theme)).toHaveAccessibleName('Dark');
+	const kg = units.getByRole('radio', { name: 'Kilograms (kg)' });
+	await expect(kg).toBeFocused();
+	await expect(kg).toHaveAttribute('aria-checked', 'true');
+	await expect(tabStops(units)).toHaveAccessibleName('Kilograms (kg)');
 	// Wraps around.
 	await page.keyboard.press('ArrowDown');
-	await expect(system).toBeFocused();
-	await expect(system).toHaveAttribute('aria-checked', 'true');
+	await expect(lb).toBeFocused();
+	await expect(lb).toHaveAttribute('aria-checked', 'true');
 	await page.keyboard.press('ArrowUp');
-	await expect(dark).toHaveAttribute('aria-checked', 'true');
+	await expect(kg).toHaveAttribute('aria-checked', 'true');
 	await page.keyboard.press('Home');
-	await expect(system).toHaveAttribute('aria-checked', 'true');
+	await expect(lb).toHaveAttribute('aria-checked', 'true');
 });
 
 test("Weightlifting's tabs switch with the arrow keys and name their panels", async ({ page }) => {

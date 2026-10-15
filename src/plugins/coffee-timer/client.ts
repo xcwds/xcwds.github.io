@@ -10,7 +10,9 @@ export default definePlugin(
 		registerEntries(app.storage, [entries.coffeeDuration, entries.coffeeBrew]);
 		app.settings.field('coffeeDefaultSeconds', {
 			default: defaultSettings.coffeeDefaultSeconds,
-			parse: parseCoffeeSeconds
+			parse: parseCoffeeSeconds,
+			label: 'Coffee Timer',
+			section: 'tool-defaults'
 		});
 	},
 	{ name: NAME, namespace: '', dependencies: ['@xcwds/plugin-tools'], network: false }

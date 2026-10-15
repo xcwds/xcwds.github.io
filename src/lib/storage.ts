@@ -13,6 +13,12 @@ import { parseEnvironment, type Environment } from '$lib/self-control/environmen
 import { parseReflections, type Reflections } from '$lib/self-control/review';
 import { parseSeesaw, type Seesaw } from '$lib/self-control/seesaw';
 import { parseWhy, type Why } from '$lib/self-control/why';
+import {
+	parseItems as parseLastDoneItems,
+	parseLog as parseLastDoneLog,
+	type LastDoneEntry,
+	type LastDoneItem
+} from '$lib/utils/last-done';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
 import { getApp } from '@xcwds/sveltekit';
 import {
@@ -357,7 +363,10 @@ export const entries = {
 		'self-control:review',
 		'Self-Control weekly reflections',
 		parseReflections
-	)
+	),
+	// Last done (#218): the things you track, and when you did each.
+	lastDoneItems: entry<LastDoneItem[]>('last-done:items', 'Last done things', parseLastDoneItems),
+	lastDoneLog: entry<LastDoneEntry[]>('last-done:log', 'Last done history', parseLastDoneLog)
 } satisfies Record<string, Entry<unknown>>;
 
 /**
@@ -390,38 +399,6 @@ export function registerEntries(storage: StorageScope, list: Entry<unknown>[]): 
 			parse: e.parse,
 			group: e.group
 		});
-}
-
-/** Labels for the groups Settings → Your data clears one at a time, in the order it lists them. */
-const GROUP_LABELS: Record<string, string> = {
-	'coffee-timer': 'Coffee Timer',
-	'cooking-timer': 'Cooking Timer',
-	weightlifting: 'Weightlifting Calculator',
-	'workout-history': 'Workout History',
-	'self-control': 'Self-Control',
-	settings: 'Settings',
-	home: 'Home shortcuts'
-};
-
-export type Group = { id: string; label: string; entries: KernelEntry<unknown>[] };
-
-export function groupOf(e: KernelEntry<unknown>): string {
-	return e.key.slice(PREFIX.length).split(':')[0]!;
-}
-
-/** Everything the app saves, grouped by the first segment of the key (`app:<group>:...`). */
-export function groups(): Group[] {
-	const all = getApp().storage.entries();
-	const ids = [...new Set(all.map(groupOf))].sort((a, b) => {
-		const order = Object.keys(GROUP_LABELS);
-		const rank = (id: string) => (order.includes(id) ? order.indexOf(id) : order.length);
-		return rank(a) - rank(b);
-	});
-	return ids.map((id) => ({
-		id,
-		label: GROUP_LABELS[id] ?? id,
-		entries: all.filter((e) => groupOf(e) === id)
-	}));
 }
 
 const RENAMED_EQUIPMENT: Record<string, string> = {
