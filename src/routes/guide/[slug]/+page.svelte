@@ -3,7 +3,7 @@
 	import { getArticle, sectionId } from '$lib/guide';
 	import GuideBlock from '$lib/guide/GuideBlock.svelte';
 	import { getRecipe } from '$lib/recipes';
-	import { tools } from '$lib/utils/tools';
+	import { allTools } from '$lib/utils/tools';
 
 	let { data } = $props();
 	let article = $derived(data.article);
@@ -19,7 +19,8 @@
 			return { href: resolve('/recipes/[slug]', { slug }), emoji: r.emoji ?? '🍽️', name: r.name };
 		}),
 		...(article.related?.tools ?? []).map((path) => {
-			const t = tools().find((tool) => tool.path === path)!;
+			// Its app may be off: the tool's page still opens.
+			const t = allTools().find((tool) => tool.path === path)!;
 			return { href: resolve(t.path as '/'), emoji: t.emoji, name: t.name };
 		})
 	]);

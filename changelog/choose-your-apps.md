@@ -1,0 +1,1 @@
+- Choose which apps you see: Kitchen, Gym, Links. Turn one off at Apps (linked from Home and Utils) to hide its tools and, for Kitchen, the Recipes tab. Nothing saved is lost, and its pages still open.

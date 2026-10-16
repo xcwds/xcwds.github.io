@@ -9,10 +9,18 @@
 </svelte:head>
 
 <main class="page-wide flex flex-col gap-6 pt-2 pb-6 sm:pb-12">
+	<p class="text-sm text-gray-600 dark:text-gray-400">
+		<a
+			href={resolve('/apps')}
+			class="inline-flex min-h-11 items-center underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100"
+			>Choose apps</a
+		> to show only the tools you use.
+	</p>
 	<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
 		{#each tools() as tool (tool.path)}
 			{@const pinned = shortcuts.pins.includes(tool.path)}
-			<li class="flex items-stretch gap-2">
+			<!-- `data-app` hides it before the page starts when its app is off (app.css). -->
+			<li class="flex items-stretch gap-2" data-app={tool.app}>
 				<a
 					href={resolve(tool.path as '/')}
 					class="flex flex-1 items-center gap-3 rounded-md bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"

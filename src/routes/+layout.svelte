@@ -2,10 +2,12 @@
 	import OfflineNotice from '@xcwds/plugin-offline/OfflineNotice.svelte';
 	import Shell from '@xcwds/plugin-shell/Shell.svelte';
 	import PluginTimerAlert from '@xcwds/plugin-timers/TimerAlert.svelte';
+	import AppOffNotice from '@xcwds/plugin-tools/AppOffNotice.svelte';
 	import UpdateBanner from '@xcwds/plugin-update/UpdateBanner.svelte';
 	import { App, settings as appSettings } from '@xcwds/sveltekit';
 	import { onMount } from 'svelte';
 	import BackOnline from '$lib/BackOnline.svelte';
+	import { startApps } from '$lib/apps.svelte';
 	import TimerAlert from '$lib/TimerAlert.svelte';
 	import SosAlert from '$lib/self-control/SosAlert.svelte';
 	import { startShortcuts } from '$lib/home.svelte';
@@ -27,6 +29,7 @@
 
 	onMount(() => {
 		startShortcuts();
+		startApps();
 	});
 </script>
 
@@ -37,6 +40,7 @@
 			<PluginTimerAlert openLabel="Open Cooking Timer" />
 			<TimerAlert />
 			<SosAlert />
+			<AppOffNotice />
 			<UpdateBanner />
 			<OfflineNotice />
 			<BackOnline />

@@ -122,6 +122,7 @@ for (const [name, viewport] of [
 			['/guide/beef'],
 			['/guide/eggs'],
 			['/utils'],
+			['/apps'],
 			['/utils/pizza-dough'],
 			['/utils/coffee-timer'],
 			['/utils/oven-time'],

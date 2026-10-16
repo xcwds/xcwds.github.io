@@ -1,6 +1,7 @@
 import { buildTestApp } from '@xcwds/testing';
 import timers from '@xcwds/plugin-timers';
 import tools from '@xcwds/plugin-tools';
+import { APPS } from '$lib/apps';
 import type { App, StorageAdapter } from '@xcwds/core';
 import app from 'xcwds-app';
 import coffeeTimer from 'xcwds-app-coffee-timer';
@@ -93,7 +94,7 @@ async function open(): Promise<App> {
 			storage: { appName: BACKUP_APP },
 			plugins: [
 				app(),
-				tools({ path: '/utils', title: 'Utils', storageKey: KEYS.homeShortcuts }),
+				tools({ path: '/utils', title: 'Utils', storageKey: KEYS.homeShortcuts, apps: APPS }),
 				timers({ page: '/utils/cooking-timer', storageKey: KEYS.cookingTimers }),
 				coffeeTimer(),
 				cookingTimer(),
@@ -181,6 +182,7 @@ describe('update', () => {
 		namespace: '',
 		backup: true,
 		sensitive: false,
+		prefix: false,
 		parse: (v: unknown) => v as number[]
 	};
 	const push = (n: number) => (latest: number[] | undefined) => [...(latest ?? []), n];
@@ -420,7 +422,8 @@ describe('backups', () => {
 			versions: { '': SCHEMA_VERSION, tools: 0, timers: 0 },
 			data: {
 				[entries.coffeeDuration.key]: 120_000,
-				[KEYS.settings]: { ...defaultSettings, theme: 'dark' }
+				// `apps` is @xcwds/plugin-tools' field (#223): which apps are on.
+				[KEYS.settings]: { ...defaultSettings, theme: 'dark', apps: {} }
 			},
 			unclaimed: {},
 			unclaimedVersions: {}

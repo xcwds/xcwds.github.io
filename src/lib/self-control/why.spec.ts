@@ -1,5 +1,6 @@
 import { buildTestApp } from '@xcwds/testing';
 import tools from '@xcwds/plugin-tools';
+import { APPS } from '$lib/apps';
 import type { App } from '@xcwds/core';
 import app from 'xcwds-app';
 import selfControl from 'xcwds-app-self-control';
@@ -147,7 +148,7 @@ describe('saved reasons', () => {
 				storage: { appName: 'xcwds.com' },
 				plugins: [
 					app(),
-					tools({ path: '/utils', title: 'Utils', storageKey: 'app:home:shortcuts' }),
+					tools({ path: '/utils', title: 'Utils', storageKey: 'app:home:shortcuts', apps: APPS }),
 					selfControl()
 				]
 			},

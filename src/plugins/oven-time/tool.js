@@ -2,6 +2,7 @@
 /** @type {import('@xcwds/plugin-tools').Tool} */
 export const tool = {
 	path: '/utils/oven-time',
+	app: 'kitchen',
 	emoji: '🌡️',
 	name: 'Oven Time Converter',
 	blurb: 'New cook time when the oven has to be hotter or cooler.'

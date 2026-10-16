@@ -2,6 +2,7 @@
 /** @type {import('@xcwds/plugin-tools').Tool} */
 export const tool = {
 	path: '/utils/url-sanitizer',
+	app: 'links',
 	emoji: '🧼',
 	name: 'URL Sanitizer',
 	blurb: 'Strip tracking params from a link before sharing it.',

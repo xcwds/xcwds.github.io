@@ -1,5 +1,6 @@
 import { buildTestApp } from '@xcwds/testing';
 import tools from '@xcwds/plugin-tools';
+import { APPS } from '$lib/apps';
 import type { App, Entry } from '@xcwds/core';
 import app from 'xcwds-app';
 import selfControl from 'xcwds-app-self-control';
@@ -126,6 +127,7 @@ describe('saved data', () => {
 		group: 'self-control',
 		backup: true,
 		sensitive: false,
+		prefix: false,
 		parse: (v) =>
 			typeof v === 'object' && v !== null ? (v as Record<string, string[]>) : undefined
 	};
@@ -144,7 +146,7 @@ describe('saved data', () => {
 				storage: { appName: 'xcwds.com' },
 				plugins: [
 					app(),
-					tools({ path: '/utils', title: 'Utils', storageKey: 'app:home:shortcuts' }),
+					tools({ path: '/utils', title: 'Utils', storageKey: 'app:home:shortcuts', apps: APPS }),
 					selfControl()
 				]
 			},

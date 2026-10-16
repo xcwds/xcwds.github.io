@@ -6,3 +6,6 @@ overrides:
   vite: $vite
 engineStrict: true
 dedupePeerDependents: false
+# Our own framework, released from xcwds/xcwds: a new release is usable here right away.
+minimumReleaseAgeExclude:
+  - '@xcwds/*'
