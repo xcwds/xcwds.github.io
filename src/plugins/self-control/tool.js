@@ -2,6 +2,7 @@
 /** @type {import('@xcwds/plugin-tools').Tool} */
 export const tool = {
 	path: '/utils/self-control',
+	app: 'self-control',
 	emoji: '🧭',
 	name: 'Self-Control',
 	blurb: 'Ride out cravings and redesign your triggers.',

@@ -55,7 +55,12 @@ entry that uses Node modules (`recipes` keeps its name in `name.js` for that rea
   order `xcwds.config.ts` lists the plugins; `src/lib/utils/tools.ts` collects them for the app's own
   pages. Home shows pinned and recently used tools (`@xcwds/plugin-tools`, saved as `app:home:shortcuts`;
   `home.svelte.ts` mirrors it). A private tool sets `private: true`, so it never appears under
-  "Recently used", can't be a manifest shortcut and has no Share button. New tools arrive as GitHub issues. The site is static with no server or
+  "Recently used", can't be a manifest shortcut and has no Share button. Tools are grouped into apps
+  people turn on and off at `/apps` (#223; `APPS` in `src/lib/apps.ts`, each `tool.js` sets `app`): an
+  app that's off hides its tools from Home and Utils (and Kitchen the Recipes tab) but its pages still
+  open with a "turned off" notice. Lists of tools use `tools()` (only the ones that show) and mark items
+  `data-app` so `app.css` hides them before first paint; links from pages that still open use
+  `allTools()`. A new tool joins an app, and a new app is added to `APPS` and to `app.css`. New tools arrive as GitHub issues. The site is static with no server or
   auth, so tools must be fully client-side; shared logic lives in `src/lib/utils/` (timers count against
   wall-clock end times so they stay correct when a phone backgrounds the tab).
 - e2e tests that type into inputs must navigate with `gotoHydrated` from `e2e/helpers.ts`; input sent

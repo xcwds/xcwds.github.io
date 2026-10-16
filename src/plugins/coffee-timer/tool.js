@@ -2,6 +2,7 @@
 /** @type {import('@xcwds/plugin-tools').Tool} */
 export const tool = {
 	path: '/utils/coffee-timer',
+	app: 'kitchen',
 	emoji: '☕',
 	name: 'Coffee Timer',
 	blurb: '90-second countdown with quick adjustments.',

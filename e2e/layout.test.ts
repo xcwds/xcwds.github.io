@@ -102,6 +102,7 @@ test.describe('with the sidebar', () => {
 	for (const path of [
 		'/',
 		'/utils',
+		'/apps',
 		'/recipes',
 		'/recipes/pizza-dough',
 		'/guide/grill-stovetop-or-oven',
@@ -157,6 +158,7 @@ for (const [name, viewport] of Object.entries(viewports)) {
 		for (const path of [
 			'/',
 			'/utils',
+			'/apps',
 			'/recipes',
 			'/recipes/pizza-dough',
 			'/guide',

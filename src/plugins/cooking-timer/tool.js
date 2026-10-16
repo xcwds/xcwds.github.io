@@ -2,6 +2,7 @@
 /** @type {import('@xcwds/plugin-tools').Tool} */
 export const tool = {
 	path: '/utils/cooking-timer',
+	app: 'kitchen',
 	emoji: '⏲️',
 	name: 'Cooking Timer',
 	blurb: 'Several labeled timers at once.',

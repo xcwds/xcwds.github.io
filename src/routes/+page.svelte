@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import Acronym from '$lib/Acronym.svelte';
+	import { appIsOn } from '$lib/apps.svelte';
 	import { ACRONYM, BRAND, TAGLINE } from '$lib/brand';
 	import { movePin, shortcuts, togglePin } from '$lib/home.svelte';
 	import { articles } from '$lib/guide';
@@ -25,28 +26,31 @@
 	const small =
 		'min-h-11 min-w-11 rounded-lg bg-white/70 px-2 text-sm hover:not-disabled:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700';
 
-	const sections = [
-		{
-			path: '/recipes',
-			emoji: '📖',
-			name: 'Recipes',
-			blurb: `${recipes.length} classic back-pocket recipes.`
-		},
-		{
-			path: '/guide',
-			emoji: '🍳',
-			name: 'Kitchen Guide',
-			blurb: `Cooking and baking know-how beyond the recipes, in ${articles.length} ${articles.length === 1 ? 'article' : 'articles'}.`
-		},
-		{
-			path: '/utils',
-			emoji: '🧰',
-			name: 'Utils',
-			blurb: tools()
-				.map((tool) => tool.name)
-				.join(', ')
-		}
-	] as const;
+	// Recipes and the Kitchen Guide are Kitchen's (#223): they hide while it's off.
+	let sections = $derived(
+		[
+			{
+				path: '/recipes' as const,
+				emoji: '📖',
+				name: 'Recipes',
+				blurb: `${recipes.length} classic back-pocket recipes.`
+			},
+			{
+				path: '/guide' as const,
+				emoji: '🍳',
+				name: 'Kitchen Guide',
+				blurb: `Cooking and baking know-how beyond the recipes, in ${articles.length} ${articles.length === 1 ? 'article' : 'articles'}.`
+			},
+			{
+				path: '/utils' as const,
+				emoji: '🧰',
+				name: 'Utils',
+				blurb: tools()
+					.map((tool) => tool.name)
+					.join(', ')
+			}
+		].filter((s) => s.path === '/utils' || appIsOn('kitchen'))
+	);
 </script>
 
 <svelte:head>
@@ -145,7 +149,7 @@
 	<nav aria-label="Sections">
 		<ul class="grid gap-3 sm:grid-cols-2">
 			{#each sections as section (section.path)}
-				<li>
+				<li data-app={section.path === '/utils' ? undefined : 'kitchen'}>
 					<a
 						href={resolve(section.path)}
 						class="flex h-full items-center gap-4 rounded-xl bg-white/70 px-5 py-4 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
@@ -162,4 +166,12 @@
 			{/each}
 		</ul>
 	</nav>
+
+	<p class="text-sm text-gray-600 dark:text-gray-400">
+		<a
+			href={resolve('/apps')}
+			class="inline-flex min-h-11 items-center underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100"
+			>Choose apps</a
+		> to keep only the ones you use on Home.
+	</p>
 </main>

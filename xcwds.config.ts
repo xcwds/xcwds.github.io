@@ -19,6 +19,7 @@ import recipes from 'xcwds-app-recipes';
 import selfControl from 'xcwds-app-self-control';
 import urlSanitizer from 'xcwds-app-url-sanitizer';
 import weightlifting from 'xcwds-app-weightlifting';
+import { APPS } from './src/lib/apps';
 import { BRAND, TAGLINE } from './src/lib/brand';
 import { loadChangelog } from './src/lib/server/changelog';
 
@@ -42,13 +43,19 @@ export default defineConfig({
 		shell({
 			sections: [
 				{ path: '/', label: 'Home', emoji: '🏠' },
-				{ path: '/recipes', label: 'Recipes', emoji: '📖', also: ['/guide'] },
+				{ path: '/recipes', label: 'Recipes', emoji: '📖', also: ['/guide'], app: 'kitchen' },
 				{ path: '/utils', label: 'Utils', emoji: '🧰' },
 				{ path: '/settings', label: 'Settings', emoji: '⚙️' }
 			]
 		}),
 		theme(),
-		tools({ path: '/utils', title: 'Utils', storageKey: 'app:home:shortcuts' }),
+		tools({
+			path: '/utils',
+			title: 'Utils',
+			storageKey: 'app:home:shortcuts',
+			// Apps people turn on and off at /apps (#223). Each tool's `tool.js` names its app.
+			apps: APPS
+		}),
 		timers({ page: '/utils/cooking-timer', storageKey: 'app:cooking-timer:timers' }),
 		// Tools, in the order /utils and Home list them (`src/lib/utils/tools.ts` reads it).
 		pizzaDough(),

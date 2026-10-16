@@ -296,6 +296,7 @@ function entry<T>(
 		namespace: '',
 		backup: true,
 		sensitive: false,
+		prefix: false,
 		...(legacyKey ? { legacyKey } : {})
 	};
 }

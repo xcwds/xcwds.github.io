@@ -2,6 +2,7 @@
 /** @type {import('@xcwds/plugin-tools').Tool} */
 export const tool = {
 	path: '/utils/last-done',
+	app: 'housework',
 	emoji: '✅',
 	name: 'Last done',
 	blurb: 'When did I last…? Track how often you do things.',
