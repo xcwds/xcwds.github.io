@@ -1,11 +1,17 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:recommended", "helpers:pinGitHubActionDigests", "group:allNonMajor"],
+	"minimumReleaseAge": "1 day",
 	"packageRules": [
 		{
 			"description": "The @xcwds packages move together: a partial bump can load two kernels (xcwds/xcwds#53).",
 			"matchPackageNames": ["@xcwds/**"],
 			"groupName": "@xcwds packages"
+		},
+		{
+			"description": "pnpm-workspace.yaml exempts our own framework from pnpm's release-age check, so new @xcwds releases can be offered right away.",
+			"matchPackageNames": ["@xcwds/**"],
+			"minimumReleaseAge": null
 		}
 	]
 }
