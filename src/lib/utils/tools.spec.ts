@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import type { App } from '@xcwds/core';
 import type { TestApp } from '@xcwds/testing';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
@@ -52,6 +53,12 @@ describe('apps (#223)', () => {
 		for (const tool of allTools()) expect(ids, tool.path).toContain(tool.app);
 		expect(APPS.filter((a) => a.default === false)).toEqual([]);
 		expect(APPS.find((a) => a.id === 'self-control')?.private).toBe(true);
+	});
+
+	it('each hide their marked items before first paint (app.css)', () => {
+		const css = readFileSync(new URL('../../app.css', import.meta.url), 'utf8');
+		for (const { id } of APPS)
+			expect(css, id).toContain(`:root[data-apps-off~='${id}'] [data-app='${id}']`);
 	});
 
 	it("hide an app's tools while it's off, and show them again", () => {
