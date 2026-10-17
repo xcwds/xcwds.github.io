@@ -154,6 +154,7 @@ for (const [name, viewport] of [
 					await p.getByRole('button', { name: 'Add a habit' }).click();
 				}
 			],
+			['/utils/camera', (p) => p.getByText('What stays private').click()],
 			['/utils/self-control/sos'],
 			['/utils/self-control/why'],
 			['/utils/self-control/seesaw'],

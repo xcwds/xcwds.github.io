@@ -29,6 +29,13 @@ export const APPS: AppGroup[] = [
 		blurb: 'Keep track of when you last did things.',
 		groups: ['last-done']
 	},
+	{
+		id: 'camera',
+		name: 'Camera',
+		emoji: '📷',
+		blurb: 'Photos that stay on this device.',
+		groups: ['photos']
+	},
 	// Private and discreet, like its tool (#146).
 	{
 		id: 'self-control',

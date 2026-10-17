@@ -25,7 +25,8 @@ describe('tools', () => {
 			'/utils/url-sanitizer',
 			'/utils/weightlifting',
 			'/utils/self-control',
-			'/utils/last-done'
+			'/utils/last-done',
+			'/utils/camera'
 		]);
 	});
 
