@@ -134,7 +134,7 @@
 						{/if}
 					</p>
 					<p class="text-base break-all" data-testid="qr-link">{cleaned.link}</p>
-					{#if cleaned.link !== found.text}
+					{#if cleaned.removed || cleaned.via}
 						<details class="text-sm">
 							<summary class="flex min-h-11 cursor-pointer items-center">What the code said</summary
 							>

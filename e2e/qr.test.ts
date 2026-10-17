@@ -98,6 +98,15 @@ test('makes a code, and reads it back from an image', async ({ page }) => {
 		.setInputFiles({ name: 'code.png', mimeType: 'image/png', buffer: await shot() });
 	await expect(page.getByTestId('qr-text')).toHaveText('Hello from xcwds ✓');
 
+	// A clean link: nothing removed, so nothing more to show (even though the URL adds a slash).
+	await input.fill('https://example.com');
+	await page
+		.getByTestId('qr-file')
+		.setInputFiles({ name: 'link.png', mimeType: 'image/png', buffer: await shot() });
+	await expect(page.getByTestId('qr-link')).toHaveText('https://example.com/');
+	await expect(page.getByTestId('qr-result')).toContainText('No trackers found.');
+	await expect(page.getByText('What the code said')).toHaveCount(0);
+
 	// Wi-Fi: the network's name, and its password only to copy.
 	await input.fill('WIFI:S:Home net;T:WPA;P:pa55word;;');
 	await page
