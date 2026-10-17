@@ -56,3 +56,26 @@ test('says what stays private, and stays out of Recently used', async ({ page })
 	await gotoHydrated(page, '/');
 	await expect(page.getByTestId('recent').getByRole('link')).toHaveText([/Coffee Timer$/]);
 });
+
+test('Settings lists photos under Camera, and clearing it removes them', async ({ page }) => {
+	page.on('dialog', (dialog) => dialog.accept());
+	await gotoHydrated(page, '/utils/camera');
+	await page.getByRole('button', { name: 'Turn on camera' }).click();
+	await page.getByRole('button', { name: 'Take photo' }).click();
+	await expect(page.getByRole('list', { name: 'Photos' }).getByRole('button')).toHaveCount(1);
+
+	await gotoHydrated(page, '/settings');
+	// The group is labelled "Camera" (its Clear button says so) and counts each photo's file.
+	const clear = page.getByRole('button', { name: 'Clear Camera' });
+	const group = page.getByRole('listitem').filter({ has: clear });
+	await expect(group.getByTestId('files-note')).toHaveText([
+		/^Photos: 1 file, /,
+		/^Photos \(thumbnails\): 1 file, /
+	]);
+	await expect(group.getByTestId('backup-note')).toHaveText('Not in backups');
+	await clear.click();
+	await expect(group.getByTestId('files-note')).toHaveCount(0);
+
+	await gotoHydrated(page, '/utils/camera');
+	await expect(page.getByTestId('photos')).toContainText('No photos yet.');
+});
