@@ -41,6 +41,14 @@ export const APPS: AppGroup[] = [
 		blurb: 'Photos that stay on this device.',
 		groups: ['photos']
 	},
+	{
+		id: 'blocks',
+		name: 'Your apps',
+		emoji: '🧩',
+		blurb: 'Build your own checklists, counters and logs.',
+		routes: ['/my-apps'],
+		groups: ['blocks', 'blocks-private']
+	},
 	// Private and discreet, like its tool (#146).
 	{
 		id: 'self-control',

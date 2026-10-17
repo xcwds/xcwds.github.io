@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { appIsOn } from '$lib/apps.svelte';
 	import { shortcuts, togglePin } from '$lib/home.svelte';
 	import { tools } from '$lib/utils/tools';
 </script>
@@ -16,6 +17,23 @@
 			>Choose apps</a
 		> to show only the tools you use.
 	</p>
+	{#if appIsOn('blocks')}
+		<!-- Your apps (#224): the ones you've made show in the list below, too. -->
+		<a
+			href={resolve('/my-apps')}
+			data-app="blocks"
+			class="flex items-center gap-3 self-start rounded-md bg-white/70 px-4 py-3 hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800"
+			data-testid="your-apps-link"
+		>
+			<span aria-hidden="true" class="text-2xl">🧩</span>
+			<span class="flex flex-col">
+				<span class="font-medium text-gray-900 dark:text-gray-100">Your apps</span>
+				<span class="text-sm text-gray-600 dark:text-gray-400"
+					>Build your own checklists, counters and logs, or start from a template.</span
+				>
+			</span>
+		</a>
+	{/if}
 	<ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
 		{#each tools() as tool (tool.path)}
 			{@const pinned = shortcuts.pins.includes(tool.path)}

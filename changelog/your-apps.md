@@ -1,0 +1,2 @@
+- Build your own apps: checklists, counters and logs, with templates for chores, water, mood and more. Find them under Utils → Your apps.
+- Share how an app you built is set up as a link or a file. What you've saved in it stays on your device.

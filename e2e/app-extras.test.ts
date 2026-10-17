@@ -170,6 +170,17 @@ for (const [name, viewport] of [
 				}
 			],
 			['/utils/self-control/review'],
+			['/my-apps'],
+			[
+				'/my-apps',
+				// A log from a template (it opens at /my-apps/app#<id>).
+				async (p) => {
+					await p.getByRole('button', { name: /^Add Mood/ }).click();
+					await p.getByTestId('blocks-app').waitFor();
+				}
+			],
+			['/my-apps/edit', (p) => p.getByRole('button', { name: /^Add log/ }).click()],
+			['/my-apps/import'],
 			[
 				'/utils/last-done',
 				async (p) => {
