@@ -1,5 +1,7 @@
 import { defineConfig } from '@xcwds/core';
 import camera from '@xcwds/plugin-camera';
+import blocks from '@xcwds/plugin-blocks';
+import type { AppDefinition } from '@xcwds/plugin-blocks/model';
 import changelog from '@xcwds/plugin-changelog';
 import install from '@xcwds/plugin-install';
 import qr from '@xcwds/plugin-qr';
@@ -25,6 +27,7 @@ import urlSanitizer from 'xcwds-app-url-sanitizer';
 import weightlifting from 'xcwds-app-weightlifting';
 import { APPS } from './src/lib/apps';
 import { BRAND, TAGLINE } from './src/lib/brand';
+import myAppsTemplates from './src/lib/my-apps/templates.json';
 import { loadChangelog } from './src/lib/server/changelog';
 
 export default defineConfig({
@@ -73,11 +76,17 @@ export default defineConfig({
 		lastDone(),
 		cameraTool(),
 		recipes(),
+		// Your apps (#224): apps people build from blocks, each one a tool in the `blocks` app.
+		blocks({ path: '/my-apps', app: 'blocks', templates: myAppsTemplates as AppDefinition[] }),
 		// The camera as `app.camera` (off while hidden) and photos kept in the app as `app.photos`.
 		camera(),
 		// QR codes made and read on the device; the QR tool scans through `app.camera`.
 		qr(),
-		share({ target: '/utils/url-sanitizer', exclude: ['/settings'] }),
+		share({
+			target: '/utils/url-sanitizer',
+			// A link to one of your apps opens nothing on another device; Share design shares one.
+			exclude: ['/settings', '/my-apps']
+		}),
 		settings({
 			source: 'https://github.com/xcwds/xcwds.github.io',
 			backupName: 'xcwds-backup',
@@ -93,6 +102,8 @@ export default defineConfig({
 				'workout-history': 'Workout History',
 				'self-control': 'Self-Control',
 				'last-done': 'Last done',
+				blocks: 'Your apps',
+				'blocks-private': 'Your private apps',
 				photos: 'Camera',
 				settings: 'Settings',
 				tools: 'Home shortcuts',

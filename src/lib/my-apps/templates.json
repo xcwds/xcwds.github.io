@@ -1,0 +1,212 @@
+[
+	{
+		"format": 1,
+		"id": "chores",
+		"name": "Chores",
+		"emoji": "🧹",
+		"private": false,
+		"blocks": [
+			{
+				"id": "week",
+				"type": "checklist",
+				"label": "This week",
+				"items": [
+					{
+						"id": "bathroom",
+						"label": "Clean the bathroom",
+						"repeat": {
+							"repeat": "weekly",
+							"weekdays": [6]
+						}
+					},
+					{
+						"id": "floors",
+						"label": "Vacuum and mop the floors",
+						"repeat": {
+							"repeat": "weekly",
+							"weekdays": [6]
+						}
+					},
+					{
+						"id": "laundry",
+						"label": "Laundry",
+						"repeat": {
+							"repeat": "weekly",
+							"weekdays": [0]
+						}
+					},
+					{
+						"id": "trash",
+						"label": "Take out the trash",
+						"repeat": {
+							"repeat": "weekly",
+							"weekdays": [2]
+						}
+					}
+				]
+			}
+		]
+	},
+	{
+		"format": 1,
+		"id": "water",
+		"name": "Water",
+		"emoji": "💧",
+		"private": false,
+		"blocks": [
+			{
+				"id": "glasses",
+				"type": "counter",
+				"label": "Glasses today",
+				"goal": 8,
+				"unit": "glasses",
+				"reset": "daily"
+			}
+		]
+	},
+	{
+		"format": 1,
+		"id": "mood",
+		"name": "Mood",
+		"emoji": "🙂",
+		"private": false,
+		"blocks": [
+			{
+				"id": "check-ins",
+				"type": "log",
+				"label": "Check-ins",
+				"fields": [
+					{
+						"id": "mood",
+						"type": "scale",
+						"label": "Mood",
+						"max": 5,
+						"low": "Low",
+						"high": "Great"
+					},
+					{
+						"id": "note",
+						"type": "text",
+						"label": "Note"
+					}
+				]
+			}
+		]
+	},
+	{
+		"format": 1,
+		"id": "weight",
+		"name": "Weight",
+		"emoji": "⚖️",
+		"private": false,
+		"blocks": [
+			{
+				"id": "weigh-ins",
+				"type": "log",
+				"label": "Weigh-ins",
+				"fields": [
+					{
+						"id": "weight",
+						"type": "number",
+						"label": "Weight",
+						"unit": "lb",
+						"min": 0
+					}
+				]
+			}
+		]
+	},
+	{
+		"format": 1,
+		"id": "medication",
+		"name": "Medication",
+		"emoji": "💊",
+		"private": true,
+		"blocks": [
+			{
+				"id": "doses",
+				"type": "log",
+				"label": "Doses",
+				"fields": [
+					{
+						"id": "name",
+						"type": "choice",
+						"label": "Name",
+						"options": [
+							{
+								"id": "first",
+								"label": "First"
+							},
+							{
+								"id": "second",
+								"label": "Second"
+							}
+						]
+					},
+					{
+						"id": "taken",
+						"type": "yesno",
+						"label": "Taken"
+					},
+					{
+						"id": "time",
+						"type": "time",
+						"label": "Time"
+					}
+				]
+			}
+		]
+	},
+	{
+		"format": 1,
+		"id": "symptoms",
+		"name": "Symptoms",
+		"emoji": "📝",
+		"private": true,
+		"blocks": [
+			{
+				"id": "log",
+				"type": "log",
+				"label": "Log",
+				"fields": [
+					{
+						"id": "symptom",
+						"type": "choice",
+						"label": "Symptom",
+						"options": [
+							{
+								"id": "headache",
+								"label": "Headache"
+							},
+							{
+								"id": "pain",
+								"label": "Pain"
+							},
+							{
+								"id": "tired",
+								"label": "Tired"
+							},
+							{
+								"id": "other",
+								"label": "Other"
+							}
+						]
+					},
+					{
+						"id": "severity",
+						"type": "scale",
+						"label": "Severity",
+						"max": 10,
+						"low": "Mild",
+						"high": "Severe"
+					},
+					{
+						"id": "note",
+						"type": "text",
+						"label": "Note"
+					}
+				]
+			}
+		]
+	}
+]

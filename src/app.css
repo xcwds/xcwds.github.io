@@ -14,6 +14,7 @@
 @import '@xcwds/plugin-changelog/styles.css';
 @import '@xcwds/plugin-camera/styles.css';
 @import '@xcwds/plugin-qr/styles.css';
+@import '@xcwds/plugin-blocks/styles.css';
 
 /* Apps that are off (#223): @xcwds/plugin-tools lists them in `data-apps-off` on <html> before
    first paint, so prerendered tool lists marked `data-app` don't flash their tools. */
@@ -22,6 +23,7 @@
 :root[data-apps-off~='links'] [data-app='links'],
 :root[data-apps-off~='housework'] [data-app='housework'],
 :root[data-apps-off~='camera'] [data-app='camera'],
+:root[data-apps-off~='blocks'] [data-app='blocks'],
 :root[data-apps-off~='self-control'] [data-app='self-control'] {
 	display: none !important;
 }

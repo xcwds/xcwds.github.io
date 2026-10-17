@@ -117,7 +117,10 @@ test.describe('with the sidebar', () => {
 		'/utils/self-control/cues',
 		'/utils/self-control/environment',
 		'/utils/self-control/review',
-		'/utils/last-done'
+		'/utils/last-done',
+		'/my-apps',
+		'/my-apps/edit',
+		'/my-apps/import'
 	]) {
 		test(`the header lines up with the page on ${path}`, async ({ page }) => {
 			await gotoHydrated(page, path);
@@ -166,7 +169,10 @@ for (const [name, viewport] of Object.entries(viewports)) {
 			'/guide/doneness-and-food-safety',
 			'/guide/beef',
 			'/settings',
-			'/utils/weightlifting'
+			'/utils/weightlifting',
+			'/my-apps',
+			'/my-apps/edit',
+			'/my-apps/import'
 		]) {
 			await gotoHydrated(page, path);
 			const overflow = await page.evaluate(
