@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { useApp } from '@xcwds/sveltekit';
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 	import { toast } from '$lib/toast.svelte';
 	import {
 		buildLink,
@@ -11,6 +12,7 @@
 		unwrapRedirect,
 		type Param
 	} from '$lib/utils/url';
+	import { qrFragment } from '$lib/utils/qr';
 
 	let input = $state('');
 	let url = $state<URL | null>(null);
@@ -163,6 +165,11 @@
 							class="{button} flex items-center justify-center text-lg">Open</a
 						>
 					</div>
+					<!-- In the fragment, so the link never reaches a server (#211). -->
+					<a
+						href="{resolve('/utils/qr')}{qrFragment(cleaned)}"
+						class="{button} flex min-h-11 items-center justify-center">Show as QR code</a
+					>
 					{#if trackingKept}
 						<p class="text-sm text-amber-800 dark:text-amber-300">
 							{trackingKept} known tracking {trackingKept === 1 ? 'param is' : 'params are'} still in

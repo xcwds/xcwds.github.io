@@ -2,6 +2,7 @@ import { defineConfig } from '@xcwds/core';
 import camera from '@xcwds/plugin-camera';
 import changelog from '@xcwds/plugin-changelog';
 import install from '@xcwds/plugin-install';
+import qr from '@xcwds/plugin-qr';
 import offline from '@xcwds/plugin-offline';
 import settings from '@xcwds/plugin-settings';
 import share from '@xcwds/plugin-share';
@@ -17,6 +18,7 @@ import cameraTool from 'xcwds-app-camera';
 import lastDone from 'xcwds-app-last-done';
 import ovenTime from 'xcwds-app-oven-time';
 import pizzaDough from 'xcwds-app-pizza-dough';
+import qrTool from 'xcwds-app-qr';
 import recipes from 'xcwds-app-recipes';
 import selfControl from 'xcwds-app-self-control';
 import urlSanitizer from 'xcwds-app-url-sanitizer';
@@ -30,7 +32,7 @@ export default defineConfig({
 		name: BRAND,
 		tagline: TAGLINE,
 		description:
-			'Everyday tools that never phone home: recipes, kitchen and gym tools, and a URL sanitizer.',
+			'Everyday tools that never phone home: recipes, kitchen and gym tools, a URL sanitizer and QR codes.',
 		icon: 'icon.svg',
 		themeColor: { light: '#bfdbfe', dark: '#030712' },
 		backgroundColor: '#bfdbfe'
@@ -65,6 +67,7 @@ export default defineConfig({
 		cookingTimer(),
 		ovenTime(),
 		urlSanitizer(),
+		qrTool(),
 		weightlifting(),
 		selfControl(),
 		lastDone(),
@@ -72,6 +75,8 @@ export default defineConfig({
 		recipes(),
 		// The camera as `app.camera` (off while hidden) and photos kept in the app as `app.photos`.
 		camera(),
+		// QR codes made and read on the device; the QR tool scans through `app.camera`.
+		qr(),
 		share({ target: '/utils/url-sanitizer', exclude: ['/settings'] }),
 		settings({
 			source: 'https://github.com/xcwds/xcwds.github.io',

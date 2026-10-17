@@ -21,7 +21,12 @@ export const APPS: AppGroup[] = [
 		blurb: 'Plate math and a workout log.',
 		groups: ['weightlifting', 'workout-history']
 	},
-	{ id: 'links', name: 'Links', emoji: '🔗', blurb: 'Clean links before you share them.' },
+	{
+		id: 'links',
+		name: 'Links',
+		emoji: '🔗',
+		blurb: 'Clean links before you share them, and scan or show them as QR codes.'
+	},
 	{
 		id: 'housework',
 		name: 'Housework',
