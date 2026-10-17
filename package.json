@@ -57,7 +57,7 @@
 		"@xcwds/plugin-update": "^0.4.0",
 		"@xcwds/plugin-install": "^0.4.0",
 		"@xcwds/plugin-settings": "^0.4.0",
-		"@xcwds/plugin-tools": "^0.4.0",
+		"@xcwds/plugin-tools": "^0.5.0",
 		"@xcwds/plugin-timers": "^0.4.0",
 		"@xcwds/plugin-share": "^0.4.0",
 		"@xcwds/plugin-changelog": "^0.4.0",

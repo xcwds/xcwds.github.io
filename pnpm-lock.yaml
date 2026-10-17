@@ -206,8 +206,8 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0(1e3aa04b153848d8f79dcc7d6054eb6e)
       '@xcwds/plugin-tools':
-        specifier: ^0.4.0
-        version: 0.4.0(1e3aa04b153848d8f79dcc7d6054eb6e)
+        specifier: ^0.5.0
+        version: 0.5.0(1e3aa04b153848d8f79dcc7d6054eb6e)
       '@xcwds/plugin-update':
         specifier: ^0.4.0
         version: 0.4.0(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))
@@ -1194,8 +1194,8 @@ packages:
       '@xcwds/plugin-shell':
         optional: true
 
-  '@xcwds/plugin-tools@0.4.0':
-    resolution: {integrity: sha512-LMIfeBPoZOCqvnikoimQTwKSsPN4/fGt5v4udpR4ptSrtqwjVcrHM5EaNRkaREAgu9MZlIJYHguHbu1Ct3GuyQ==}
+  '@xcwds/plugin-tools@0.5.0':
+    resolution: {integrity: sha512-OU/k5EntqaaDL60r278ijGJT79sF3Hzxhr2DnfxIleGP7FA1o0rrKcJPEVB7/BDoOvFii8OQtm9DCuS3BgWloA==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@sveltejs/kit': ^2.20.0
@@ -2704,7 +2704,7 @@ snapshots:
     optionalDependencies:
       '@xcwds/plugin-shell': 0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))
 
-  '@xcwds/plugin-tools@0.4.0(1e3aa04b153848d8f79dcc7d6054eb6e)':
+  '@xcwds/plugin-tools@0.5.0(1e3aa04b153848d8f79dcc7d6054eb6e)':
     dependencies:
       '@sveltejs/kit': 2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0))
       '@xcwds/core': 0.4.0(@resvg/resvg-js@2.6.2)
