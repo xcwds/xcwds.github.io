@@ -21,13 +21,25 @@ export const APPS: AppGroup[] = [
 		blurb: 'Plate math and a workout log.',
 		groups: ['weightlifting', 'workout-history']
 	},
-	{ id: 'links', name: 'Links', emoji: '🔗', blurb: 'Clean links before you share them.' },
+	{
+		id: 'links',
+		name: 'Links',
+		emoji: '🔗',
+		blurb: 'Clean links before you share them, and scan or show them as QR codes.'
+	},
 	{
 		id: 'housework',
 		name: 'Housework',
 		emoji: '🧹',
 		blurb: 'Keep track of when you last did things.',
 		groups: ['last-done']
+	},
+	{
+		id: 'camera',
+		name: 'Camera',
+		emoji: '📷',
+		blurb: 'Photos that stay on this device.',
+		groups: ['photos']
 	},
 	// Private and discreet, like its tool (#146).
 	{

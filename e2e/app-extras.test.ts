@@ -134,6 +134,7 @@ for (const [name, viewport] of [
 				'/utils/url-sanitizer',
 				(p) => p.getByLabel('Paste a link').fill('https://a.com/?utm_source=x&b=1')
 			],
+			['/utils/qr', (p) => p.getByLabel('Text or link').fill('https://example.com')],
 			['/utils/weightlifting'],
 			[
 				'/utils/weightlifting',
@@ -154,6 +155,7 @@ for (const [name, viewport] of [
 					await p.getByRole('button', { name: 'Add a habit' }).click();
 				}
 			],
+			['/utils/camera', (p) => p.getByText('What stays private').click()],
 			['/utils/self-control/sos'],
 			['/utils/self-control/why'],
 			['/utils/self-control/seesaw'],

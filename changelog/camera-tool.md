@@ -1,0 +1,1 @@
+- New in Utils: Camera, for photos you'd rather keep out of your gallery and cloud backup. Photos stay in the app with no location or device details until you share one.

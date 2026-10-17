@@ -1,0 +1,2 @@
+- New in Utils: QR codes. Scan a code with the camera or from a screenshot without a scanner app logging it, and see where a link really goes, with its trackers removed, before you open it. You can also show any text or link as a QR code and download it.
+- URL Sanitizer has a Show as QR code button, to move a cleaned link to another phone.

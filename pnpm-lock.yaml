@@ -175,6 +175,9 @@ importers:
       '@xcwds/core':
         specifier: ^0.4.0
         version: 0.4.0(@resvg/resvg-js@2.6.2)
+      '@xcwds/plugin-camera':
+        specifier: ^0.1.0
+        version: 0.1.0(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))
       '@xcwds/plugin-changelog':
         specifier: ^0.4.0
         version: 0.4.0(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))
@@ -184,6 +187,9 @@ importers:
       '@xcwds/plugin-offline':
         specifier: ^0.4.0
         version: 0.4.0(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))
+      '@xcwds/plugin-qr':
+        specifier: ^0.1.0
+        version: 0.1.0(10dd23b823b892f180eb21e9276ef100)
       '@xcwds/plugin-settings':
         specifier: ^0.4.0
         version: 0.4.0(1e3aa04b153848d8f79dcc7d6054eb6e)
@@ -214,6 +220,9 @@ importers:
       xcwds-app:
         specifier: link:src/plugins/app
         version: link:src/plugins/app
+      xcwds-app-camera:
+        specifier: link:src/plugins/camera
+        version: link:src/plugins/camera
       xcwds-app-coffee-timer:
         specifier: link:src/plugins/coffee-timer
         version: link:src/plugins/coffee-timer
@@ -229,6 +238,9 @@ importers:
       xcwds-app-pizza-dough:
         specifier: link:src/plugins/pizza-dough
         version: link:src/plugins/pizza-dough
+      xcwds-app-qr:
+        specifier: link:src/plugins/qr
+        version: link:src/plugins/qr
       xcwds-app-recipes:
         specifier: link:src/plugins/recipes
         version: link:src/plugins/recipes
@@ -1085,6 +1097,14 @@ packages:
       '@resvg/resvg-js':
         optional: true
 
+  '@xcwds/plugin-camera@0.1.0':
+    resolution: {integrity: sha512-V/UEY9Yay5yO6bD/UfiWZ90YhfKhw2KuP1VCv4aP4t/swW/ny+LHLToXejPCztEXPNkedagJ7O3ZU1GzWSeJPQ==}
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@xcwds/core': ^0.4.0
+      '@xcwds/sveltekit': ^0.4.0
+      svelte: ^5.0.0
+
   '@xcwds/plugin-changelog@0.4.0':
     resolution: {integrity: sha512-wzTERuHZE/HktFpbrcxD1TpVrkJneEDevaq/xFiyV1ukSmL4eywXExaHI9iTSzWCTx6Ob/z3kvx5bPQtke+aiw==}
     engines: {node: '>=22.18'}
@@ -1106,6 +1126,15 @@ packages:
     engines: {node: '>=22.18'}
     peerDependencies:
       '@xcwds/core': ^0.4.0
+      '@xcwds/sveltekit': ^0.4.0
+      svelte: ^5.0.0
+
+  '@xcwds/plugin-qr@0.1.0':
+    resolution: {integrity: sha512-0hDyaJp9VYaP9KZcwHp+z9RsjpJw2A7Hkkp9FnZyGsHt6kdi+b+tPZ0Gxec5HiMA4rlq1VuWUs8iEdQ4IwrMkQ==}
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@xcwds/core': ^0.4.0
+      '@xcwds/plugin-camera': ^0.1.0
       '@xcwds/sveltekit': ^0.4.0
       svelte: ^5.0.0
 
@@ -1493,6 +1522,9 @@ packages:
 
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
+
+  jsqr@1.4.0:
+    resolution: {integrity: sha512-dxLob7q65Xg2DvstYkRpkYtmKm2sPJ9oFhrhmudT1dZvNFFTlroai3AWSpLey/w5vMcLBXRgOJsbXpdN9HzU/A==}
 
   keyv@5.6.0:
     resolution: {integrity: sha512-CYDD3SOtsHtyXeEORYRx2qBtpDJFjRTGXUtmNEMGyzYOKj1TE3tycdlho7kA1Ufx9OYWZzg52QFBGALTirzDSw==}
@@ -2600,6 +2632,12 @@ snapshots:
     optionalDependencies:
       '@resvg/resvg-js': 2.6.2
 
+  '@xcwds/plugin-camera@0.1.0(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))':
+    dependencies:
+      '@xcwds/core': 0.4.0(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': 0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0))
+      svelte: 5.57.2(@typescript-eslint/types@8.71.2)
+
   '@xcwds/plugin-changelog@0.4.0(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))':
     dependencies:
       '@xcwds/core': 0.4.0(@resvg/resvg-js@2.6.2)
@@ -2616,6 +2654,14 @@ snapshots:
     dependencies:
       '@xcwds/core': 0.4.0(@resvg/resvg-js@2.6.2)
       '@xcwds/sveltekit': 0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0))
+      svelte: 5.57.2(@typescript-eslint/types@8.71.2)
+
+  '@xcwds/plugin-qr@0.1.0(10dd23b823b892f180eb21e9276ef100)':
+    dependencies:
+      '@xcwds/core': 0.4.0(@resvg/resvg-js@2.6.2)
+      '@xcwds/plugin-camera': 0.1.0(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))
+      '@xcwds/sveltekit': 0.4.0(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(typescript@5.9.3)(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0)))(@xcwds/core@0.4.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.71.2))(vite@7.3.7(@types/node@24.19.2)(jiti@2.7.0)(lightningcss@1.32.0))
+      jsqr: 1.4.0
       svelte: 5.57.2(@typescript-eslint/types@8.71.2)
 
   '@xcwds/plugin-settings@0.4.0(1e3aa04b153848d8f79dcc7d6054eb6e)':
@@ -2982,6 +3028,8 @@ snapshots:
   json-schema-traverse@0.4.1: {}
 
   json-stable-stringify-without-jsonify@1.0.1: {}
+
+  jsqr@1.4.0: {}
 
   keyv@5.6.0:
     dependencies:
