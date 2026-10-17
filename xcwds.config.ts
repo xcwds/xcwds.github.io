@@ -1,4 +1,5 @@
 import { defineConfig } from '@xcwds/core';
+import camera from '@xcwds/plugin-camera';
 import changelog from '@xcwds/plugin-changelog';
 import install from '@xcwds/plugin-install';
 import offline from '@xcwds/plugin-offline';
@@ -12,6 +13,7 @@ import update from '@xcwds/plugin-update';
 import coffeeTimer from 'xcwds-app-coffee-timer';
 import cookingTimer from 'xcwds-app-cooking-timer';
 import app from 'xcwds-app';
+import cameraTool from 'xcwds-app-camera';
 import lastDone from 'xcwds-app-last-done';
 import ovenTime from 'xcwds-app-oven-time';
 import pizzaDough from 'xcwds-app-pizza-dough';
@@ -66,7 +68,10 @@ export default defineConfig({
 		weightlifting(),
 		selfControl(),
 		lastDone(),
+		cameraTool(),
 		recipes(),
+		// The camera as `app.camera` (off while hidden) and photos kept in the app as `app.photos`.
+		camera(),
 		share({ target: '/utils/url-sanitizer', exclude: ['/settings'] }),
 		settings({
 			source: 'https://github.com/xcwds/xcwds.github.io',
@@ -83,6 +88,7 @@ export default defineConfig({
 				'workout-history': 'Workout History',
 				'self-control': 'Self-Control',
 				'last-done': 'Last done',
+				photos: 'Camera',
 				settings: 'Settings',
 				tools: 'Home shortcuts',
 				changelog: "What's new"
