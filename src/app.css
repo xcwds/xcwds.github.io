@@ -13,6 +13,7 @@
 @import '@xcwds/plugin-settings/styles.css';
 @import '@xcwds/plugin-changelog/styles.css';
 @import '@xcwds/plugin-camera/styles.css';
+@import '@xcwds/plugin-qr/styles.css';
 
 /* Apps that are off (#223): @xcwds/plugin-tools lists them in `data-apps-off` on <html> before
    first paint, so prerendered tool lists marked `data-app` don't flash their tools. */

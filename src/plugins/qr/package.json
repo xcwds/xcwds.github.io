@@ -1,0 +1,11 @@
+{
+	"name": "xcwds-app-qr",
+	"version": "0.0.0",
+	"private": true,
+	"description": "QR codes: scan without tracking, see where a link really goes, and show any link as a code.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts"
+	}
+}
