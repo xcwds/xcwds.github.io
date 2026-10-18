@@ -4,13 +4,16 @@ import {
 	agoLabel,
 	average,
 	daysBetween,
+	dueEvent,
 	dueLabel,
+	eventFileName,
 	everyLabel,
 	fromInputs,
 	gaps,
 	timeInput,
 	median,
 	nameProblem,
+	parseCalendarAdded,
 	parseItems,
 	parseLog,
 	sortStatuses,
@@ -173,5 +176,39 @@ describe('status and order', () => {
 			now
 		).map((s) => s.item.id);
 		expect(order).toEqual(['later', 'late', 'old', 'recent', 'never']);
+	});
+});
+
+describe('calendar (#219)', () => {
+	const item: LastDoneItem = {
+		id: 'vac',
+		name: 'Vacuum the basement',
+		every: { n: 2, unit: 'weeks' }
+	};
+	const log: LastDoneEntry[] = [
+		{ id: 'e1', itemId: 'vac', at: new Date(2026, 9, 7, 18).toISOString() }
+	];
+
+	it('makes an all-day event on the due date, with a stable UID', () => {
+		const status = statusOf(item, log, new Date(2026, 9, 10));
+		const event = dueEvent(status, status.due!);
+		expect(event.uid).toBe('vac-20261021@xcwds.com');
+		expect(event.summary).toBe('Vacuum the basement');
+		expect(event.description).toMatch(/^Last done .+\.$/);
+		expect(dueEvent(statusOf(item, log, new Date(2026, 9, 12)), status.due!).uid).toBe(event.uid);
+	});
+
+	it('names the file after the thing', () => {
+		expect(eventFileName('Vacuum the basement')).toBe('Vacuum the basement.ics');
+		expect(eventFileName('Filters: A/C  "upstairs"')).toBe('Filters A C upstairs.ics');
+		expect(eventFileName('///')).toBe('event.ics');
+	});
+
+	it('keeps valid calendar marks and drops the rest', () => {
+		expect(parseCalendarAdded({ vac: '20261021', bad: '2026-10-21', x: 3 })).toEqual({
+			vac: '20261021'
+		});
+		expect(parseCalendarAdded([])).toBeUndefined();
+		expect(parseCalendarAdded('x')).toBeUndefined();
 	});
 });

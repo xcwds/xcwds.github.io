@@ -7,7 +7,11 @@ import { tool } from './tool.js';
 export default definePlugin(
 	(app) => {
 		app.tools?.add(tool);
-		registerEntries(app.storage, [entries.lastDoneItems, entries.lastDoneLog]);
+		registerEntries(app.storage, [
+			entries.lastDoneItems,
+			entries.lastDoneLog,
+			entries.lastDoneCalendar
+		]);
 	},
 	{ name: NAME, namespace: '', dependencies: ['@xcwds/plugin-tools'], network: false }
 );

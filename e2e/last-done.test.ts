@@ -178,3 +178,59 @@ test('things survive a reload and go into backups', async ({ page }) => {
 	expect(backup.data['app:last-done:log']).toHaveLength(1);
 	await expect(page.getByRole('button', { name: 'Clear Last done' })).toBeEnabled();
 });
+
+test('adds the next due date to your calendar, and offers the new one after Done (#219)', async ({
+	page
+}) => {
+	// The download path: no file sharing in this browser.
+	await page.addInitScript(() => {
+		Object.defineProperty(navigator, 'canShare', { value: () => false });
+	});
+	await gotoHydrated(page, '/utils/last-done');
+	await add(page, 'Never done');
+	await thing(page, 'Never done').getByRole('link', { name: 'Never done' }).click();
+	// No due date yet: nothing to add.
+	await expect(page.getByTestId('since')).toHaveText('Not done yet');
+	await expect(page.getByTestId('add-to-calendar')).toHaveCount(0);
+
+	await page.getByRole('link', { name: 'All things' }).click();
+	await add(page, 'Vacuum, basement; stairs', { n: '2', unit: 'weeks' });
+	await doneEarlier(page, 'Vacuum, basement; stairs', 4);
+	await thing(page, 'Vacuum, basement; stairs')
+		.getByRole('link', { name: 'Vacuum, basement; stairs' })
+		.click();
+	await expect(page.getByText('Due in 10 days')).toBeVisible();
+
+	const due = new Date();
+	due.setDate(due.getDate() + 10);
+	const day = [due.getFullYear(), due.getMonth() + 1, due.getDate()]
+		.map((n, i) => String(n).padStart(i ? 2 : 4, '0'))
+		.join('');
+	const download = page.waitForEvent('download');
+	await page.getByTestId('add-to-calendar').click();
+	const file = await download;
+	expect(file.suggestedFilename()).toBe('Vacuum, basement; stairs.ics');
+	const ics = await readFile((await file.path())!, 'utf8');
+	const lines = ics.replace(/\r\n /g, '').split('\r\n');
+	expect(lines.filter((l) => l === 'BEGIN:VEVENT')).toHaveLength(1);
+	expect(lines).toContain(`DTSTART;VALUE=DATE:${day}`);
+	expect(lines).toContain('SUMMARY:Vacuum\\, basement\\; stairs');
+	expect(lines).toContain('TRIGGER:PT9H');
+	expect(lines.find((l) => l.startsWith('UID:'))).toMatch(new RegExp(`-${day}@xcwds\\.com$`));
+	await expect(page.getByTestId('toast').filter({ hasText: 'Downloaded' })).toBeVisible();
+
+	// Done today moves the due date: the new one is offered, once.
+	await page.getByRole('button', { name: 'Done', exact: true }).click();
+	const offer = page.getByTestId('calendar-offer');
+	await expect(offer).toContainText('Next due in 14 days.');
+	const again = page.waitForEvent('download');
+	await offer.getByRole('button', { name: 'Add the new due date' }).click();
+	await again;
+	await expect(offer).toHaveCount(0);
+	// Remembered across a reload: Done today again doesn't move it, so nothing is offered.
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await page.getByRole('button', { name: 'Done', exact: true }).click();
+	await expect(page.getByTestId('undo-row')).toBeVisible();
+	await expect(offer).toHaveCount(0);
+});

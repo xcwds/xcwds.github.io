@@ -1,7 +1,8 @@
 <script lang="ts">
 	/**
 	 * Last done (#218): one card per thing with how long it's been, how often you usually do it
-	 * and when it's next due; a thing's page (`#<id>`) has its history and stats.
+	 * and when it's next due; a thing's page (`#<id>`) has its history and stats, and adds the
+	 * next due date to your calendar (#219).
 	 */
 	import { onMount, tick } from 'svelte';
 	import { afterNavigate, goto } from '$app/navigation';
@@ -10,16 +11,20 @@
 	import { slashToFocus } from '#lib/shortcuts.js';
 	import { entries, update } from '#lib/storage.js';
 	import { toast } from '#lib/toast.svelte.js';
+	import { calendarFile, icsDate } from '#lib/utils/ics.js';
 	import {
 		agoLabel,
 		average,
+		dueEvent,
 		dueLabel,
+		eventFileName,
 		everyLabel,
 		gaps,
 		median,
 		newId,
 		sortStatuses,
 		statusOf,
+		type CalendarAdded,
 		type LastDoneEntry,
 		type LastDoneItem,
 		type Status
@@ -31,6 +36,8 @@
 
 	let items = $state<LastDoneItem[]>([]);
 	let log = $state<LastDoneEntry[]>([]);
+	/** The due date (`YYYYMMDD`) last added to your calendar, per thing. */
+	let calendar = $state<CalendarAdded>({});
 	/** Ticks every minute (and when the page comes back), so "today" moves on at midnight. */
 	let now = $state(new Date());
 	/** The thing whose page is open (`#<id>`), if any. */
@@ -45,7 +52,13 @@
 	 * What can be undone: the last Done, or a history row you deleted. Shown as an Undo row
 	 * until the next change, with no timer, so it can't vanish before you reach it.
 	 */
-	let undo = $state<{ message: string; entry: LastDoneEntry; kind: 'logged' | 'deleted' }>();
+	let undo = $state<{
+		message: string;
+		entry: LastDoneEntry;
+		kind: 'logged' | 'deleted';
+		/** After a Done: the thing whose new due date the row offers to add to your calendar. */
+		calendar?: string;
+	}>();
 	let undoButton = $state<HTMLButtonElement | undefined>();
 
 	const savedItems = persist(
@@ -53,6 +66,12 @@
 		() => (items.length ? items : undefined),
 		(value) => (items = value),
 		{ cleared: () => (items = []) }
+	);
+	const savedCalendar = persist(
+		entries.lastDoneCalendar,
+		() => (Object.keys(calendar).length ? calendar : undefined),
+		(value) => (calendar = value),
+		{ cleared: () => (calendar = {}) }
 	);
 	const savedLog = persist(
 		entries.lastDoneLog,
@@ -75,6 +94,61 @@
 		items = result.value ?? [];
 		savedItems.markSaved();
 		return saveResult(entries.lastDoneItems, result.saved, { explicit: true });
+	}
+
+	/** Changes the calendar marks, starting from the latest saved ones. */
+	function changeCalendar(change: (latest: CalendarAdded) => CalendarAdded): boolean {
+		const result = update(
+			entries.lastDoneCalendar,
+			$state.snapshot(calendar),
+			(latest) => {
+				const next = change({ ...latest });
+				return Object.keys(next).length ? next : undefined;
+			},
+			{ unsaved: hasUnsavedChanges(entries.lastDoneCalendar) }
+		);
+		calendar = result.value ?? {};
+		savedCalendar.markSaved();
+		return saveResult(entries.lastDoneCalendar, result.saved);
+	}
+
+	/**
+	 * Shares the file with an app that takes it (Android lists the calendar) where the browser
+	 * can, else downloads it (iPhone and most computers open it with an Add sheet).
+	 */
+	async function deliver(file: File): Promise<'shared' | 'downloaded' | 'cancelled'> {
+		if (navigator.canShare?.({ files: [file] })) {
+			try {
+				await navigator.share({ files: [file], title: file.name });
+				return 'shared';
+			} catch (error) {
+				if (error instanceof DOMException && error.name === 'AbortError') return 'cancelled';
+				// Refused (no user gesture left, or the share target failed): download it instead.
+			}
+		}
+		const url = URL.createObjectURL(file);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = file.name;
+		document.body.append(link);
+		link.click();
+		link.remove();
+		setTimeout(() => URL.revokeObjectURL(url), 1000);
+		return 'downloaded';
+	}
+
+	/** Adds a thing's next due date to your calendar as an all-day event with a 9am alert. */
+	async function addToCalendar(s: Status) {
+		if (!s.due) return;
+		const due = s.due;
+		const file = new File([calendarFile(dueEvent(s, due))], eventFileName(s.item.name), {
+			type: 'text/calendar'
+		});
+		const how = await deliver(file);
+		if (how === 'cancelled') return;
+		if (undo?.calendar === s.item.id) undo = { ...undo, calendar: undefined };
+		changeCalendar((latest) => ({ ...latest, [s.item.id]: icsDate(due) }));
+		toast(how === 'shared' ? 'Sent to your calendar.' : `Downloaded ${file.name}.`);
 	}
 
 	/** Changes the history, starting from the latest saved log; returns whether it was saved. */
@@ -147,7 +221,15 @@
 		if (!changeLog((latest) => [...latest, entry])) return false;
 		earlier = undefined;
 		now = new Date();
-		void offerUndo({ message: `Logged ${item.name}.`, entry, kind: 'logged' });
+		// Its due date was in your calendar: offer the new one, once.
+		const due = statusOf(item, log, now).due;
+		const offer = calendar[item.id] && due && icsDate(due) !== calendar[item.id];
+		void offerUndo({
+			message: `Logged ${item.name}.`,
+			entry,
+			kind: 'logged',
+			...(offer ? { calendar: item.id } : {})
+		});
 		return true;
 	}
 
@@ -192,6 +274,11 @@
 			changeItems((latest) => latest.filter((i) => i.id !== item.id)) &&
 			changeLog((latest) => latest.filter((e) => e.itemId !== item.id));
 		if (!ok) return;
+		if (calendar[item.id])
+			changeCalendar((latest) => {
+				delete latest[item.id];
+				return latest;
+			});
 		toast(`Deleted ${item.name}.`);
 		void goto(resolve('/utils/last-done'));
 	}
@@ -235,6 +322,15 @@
 				>Undo</button
 			>
 		</div>
+		{@const offered = undo.calendar && statuses.find((s) => s.item.id === undo?.calendar)}
+		{#if offered && offered.due}
+			<div class="flex flex-wrap items-center gap-2 text-sm" data-testid="calendar-offer">
+				<span>Next due {dueLabel(offered.due, now)}.</span>
+				<button type="button" class={button} onclick={() => addToCalendar(offered)}
+					>Add the new due date</button
+				>
+			</div>
+		{/if}
 	{/if}
 {/snippet}
 
@@ -289,6 +385,14 @@
 					{#if s.item.every}· target {everyLabel(s.item.every)}{/if}
 				</p>
 				{@render dueLine(s)}
+				{#if s.due}
+					<button
+						type="button"
+						class="{button} self-start text-sm"
+						data-testid="add-to-calendar"
+						onclick={() => addToCalendar(s)}>Add to calendar</button
+					>
+				{/if}
 				{#if s.item.notes}
 					<p class="text-sm whitespace-pre-line text-gray-600 dark:text-gray-400">
 						{s.item.notes}
