@@ -119,6 +119,7 @@ test.describe('with the sidebar', () => {
 		'/utils/self-control/environment',
 		'/utils/self-control/review',
 		'/utils/last-done',
+		'/utils/photo-cleaner',
 		'/my-apps',
 		'/my-apps/edit',
 		'/my-apps/import'

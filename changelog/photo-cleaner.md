@@ -1,0 +1,1 @@
+- New in Utils: Photo Cleaner. Pick photos to see what they give away (GPS location, phone model, date taken) and share or download copies without it, optionally smaller. Everything stays on your device.

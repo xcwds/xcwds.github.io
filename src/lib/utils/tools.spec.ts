@@ -28,7 +28,8 @@ describe('tools', () => {
 			'/utils/weightlifting',
 			'/utils/self-control',
 			'/utils/last-done',
-			'/utils/camera'
+			'/utils/camera',
+			'/utils/photo-cleaner'
 		]);
 	});
 

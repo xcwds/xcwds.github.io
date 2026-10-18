@@ -241,6 +241,9 @@ importers:
       xcwds-app-oven-time:
         specifier: link:src/plugins/oven-time
         version: link:src/plugins/oven-time
+      xcwds-app-photo-cleaner:
+        specifier: link:src/plugins/photo-cleaner
+        version: link:src/plugins/photo-cleaner
       xcwds-app-pizza-dough:
         specifier: link:src/plugins/pizza-dough
         version: link:src/plugins/pizza-dough

@@ -74,6 +74,7 @@
 		"xcwds-app-last-done": "link:src/plugins/last-done",
 		"xcwds-app-microwave-time": "link:src/plugins/microwave-time",
 		"xcwds-app-oven-time": "link:src/plugins/oven-time",
+		"xcwds-app-photo-cleaner": "link:src/plugins/photo-cleaner",
 		"xcwds-app-pizza-dough": "link:src/plugins/pizza-dough",
 		"xcwds-app-qr": "link:src/plugins/qr",
 		"xcwds-app-recipes": "link:src/plugins/recipes",
