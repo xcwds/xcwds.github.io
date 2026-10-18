@@ -178,3 +178,101 @@ test('things survive a reload and go into backups', async ({ page }) => {
 	expect(backup.data['app:last-done:log']).toHaveLength(1);
 	await expect(page.getByRole('button', { name: 'Clear Last done' })).toBeEnabled();
 });
+
+test('adds the next due date to your calendar, and offers the new one after Done (#219)', async ({
+	page
+}) => {
+	// The download path: no file sharing in this browser.
+	await page.addInitScript(() => {
+		Object.defineProperty(navigator, 'canShare', { value: () => false });
+	});
+	await gotoHydrated(page, '/utils/last-done');
+	await add(page, 'Never done');
+	await thing(page, 'Never done').getByRole('link', { name: 'Never done' }).click();
+	// No due date yet: nothing to add.
+	await expect(page.getByTestId('since')).toHaveText('Not done yet');
+	await expect(page.getByTestId('add-to-calendar')).toHaveCount(0);
+
+	await page.getByRole('link', { name: 'All things' }).click();
+	await add(page, 'Vacuum, basement; stairs', { n: '2', unit: 'weeks' });
+	await doneEarlier(page, 'Vacuum, basement; stairs', 4);
+	await thing(page, 'Vacuum, basement; stairs')
+		.getByRole('link', { name: 'Vacuum, basement; stairs' })
+		.click();
+	await expect(page.getByText('Due in 10 days')).toBeVisible();
+
+	const due = new Date();
+	due.setDate(due.getDate() + 10);
+	const day = [due.getFullYear(), due.getMonth() + 1, due.getDate()]
+		.map((n, i) => String(n).padStart(i ? 2 : 4, '0'))
+		.join('');
+	const download = page.waitForEvent('download');
+	await page.getByTestId('add-to-calendar').click();
+	const file = await download;
+	expect(file.suggestedFilename()).toBe('Vacuum, basement; stairs.ics');
+	const ics = await readFile((await file.path())!, 'utf8');
+	const lines = ics.replace(/\r\n /g, '').split('\r\n');
+	expect(lines.filter((l) => l === 'BEGIN:VEVENT')).toHaveLength(1);
+	expect(lines).toContain(`DTSTART;VALUE=DATE:${day}`);
+	expect(lines).toContain('SUMMARY:Vacuum\\, basement\\; stairs');
+	expect(lines).toContain('TRIGGER:PT9H');
+	expect(lines.find((l) => l.startsWith('UID:'))).toMatch(new RegExp(`-${day}@xcwds\\.com$`));
+	await expect(page.getByTestId('toast').filter({ hasText: 'Downloaded' })).toBeVisible();
+
+	// Done today moves the due date: the new one is offered, once.
+	await page.getByRole('button', { name: 'Done', exact: true }).click();
+	const offer = page.getByTestId('calendar-offer');
+	await expect(offer).toContainText('Next due in 14 days.');
+	const again = page.waitForEvent('download');
+	await offer.getByRole('button', { name: 'Add the new due date' }).click();
+	await again;
+	await expect(offer).toHaveCount(0);
+	// Remembered across a reload: Done today again doesn't move it, so nothing is offered.
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await page.getByRole('button', { name: 'Done', exact: true }).click();
+	await expect(page.getByTestId('undo-row')).toBeVisible();
+	await expect(offer).toHaveCount(0);
+});
+
+// iPhone can share files too, but its share sheet doesn't add an event: it downloads there.
+for (const [device, userAgent, shares] of [
+	[
+		'iPhone',
+		'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+		false
+	],
+	['Android', 'Mozilla/5.0 (Linux; Android 15) Chrome/140.0 Mobile Safari/537.36', true]
+] as const)
+	test.describe(device, () => {
+		test.use({ userAgent });
+
+		test(`${shares ? 'shares' : 'downloads'} the calendar file where files can be shared`, async ({
+			page
+		}) => {
+			await page.addInitScript(() => {
+				const w = window as unknown as { shared: string[] };
+				w.shared = [];
+				Object.defineProperty(navigator, 'canShare', { value: () => true });
+				Object.defineProperty(navigator, 'share', {
+					value: async (data: ShareData) => void w.shared.push(data.files![0]!.type)
+				});
+			});
+			await gotoHydrated(page, '/utils/last-done');
+			await add(page, 'Filters', { n: '1', unit: 'months' });
+			await page.getByRole('button', { name: 'Done: Filters' }).click();
+			await thing(page, 'Filters').getByRole('link', { name: 'Filters' }).click();
+			const downloads: unknown[] = [];
+			page.on('download', (d) => downloads.push(d));
+			await page.getByTestId('add-to-calendar').click();
+			await expect(
+				page
+					.getByTestId('toast')
+					.filter({ hasText: shares ? 'Sent to your calendar.' : 'Downloaded' })
+			).toBeVisible();
+			expect(await page.evaluate(() => (window as unknown as { shared: string[] }).shared)).toEqual(
+				shares ? ['text/calendar'] : []
+			);
+			expect(downloads).toHaveLength(shares ? 0 : 1);
+		});
+	});

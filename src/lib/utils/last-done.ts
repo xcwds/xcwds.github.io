@@ -3,6 +3,7 @@
  * when you last did each, and how often you usually do it. Pure types, validators and interval
  * maths; the page saves through `#lib/storage`.
  */
+import { icsDate, type CalendarEvent } from './ics.js';
 
 export type IntervalUnit = 'days' | 'weeks' | 'months';
 
@@ -275,3 +276,41 @@ export const dayInput = (date: Date): string =>
 /** `date`'s local time as `HH:MM`, for a time input. */
 export const timeInput = (date: Date): string =>
 	[date.getHours(), date.getMinutes()].map((n) => String(n).padStart(2, '0')).join(':');
+
+// --- Calendar (#219) --------------------------------------------------------------------
+
+/**
+ * The due dates you added to your calendar, by thing id (`YYYYMMDD`), so the page can offer the
+ * new one after the next Done.
+ */
+export type CalendarAdded = Record<string, string>;
+
+/** Saved calendar marks: malformed ones are dropped, not the whole record. */
+export function parseCalendarAdded(v: unknown): CalendarAdded | undefined {
+	if (!isRecord(v)) return undefined;
+	const out: CalendarAdded = {};
+	for (const [id, day] of Object.entries(v))
+		if (isId(id) && typeof day === 'string' && /^\d{8}$/.test(day)) out[id] = day;
+	return out;
+}
+
+/** The calendar event for a thing's next due date: all-day, titled with its name. */
+export function dueEvent(status: Status, due: Date): CalendarEvent {
+	const { item, last } = status;
+	const done = last?.toLocaleDateString(undefined, { dateStyle: 'medium' });
+	return {
+		uid: `${item.id}-${icsDate(due)}@xcwds.com`,
+		day: due,
+		summary: item.name,
+		description: done ? `Last done ${done}.` : undefined
+	};
+}
+
+/** A file name for a thing's event: its name without characters file systems refuse. */
+export function eventFileName(name: string): string {
+	const safe = name
+		.replace(/[\\/:*?"<>|]+/g, ' ')
+		.replace(/\s+/g, ' ')
+		.trim();
+	return `${safe || 'event'}.ics`;
+}

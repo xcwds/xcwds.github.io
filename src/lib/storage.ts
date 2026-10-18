@@ -14,8 +14,10 @@ import { parseReflections, type Reflections } from '#lib/self-control/review.js'
 import { parseSeesaw, type Seesaw } from '#lib/self-control/seesaw.js';
 import { parseWhy, type Why } from '#lib/self-control/why.js';
 import {
+	parseCalendarAdded,
 	parseItems as parseLastDoneItems,
 	parseLog as parseLastDoneLog,
+	type CalendarAdded,
 	type LastDoneEntry,
 	type LastDoneItem
 } from '#lib/utils/last-done.js';
@@ -367,7 +369,13 @@ export const entries = {
 	),
 	// Last done (#218): the things you track, and when you did each.
 	lastDoneItems: entry<LastDoneItem[]>('last-done:items', 'Last done things', parseLastDoneItems),
-	lastDoneLog: entry<LastDoneEntry[]>('last-done:log', 'Last done history', parseLastDoneLog)
+	lastDoneLog: entry<LastDoneEntry[]>('last-done:log', 'Last done history', parseLastDoneLog),
+	/** The due dates added to your calendar, so the page can offer the next one (#219). */
+	lastDoneCalendar: entry<CalendarAdded>(
+		'last-done:calendar',
+		'Last done calendar dates',
+		parseCalendarAdded
+	)
 } satisfies Record<string, Entry<unknown>>;
 
 /**
