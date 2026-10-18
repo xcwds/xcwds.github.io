@@ -661,13 +661,14 @@ export function musclesFor(name: string, mine: MyMuscles): MuscleGroup[] | undef
 /** Saved groups: malformed rows are dropped, not the whole map. */
 export function parseMuscles(v: unknown): MyMuscles | undefined {
 	if (typeof v !== 'object' || v === null || Array.isArray(v)) return undefined;
-	const out: MyMuscles = {};
+	const rows: [string, MuscleGroup[]][] = [];
 	for (const [key, groups] of Object.entries(v)) {
 		if (!key || key !== exerciseKey(key) || !Array.isArray(groups) || groups.length === 0) continue;
 		if (!groups.every(isMuscleGroup) || new Set(groups).size !== groups.length) continue;
-		out[key] = [...groups];
+		rows.push([key, [...groups]]);
 	}
-	return out;
+	// Own properties even for a name like "__proto__", which assigning would make the prototype.
+	return Object.fromEntries(rows);
 }
 
 /** A workout that counted for a group, and which of its exercises did. */

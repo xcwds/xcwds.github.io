@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { SvelteMap } from 'svelte/reactivity';
 	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
 	import { entries, update } from '#lib/storage.js';
 	import { toast } from '#lib/toast.svelte.js';
@@ -42,22 +43,28 @@
 	let trained = $derived(lastTrained(history, mine));
 	let open = $state<MuscleGroup | undefined>();
 	let openStatus = $derived(trained.groups.find((g) => g.group === open));
-	/** The groups picked for each ungrouped exercise, by `exerciseKey`, until saved. */
-	let picks = $state<Record<string, MuscleGroup[]>>({});
+	/**
+	 * The groups picked for each ungrouped exercise, by `exerciseKey`, until saved. A map, so a
+	 * name like "constructor" can't read an object's built-ins.
+	 */
+	const picks = new SvelteMap<string, MuscleGroup[]>();
 
 	const ago = (last: Date | undefined) => (last ? agoLabel(last, now) : 'never');
 
 	function pick(name: string, group: MuscleGroup) {
 		const key = exerciseKey(name);
-		const current = picks[key] ?? [];
-		picks[key] = current.includes(group)
-			? current.filter((g) => g !== group)
-			: MUSCLE_GROUPS.map((g) => g.id).filter((g) => g === group || current.includes(g));
+		const current = picks.get(key) ?? [];
+		picks.set(
+			key,
+			current.includes(group)
+				? current.filter((g) => g !== group)
+				: MUSCLE_GROUPS.map((g) => g.id).filter((g) => g === group || current.includes(g))
+		);
 	}
 
 	function save(name: string) {
 		const key = exerciseKey(name);
-		const groups = picks[key];
+		const groups = picks.get(key);
 		if (!groups?.length) return;
 		const result = update(
 			entries.workoutMuscles,
@@ -68,7 +75,7 @@
 		mine = result.value ?? {};
 		savedMine.markSaved();
 		if (!saveResult(entries.workoutMuscles, result.saved, { explicit: true })) return;
-		delete picks[key];
+		picks.delete(key);
 		const labels = MUSCLE_GROUPS.filter((g) => groups.includes(g.id)).map((g) => g.label);
 		toast(`${name} counts for ${labels.join(', ')}.`);
 	}
@@ -129,7 +136,7 @@
 			</div>
 			<ul class="flex flex-col gap-4">
 				{#each trained.ungrouped as name (exerciseKey(name))}
-					{@const chosen = picks[exerciseKey(name)] ?? []}
+					{@const chosen = picks.get(exerciseKey(name)) ?? []}
 					<li class="flex flex-col gap-2">
 						<span class="font-medium">{name}</span>
 						<div class="flex flex-wrap gap-2" role="group" aria-label="Groups for {name}">

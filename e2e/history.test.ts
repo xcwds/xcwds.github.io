@@ -175,6 +175,8 @@ test('muscle groups show when each was last trained', async ({ page }) => {
 	await tab(page, 'Workout').click();
 	await logExercise(page, 'Squat', '225', '5');
 	await logExercise(page, 'Cable fly', '30', '12');
+	// A name that is also an Object.prototype key.
+	await logExercise(page, 'constructor', '0', '20');
 	await page.getByRole('button', { name: 'Finish workout' }).click();
 	await tab(page, 'History').click();
 
@@ -202,6 +204,12 @@ test('muscle groups show when each was last trained', async ({ page }) => {
 	await expect(
 		page.getByTestId('toast').filter({ hasText: 'Cable fly counts for Chest.' })
 	).toBeVisible();
+	await expect(ungrouped).not.toContainText('Cable fly');
+	await page
+		.getByRole('group', { name: 'Groups for constructor' })
+		.getByRole('button', { name: 'Core' })
+		.click();
+	await page.getByRole('button', { name: 'Save groups for constructor' }).click();
 	await expect(ungrouped).toHaveCount(0);
 	await expect(chip('Chest')).toContainText('today');
 
@@ -222,7 +230,10 @@ test('muscle groups show when each was last trained', async ({ page }) => {
 	const backup = JSON.parse(
 		await (await import('node:fs/promises')).readFile((await (await download).path())!, 'utf8')
 	);
-	expect(backup.data['app:workout-history:muscles']).toEqual({ 'cable fly': ['chest'] });
+	expect(backup.data['app:workout-history:muscles']).toEqual({
+		'cable fly': ['chest'],
+		constructor: ['core']
+	});
 
 	await page.getByRole('button', { name: 'Clear Weightlifting Calculator' }).click();
 	await gotoHydrated(page, '/utils/weightlifting');

@@ -57,6 +57,13 @@ describe('parseMuscles', () => {
 		).toEqual({ 'cable fly': ['chest'], 'face pull': ['shoulders', 'back'] });
 	});
 
+	it('keeps names that are Object.prototype keys as plain rows', () => {
+		const parsed = parseMuscles(JSON.parse('{"__proto__":["core"],"constructor":["arms"]}'))!;
+		expect(Object.getPrototypeOf(parsed)).toBe(Object.prototype);
+		expect(musclesFor('__proto__', parsed)).toEqual(['core']);
+		expect(musclesFor('Constructor', parsed)).toEqual(['arms']);
+	});
+
 	it('rejects what is not a map', () => {
 		expect(parseMuscles([])).toBeUndefined();
 		expect(parseMuscles(null)).toBeUndefined();
