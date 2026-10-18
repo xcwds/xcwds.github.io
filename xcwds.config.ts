@@ -20,6 +20,7 @@ import cameraTool from 'xcwds-app-camera';
 import lastDone from 'xcwds-app-last-done';
 import microwaveTime from 'xcwds-app-microwave-time';
 import ovenTime from 'xcwds-app-oven-time';
+import photoCleaner from 'xcwds-app-photo-cleaner';
 import pizzaDough from 'xcwds-app-pizza-dough';
 import qrTool from 'xcwds-app-qr';
 import recipes from 'xcwds-app-recipes';
@@ -77,6 +78,7 @@ export default defineConfig({
 		selfControl(),
 		lastDone(),
 		cameraTool(),
+		photoCleaner(),
 		recipes(),
 		// Your apps (#224): apps people build from blocks, each one a tool in the `blocks` app.
 		blocks({ path: '/my-apps', app: 'blocks', templates: myAppsTemplates as AppDefinition[] }),
