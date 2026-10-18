@@ -170,6 +170,7 @@ test('repeating twice does not save an untouched copy as a workout', async ({ pa
 });
 
 test('muscle groups show when each was last trained', async ({ page }) => {
+	page.on('dialog', (dialog) => dialog.accept());
 	await gotoHydrated(page, '/utils/weightlifting');
 	await tab(page, 'Workout').click();
 	await logExercise(page, 'Squat', '225', '5');
@@ -198,7 +199,9 @@ test('muscle groups show when each was last trained', async ({ page }) => {
 		.getByRole('button', { name: 'Chest' })
 		.click();
 	await save.click();
-	await expect(page.getByTestId('toast')).toHaveText('Cable fly counts for Chest.');
+	await expect(
+		page.getByTestId('toast').filter({ hasText: 'Cable fly counts for Chest.' })
+	).toBeVisible();
 	await expect(ungrouped).toHaveCount(0);
 	await expect(chip('Chest')).toContainText('today');
 
