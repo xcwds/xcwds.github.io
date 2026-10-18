@@ -22,6 +22,7 @@ describe('tools', () => {
 			'/utils/coffee-timer',
 			'/utils/cooking-timer',
 			'/utils/oven-time',
+			'/utils/microwave-time',
 			'/utils/url-sanitizer',
 			'/utils/qr',
 			'/utils/weightlifting',
