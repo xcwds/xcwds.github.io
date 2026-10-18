@@ -19,7 +19,8 @@ export default definePlugin(
 			entries.liftingCalculator,
 			entries.liftingWorkout,
 			entries.liftingTab,
-			entries.workoutHistory
+			entries.workoutHistory,
+			entries.workoutMuscles
 		]);
 		app.settings.field('lifting', {
 			default: defaultSettings.lifting,

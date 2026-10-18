@@ -168,3 +168,65 @@ test('repeating twice does not save an untouched copy as a workout', async ({ pa
 	await tab(page, 'History').click();
 	await expect(entries(page)).toHaveCount(3);
 });
+
+test('muscle groups show when each was last trained', async ({ page }) => {
+	await gotoHydrated(page, '/utils/weightlifting');
+	await tab(page, 'Workout').click();
+	await logExercise(page, 'Squat', '225', '5');
+	await logExercise(page, 'Cable fly', '30', '12');
+	await page.getByRole('button', { name: 'Finish workout' }).click();
+	await tab(page, 'History').click();
+
+	const chip = (name: string) => page.getByTestId('muscle-group').filter({ hasText: name });
+	await expect(chip('Legs')).toContainText('today');
+	await expect(chip('Chest')).toContainText('never');
+	// Never-trained groups come first.
+	await expect(page.getByTestId('muscle-group').last()).toContainText('Legs');
+
+	// Tapping a group lists what counted.
+	await chip('Legs').click();
+	await expect(chip('Legs')).toHaveAttribute('aria-expanded', 'true');
+	await expect(page.getByTestId('muscle-group-workouts')).toContainText('Squat');
+
+	// Your own exercise isn't grouped until you pick its groups.
+	const ungrouped = page.getByTestId('ungrouped');
+	await expect(ungrouped).toContainText('Cable fly');
+	const save = page.getByRole('button', { name: 'Save groups for Cable fly' });
+	await expect(save).toBeDisabled();
+	await page
+		.getByRole('group', { name: 'Groups for Cable fly' })
+		.getByRole('button', { name: 'Chest' })
+		.click();
+	await save.click();
+	await expect(page.getByTestId('toast')).toHaveText('Cable fly counts for Chest.');
+	await expect(ungrouped).toHaveCount(0);
+	await expect(chip('Chest')).toContainText('today');
+
+	for (const name of ['Legs', 'Chest']) {
+		const box = (await chip(name).boundingBox())!;
+		expect(Math.min(box.width, box.height)).toBeGreaterThanOrEqual(44);
+	}
+
+	// Survives a reload.
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await expect(chip('Chest')).toContainText('today');
+
+	// Backed up and cleared with the history, never with the calculator.
+	await gotoHydrated(page, '/settings');
+	const download = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'Download backup' }).click();
+	const backup = JSON.parse(
+		await (await import('node:fs/promises')).readFile((await (await download).path())!, 'utf8')
+	);
+	expect(backup.data['app:workout-history:muscles']).toEqual({ 'cable fly': ['chest'] });
+
+	await page.getByRole('button', { name: 'Clear Weightlifting Calculator' }).click();
+	await gotoHydrated(page, '/utils/weightlifting');
+	await tab(page, 'History').click();
+	await expect(chip('Chest')).toContainText('today');
+
+	await gotoHydrated(page, '/settings');
+	await page.getByRole('button', { name: 'Clear Workout History' }).click();
+	expect(await page.evaluate(() => localStorage.getItem('app:workout-history:muscles'))).toBeNull();
+});

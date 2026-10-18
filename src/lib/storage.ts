@@ -31,11 +31,13 @@ import {
 	barName,
 	parseBar,
 	parseEquipmentSet,
+	parseMuscles,
 	type Bar,
 	type BarType,
 	type EquipmentSet,
 	type HistoryEntry,
 	type LiftingSetup,
+	type MyMuscles,
 	type PlateCounts,
 	type WeightUnit,
 	type Workout
@@ -337,6 +339,12 @@ export const entries = {
 	),
 	// Its own group, so clearing the calculator's data in Settings never wipes past workouts.
 	workoutHistory: entry<HistoryEntry[]>('workout-history', 'Workout history', parseHistory),
+	// Which muscle groups your own exercises count for (#220): kept and cleared with the history.
+	workoutMuscles: entry<MyMuscles>(
+		'workout-history:muscles',
+		'Exercise muscle groups',
+		parseMuscles
+	),
 	// Self-Control (#146) is private: its own group, so it can be cleared on its own.
 	selfControlHabits: entry<Habit[]>('self-control:habits', 'Self-Control habits', parseHabits),
 	selfControlPrefs: entry<SelfControlPrefs>(

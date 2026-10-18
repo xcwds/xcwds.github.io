@@ -2,6 +2,7 @@
 	import { onMount, tick } from 'svelte';
 	import {
 		activeSet,
+		EXERCISE_SUGGESTIONS,
 		formatWeight,
 		workoutHasContent,
 		workoutToText,
@@ -28,23 +29,6 @@
 	/** The calculator's unit. A workout keeps the unit it was logged in (see below). */
 	/** The active equipment set's unit (#82): a set of your own has its own. */
 	let calculatorUnit = $derived(activeSet(settings.lifting).unit);
-
-	const SUGGESTIONS = [
-		'Bench Press',
-		'Squat',
-		'Deadlift',
-		'Overhead Press',
-		'Barbell Row',
-		'Romanian Deadlift',
-		'Front Squat',
-		'Incline Dumbbell Press',
-		'Dumbbell Row',
-		'Goblet Squat',
-		'Kettlebell Swing',
-		'Lunges',
-		'Pull-ups',
-		'Push-ups'
-	];
 
 	const today = () =>
 		new Date().toLocaleDateString(undefined, {
@@ -236,7 +220,7 @@
 			<div class="flex items-start gap-2">
 				<ExerciseName
 					label="Exercise {e + 1} name"
-					suggestions={SUGGESTIONS}
+					suggestions={EXERCISE_SUGGESTIONS}
 					bind:value={exercise.name}
 					class="{field} text-lg font-medium"
 				/>
