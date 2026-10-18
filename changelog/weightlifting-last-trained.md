@@ -1,0 +1,1 @@
+- Weightlifting history shows when you last trained each muscle group (chest, back, shoulders, arms, legs, core). Tap one to see the workouts that counted, and pick the groups for your own exercises.
