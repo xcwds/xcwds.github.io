@@ -7,7 +7,7 @@
 		nameProblem,
 		type Habit,
 		type HabitKind
-	} from '$lib/self-control/habits';
+	} from '#lib/self-control/habits.js';
 	import { button, field, primary } from './styles';
 
 	type Fields = Pick<Habit, 'name' | 'emoji' | 'kind'>;

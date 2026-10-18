@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { plansForSos, type Environment } from '$lib/self-control/environment';
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { entries, read } from '$lib/storage';
+	import { plansForSos, type Environment } from '#lib/self-control/environment.js';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read } from '#lib/storage.js';
 	import { card } from '../styles';
 
 	/** Your starred if-then plans (#152) for the urge's habit: open, since this is the moment. */

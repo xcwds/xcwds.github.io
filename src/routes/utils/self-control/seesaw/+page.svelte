@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
-	import { activeHabits, type Habit } from '$lib/self-control/habits';
+	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
+	import { activeHabits, type Habit } from '#lib/self-control/habits.js';
 	import {
 		itemsFor,
 		leanText,
@@ -12,10 +12,10 @@
 		type SeesawItem,
 		type Side,
 		type Weight
-	} from '$lib/self-control/seesaw';
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { entries, read, update } from '$lib/storage';
-	import { toast } from '$lib/toast.svelte';
+	} from '#lib/self-control/seesaw.js';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read, update } from '#lib/storage.js';
+	import { toast } from '#lib/toast.svelte.js';
 	import { card } from '../styles';
 	import { toggle } from '../../weightlifting/styles';
 	import SeesawSide from './SeesawSide.svelte';

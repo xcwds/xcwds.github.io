@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { CookingTimers, MINUTE } from '$lib/utils/cooking-timers.svelte';
-	import { formatDuration } from '$lib/utils/time';
+	import { CookingTimers, MINUTE } from '#lib/utils/cooking-timers.svelte.js';
+	import { formatDuration } from '#lib/utils/time.js';
 
 	/** Running cooking timers, pinned to the bottom of the recipe so they're in view while cooking. */
 	let { timers }: { timers: CookingTimers } = $props();

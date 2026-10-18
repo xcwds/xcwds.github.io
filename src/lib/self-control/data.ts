@@ -3,7 +3,7 @@
  * seesaw, plans, the urge log) adds itself to `habitData`, so deleting a habit deletes all of it.
  */
 import type { Entry } from '@xcwds/core';
-import { update } from '$lib/storage';
+import { update } from '#lib/storage.js';
 
 /** An entry holding data for several habits, and how to drop one habit's part of it. */
 export type HabitData<T> = {

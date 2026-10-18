@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
-	import { segmented } from '$lib/segmented';
-	import { entries, update } from '$lib/storage';
-	import type { HistoryEntry, Workout } from '$lib/utils/lifting';
+	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
+	import { segmented } from '#lib/segmented.js';
+	import { entries, update } from '#lib/storage.js';
+	import type { HistoryEntry, Workout } from '#lib/utils/lifting.js';
 	import History from './History.svelte';
 	import PlateCalculator from './PlateCalculator.svelte';
 	import WorkoutTracker from './Workout.svelte';

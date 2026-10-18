@@ -1,8 +1,8 @@
 import { getContext, onMount, setContext } from 'svelte';
-import { browser } from '$app/environment';
-import { markBusy } from '$lib/busy';
-import { persist } from '$lib/persist.svelte';
-import { entries } from '$lib/storage';
+import { browser } from '$app/env';
+import { markBusy } from '#lib/busy.js';
+import { persist } from '#lib/persist.svelte.js';
+import { entries } from '#lib/storage.js';
 import { beep, keepAwake, primeAudio } from './alarm';
 import { Timer } from './timer.svelte';
 

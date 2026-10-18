@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { toast } from '$lib/toast.svelte';
-	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
-	import { formatMinutes } from '$lib/utils/oven';
+	import { toast } from '#lib/toast.svelte.js';
+	import { MINUTE, useCookingTimers } from '#lib/utils/cooking-timers.svelte.js';
+	import { formatMinutes } from '#lib/utils/oven.js';
 	import { startedMessage } from './timers';
 
 	let { timers }: { timers: { label: string; minutes: number }[] } = $props();

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { toast } from '$lib/toast.svelte';
+	import { toast } from '#lib/toast.svelte.js';
 	import {
 		historyToText,
 		workoutSummary,
 		workoutToText,
 		type HistoryEntry
-	} from '$lib/utils/lifting';
+	} from '#lib/utils/lifting.js';
 	import { button, card } from './styles';
 
 	let {

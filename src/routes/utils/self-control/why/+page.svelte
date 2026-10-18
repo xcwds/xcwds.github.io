@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
-	import { activeHabits, type Habit } from '$lib/self-control/habits';
+	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
+	import { activeHabits, type Habit } from '#lib/self-control/habits.js';
 	import {
 		REASONS_MAX,
 		REASON_MAX,
@@ -15,10 +15,10 @@
 		withReasons,
 		type Reason,
 		type Why
-	} from '$lib/self-control/why';
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { entries, read, update } from '$lib/storage';
-	import { toast } from '$lib/toast.svelte';
+	} from '#lib/self-control/why.js';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read, update } from '#lib/storage.js';
+	import { toast } from '#lib/toast.svelte.js';
 	import { button, card, field, primary } from '../styles';
 	import { toggle } from '../../weightlifting/styles';
 

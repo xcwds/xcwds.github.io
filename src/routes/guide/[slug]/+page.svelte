@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { getArticle, sectionId } from '$lib/guide';
-	import GuideBlock from '$lib/guide/GuideBlock.svelte';
-	import { getRecipe } from '$lib/recipes';
-	import { allTools } from '$lib/utils/tools';
+	import { getArticle, sectionId } from '#lib/guide/index.js';
+	import GuideBlock from '#lib/guide/GuideBlock.svelte';
+	import { getRecipe } from '#lib/recipes/index.js';
+	import { allTools } from '#lib/utils/tools.js';
 
 	let { data } = $props();
 	let article = $derived(data.article);

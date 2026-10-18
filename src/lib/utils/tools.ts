@@ -1,6 +1,6 @@
 import type { Tool } from '@xcwds/plugin-tools';
 import { getApp } from '@xcwds/sveltekit';
-import { trackApps } from '$lib/apps.svelte';
+import { trackApps } from '#lib/apps.svelte.js';
 
 /** Kitchen Guide articles shown as "Learn more" on a tool's page (slugs). */
 export const GUIDES: Readonly<Record<string, readonly string[]>> = {

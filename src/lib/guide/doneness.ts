@@ -7,7 +7,7 @@
  * flags them.
  */
 
-import type { TempUnit } from '$lib/utils/oven';
+import type { TempUnit } from '#lib/utils/oven.js';
 
 export type DonenessLevel = {
 	id: string;

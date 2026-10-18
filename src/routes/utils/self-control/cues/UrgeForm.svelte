@@ -12,9 +12,9 @@
 		type CueField,
 		type Cues,
 		type LogFields
-	} from '$lib/self-control/cues';
-	import type { Habit } from '$lib/self-control/habits';
-	import { NOTE_MAX, type Outcome } from '$lib/self-control/sos';
+	} from '#lib/self-control/cues.js';
+	import type { Habit } from '#lib/self-control/habits.js';
+	import { NOTE_MAX, type Outcome } from '#lib/self-control/sos.js';
 	import { button, field, primary } from '../styles';
 	import { toggle } from '../../weightlifting/styles';
 

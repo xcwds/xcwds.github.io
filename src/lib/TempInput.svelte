@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { fromF, toF, type TempUnit } from '$lib/utils/oven';
+	import { fromF, toF, type TempUnit } from '#lib/utils/oven.js';
 
 	/** A temperature field shown in `unit` but read and written in °F, so switching units keeps it. */
 	let {

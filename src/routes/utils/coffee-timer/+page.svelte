@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { persist } from '$lib/persist.svelte';
-	import { settings, settingsStatus } from '$lib/settings.svelte';
-	import { COFFEE_SECONDS, entries } from '$lib/storage';
-	import { useCoffeeTimer } from '$lib/utils/coffee-timer.svelte';
-	import { formatDuration } from '$lib/utils/time';
+	import { persist } from '#lib/persist.svelte.js';
+	import { settings, settingsStatus } from '#lib/settings.svelte.js';
+	import { COFFEE_SECONDS, entries } from '#lib/storage.js';
+	import { useCoffeeTimer } from '#lib/utils/coffee-timer.svelte.js';
+	import { formatDuration } from '#lib/utils/time.js';
 
 	/** Settings → Tool defaults (90 s unless changed). */
 	let defaultMs = $derived(settings.coffeeDefaultSeconds * 1000);

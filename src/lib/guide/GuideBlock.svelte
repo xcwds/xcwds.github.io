@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Block } from '$lib/guide';
+	import type { Block } from '#lib/guide/index.js';
 	import DonenessChart from './DonenessChart.svelte';
 	import InlineText from './InlineText.svelte';
 	import TimerButtons from './TimerButtons.svelte';

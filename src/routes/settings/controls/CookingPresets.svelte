@@ -1,7 +1,7 @@
 <script lang="ts">
 	/** Settings → Tool defaults: the cooking timer's quick-start buttons. */
-	import { settings } from '$lib/settings.svelte';
-	import { COOKING_PRESETS, parseCookingPresets } from '$lib/storage';
+	import { settings } from '#lib/settings.svelte.js';
+	import { COOKING_PRESETS, parseCookingPresets } from '#lib/storage.js';
 
 	// Editable copy of the presets; resets whenever the saved presets change.
 	let presetsText = $derived(settings.cookingPresets.join(', '));

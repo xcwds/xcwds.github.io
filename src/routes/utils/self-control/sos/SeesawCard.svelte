@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { seesawForSos, type Seesaw } from '$lib/self-control/seesaw';
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { entries, read } from '$lib/storage';
+	import { seesawForSos, type Seesaw } from '#lib/self-control/seesaw.js';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read } from '#lib/storage.js';
 	import { card } from '../styles';
 
 	/** The seesaw (#151) for the urge's habit: what giving in costs later, what holding off gets. */

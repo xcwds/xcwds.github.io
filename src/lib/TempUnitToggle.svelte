@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { segmented } from '$lib/segmented';
-	import { settings } from '$lib/settings.svelte';
-	import { TEMP_UNITS } from '$lib/utils/oven';
+	import { segmented } from '#lib/segmented.js';
+	import { settings } from '#lib/settings.svelte.js';
+	import { TEMP_UNITS } from '#lib/utils/oven.js';
 </script>
 
 <!-- The oven converter's unit (a tool default in Settings); recipes' oven panel shares it. -->

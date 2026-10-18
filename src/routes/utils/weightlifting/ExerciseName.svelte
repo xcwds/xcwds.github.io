@@ -6,7 +6,7 @@
 -->
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { MAX_SUGGESTIONS, suggest } from '$lib/utils/suggest';
+	import { MAX_SUGGESTIONS, suggest } from '#lib/utils/suggest.js';
 
 	let {
 		value = $bindable(''),

@@ -8,11 +8,11 @@
 		type Exercise,
 		type WorkoutSet,
 		type Workout
-	} from '$lib/utils/lifting';
-	import { persist } from '$lib/persist.svelte';
-	import { settings, settingsStatus } from '$lib/settings.svelte';
-	import { toast } from '$lib/toast.svelte';
-	import { entries } from '$lib/storage';
+	} from '#lib/utils/lifting.js';
+	import { persist } from '#lib/persist.svelte.js';
+	import { settings, settingsStatus } from '#lib/settings.svelte.js';
+	import { toast } from '#lib/toast.svelte.js';
+	import { entries } from '#lib/storage.js';
 	import ExerciseName from './ExerciseName.svelte';
 	import { button, card, field, primary } from './styles';
 

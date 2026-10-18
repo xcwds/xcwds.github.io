@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { getArticle } from '$lib/guide';
+	import { getArticle } from '#lib/guide/index.js';
 
 	/** Kitchen Guide articles to point to, by slug (specs check they exist). */
 	let { slugs }: { slugs: readonly string[] } = $props();

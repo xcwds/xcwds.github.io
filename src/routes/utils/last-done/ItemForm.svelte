@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import type { LastDoneItem } from '$lib/utils/last-done';
+	import type { LastDoneItem } from '#lib/utils/last-done.js';
 
 	export type Fields = Omit<LastDoneItem, 'id'>;
 </script>
@@ -14,7 +14,7 @@
 		cleanEmoji,
 		nameProblem,
 		type IntervalUnit
-	} from '$lib/utils/last-done';
+	} from '#lib/utils/last-done.js';
 	import { button, field, primary } from './styles';
 
 	let {

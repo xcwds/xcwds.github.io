@@ -1,16 +1,16 @@
 <script lang="ts">
-	import GuideLinks from '$lib/guide/GuideLinks.svelte';
-	import { toolGuides } from '$lib/utils/tools';
+	import GuideLinks from '#lib/guide/GuideLinks.svelte';
+	import { toolGuides } from '#lib/utils/tools.js';
 	import { resolve } from '$app/paths';
-	import { saveSettings, settings, settingsStatus } from '$lib/settings.svelte';
-	import { toast } from '$lib/toast.svelte';
+	import { saveSettings, settings, settingsStatus } from '#lib/settings.svelte.js';
+	import { toast } from '#lib/toast.svelte.js';
 	import {
 		computeDough,
 		DOUGH_MAX,
 		doughDefaults,
 		isDoughValue,
 		type DoughInput
-	} from '$lib/utils/dough';
+	} from '#lib/utils/dough.js';
 
 	let input = $state<DoughInput>({ ...doughDefaults });
 

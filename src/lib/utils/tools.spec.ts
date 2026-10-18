@@ -3,8 +3,8 @@ import type { App } from '@xcwds/core';
 import type { TestApp } from '@xcwds/testing';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import config from '../../../xcwds.config';
-import { BRAND, TAGLINE } from '$lib/brand';
-import { APPS } from '$lib/apps';
+import { BRAND, TAGLINE } from '#lib/brand.js';
+import { APPS } from '#lib/apps.js';
 import { GUIDES, allTools, toolGuides, tools } from './tools';
 import { toolsApp } from './tools-app';
 

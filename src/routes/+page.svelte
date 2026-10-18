@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import Acronym from '$lib/Acronym.svelte';
-	import { appIsOn } from '$lib/apps.svelte';
-	import { ACRONYM, BRAND, TAGLINE } from '$lib/brand';
-	import { movePin, shortcuts, togglePin } from '$lib/home.svelte';
-	import { articles } from '$lib/guide';
-	import { recipes } from '$lib/recipes';
-	import { tools } from '$lib/utils/tools';
+	import Acronym from '#lib/Acronym.svelte';
+	import { appIsOn } from '#lib/apps.svelte.js';
+	import { ACRONYM, BRAND, TAGLINE } from '#lib/brand.js';
+	import { movePin, shortcuts, togglePin } from '#lib/home.svelte.js';
+	import { articles } from '#lib/guide/index.js';
+	import { recipes } from '#lib/recipes/index.js';
+	import { tools } from '#lib/utils/tools.js';
 
 	const toolAt = (path: string) => tools().find((t) => t.path === path);
 	let pinned = $derived(shortcuts.pins.map(toolAt).filter((t) => t !== undefined));

@@ -9,9 +9,9 @@
 		byWeekday,
 		riskiest,
 		topCues
-	} from '$lib/self-control/cues';
+	} from '#lib/self-control/cues.js';
 	import { resolve } from '$app/paths';
-	import type { UrgeEntry } from '$lib/self-control/sos';
+	import type { UrgeEntry } from '#lib/self-control/sos.js';
 	import { button, card } from '../styles';
 
 	/**

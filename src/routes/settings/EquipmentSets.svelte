@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { segmented } from '$lib/segmented';
-	import { settings } from '$lib/settings.svelte';
-	import { entries, read, write } from '$lib/storage';
-	import { toast } from '$lib/toast.svelte';
+	import { segmented } from '#lib/segmented.js';
+	import { settings } from '#lib/settings.svelte.js';
+	import { entries, read, write } from '#lib/storage.js';
+	import { toast } from '#lib/toast.svelte.js';
 	import {
 		BAR_TYPES,
 		COMMERCIAL_GYM,
@@ -21,7 +21,7 @@
 		type EquipmentSet,
 		type NumberRule,
 		type WeightUnit
-	} from '$lib/utils/lifting';
+	} from '#lib/utils/lifting.js';
 
 	/**
 	 * Your equipment sets (#82, #84): make, copy, rename and delete them, and edit their bars and

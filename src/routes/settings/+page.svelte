@@ -7,8 +7,8 @@
 	import { onDestroy } from 'svelte';
 	import SettingsPage from '@xcwds/plugin-settings/SettingsPage.svelte';
 	import { useApp } from '@xcwds/sveltekit';
-	import Acronym from '$lib/Acronym.svelte';
-	import { ACRONYM, SECRET_ACRONYM } from '$lib/brand';
+	import Acronym from '#lib/Acronym.svelte';
+	import { ACRONYM, SECRET_ACRONYM } from '#lib/brand.js';
 	import Coffee from './controls/Coffee.svelte';
 	import CookingPresets from './controls/CookingPresets.svelte';
 	import Lifting from './controls/Lifting.svelte';

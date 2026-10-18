@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { slashToFocus } from '$lib/shortcuts';
+	import { slashToFocus } from '#lib/shortcuts.js';
 	import { resolve } from '$app/paths';
-	import { articles, byCategory, searchArticles } from '$lib/guide';
-	import RecipesGuideSwitch from '$lib/RecipesGuideSwitch.svelte';
+	import { articles, byCategory, searchArticles } from '#lib/guide/index.js';
+	import RecipesGuideSwitch from '#lib/RecipesGuideSwitch.svelte';
 
 	let query = $state('');
 	let groups = $derived(byCategory(searchArticles(articles, query)));

@@ -11,8 +11,8 @@
 	import { onMount } from 'svelte';
 	import { replaceState } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { toast } from '$lib/toast.svelte';
-	import { cleanLink, textFromFragment } from '$lib/utils/qr';
+	import { toast } from '#lib/toast.svelte.js';
+	import { cleanLink, textFromFragment } from '#lib/utils/qr.js';
 	import { button, card, field, primary } from '../weightlifting/styles';
 
 	/** The last code read; null when an image had none. Shown, never opened by itself. */

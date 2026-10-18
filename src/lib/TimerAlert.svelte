@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import { useCoffeeTimer } from '$lib/utils/coffee-timer.svelte';
+	import { useCoffeeTimer } from '#lib/utils/coffee-timer.svelte.js';
 
 	/**
 	 * A finished coffee timer, on pages other than its own (the alarm rings everywhere). Cooking

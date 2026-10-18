@@ -1,6 +1,6 @@
 /** The page entry: the Cooking Timer's tool and quick-start presets (in minutes). */
 import { definePlugin } from '@xcwds/core';
-import { defaultSettings, parseCookingPresets } from '$lib/storage';
+import { defaultSettings, parseCookingPresets } from '../../lib/storage.js';
 import { NAME } from './index.js';
 import { tool } from './tool.js';
 

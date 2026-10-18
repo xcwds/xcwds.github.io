@@ -7,7 +7,7 @@
 	import Photos from '@xcwds/plugin-camera/Photos.svelte';
 	import type { Photo } from '@xcwds/plugin-camera/client';
 	import { useApp } from '@xcwds/sveltekit';
-	import { toast } from '$lib/toast.svelte';
+	import { toast } from '#lib/toast.svelte.js';
 	import { card } from '../self-control/styles';
 
 	const app = useApp();

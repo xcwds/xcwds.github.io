@@ -1,11 +1,11 @@
 <script lang="ts">
-	import GuideLinks from '$lib/guide/GuideLinks.svelte';
-	import { toolGuides } from '$lib/utils/tools';
+	import GuideLinks from '#lib/guide/GuideLinks.svelte';
+	import { toolGuides } from '#lib/utils/tools.js';
 	import { resolve } from '$app/paths';
-	import OvenWarnings from '$lib/OvenWarnings.svelte';
-	import TempInput from '$lib/TempInput.svelte';
-	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
-	import { settings } from '$lib/settings.svelte';
+	import OvenWarnings from '#lib/OvenWarnings.svelte';
+	import TempInput from '#lib/TempInput.svelte';
+	import TempUnitToggle from '#lib/TempUnitToggle.svelte';
+	import { settings } from '#lib/settings.svelte.js';
 	import {
 		FOOD_PRESETS,
 		adjustOvenTime,
@@ -15,7 +15,7 @@
 		ovenProblem,
 		ovenWarnings,
 		type FoodId
-	} from '$lib/utils/oven';
+	} from '#lib/utils/oven.js';
 
 	// Temperatures are kept in °F; the fields show them in the chosen unit.
 	let fromF = $state(350);

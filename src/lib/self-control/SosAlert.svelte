@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import { markBusy } from '$lib/busy';
-	import { isTimed, type SosSession } from '$lib/self-control/sos';
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { entries, read, write } from '$lib/storage';
-	import { beep, keepAwake } from '$lib/utils/alarm';
+	import { markBusy } from '#lib/busy.js';
+	import { isTimed, type SosSession } from '#lib/self-control/sos.js';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read, write } from '#lib/storage.js';
+	import { beep, keepAwake } from '#lib/utils/alarm.js';
 
 	/**
 	 * Urge SOS's timer (surfing, or a sprint's delay) when you've left its page (#149): it rings

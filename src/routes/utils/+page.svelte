@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { appIsOn } from '$lib/apps.svelte';
-	import { shortcuts, togglePin } from '$lib/home.svelte';
-	import { tools } from '$lib/utils/tools';
+	import { appIsOn } from '#lib/apps.svelte.js';
+	import { shortcuts, togglePin } from '#lib/home.svelte.js';
+	import { tools } from '#lib/utils/tools.js';
 </script>
 
 <svelte:head>

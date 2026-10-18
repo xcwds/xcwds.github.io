@@ -9,7 +9,7 @@
 		type Group,
 		type HabitPlan,
 		type StarterItem
-	} from '$lib/self-control/environment';
+	} from '#lib/self-control/environment.js';
 	import { button, card, field, primary } from '../styles';
 
 	/** A habit's environment checklist: built-in and your own items, by group. */

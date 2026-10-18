@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { whyForSos, type Why } from '$lib/self-control/why';
-	import { entries, read } from '$lib/storage';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { whyForSos, type Why } from '#lib/self-control/why.js';
+	import { entries, read } from '#lib/storage.js';
 	import { card } from '../styles';
 
 	/** "Your why" (#150) for the urge's habit, under the technique: folded, one tap to open. */

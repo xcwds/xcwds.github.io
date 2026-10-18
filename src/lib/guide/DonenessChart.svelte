@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { segmented } from '$lib/segmented';
-	import { settings } from '$lib/settings.svelte';
-	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
-	import { toast } from '$lib/toast.svelte';
-	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
+	import { segmented } from '#lib/segmented.js';
+	import { settings } from '#lib/settings.svelte.js';
+	import TempUnitToggle from '#lib/TempUnitToggle.svelte';
+	import { toast } from '#lib/toast.svelte.js';
+	import { MINUTE, useCookingTimers } from '#lib/utils/cooking-timers.svelte.js';
 	import { doneness, formatInternal, formatRise, MEATS } from './doneness';
 
 	const timers = useCookingTimers();

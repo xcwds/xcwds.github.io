@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
-	import { removeHabitData } from '$lib/self-control/data';
+	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
+	import { removeHabitData } from '#lib/self-control/data.js';
 	import {
 		DEFAULT_EMOJI,
 		HABIT_KINDS,
@@ -10,10 +10,10 @@
 		newHabit,
 		withFields,
 		type Habit
-	} from '$lib/self-control/habits';
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { entries, read, update } from '$lib/storage';
-	import { toast } from '$lib/toast.svelte';
+	} from '#lib/self-control/habits.js';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read, update } from '#lib/storage.js';
+	import { toast } from '#lib/toast.svelte.js';
 	import { pages } from '../../../plugins/self-control/pages.js';
 	import HabitForm from './HabitForm.svelte';
 	import { button, card, primary } from './styles';

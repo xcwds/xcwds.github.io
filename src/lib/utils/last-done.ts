@@ -1,7 +1,7 @@
 /**
  * Last done (#218): things you do now and then (clean the bathroom, open a new bag of dog food),
  * when you last did each, and how often you usually do it. Pure types, validators and interval
- * maths; the page saves through `$lib/storage`.
+ * maths; the page saves through `#lib/storage`.
  */
 
 export type IntervalUnit = 'days' | 'weeks' | 'months';

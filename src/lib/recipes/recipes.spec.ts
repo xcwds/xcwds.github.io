@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readdirSync } from 'node:fs';
-import { getArticle } from '$lib/guide';
-import { FOOD_PRESETS, foodPreset } from '$lib/utils/oven';
+import { getArticle } from '#lib/guide/index.js';
+import { FOOD_PRESETS, foodPreset } from '#lib/utils/oven.js';
 import { MAX_STEP_TIMER_MINUTES, recipes, searchRecipes, stepText, stepTimer } from './index';
 import { isScalable } from './scale';
 import { systemOf } from './units';
