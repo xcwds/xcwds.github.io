@@ -34,21 +34,33 @@
 	let nextId = 0;
 
 	onMount(() => (canShare = canShareFiles()));
-	onDestroy(() => items.forEach(revoke));
+	// Emptied too, so a clean that finishes after leaving finds nothing to make a URL for.
+	onDestroy(clear);
 
 	const revoke = (item: Item) => item.url && URL.revokeObjectURL(item.url);
 	let done = $derived(items.filter((i) => i.status === 'ok'));
 	let working = $derived(items.some((i) => i.status === 'working'));
 
-	async function clean(id: number) {
+	// One photo at a time: each clean holds a full-size bitmap and canvas, and a phone that
+	// decodes twenty at once runs out of memory.
+	let queue = Promise.resolve();
+
+	function clean(id: number) {
 		const item = items.find((i) => i.id === id);
 		if (!item) return;
 		const run = ++item.run;
 		item.status = 'working';
+		queue = queue.then(() => work(id, run));
+	}
+
+	async function work(id: number, run: number) {
+		const latest = () => items.find((i) => i.id === id && i.run === run);
+		const item = latest();
+		// Removed, cleared, or queued again at another size: skip the decode.
+		if (!item) return;
 		const result = await cleanImage(item.original, { maxSide: SIZES[size].maxSide });
-		// Re-read: the item may have been cleared, or cleaned again at another size, meanwhile.
-		const current = items.find((i) => i.id === id);
-		if (!current || current.run !== run) return;
+		const current = latest();
+		if (!current) return;
 		revoke(current);
 		if (result.ok) {
 			Object.assign(current, {
@@ -74,13 +86,13 @@
 			status: 'working'
 		}));
 		items.push(...added);
-		for (const item of added) void clean(item.id);
+		for (const item of added) clean(item.id);
 		if (picker) picker.value = '';
 	}
 
 	function resize(index: number) {
 		size = index;
-		for (const item of items) void clean(item.id);
+		for (const item of items) clean(item.id);
 	}
 
 	function clear() {
