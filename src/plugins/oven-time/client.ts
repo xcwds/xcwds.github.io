@@ -1,6 +1,6 @@
 /** The page entry: the Oven Time Converter's tool and the °F/°C setting (recipes use it too). */
 import { definePlugin } from '@xcwds/core';
-import { defaultSettings, parseOvenUnit } from '$lib/storage';
+import { defaultSettings, parseOvenUnit } from '../../lib/storage.js';
 import { NAME } from './index.js';
 import { tool } from './tool.js';
 

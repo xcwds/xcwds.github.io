@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
-	import { riskiest } from '$lib/self-control/cues';
-	import { planFor, type Environment, type Plan } from '$lib/self-control/environment';
-	import { activeHabits, type Habit } from '$lib/self-control/habits';
+	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
+	import { riskiest } from '#lib/self-control/cues.js';
+	import { planFor, type Environment, type Plan } from '#lib/self-control/environment.js';
+	import { activeHabits, type Habit } from '#lib/self-control/habits.js';
 	import {
 		REFLECTION_MAX,
 		byTechnique,
@@ -16,12 +16,12 @@
 		withReflection,
 		type Reflections,
 		type Summary
-	} from '$lib/self-control/review';
-	import { TECHNIQUE_LABELS, type UrgeEntry } from '$lib/self-control/sos';
-	import { settings, settingsStatus } from '$lib/settings.svelte';
-	import { entries, read, update } from '$lib/storage';
-	import { toast } from '$lib/toast.svelte';
-	import { weekStartDay } from '$lib/week';
+	} from '#lib/self-control/review.js';
+	import { TECHNIQUE_LABELS, type UrgeEntry } from '#lib/self-control/sos.js';
+	import { settings, settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read, update } from '#lib/storage.js';
+	import { toast } from '#lib/toast.svelte.js';
+	import { weekStartDay } from '#lib/week.js';
 	import { button, card, field, primary } from '../styles';
 	import { toggle } from '../../weightlifting/styles';
 

@@ -1,24 +1,24 @@
-import { doughDefaults, isDoughValue, type DoughInput } from '$lib/utils/dough';
-import type { TempUnit } from '$lib/utils/oven';
-import type { UnitSystem } from '$lib/recipes/units';
-import { isWeekDay, type WeekDay } from '$lib/week';
+import { doughDefaults, isDoughValue, type DoughInput } from '#lib/utils/dough.js';
+import type { TempUnit } from '#lib/utils/oven.js';
+import type { UnitSystem } from '#lib/recipes/units.js';
+import { isWeekDay, type WeekDay } from '#lib/week.js';
 import {
 	parseHabits,
 	parsePrefs,
 	type Habit,
 	type SelfControlPrefs
-} from '$lib/self-control/habits';
-import { parseLog, parseSession, type SosSession, type UrgeEntry } from '$lib/self-control/sos';
-import { parseEnvironment, type Environment } from '$lib/self-control/environment';
-import { parseReflections, type Reflections } from '$lib/self-control/review';
-import { parseSeesaw, type Seesaw } from '$lib/self-control/seesaw';
-import { parseWhy, type Why } from '$lib/self-control/why';
+} from '#lib/self-control/habits.js';
+import { parseLog, parseSession, type SosSession, type UrgeEntry } from '#lib/self-control/sos.js';
+import { parseEnvironment, type Environment } from '#lib/self-control/environment.js';
+import { parseReflections, type Reflections } from '#lib/self-control/review.js';
+import { parseSeesaw, type Seesaw } from '#lib/self-control/seesaw.js';
+import { parseWhy, type Why } from '#lib/self-control/why.js';
 import {
 	parseItems as parseLastDoneItems,
 	parseLog as parseLastDoneLog,
 	type LastDoneEntry,
 	type LastDoneItem
-} from '$lib/utils/last-done';
+} from '#lib/utils/last-done.js';
 import type { Entry as KernelEntry, Migration, StorageScope } from '@xcwds/core';
 import { getApp } from '@xcwds/sveltekit';
 import {
@@ -37,7 +37,7 @@ import {
 	type PlateCounts,
 	type WeightUnit,
 	type Workout
-} from '$lib/utils/lifting';
+} from '#lib/utils/lifting.js';
 
 /**
  * The app's saved data: every value it saves, registered with the @xcwds kernel (`app.storage`)
@@ -188,7 +188,7 @@ export type Settings = {
 	recipeUnits: UnitSystem | null;
 	/** Navigation style per orientation; phones always keep the tab bar (see app.css). */
 	nav: { portrait: NavStyle; landscape: NavStyle };
-	/** The day weeks start on (1 Monday … 7 Sunday); null follows the locale (`$lib/week`). */
+	/** The day weeks start on (1 Monday … 7 Sunday); null follows the locale (`#lib/week`). */
 	weekStart: WeekDay | null;
 };
 

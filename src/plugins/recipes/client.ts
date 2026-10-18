@@ -1,6 +1,6 @@
 /** The page entry: the recipe units setting (US, metric, or each recipe as written). */
 import { definePlugin } from '@xcwds/core';
-import { defaultSettings, parseRecipeUnits } from '$lib/storage';
+import { defaultSettings, parseRecipeUnits } from '../../lib/storage.js';
 import { NAME } from './name.js';
 
 export default definePlugin(

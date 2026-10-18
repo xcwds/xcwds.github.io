@@ -3,12 +3,12 @@
  * environment plans and weekly reflections it saves.
  */
 import { definePlugin } from '@xcwds/core';
-import { addHabitData } from '$lib/self-control/data';
-import { environmentWithout } from '$lib/self-control/environment';
-import { logWithout } from '$lib/self-control/sos';
-import { seesawWithout } from '$lib/self-control/seesaw';
-import { whyWithout } from '$lib/self-control/why';
-import { entries, registerEntries } from '$lib/storage';
+import { addHabitData } from '../../lib/self-control/data.js';
+import { environmentWithout } from '../../lib/self-control/environment.js';
+import { logWithout } from '../../lib/self-control/sos.js';
+import { seesawWithout } from '../../lib/self-control/seesaw.js';
+import { whyWithout } from '../../lib/self-control/why.js';
+import { entries, registerEntries } from '../../lib/storage.js';
 import { NAME } from './index.js';
 import { tool } from './tool.js';
 

@@ -6,10 +6,10 @@
 	import { onMount, tick } from 'svelte';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
-	import { slashToFocus } from '$lib/shortcuts';
-	import { entries, update } from '$lib/storage';
-	import { toast } from '$lib/toast.svelte';
+	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
+	import { slashToFocus } from '#lib/shortcuts.js';
+	import { entries, update } from '#lib/storage.js';
+	import { toast } from '#lib/toast.svelte.js';
 	import {
 		agoLabel,
 		average,
@@ -23,7 +23,7 @@
 		type LastDoneEntry,
 		type LastDoneItem,
 		type Status
-	} from '$lib/utils/last-done';
+	} from '#lib/utils/last-done.js';
 	import DoneEarlier from './DoneEarlier.svelte';
 	import GapChart from './GapChart.svelte';
 	import ItemForm, { type Fields } from './ItemForm.svelte';

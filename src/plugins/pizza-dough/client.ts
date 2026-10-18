@@ -1,6 +1,6 @@
 /** The page entry: the Pizza Dough Calculator's tool and saved defaults. */
 import { definePlugin } from '@xcwds/core';
-import { defaultSettings, parsePizzaDefaults } from '$lib/storage';
+import { defaultSettings, parsePizzaDefaults } from '../../lib/storage.js';
 import { NAME } from './index.js';
 import { tool } from './tool.js';
 

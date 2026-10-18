@@ -1,6 +1,6 @@
 /** The page entry: the Last done tool and the things and history it saves (#218). */
 import { definePlugin } from '@xcwds/core';
-import { entries, registerEntries } from '$lib/storage';
+import { entries, registerEntries } from '../../lib/storage.js';
 import { NAME } from './index.js';
 import { tool } from './tool.js';
 

@@ -1,8 +1,8 @@
 <script lang="ts">
 	/** Settings → Tool defaults: the coffee timer's default length. */
-	import { settings } from '$lib/settings.svelte';
-	import { COFFEE_SECONDS, entries, remove } from '$lib/storage';
-	import { formatDuration } from '$lib/utils/time';
+	import { settings } from '#lib/settings.svelte.js';
+	import { COFFEE_SECONDS, entries, remove } from '#lib/storage.js';
+	import { formatDuration } from '#lib/utils/time.js';
 
 	function adjust(deltaSeconds: number) {
 		// Forget a length picked in the timer, so the new default is what it opens with.

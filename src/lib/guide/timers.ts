@@ -1,4 +1,4 @@
-import { formatMinutes } from '$lib/utils/oven';
+import { formatMinutes } from '#lib/utils/oven.js';
 
 /** "a" or "an" before a number as said aloud: an 8, an 11, an 18, an 80…, otherwise a. */
 export const article = (text: string) => (/^(8|11\b|18\b)/.test(text) ? 'an' : 'a');

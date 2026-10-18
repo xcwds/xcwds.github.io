@@ -1,7 +1,7 @@
 <script lang="ts">
 	/** Says "Back online." with a toast when the connection returns (the offline notice goes). */
 	import { useApp } from '@xcwds/sveltekit';
-	import { toast } from '$lib/toast.svelte';
+	import { toast } from '#lib/toast.svelte.js';
 
 	const network = useApp().network;
 	$effect(() => {

@@ -1,8 +1,8 @@
 <script lang="ts">
 	/** Settings → Appearance: which day weeks start on, or the locale's (`settings.weekStart`). */
 	import { onMount } from 'svelte';
-	import { settings } from '$lib/settings.svelte';
-	import { WEEK_DAYS, dayName, isWeekDay, localeWeekStart, type WeekDay } from '$lib/week';
+	import { settings } from '#lib/settings.svelte.js';
+	import { WEEK_DAYS, dayName, isWeekDay, localeWeekStart, type WeekDay } from '#lib/week.js';
 
 	/** The locale's first day of the week, known once the page runs in the browser. */
 	let regionWeekStart = $state<WeekDay | undefined>();

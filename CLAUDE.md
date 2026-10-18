@@ -8,7 +8,7 @@ The app icon (`icon.svg` at the repo root, the "multi-tool X") must stay neutral
 or revealing text. Some tools will be private (e.g. planned feminine-care tools), and the icon shows on
 home screens and in app switchers.
 
-SvelteKit static site (adapter-static, Tailwind) deployed to GitHub Pages from `main`.
+SvelteKit 3 static site (adapter-static, Tailwind; SvelteKit's config goes to `xcwds()` in `vite.config.ts`) deployed to GitHub Pages from `main`.
 Package manager: pnpm.
 
 It runs on the @xcwds framework ([xcwds/xcwds](https://github.com/xcwds/xcwds)): `xcwds.config.ts` holds the
@@ -21,7 +21,9 @@ field, and reads only auth and registry keys from `.npmrc`). The app's own featu
 plugins in `src/plugins/<name>/` (linked packages): `index.js` is the build entry (plain JS, run by Node:
 routes, and tools via `tool.js`), `client.ts` the page entry (Vite: registers the plugin's saved data
 and settings fields in the app's namespace, `namespace: ''`). A page entry must not import a build
-entry that uses Node modules (`recipes` keeps its name in `name.js` for that reason).
+entry that uses Node modules (`recipes` keeps its name in `name.js` for that reason). SvelteKit 3 has
+no `$lib`: app code imports `src/lib` as `#lib/<path>.js` (`imports` in `package.json`), and
+the plugins, being their own packages, import it with relative paths.
 
 - Recipes at `/recipes` are classic back-pocket recipes written here with structured, scalable
   ingredients — follow [docs/classic-recipes.md](docs/classic-recipes.md). Tracking issue: #49.

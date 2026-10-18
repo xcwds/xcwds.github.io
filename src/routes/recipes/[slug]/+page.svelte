@@ -1,13 +1,13 @@
 <script lang="ts">
-	import GuideLinks from '$lib/guide/GuideLinks.svelte';
-	import { stepText, stepTimer, type StepTimer } from '$lib/recipes';
-	import { getPan, PANS, panDepthRatio, panRatio, type PanId } from '$lib/recipes/pans';
-	import { formatIngredient, formatYield, isScalable } from '$lib/recipes/scale';
-	import { nativeSystem, systemOf } from '$lib/recipes/units';
-	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
-	import { settings } from '$lib/settings.svelte';
-	import { toast } from '$lib/toast.svelte';
-	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
+	import GuideLinks from '#lib/guide/GuideLinks.svelte';
+	import { stepText, stepTimer, type StepTimer } from '#lib/recipes/index.js';
+	import { getPan, PANS, panDepthRatio, panRatio, type PanId } from '#lib/recipes/pans.js';
+	import { formatIngredient, formatYield, isScalable } from '#lib/recipes/scale.js';
+	import { nativeSystem, systemOf } from '#lib/recipes/units.js';
+	import RecipeUnitsToggle from '#lib/RecipeUnitsToggle.svelte';
+	import { settings } from '#lib/settings.svelte.js';
+	import { toast } from '#lib/toast.svelte.js';
+	import { MINUTE, useCookingTimers } from '#lib/utils/cooking-timers.svelte.js';
 	import {
 		adjustOvenTime,
 		asRange,
@@ -15,7 +15,7 @@
 		formatMinutes,
 		formatMinutesRange,
 		formatTemp
-	} from '$lib/utils/oven';
+	} from '#lib/utils/oven.js';
 	import OvenPanel from './OvenPanel.svelte';
 	import TimerTray from './TimerTray.svelte';
 

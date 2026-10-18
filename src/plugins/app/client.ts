@@ -5,7 +5,7 @@
  * Also the app-wide "Week starts on" setting.
  */
 import { definePlugin } from '@xcwds/core';
-import { defaultSettings, migrations, parseWeekStart } from '$lib/storage';
+import { defaultSettings, migrations, parseWeekStart } from '../../lib/storage.js';
 import { NAME } from './index.js';
 
 export default definePlugin(

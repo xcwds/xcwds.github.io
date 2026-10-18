@@ -1,7 +1,7 @@
 <script lang="ts">
 	/** Settings → Tool defaults: the pizza dough calculator's saved defaults, and a reset. */
-	import { settings } from '$lib/settings.svelte';
-	import { doughDefaults } from '$lib/utils/dough';
+	import { settings } from '#lib/settings.svelte.js';
+	import { doughDefaults } from '#lib/utils/dough.js';
 
 	let pizza = $derived(settings.pizzaDefaults);
 	let pizzaIsBuiltIn = $derived(

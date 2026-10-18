@@ -1,9 +1,9 @@
 <script lang="ts">
-	import GuideLinks from '$lib/guide/GuideLinks.svelte';
-	import { toolGuides } from '$lib/utils/tools';
-	import { settings } from '$lib/settings.svelte';
-	import { MINUTE, useCookingTimers } from '$lib/utils/cooking-timers.svelte';
-	import { formatDuration } from '$lib/utils/time';
+	import GuideLinks from '#lib/guide/GuideLinks.svelte';
+	import { toolGuides } from '#lib/utils/tools.js';
+	import { settings } from '#lib/settings.svelte.js';
+	import { MINUTE, useCookingTimers } from '#lib/utils/cooking-timers.svelte.js';
+	import { formatDuration } from '#lib/utils/time.js';
 
 	/** Quick-start buttons, in minutes (Settings → Tool defaults). */
 	let presets = $derived(settings.cookingPresets);

@@ -1,4 +1,4 @@
-import type { FoodId } from '$lib/utils/oven';
+import type { FoodId } from '#lib/utils/oven.js';
 import type { PanId } from './pans';
 import type { Ingredient, RecipeYield } from './scale';
 

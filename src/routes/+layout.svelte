@@ -6,14 +6,14 @@
 	import UpdateBanner from '@xcwds/plugin-update/UpdateBanner.svelte';
 	import { App, settings as appSettings } from '@xcwds/sveltekit';
 	import { onMount } from 'svelte';
-	import BackOnline from '$lib/BackOnline.svelte';
-	import { startApps } from '$lib/apps.svelte';
-	import TimerAlert from '$lib/TimerAlert.svelte';
-	import SosAlert from '$lib/self-control/SosAlert.svelte';
-	import { startShortcuts } from '$lib/home.svelte';
-	import { startSettings } from '$lib/settings.svelte';
-	import { provideCoffeeTimer } from '$lib/utils/coffee-timer.svelte';
-	import { provideCookingTimers } from '$lib/utils/cooking-timers.svelte';
+	import BackOnline from '#lib/BackOnline.svelte';
+	import { startApps } from '#lib/apps.svelte.js';
+	import TimerAlert from '#lib/TimerAlert.svelte';
+	import SosAlert from '#lib/self-control/SosAlert.svelte';
+	import { startShortcuts } from '#lib/home.svelte.js';
+	import { startSettings } from '#lib/settings.svelte.js';
+	import { provideCoffeeTimer } from '#lib/utils/coffee-timer.svelte.js';
+	import { provideCookingTimers } from '#lib/utils/cooking-timers.svelte.js';
 	import '../app.css';
 
 	let { children } = $props();

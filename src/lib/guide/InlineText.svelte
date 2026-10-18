@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { parseInline, type Inline } from '$lib/guide';
+	import { parseInline, type Inline } from '#lib/guide/index.js';
 
 	let { text }: { text: string } = $props();
 

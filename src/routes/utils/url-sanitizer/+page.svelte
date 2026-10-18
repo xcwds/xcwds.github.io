@@ -2,7 +2,7 @@
 	import { useApp } from '@xcwds/sveltekit';
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
-	import { toast } from '$lib/toast.svelte';
+	import { toast } from '#lib/toast.svelte.js';
 	import {
 		buildLink,
 		isTrackingParam,
@@ -11,8 +11,8 @@
 		trackingPathSegment,
 		unwrapRedirect,
 		type Param
-	} from '$lib/utils/url';
-	import { qrFragment } from '$lib/utils/qr';
+	} from '#lib/utils/url.js';
+	import { qrFragment } from '#lib/utils/qr.js';
 
 	let input = $state('');
 	let url = $state<URL | null>(null);

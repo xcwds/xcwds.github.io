@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { persist } from '$lib/persist.svelte';
-	import { segmented } from '$lib/segmented';
-	import { settings, settingsStatus } from '$lib/settings.svelte';
-	import { entries } from '$lib/storage';
+	import { persist } from '#lib/persist.svelte.js';
+	import { segmented } from '#lib/segmented.js';
+	import { settings, settingsStatus } from '#lib/settings.svelte.js';
+	import { entries } from '#lib/storage.js';
 	import {
 		COMMERCIAL_GYM,
 		UNITS,
@@ -24,7 +24,7 @@
 		totalWeight,
 		type PlateCounts,
 		type WeightUnit
-	} from '$lib/utils/lifting';
+	} from '#lib/utils/lifting.js';
 	import { button, card, field, primary, toggle } from './styles';
 
 	let { total = $bindable(0) }: { total?: number } = $props();

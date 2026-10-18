@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { resolve } from '$app/paths';
-	import type { RecipeOven } from '$lib/recipes';
-	import OvenWarnings from '$lib/OvenWarnings.svelte';
-	import TempInput from '$lib/TempInput.svelte';
-	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
-	import { settings } from '$lib/settings.svelte';
+	import type { RecipeOven } from '#lib/recipes/index.js';
+	import OvenWarnings from '#lib/OvenWarnings.svelte';
+	import TempInput from '#lib/TempInput.svelte';
+	import TempUnitToggle from '#lib/TempUnitToggle.svelte';
+	import { settings } from '#lib/settings.svelte.js';
 	import {
 		adjustOvenTime,
 		asRange,
@@ -14,7 +14,7 @@
 		formatTemp,
 		ovenProblem,
 		ovenWarnings
-	} from '$lib/utils/oven';
+	} from '#lib/utils/oven.js';
 
 	/**
 	 * `activeF` reports the oven temperature to use for the recipe's oven step timers: the one

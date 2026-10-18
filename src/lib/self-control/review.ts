@@ -3,7 +3,7 @@
  * week in local time, plus a short reflection per week. No streaks: progress is urges noticed and
  * ridden out, and what helped. Pure stats and validators; the page saves through `update()`.
  */
-import { shiftWeek, startOfWeek, weekKey, type WeekDay } from '$lib/week';
+import { shiftWeek, startOfWeek, weekKey, type WeekDay } from '#lib/week.js';
 import type { Technique, UrgeEntry } from './sos';
 
 export type Summary = {

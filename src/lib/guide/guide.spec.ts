@@ -1,9 +1,9 @@
 import type { App } from '@xcwds/core';
 import type { TestApp } from '@xcwds/testing';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-import { getRecipe, MAX_STEP_TIMER_MINUTES } from '$lib/recipes';
-import { toolGuides, tools } from '$lib/utils/tools';
-import { toolsApp } from '$lib/utils/tools-app';
+import { getRecipe, MAX_STEP_TIMER_MINUTES } from '#lib/recipes/index.js';
+import { toolGuides, tools } from '#lib/utils/tools.js';
+import { toolsApp } from '#lib/utils/tools-app.js';
 import {
 	articles,
 	articleTexts,

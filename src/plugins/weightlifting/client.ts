@@ -3,7 +3,12 @@
  * plate calculator, workout and history it saves.
  */
 import { definePlugin } from '@xcwds/core';
-import { defaultSettings, entries, parseLiftingSettings, registerEntries } from '$lib/storage';
+import {
+	defaultSettings,
+	entries,
+	parseLiftingSettings,
+	registerEntries
+} from '../../lib/storage.js';
 import { NAME } from './index.js';
 import { tool } from './tool.js';
 

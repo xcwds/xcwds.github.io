@@ -1,4 +1,4 @@
-import { settings } from '$lib/settings.svelte';
+import { settings } from '#lib/settings.svelte.js';
 
 let context: AudioContext | undefined;
 

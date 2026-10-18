@@ -1,7 +1,7 @@
 import { buildTestApp } from '@xcwds/testing';
 import timers from '@xcwds/plugin-timers';
 import tools from '@xcwds/plugin-tools';
-import { APPS } from '$lib/apps';
+import { APPS } from '#lib/apps.js';
 import type { App, StorageAdapter } from '@xcwds/core';
 import app from 'xcwds-app';
 import coffeeTimer from 'xcwds-app-coffee-timer';

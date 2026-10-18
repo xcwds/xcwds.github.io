@@ -2,8 +2,8 @@
 	import { replaceState } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
-	import { hasUnsavedChanges, persist, saveResult } from '$lib/persist.svelte';
-	import { CUE_FIELDS, topCues } from '$lib/self-control/cues';
+	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
+	import { CUE_FIELDS, topCues } from '#lib/self-control/cues.js';
 	import {
 		PLANS_MAX,
 		TEXT_MAX,
@@ -19,12 +19,12 @@
 		type Group,
 		type HabitPlan,
 		type Plan
-	} from '$lib/self-control/environment';
-	import { activeHabits, type Habit } from '$lib/self-control/habits';
-	import { SPRINT_ACTIONS, type UrgeEntry } from '$lib/self-control/sos';
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { entries, read, update } from '$lib/storage';
-	import { toast } from '$lib/toast.svelte';
+	} from '#lib/self-control/environment.js';
+	import { activeHabits, type Habit } from '#lib/self-control/habits.js';
+	import { SPRINT_ACTIONS, type UrgeEntry } from '#lib/self-control/sos.js';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read, update } from '#lib/storage.js';
+	import { toast } from '#lib/toast.svelte.js';
 	import { button, card, field, primary } from '../styles';
 	import { toggle } from '../../weightlifting/styles';
 	import Checklist from './Checklist.svelte';

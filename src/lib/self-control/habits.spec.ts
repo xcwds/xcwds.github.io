@@ -1,6 +1,6 @@
 import { buildTestApp } from '@xcwds/testing';
 import tools from '@xcwds/plugin-tools';
-import { APPS } from '$lib/apps';
+import { APPS } from '#lib/apps.js';
 import type { App, Entry } from '@xcwds/core';
 import app from 'xcwds-app';
 import selfControl from 'xcwds-app-self-control';

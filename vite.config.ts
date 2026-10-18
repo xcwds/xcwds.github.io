@@ -1,6 +1,5 @@
 import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
-import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { xcwds } from '@xcwds/sveltekit/vite';
 
@@ -24,7 +23,10 @@ const xcwdsClients = [
 ];
 
 export default defineConfig({
-	plugins: [xcwds(), sveltekit(), tailwindcss()],
+	// @xcwds sets up SvelteKit with adapter-static (with the `404.html` fallback GitHub Pages serves
+	// for unknown URLs, which boots the app and shows src/routes/+error.svelte; the service worker
+	// uses it offline too), prerendering of every registered page, and the Content Security Policy.
+	plugins: [xcwds(), tailwindcss()],
 
 	test: {
 		expect: { requireAssertions: true },

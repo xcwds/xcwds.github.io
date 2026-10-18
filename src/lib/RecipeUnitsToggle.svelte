@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { UnitSystem } from '$lib/recipes/units';
-	import { segmented } from '$lib/segmented';
-	import { settings } from '$lib/settings.svelte';
+	import type { UnitSystem } from '#lib/recipes/units.js';
+	import { segmented } from '#lib/segmented.js';
+	import { settings } from '#lib/settings.svelte.js';
 
 	/**
 	 * US or metric for recipe ingredients (a tool default in Settings, saved as

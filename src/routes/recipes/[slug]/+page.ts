@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getRecipe, recipes } from '$lib/recipes';
+import { getRecipe, recipes } from '#lib/recipes/index.js';
 import type { EntryGenerator, PageLoad } from './$types';
 
 export const entries: EntryGenerator = () => recipes.map(({ slug }) => ({ slug }));

@@ -1,6 +1,6 @@
 <script lang="ts">
 	/** Settings → Tool defaults: the oven converter's temperature unit. */
-	import TempUnitToggle from '$lib/TempUnitToggle.svelte';
+	import TempUnitToggle from '#lib/TempUnitToggle.svelte';
 </script>
 
 <!-- Spaced from the tool above it in Tool defaults. -->

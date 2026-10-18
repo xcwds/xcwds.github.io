@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { dayInput, fromInputs, timeInput } from '$lib/utils/last-done';
+	import { dayInput, fromInputs, timeInput } from '#lib/utils/last-done.js';
 	import { button, field, primary } from './styles';
 
 	let {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	/** Settings → Tool defaults: recipes' ingredient units. */
-	import RecipeUnitsToggle from '$lib/RecipeUnitsToggle.svelte';
+	import RecipeUnitsToggle from '#lib/RecipeUnitsToggle.svelte';
 </script>
 
 <!-- Spaced from the tool above it in Tool defaults. -->

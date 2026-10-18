@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { articles, getArticle } from '$lib/guide';
+import { articles, getArticle } from '#lib/guide/index.js';
 import type { EntryGenerator, PageLoad } from './$types';
 
 export const entries: EntryGenerator = () => articles.map(({ slug }) => ({ slug }));

@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
-	import { markBusy } from '$lib/busy';
-	import { persist, saveResult } from '$lib/persist.svelte';
+	import { markBusy } from '#lib/busy.js';
+	import { persist, saveResult } from '#lib/persist.svelte.js';
 	import {
 		activeHabits,
 		habitById,
 		NAME_MAX,
 		randomId,
 		type Habit
-	} from '$lib/self-control/habits';
+	} from '#lib/self-control/habits.js';
 	import {
 		ANSWER_MAX,
 		DEFAULT_SURF_MINUTES,
@@ -31,12 +31,12 @@
 		type Outcome,
 		type SessionTechnique,
 		type SosSession
-	} from '$lib/self-control/sos';
-	import { settingsStatus } from '$lib/settings.svelte';
-	import { entries, read, update } from '$lib/storage';
-	import { toast } from '$lib/toast.svelte';
-	import { beep, keepAwake, primeAudio } from '$lib/utils/alarm';
-	import { formatDuration } from '$lib/utils/time';
+	} from '#lib/self-control/sos.js';
+	import { settingsStatus } from '#lib/settings.svelte.js';
+	import { entries, read, update } from '#lib/storage.js';
+	import { toast } from '#lib/toast.svelte.js';
+	import { beep, keepAwake, primeAudio } from '#lib/utils/alarm.js';
+	import { formatDuration } from '#lib/utils/time.js';
 	import { button, card, field, primary } from '../styles';
 	import PlanCard from './PlanCard.svelte';
 	import SeesawCard from './SeesawCard.svelte';

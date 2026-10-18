@@ -1,9 +1,9 @@
 <script lang="ts">
 	/** Settings → Tool defaults: the weightlifting calculator's units and equipment sets. */
 	import EquipmentSets from '../EquipmentSets.svelte';
-	import { segmented } from '$lib/segmented';
-	import { settings } from '$lib/settings.svelte';
-	import { COMMERCIAL_GYM, WEIGHT_UNITS } from '$lib/utils/lifting';
+	import { segmented } from '#lib/segmented.js';
+	import { settings } from '#lib/settings.svelte.js';
+	import { COMMERCIAL_GYM, WEIGHT_UNITS } from '#lib/utils/lifting.js';
 </script>
 
 <!-- Spaced from the tool above it in Tool defaults. -->

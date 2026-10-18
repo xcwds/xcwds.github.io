@@ -9,7 +9,7 @@
 		type SeesawItem,
 		type Side,
 		type Weight
-	} from '$lib/self-control/seesaw';
+	} from '#lib/self-control/seesaw.js';
 	import { button, card, field, primary } from '../styles';
 	import { toggle } from '../../weightlifting/styles';
 
