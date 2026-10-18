@@ -36,9 +36,13 @@
 		yourWatts: num(yourWatts),
 		level
 	});
-	let problem = $derived(microwaveProblem(input));
-	let warnings = $derived(microwaveWarnings(input));
-	let result = $derived(microwaveTime(input));
+	// The fields' `min` isn't enforced, and -1 min + 90 s would still add up to a usable time.
+	let negative = $derived((minutes ?? 0) < 0 || (seconds ?? 0) < 0);
+	let problem = $derived(
+		negative ? 'Minutes and seconds can’t be negative.' : microwaveProblem(input)
+	);
+	let warnings = $derived(negative ? [] : microwaveWarnings(input));
+	let result = $derived(negative ? undefined : microwaveTime(input));
 	let change = $derived(result === undefined ? 0 : result - Math.round(input.seconds));
 
 	let canSave = $derived(
@@ -96,14 +100,7 @@
 				</label>
 				<label class="flex flex-col gap-1 text-sm">
 					<span>Seconds</span>
-					<input
-						type="number"
-						inputmode="numeric"
-						min="0"
-						max="59"
-						bind:value={seconds}
-						class={field}
-					/>
+					<input type="number" inputmode="numeric" min="0" bind:value={seconds} class={field} />
 				</label>
 				<label class="col-span-2 flex flex-col gap-1 text-sm">
 					<span>For a microwave of (W)</span>

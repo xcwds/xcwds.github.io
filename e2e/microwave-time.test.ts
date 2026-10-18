@@ -20,7 +20,10 @@ test('converts the package time, and remembers your microwave', async ({ page })
 	await page.getByLabel('Minutes').fill('');
 	await page.getByLabel('Seconds').fill('');
 	await expect(page.getByRole('alert')).toHaveText('The package time must be more than 0.');
+	await page.getByLabel('Minutes').fill('-1');
 	await page.getByLabel('Seconds').fill('90');
+	await expect(page.getByRole('alert')).toHaveText('Minutes and seconds can’t be negative.');
+	await page.getByLabel('Minutes').fill('');
 	await expect(time).toHaveText('4:45');
 
 	await page.getByRole('button', { name: 'Save as my microwave' }).click();
