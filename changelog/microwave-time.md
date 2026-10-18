@@ -1,0 +1,1 @@
+- New in Utils: Microwave Time Converter. Enter the time on the package and the wattage it's for, and it works out the time for your microwave and power level. Save your microwave's wattage once, here or in Settings.

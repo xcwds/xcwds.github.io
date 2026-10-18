@@ -1,5 +1,6 @@
 import { doughDefaults, isDoughValue, type DoughInput } from '#lib/utils/dough.js';
 import type { TempUnit } from '#lib/utils/oven.js';
+import { DEFAULT_WATTS, parseWatts } from '#lib/utils/microwave.js';
 import type { UnitSystem } from '#lib/recipes/units.js';
 import { isWeekDay, type WeekDay } from '#lib/week.js';
 import {
@@ -188,6 +189,8 @@ export type Settings = {
 	lifting: LiftingSettings;
 	/** °F or °C, for the oven time converter (and its panel on recipes). */
 	ovenUnit: TempUnit;
+	/** Your microwave's wattage, for the microwave time converter. */
+	microwaveWatts: number;
 	/** US or metric for recipe ingredients; null shows each recipe as written. */
 	recipeUnits: UnitSystem | null;
 	/** Navigation style per orientation; phones always keep the tab bar (see app.css). */
@@ -204,6 +207,7 @@ export const defaultSettings: Settings = {
 	pizzaDefaults: { ...doughDefaults },
 	lifting: { unit: 'lb', activeSet: COMMERCIAL_GYM, sets: [] },
 	ovenUnit: 'F',
+	microwaveWatts: DEFAULT_WATTS,
 	recipeUnits: null,
 	nav: { portrait: 'bar', landscape: 'sidebar' },
 	weekStart: null
@@ -278,6 +282,7 @@ export function parseSettings(v: unknown): Settings | undefined {
 		pizzaDefaults: parsePizzaDefaults(v.pizzaDefaults),
 		lifting: parseLiftingSettings(v.lifting),
 		ovenUnit: parseOvenUnit(v.ovenUnit) ?? 'F',
+		microwaveWatts: parseWatts(v.microwaveWatts) ?? DEFAULT_WATTS,
 		recipeUnits: parseRecipeUnits(v.recipeUnits) ?? null,
 		nav: { portrait: navStyle('portrait'), landscape: navStyle('landscape') },
 		weekStart: parseWeekStart(v.weekStart) ?? null

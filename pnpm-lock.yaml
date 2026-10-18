@@ -235,6 +235,9 @@ importers:
       xcwds-app-last-done:
         specifier: link:src/plugins/last-done
         version: link:src/plugins/last-done
+      xcwds-app-microwave-time:
+        specifier: link:src/plugins/microwave-time
+        version: link:src/plugins/microwave-time
       xcwds-app-oven-time:
         specifier: link:src/plugins/oven-time
         version: link:src/plugins/oven-time
