@@ -6,6 +6,7 @@
 	 */
 	import { onMount, tick } from 'svelte';
 	import { afterNavigate, goto } from '$app/navigation';
+	import { isIos } from '@xcwds/plugin-install';
 	import { resolve } from '$app/paths';
 	import { hasUnsavedChanges, persist, saveResult } from '#lib/persist.svelte.js';
 	import { slashToFocus } from '#lib/shortcuts.js';
@@ -114,10 +115,12 @@
 
 	/**
 	 * Shares the file with an app that takes it (Android lists the calendar) where the browser
-	 * can, else downloads it (iPhone and most computers open it with an Add sheet).
+	 * can, else downloads it (iPhone and most computers open it with an Add sheet). iPhone can
+	 * share files too, but its share sheet doesn't add an event, so it always downloads.
 	 */
 	async function deliver(file: File): Promise<'shared' | 'downloaded' | 'cancelled'> {
-		if (navigator.canShare?.({ files: [file] })) {
+		const ios = isIos(navigator.userAgent, navigator.maxTouchPoints);
+		if (!ios && navigator.canShare?.({ files: [file] })) {
 			try {
 				await navigator.share({ files: [file], title: file.name });
 				return 'shared';
