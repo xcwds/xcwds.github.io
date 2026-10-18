@@ -126,6 +126,7 @@ for (const [name, viewport] of [
 			['/utils/pizza-dough'],
 			['/utils/coffee-timer'],
 			['/utils/oven-time'],
+			['/utils/microwave-time'],
 			[
 				'/utils/cooking-timer',
 				(p) => p.getByRole('button', { name: '5 min', exact: true }).click()

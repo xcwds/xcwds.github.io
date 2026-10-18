@@ -1,0 +1,1 @@
+- Last done: add a thing's next due date to your calendar, so the calendar app you already use reminds you. After the next Done, it offers the new date.

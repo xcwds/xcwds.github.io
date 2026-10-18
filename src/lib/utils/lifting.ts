@@ -592,3 +592,140 @@ export type HistoryEntry = { id: number; finishedAt: string; workout: Workout };
 export function historyToText(history: HistoryEntry[]): string {
 	return history.map((h) => workoutToText(h.workout)).join('\n\n');
 }
+
+/** Exercise names the workout suggests as you type. */
+export const EXERCISE_SUGGESTIONS = [
+	'Bench Press',
+	'Squat',
+	'Deadlift',
+	'Overhead Press',
+	'Barbell Row',
+	'Romanian Deadlift',
+	'Front Squat',
+	'Incline Dumbbell Press',
+	'Dumbbell Row',
+	'Goblet Squat',
+	'Kettlebell Swing',
+	'Lunges',
+	'Pull-ups',
+	'Push-ups'
+];
+
+// --- Muscle groups (#220) ----------------------------------------------------------------
+
+export type MuscleGroup = 'chest' | 'back' | 'shoulders' | 'arms' | 'legs' | 'core';
+export const MUSCLE_GROUPS: readonly { id: MuscleGroup; label: string }[] = [
+	{ id: 'chest', label: 'Chest' },
+	{ id: 'back', label: 'Back' },
+	{ id: 'shoulders', label: 'Shoulders' },
+	{ id: 'arms', label: 'Arms' },
+	{ id: 'legs', label: 'Legs' },
+	{ id: 'core', label: 'Core' }
+];
+const isMuscleGroup = (v: unknown): v is MuscleGroup => MUSCLE_GROUPS.some((g) => g.id === v);
+
+/** Your own exercises' groups, keyed by `exerciseKey` (`app:workout-history:muscles`). */
+export type MyMuscles = Record<string, MuscleGroup[]>;
+
+/** How an exercise name is matched: case-insensitive, ignoring extra spaces. */
+export const exerciseKey = (name: string) => name.trim().replace(/\s+/g, ' ').toLowerCase();
+
+/** The groups each suggested exercise counts for. */
+const BUILT_IN_MUSCLES: MyMuscles = {
+	'bench press': ['chest', 'shoulders', 'arms'],
+	squat: ['legs'],
+	deadlift: ['back', 'legs'],
+	'overhead press': ['shoulders', 'arms'],
+	'barbell row': ['back', 'arms'],
+	'romanian deadlift': ['legs', 'back'],
+	'front squat': ['legs'],
+	'incline dumbbell press': ['chest', 'shoulders'],
+	'dumbbell row': ['back', 'arms'],
+	'goblet squat': ['legs'],
+	'kettlebell swing': ['legs', 'back'],
+	lunges: ['legs'],
+	'pull-ups': ['back', 'arms'],
+	'push-ups': ['chest', 'arms']
+};
+
+/** The groups an exercise counts for, or undefined if it isn't grouped yet. */
+export function musclesFor(name: string, mine: MyMuscles): MuscleGroup[] | undefined {
+	const key = exerciseKey(name);
+	return Object.hasOwn(mine, key)
+		? mine[key]
+		: Object.hasOwn(BUILT_IN_MUSCLES, key)
+			? BUILT_IN_MUSCLES[key]
+			: undefined;
+}
+
+/** Saved groups: malformed rows are dropped, not the whole map. */
+export function parseMuscles(v: unknown): MyMuscles | undefined {
+	if (typeof v !== 'object' || v === null || Array.isArray(v)) return undefined;
+	const rows: [string, MuscleGroup[]][] = [];
+	for (const [key, groups] of Object.entries(v)) {
+		if (!key || key !== exerciseKey(key) || !Array.isArray(groups) || groups.length === 0) continue;
+		if (!groups.every(isMuscleGroup) || new Set(groups).size !== groups.length) continue;
+		rows.push([key, [...groups]]);
+	}
+	// Own properties even for a name like "__proto__", which assigning would make the prototype.
+	return Object.fromEntries(rows);
+}
+
+/** A workout that counted for a group, and which of its exercises did. */
+export type GroupWorkout = { entry: HistoryEntry; exercises: string[] };
+
+export type GroupStatus = {
+	group: MuscleGroup;
+	label: string;
+	/** When the newest workout that counted was finished. */
+	last?: Date;
+	/** The workouts that counted, newest first. */
+	workouts: GroupWorkout[];
+};
+
+/**
+ * When each muscle group was last trained, from finished workouts: never-trained groups first,
+ * then the longest ago. Only exercises with a set that has reps count. `ungrouped` lists the
+ * names that counted but aren't grouped yet, as last written, newest first.
+ */
+export function lastTrained(
+	history: readonly HistoryEntry[],
+	mine: MyMuscles
+): { groups: GroupStatus[]; ungrouped: string[] } {
+	const byGroup = new Map<MuscleGroup, GroupWorkout[]>(MUSCLE_GROUPS.map((g) => [g.id, []]));
+	const ungrouped = new Map<string, string>();
+	const finished = history
+		.map((entry) => ({ entry, at: Date.parse(entry.finishedAt) }))
+		.filter(({ at }) => !Number.isNaN(at))
+		.sort((a, b) => b.at - a.at);
+	for (const { entry } of finished) {
+		const counted = new Map<MuscleGroup, string[]>();
+		for (const exercise of entry.workout.exercises) {
+			const name = exercise.name.trim().replace(/\s+/g, ' ');
+			if (!name || !exercise.sets.some((s) => s.reps)) continue;
+			const groups = musclesFor(name, mine);
+			if (!groups) {
+				const key = exerciseKey(name);
+				if (!ungrouped.has(key)) ungrouped.set(key, name);
+				continue;
+			}
+			for (const group of groups) {
+				const names = counted.get(group) ?? [];
+				if (!names.includes(name)) names.push(name);
+				counted.set(group, names);
+			}
+		}
+		for (const [group, exercises] of counted) byGroup.get(group)!.push({ entry, exercises });
+	}
+	const groups: GroupStatus[] = MUSCLE_GROUPS.map(({ id, label }) => {
+		const workouts = byGroup.get(id)!;
+		const newest = workouts[0];
+		return newest
+			? { group: id, label, last: new Date(newest.entry.finishedAt), workouts }
+			: { group: id, label, workouts };
+	});
+	// Stable sort: ties keep the order of MUSCLE_GROUPS.
+	const time = (s: GroupStatus) => s.last?.getTime() ?? -Infinity;
+	groups.sort((a, b) => (time(a) === time(b) ? 0 : time(a) < time(b) ? -1 : 1));
+	return { groups, ungrouped: [...ungrouped.values()] };
+}

@@ -18,6 +18,7 @@ import cookingTimer from 'xcwds-app-cooking-timer';
 import app from 'xcwds-app';
 import cameraTool from 'xcwds-app-camera';
 import lastDone from 'xcwds-app-last-done';
+import microwaveTime from 'xcwds-app-microwave-time';
 import ovenTime from 'xcwds-app-oven-time';
 import pizzaDough from 'xcwds-app-pizza-dough';
 import qrTool from 'xcwds-app-qr';
@@ -69,6 +70,7 @@ export default defineConfig({
 		coffeeTimer(),
 		cookingTimer(),
 		ovenTime(),
+		microwaveTime(),
 		urlSanitizer(),
 		qrTool(),
 		weightlifting(),

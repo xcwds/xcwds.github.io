@@ -107,6 +107,7 @@ test.describe('with the sidebar', () => {
 		'/recipes/pizza-dough',
 		'/guide/grill-stovetop-or-oven',
 		'/settings',
+		'/utils/microwave-time',
 		'/utils/coffee-timer',
 		'/utils/weightlifting',
 		'/utils/url-sanitizer',

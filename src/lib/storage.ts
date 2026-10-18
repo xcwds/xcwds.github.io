@@ -1,5 +1,6 @@
 import { doughDefaults, isDoughValue, type DoughInput } from '#lib/utils/dough.js';
 import type { TempUnit } from '#lib/utils/oven.js';
+import { DEFAULT_WATTS, parseWatts } from '#lib/utils/microwave.js';
 import type { UnitSystem } from '#lib/recipes/units.js';
 import { isWeekDay, type WeekDay } from '#lib/week.js';
 import {
@@ -14,8 +15,10 @@ import { parseReflections, type Reflections } from '#lib/self-control/review.js'
 import { parseSeesaw, type Seesaw } from '#lib/self-control/seesaw.js';
 import { parseWhy, type Why } from '#lib/self-control/why.js';
 import {
+	parseCalendarAdded,
 	parseItems as parseLastDoneItems,
 	parseLog as parseLastDoneLog,
+	type CalendarAdded,
 	type LastDoneEntry,
 	type LastDoneItem
 } from '#lib/utils/last-done.js';
@@ -29,11 +32,13 @@ import {
 	barName,
 	parseBar,
 	parseEquipmentSet,
+	parseMuscles,
 	type Bar,
 	type BarType,
 	type EquipmentSet,
 	type HistoryEntry,
 	type LiftingSetup,
+	type MyMuscles,
 	type PlateCounts,
 	type WeightUnit,
 	type Workout
@@ -184,6 +189,8 @@ export type Settings = {
 	lifting: LiftingSettings;
 	/** °F or °C, for the oven time converter (and its panel on recipes). */
 	ovenUnit: TempUnit;
+	/** Your microwave's wattage, for the microwave time converter. */
+	microwaveWatts: number;
 	/** US or metric for recipe ingredients; null shows each recipe as written. */
 	recipeUnits: UnitSystem | null;
 	/** Navigation style per orientation; phones always keep the tab bar (see app.css). */
@@ -200,6 +207,7 @@ export const defaultSettings: Settings = {
 	pizzaDefaults: { ...doughDefaults },
 	lifting: { unit: 'lb', activeSet: COMMERCIAL_GYM, sets: [] },
 	ovenUnit: 'F',
+	microwaveWatts: DEFAULT_WATTS,
 	recipeUnits: null,
 	nav: { portrait: 'bar', landscape: 'sidebar' },
 	weekStart: null
@@ -274,6 +282,7 @@ export function parseSettings(v: unknown): Settings | undefined {
 		pizzaDefaults: parsePizzaDefaults(v.pizzaDefaults),
 		lifting: parseLiftingSettings(v.lifting),
 		ovenUnit: parseOvenUnit(v.ovenUnit) ?? 'F',
+		microwaveWatts: parseWatts(v.microwaveWatts) ?? DEFAULT_WATTS,
 		recipeUnits: parseRecipeUnits(v.recipeUnits) ?? null,
 		nav: { portrait: navStyle('portrait'), landscape: navStyle('landscape') },
 		weekStart: parseWeekStart(v.weekStart) ?? null
@@ -335,6 +344,12 @@ export const entries = {
 	),
 	// Its own group, so clearing the calculator's data in Settings never wipes past workouts.
 	workoutHistory: entry<HistoryEntry[]>('workout-history', 'Workout history', parseHistory),
+	// Which muscle groups your own exercises count for (#220): kept and cleared with the history.
+	workoutMuscles: entry<MyMuscles>(
+		'workout-history:muscles',
+		'Exercise muscle groups',
+		parseMuscles
+	),
 	// Self-Control (#146) is private: its own group, so it can be cleared on its own.
 	selfControlHabits: entry<Habit[]>('self-control:habits', 'Self-Control habits', parseHabits),
 	selfControlPrefs: entry<SelfControlPrefs>(
@@ -367,7 +382,13 @@ export const entries = {
 	),
 	// Last done (#218): the things you track, and when you did each.
 	lastDoneItems: entry<LastDoneItem[]>('last-done:items', 'Last done things', parseLastDoneItems),
-	lastDoneLog: entry<LastDoneEntry[]>('last-done:log', 'Last done history', parseLastDoneLog)
+	lastDoneLog: entry<LastDoneEntry[]>('last-done:log', 'Last done history', parseLastDoneLog),
+	/** The due dates added to your calendar, so the page can offer the next one (#219). */
+	lastDoneCalendar: entry<CalendarAdded>(
+		'last-done:calendar',
+		'Last done calendar dates',
+		parseCalendarAdded
+	)
 } satisfies Record<string, Entry<unknown>>;
 
 /**

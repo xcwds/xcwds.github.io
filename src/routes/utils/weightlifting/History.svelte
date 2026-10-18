@@ -7,6 +7,7 @@
 		workoutToText,
 		type HistoryEntry
 	} from '#lib/utils/lifting.js';
+	import MuscleGroups from './MuscleGroups.svelte';
 	import { button, card } from './styles';
 
 	let {
@@ -55,6 +56,7 @@
 			No saved workouts yet. Tap <strong>Finish workout</strong> on the Workout tab to save one here.
 		</p>
 	{:else}
+		<MuscleGroups {history} />
 		<div class="flex items-center justify-between gap-2">
 			<p class="text-sm text-gray-600 dark:text-gray-400">
 				{history.length}
