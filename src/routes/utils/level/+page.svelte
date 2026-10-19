@@ -222,7 +222,6 @@
 			{/if}
 			<p
 				class="text-4xl font-semibold tabular-nums"
-				aria-live="polite"
 				data-testid="level-angle"
 				data-level={reading?.level ?? false}
 			>
@@ -233,6 +232,10 @@
 				{:else}
 					{Math.abs(reading.angle).toFixed(1)}°
 				{/if}
+			</p>
+			<!-- Announced only on becoming level or not: the angle changes with every reading. -->
+			<p class="sr-only" aria-live="polite" data-testid="level-status">
+				{reading ? (reading.level ? 'Level' : 'Not level') : ''}
 			</p>
 			<p class="text-center text-sm text-gray-600 dark:text-gray-400">
 				{reading?.mode === 'edge'
@@ -275,7 +278,7 @@
 					</div>
 					<div class="absolute top-6 left-1/2 h-24 w-1 -translate-x-1/2 rounded bg-red-600"></div>
 				</div>
-				<p class="text-4xl font-semibold tabular-nums" aria-live="polite" data-testid="heading">
+				<p class="text-4xl font-semibold tabular-nums" data-testid="heading">
 					{heading === undefined ? '…' : `${Math.round(heading) % 360}° ${compassPoint(heading)}`}
 				</p>
 			{/if}

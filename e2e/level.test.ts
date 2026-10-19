@@ -27,10 +27,15 @@ test('the bubble follows the tilt, reads level at 0°, and calibrates', async ({
 	await tilt(page, { beta: 0, gamma: 0 });
 	await expect(angle).toHaveText('Level');
 	await expect(angle).toHaveAttribute('data-level', 'true');
+	// Screen readers hear only the change into or out of level, not every reading.
+	const status = page.getByTestId('level-status');
+	await expect(status).toHaveText('Level');
+	await expect(page.locator('main [aria-live]')).toHaveCount(1);
 
 	// Lying flat, tipped: the angle shows and the bubble moves to the higher side (left).
 	await tilt(page, { beta: 0, gamma: 3 });
 	await expect(angle).toHaveText('3.0°');
+	await expect(status).toHaveText('Not level');
 	const bubble = page.getByTestId('bubble');
 	await expect(bubble).toHaveAttribute('style', /translate\(-[\d.]+rem, 0rem\)/);
 
