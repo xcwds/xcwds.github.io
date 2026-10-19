@@ -79,24 +79,32 @@
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	let listening = false;
 
-	function listen() {
-		if (listening) return;
-		listening = true;
+	const requestPermission = () =>
+		(DeviceOrientationEvent as unknown as { requestPermission?: Permission }).requestPermission;
+
+	/**
+	 * Listens, and after a moment without readings says why: Safari on iOS (and browsers like it)
+	 * sends none until asked, which it allows only from a tap; others have no sensors. Browsers
+	 * that can ask but don't need to (newer Chrome) just start.
+	 */
+	function listen(asked = false) {
 		sensor = 'waiting';
-		window.addEventListener('deviceorientation', onOrientation);
-		window.addEventListener('deviceorientationabsolute', onAbsolute);
+		if (heading === undefined) compass = 'waiting';
+		if (!listening) {
+			listening = true;
+			window.addEventListener('deviceorientation', onOrientation);
+			window.addEventListener('deviceorientationabsolute', onAbsolute);
+		}
+		clearTimeout(timer);
 		timer = setTimeout(() => {
-			if (!up) sensor = 'none';
+			if (!up) sensor = !asked && typeof requestPermission() === 'function' ? 'ask' : 'none';
 			if (heading === undefined) compass = 'none';
 		}, WAIT_MS);
 	}
 
-	/** Safari on iOS asks first, and only from a tap. */
 	async function start() {
-		const ask = (DeviceOrientationEvent as unknown as { requestPermission?: Permission })
-			.requestPermission;
 		try {
-			if ((await ask?.()) === 'denied') {
+			if ((await requestPermission()?.()) === 'denied') {
 				sensor = 'denied';
 				return;
 			}
@@ -104,18 +112,13 @@
 			sensor = 'denied';
 			return;
 		}
-		listen();
+		listen(true);
 	}
 
 	onMount(() => {
 		const awake = keepAwake(() => true);
 		void awake.sync();
 		if (typeof DeviceOrientationEvent === 'undefined') sensor = 'none';
-		else if (
-			typeof (DeviceOrientationEvent as unknown as { requestPermission?: Permission })
-				.requestPermission === 'function'
-		)
-			sensor = 'ask';
 		else listen();
 		return () => {
 			clearTimeout(timer);

@@ -69,24 +69,48 @@ test('the compass reads an absolute heading, or says it has none', async ({ page
 	await expect(page.getByText('Magnetic north')).toBeVisible();
 });
 
+/** Gives the browser `requestPermission` as Safari on iOS has it, or takes it away. */
+function permission(page: Page, value: 'granted' | 'none') {
+	return page.addInitScript((value) => {
+		(window as unknown as { asked: number }).asked = 0;
+		Object.defineProperty(DeviceOrientationEvent, 'requestPermission', {
+			configurable: true,
+			value:
+				value === 'none'
+					? undefined
+					: async () => {
+							(window as unknown as { asked: number }).asked++;
+							return value;
+						}
+		});
+	}, value);
+}
+
+const asked = (page: Page) => page.evaluate(() => (window as unknown as { asked: number }).asked);
+
 test('says it needs a phone where there are no sensors', async ({ page }) => {
+	await permission(page, 'none');
 	await gotoHydrated(page, '/utils/level');
 	await expect(page.getByTestId('no-sensors')).toBeVisible();
 });
 
-test('asks first where the browser wants a tap (iOS)', async ({ page }) => {
-	await page.addInitScript(() => {
-		(window as unknown as { asked: number }).asked = 0;
-		Object.defineProperty(DeviceOrientationEvent, 'requestPermission', {
-			value: async () => {
-				(window as unknown as { asked: number }).asked++;
-				return 'granted';
-			}
-		});
-	});
+test('asks first where the browser wants a tap and sends nothing until then (iOS)', async ({
+	page
+}) => {
+	await permission(page, 'granted');
 	await gotoHydrated(page, '/utils/level');
 	await page.getByRole('button', { name: 'Start' }).click();
-	expect(await page.evaluate(() => (window as unknown as { asked: number }).asked)).toBe(1);
+	expect(await asked(page)).toBe(1);
 	await tilt(page, { beta: 0, gamma: 0 });
 	await expect(page.getByTestId('level-angle')).toHaveText('Level');
+});
+
+test('never asks where readings arrive anyway (newer Chrome)', async ({ page }) => {
+	await permission(page, 'granted');
+	await gotoHydrated(page, '/utils/level');
+	await tilt(page, { beta: 0, gamma: 0 });
+	await expect(page.getByTestId('level-angle')).toHaveText('Level');
+	await page.waitForTimeout(2500);
+	await expect(page.getByRole('button', { name: 'Start' })).toHaveCount(0);
+	expect(await asked(page)).toBe(0);
 });
