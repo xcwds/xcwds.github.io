@@ -1,6 +1,7 @@
 import { doughDefaults, isDoughValue, type DoughInput } from '#lib/utils/dough.js';
 import type { TempUnit } from '#lib/utils/oven.js';
 import { DEFAULT_WATTS, parseWatts } from '#lib/utils/microwave.js';
+import { parseCalibration, type Calibration } from '#lib/utils/level.js';
 import type { UnitSystem } from '#lib/recipes/units.js';
 import { isWeekDay, type WeekDay } from '#lib/week.js';
 import {
@@ -388,7 +389,12 @@ export const entries = {
 		'last-done:calendar',
 		'Last done calendar dates',
 		parseCalendarAdded
-	)
+	),
+	/** Level (#217): this phone's zero, for a case that rocks. Not in backups: it's per phone. */
+	levelCalibration: {
+		...entry<Calibration>('level:calibration', 'Level calibration', parseCalibration),
+		backup: false
+	}
 } satisfies Record<string, Entry<unknown>>;
 
 /**

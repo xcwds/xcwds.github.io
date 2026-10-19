@@ -31,8 +31,8 @@ export const APPS: AppGroup[] = [
 		id: 'housework',
 		name: 'Housework',
 		emoji: '🧹',
-		blurb: 'Keep track of when you last did things.',
-		groups: ['last-done']
+		blurb: 'Keep track of when you last did things, and a level for hanging pictures.',
+		groups: ['last-done', 'level']
 	},
 	{
 		id: 'camera',

@@ -1,0 +1,1 @@
+- New in Utils: Level and compass. Lay your phone flat for a bubble level, or stand it on an edge to hang a picture straight, and calibrate it for a case that rocks. The compass shows magnetic north where your browser reports it. No location needed.

@@ -28,6 +28,7 @@ describe('tools', () => {
 			'/utils/weightlifting',
 			'/utils/self-control',
 			'/utils/last-done',
+			'/utils/level',
 			'/utils/camera',
 			'/utils/photo-cleaner',
 			'/utils/magnifier'
