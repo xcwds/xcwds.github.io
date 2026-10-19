@@ -29,7 +29,8 @@ describe('tools', () => {
 			'/utils/self-control',
 			'/utils/last-done',
 			'/utils/camera',
-			'/utils/photo-cleaner'
+			'/utils/photo-cleaner',
+			'/utils/magnifier'
 		]);
 	});
 

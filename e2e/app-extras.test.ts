@@ -158,6 +158,7 @@ for (const [name, viewport] of [
 			],
 			['/utils/camera', (p) => p.getByText('What stays private').click()],
 			['/utils/photo-cleaner', (p) => p.getByText('What gets removed').click()],
+			['/utils/magnifier'],
 			['/utils/self-control/sos'],
 			['/utils/self-control/why'],
 			['/utils/self-control/seesaw'],

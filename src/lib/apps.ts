@@ -38,7 +38,7 @@ export const APPS: AppGroup[] = [
 		id: 'camera',
 		name: 'Camera',
 		emoji: '📷',
-		blurb: 'Photos that stay on this device, and clean copies to share.',
+		blurb: 'Photos that stay on this device, clean copies to share and a magnifier.',
 		groups: ['photos']
 	},
 	{
