@@ -1,0 +1,1 @@
+- Microwave Time Converter: no package? Switch to "A food" for a starting time for soup, rice, leftovers, vegetables, a potato, eggs, bacon, pizza, oatmeal, a mug of water or coffee, or butter, by amount and whether it's frozen, worked out for your microwave's wattage.
