@@ -1,0 +1,1 @@
+- New in Utils: Magnifier, for menus, labels and medicine bottles. Zoom in with the camera, freeze the picture to read it comfortably, switch to high contrast or inverted colours, and turn on the light where your phone has one. Nothing is saved.

@@ -18,6 +18,7 @@ import cookingTimer from 'xcwds-app-cooking-timer';
 import app from 'xcwds-app';
 import cameraTool from 'xcwds-app-camera';
 import lastDone from 'xcwds-app-last-done';
+import magnifier from 'xcwds-app-magnifier';
 import microwaveTime from 'xcwds-app-microwave-time';
 import ovenTime from 'xcwds-app-oven-time';
 import photoCleaner from 'xcwds-app-photo-cleaner';
@@ -79,6 +80,7 @@ export default defineConfig({
 		lastDone(),
 		cameraTool(),
 		photoCleaner(),
+		magnifier(),
 		recipes(),
 		// Your apps (#224): apps people build from blocks, each one a tool in the `blocks` app.
 		blocks({ path: '/my-apps', app: 'blocks', templates: myAppsTemplates as AppDefinition[] }),
