@@ -97,3 +97,20 @@ test('remembers the zoom for this visit', async ({ page }) => {
 	await page.getByRole('button', { name: 'Turn on camera' }).click();
 	await expect(page.getByRole('slider', { name: /Digital zoom/ })).toHaveValue('1.2');
 });
+
+test('a frozen picture stays when the camera goes off', async ({ page }) => {
+	await gotoHydrated(page, '/utils/magnifier');
+	await page.getByRole('button', { name: 'Turn on camera' }).click();
+	await page.getByRole('button', { name: 'Freeze' }).click();
+	await page.getByRole('button', { name: 'Turn off' }).click();
+	const viewer = page.getByTestId('magnifier');
+	await expect(viewer).toHaveAttribute('data-state', 'idle');
+	await expect(viewer).toHaveAttribute('data-frozen', 'true');
+	await expect(page.getByTestId('frozen')).toBeVisible();
+	await expect(page.getByRole('button', { name: 'Turn on camera' })).toHaveCount(0);
+	await page.getByRole('slider', { name: /Zoom/ }).fill('2');
+	await expect(page.getByTestId('frozen')).toHaveAttribute('style', /scale\(2\)/);
+
+	await page.getByRole('button', { name: 'Unfreeze' }).click();
+	await expect(page.getByRole('button', { name: 'Turn on camera' })).toBeVisible();
+});

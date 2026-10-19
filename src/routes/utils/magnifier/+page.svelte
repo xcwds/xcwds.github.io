@@ -56,10 +56,10 @@
 			error = camera.error;
 			stream = camera.stream;
 			caps = camera.capabilities();
-			if (camera.state !== 'live') {
-				applied = false;
-				frozen = false;
-			} else if (!applied && caps.zoom && sessionZoom !== undefined) {
+			// A frozen picture stays when the camera goes off (a locked screen, another app): it
+			// needs no camera, and that's when it helps most.
+			if (camera.state !== 'live') applied = false;
+			else if (!applied && caps.zoom && sessionZoom !== undefined) {
 				// Back to the zoom last used, each time the camera comes on.
 				applied = true;
 				void camera.setZoom(sessionZoom);
@@ -119,7 +119,7 @@
 		frozen ? { ...FROZEN_ZOOM, kind: 'digital' as const, value: frozenZoom } : zoom;
 
 	function pointerDown(event: PointerEvent) {
-		if (!live || (!frozen && event.pointerType !== 'touch')) return;
+		if (!frozen && (!live || event.pointerType !== 'touch')) return;
 		(event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
 		pointers[event.pointerId] = { x: event.clientX, y: event.clientY };
 		const z = pinchable();
@@ -164,7 +164,7 @@
 		data-frozen={frozen}
 		bind:clientWidth={width}
 		bind:clientHeight={height}
-		style:touch-action={live ? 'none' : undefined}
+		style:touch-action={live || frozen ? 'none' : undefined}
 		onpointerdown={pointerDown}
 		onpointermove={pointerMove}
 		onpointerup={pointerUp}
@@ -192,7 +192,7 @@
 			aria-label="Frozen picture"
 			data-testid="frozen"
 		></canvas>
-		{#if !live}
+		{#if !live && !frozen}
 			<div class="absolute inset-0 flex items-center justify-center p-4 text-center text-white">
 				{#if status === 'asking'}
 					<p>Waiting for permission to use the camera…</p>
@@ -214,19 +214,24 @@
 		{status === 'denied' || status === 'unavailable' || status === 'error' ? error : ''}
 	</p>
 
-	{#if live}
+	{#if live || frozen}
 		<div class="grid grid-cols-2 gap-3">
 			{#if frozen}
-				<button type="button" class="{primary} min-h-12 text-lg" onclick={unfreeze}>Unfreeze</button
+				<button
+					type="button"
+					class="{primary} min-h-12 text-lg {live ? '' : 'col-span-2'}"
+					onclick={unfreeze}>Unfreeze</button
 				>
 			{:else}
 				<button type="button" class="{primary} min-h-12 text-lg" disabled={!ready} onclick={freeze}
 					>Freeze</button
 				>
 			{/if}
-			<button type="button" class="{button} min-h-12 text-lg" onclick={() => camera?.stop()}
-				>Turn off</button
-			>
+			{#if live}
+				<button type="button" class="{button} min-h-12 text-lg" onclick={() => camera?.stop()}
+					>Turn off</button
+				>
+			{/if}
 			{#if caps.torch}
 				<button
 					type="button"
