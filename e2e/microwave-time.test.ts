@@ -63,6 +63,10 @@ test('gives a starting time by food, amount and state', async ({ page }) => {
 	// A weaker microwave takes longer, and a food with one way to start shows no choice.
 	await page.getByLabel('Wattage (W)').fill('700');
 	await expect(time).toHaveText('12:25');
+	await page.getByLabel('Wattage (W)').fill('450');
+	await expect(page.getByTestId('oven-warnings')).toContainText('for a 1000 W microwave');
+	await expect(page.getByTestId('oven-warnings')).not.toContainText('package');
+	await page.getByLabel('Wattage (W)').fill('700');
 	await page.getByLabel('Food').selectOption({ label: 'Potato, whole' });
 	await expect(page.getByRole('group', { name: 'Starting from' })).toHaveCount(0);
 	await expect(page.getByTestId('microwave-amount')).toContainText('2 medium potatoes');

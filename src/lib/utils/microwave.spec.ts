@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	FOODS,
+	foodPackage,
 	formatClock,
 	foodTime,
 	microwaveProblem,
@@ -100,6 +101,13 @@ describe('foodTime', () => {
 		const most = foodTime({ food: soup, state: fromFridge, amount: soup.max, yourWatts: 1000 });
 		expect(foodTime({ food: soup, state: fromFridge, amount: 99, yourWatts: 1000 })).toBe(most);
 		expect(foodTime({ food: soup, state: fromFridge, amount: NaN, yourWatts: 1000 })).toBe(90);
+	});
+
+	it('warns in its own words when your microwave is far from 1000 W', () => {
+		const input = foodPackage({ food: soup, state: fromFridge, amount: 1, yourWatts: 450 });
+		expect(microwaveWarnings(input, true)).toEqual([expect.stringContaining('1000 W microwave')]);
+		expect(microwaveWarnings(input, true)[0]).not.toContain('package');
+		expect(microwaveWarnings({ ...input, yourWatts: 800 }, true)).toEqual([]);
 	});
 
 	it('has no time for a wattage out of range', () => {

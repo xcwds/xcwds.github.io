@@ -61,7 +61,7 @@
 	let problem = $derived(
 		negative ? 'Minutes and seconds can’t be negative.' : microwaveProblem(input)
 	);
-	let warnings = $derived(negative ? [] : microwaveWarnings(input));
+	let warnings = $derived(negative ? [] : microwaveWarnings(input, mode === 'food'));
 	let result = $derived(negative ? undefined : microwaveTime(input));
 	let change = $derived(result === undefined ? 0 : result - Math.round(input.seconds));
 	let shownLevel = $derived(mode === 'food' ? foodState.level : level);

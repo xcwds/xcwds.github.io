@@ -58,15 +58,19 @@ export function microwaveTime(input: MicrowaveInput): number | undefined {
 	return Math.max(ROUND_SECONDS, Math.round(exact / ROUND_SECONDS) * ROUND_SECONDS);
 }
 
-/** Warnings worth showing next to a usable result. */
-export function microwaveWarnings(input: MicrowaveInput): string[] {
+/**
+ * Warnings worth showing next to a usable result. `food`: the time is one of {@link FOODS}, for
+ * a 1000 W microwave, not a package's.
+ */
+export function microwaveWarnings(input: MicrowaveInput, food = false): string[] {
 	if (microwaveProblem(input)) return [];
 	const factor = (input.packageWatts * 100) / (input.yourWatts * input.level);
-	return factor > RELIABLE_FACTOR || factor < 1 / RELIABLE_FACTOR
-		? [
-				'That’s a big change from the package, so the estimate is rough. Check early and add time in short bursts.'
-			]
-		: [];
+	if (factor <= RELIABLE_FACTOR && factor >= 1 / RELIABLE_FACTOR) return [];
+	return [
+		food
+			? `These times are for a ${FOOD_WATTS} W microwave, so the estimate is rough this far from it. Check early and add time in short bursts.`
+			: 'That’s a big change from the package, so the estimate is rough. Check early and add time in short bursts.'
+	];
 }
 
 /** `m:ss` (or `h:mm:ss` past an hour), as a microwave's display shows it. */
@@ -179,7 +183,7 @@ export const FOODS: Food[] = [
 		max: 4,
 		scale: 0.8,
 		states: [
-			raw(150, 100, 'Add 2 tablespoons of water and cover, so they steam.'),
+			raw(150, 100, 'Add 2 tablespoons of water and cover, so they steam, until just tender.'),
 			frozen(180, 100, 'Add 2 tablespoons of water, cover, and stir halfway.')
 		]
 	},
@@ -203,7 +207,13 @@ export const FOODS: Food[] = [
 		unit: { one: 'egg', other: 'eggs' },
 		max: 4,
 		scale: 0.75,
-		states: [raw(45, 100, 'Beat with a splash of milk in a greased mug; stir every 30 seconds.')]
+		states: [
+			raw(
+				45,
+				100,
+				'Beat with a splash of milk in a greased mug; stir every 30 seconds until just set, with no runny egg left.'
+			)
+		]
 	},
 	{
 		id: 'bacon',
@@ -211,7 +221,13 @@ export const FOODS: Food[] = [
 		unit: { one: 'slice', other: 'slices' },
 		max: 6,
 		scale: 0.9,
-		states: [raw(50, 100, 'Lay it flat between paper towels on a plate.')]
+		states: [
+			raw(
+				50,
+				100,
+				'Lay it flat between paper towels on a plate. Cook until crisp, adding 15 seconds at a time.'
+			)
+		]
 	},
 	{
 		id: 'pizza',
