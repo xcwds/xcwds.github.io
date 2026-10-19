@@ -18,6 +18,7 @@ import cookingTimer from 'xcwds-app-cooking-timer';
 import app from 'xcwds-app';
 import cameraTool from 'xcwds-app-camera';
 import lastDone from 'xcwds-app-last-done';
+import level from 'xcwds-app-level';
 import magnifier from 'xcwds-app-magnifier';
 import microwaveTime from 'xcwds-app-microwave-time';
 import ovenTime from 'xcwds-app-oven-time';
@@ -78,6 +79,7 @@ export default defineConfig({
 		weightlifting(),
 		selfControl(),
 		lastDone(),
+		level(),
 		cameraTool(),
 		photoCleaner(),
 		magnifier(),
@@ -108,6 +110,7 @@ export default defineConfig({
 				'workout-history': 'Workout History',
 				'self-control': 'Self-Control',
 				'last-done': 'Last done',
+				level: 'Level',
 				blocks: 'Your apps',
 				'blocks-private': 'Your private apps',
 				photos: 'Camera',
