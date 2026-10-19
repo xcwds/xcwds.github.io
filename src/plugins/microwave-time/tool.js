@@ -5,5 +5,5 @@ export const tool = {
 	app: 'kitchen',
 	emoji: '📡',
 	name: 'Microwave Time Converter',
-	blurb: 'Package time for your microwave’s wattage and power level.'
+	blurb: 'Package time for your wattage and power level, or a starting time by food.'
 };

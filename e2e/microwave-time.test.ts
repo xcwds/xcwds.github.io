@@ -38,3 +38,48 @@ test('converts the package time, and remembers your microwave', async ({ page })
 	await gotoHydrated(page, '/utils/microwave-time');
 	await expect(page.getByLabel('Wattage (W)')).toHaveValue('750');
 });
+
+test('gives a starting time by food, amount and state', async ({ page }) => {
+	await gotoHydrated(page, '/utils/microwave-time');
+	await page.getByRole('button', { name: 'A food' }).click();
+	await expect(page.getByRole('button', { name: 'A food' })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	const time = page.getByTestId('microwave-time');
+	// Soup from the fridge, 1 cup at 1000 W; no package fields or power level here.
+	await expect(time).toHaveText('1:30');
+	await expect(page.getByLabel('Minutes')).toHaveCount(0);
+	await expect(page.getByLabel('Power level')).toHaveCount(0);
+	await expect(page.getByTestId('microwave-result')).toContainText('steaming hot');
+
+	await page.getByRole('button', { name: 'More' }).click();
+	await expect(page.getByTestId('microwave-amount')).toContainText('2 cups');
+	await expect(time).toHaveText('2:35');
+	await page.getByRole('button', { name: 'Frozen' }).click();
+	await expect(page.getByTestId('microwave-result')).toContainText('at 50% power');
+	await expect(time).toHaveText('8:40');
+
+	// A weaker microwave takes longer, and a food with one way to start shows no choice.
+	await page.getByLabel('Wattage (W)').fill('700');
+	await expect(time).toHaveText('12:25');
+	await page.getByLabel('Wattage (W)').fill('450');
+	await expect(page.getByTestId('oven-warnings')).toContainText('for a 1000 W microwave');
+	await expect(page.getByTestId('oven-warnings')).not.toContainText('package');
+	await page.getByLabel('Wattage (W)').fill('700');
+	await page.getByLabel('Food').selectOption({ label: 'Potato, whole' });
+	await expect(page.getByRole('group', { name: 'Starting from' })).toHaveCount(0);
+	await expect(page.getByTestId('microwave-amount')).toContainText('2 medium potatoes');
+	await expect(page.getByTestId('microwave-tip')).toContainText('Prick it all over');
+	await expect(page.getByTestId('microwave-result')).not.toContainText('steaming hot');
+
+	// One plate at a time: the amount stops at the food's most.
+	await page.getByLabel('Food').selectOption({ label: 'Plate of leftovers' });
+	await expect(page.getByRole('button', { name: 'More' })).toHaveCount(0);
+	await expect(page.getByText('One plate at a time.')).toBeVisible();
+
+	// Back to the package: its fields and power level return.
+	await page.getByRole('button', { name: 'The package' }).click();
+	await expect(page.getByLabel('Power level')).toBeVisible();
+	await expect(page.getByTestId('microwave-change')).toBeVisible();
+});
