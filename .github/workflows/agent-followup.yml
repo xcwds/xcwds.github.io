@@ -1,0 +1,40 @@
+# Follows up on the agent's own PRs here (xcwds.github.io#237): red CI on a PR the bot opened on a
+# claude/ branch, or the owner's review on one, runs xcwds/xcwds's agent-followup.yml, which gates
+# the event (followup-gate.mjs) and then fixes, answers or merges. Events are per repo, so this thin
+# caller listens here; the called workflow sees this repo's event and variables as its own.
+name: Agent follow-up
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: read
+
+jobs:
+  followup:
+    # The same cheap first filter as the called workflow's gate job, so most CI runs and reviews
+    # start nothing.
+    if: >-
+      (github.event_name == 'workflow_run'
+        && github.event.workflow_run.conclusion == 'failure'
+        && github.event.workflow_run.event == 'pull_request'
+        && startsWith(github.event.workflow_run.head_branch, 'claude/'))
+      || (github.event_name == 'pull_request_review'
+        && github.event.review.user.login == github.repository_owner
+        && contains(fromJSON('["changes_requested","commented"]'), github.event.review.state)
+        && github.event.pull_request.user.type == 'Bot'
+        && startsWith(github.event.pull_request.head.ref, 'claude/')
+        && github.event.pull_request.head.repo.full_name == github.repository)
+    # The gate job reads the PR and the Issue to PR runs with this workflow's token.
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    uses: xcwds/xcwds/.github/workflows/agent-followup.yml@main
+    secrets:
+      AGENT_APP_PRIVATE_KEY: ${{ secrets.AGENT_APP_PRIVATE_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
