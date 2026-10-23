@@ -37,6 +37,13 @@ the plugins, being their own packages, import it with relative paths.
 - `pnpm test:e2e` needs a Playwright browser. In Claude Code cloud containers don't run
   `playwright install`; use a config (kept out of the repo) that sets
   `use.launchOptions.executablePath` to the Chromium under `/opt/pw-browsers/chromium-*/chrome-linux/chrome`.
+  On GitHub Actions runners `pnpm exec playwright install --with-deps chromium` is fine (the agent
+  workflows' runner does it before the agent starts), so the plain `pnpm test:e2e` works there.
+- Agent workflows: `agent-mention.yml` (tag `@claude` in an issue, a PR comment or a review),
+  `agent-followup.yml` (red CI or the owner's review on the bot's `claude/` PRs) and
+  `agent-labeling.yml` (the owner's `refinement requested` / `answered in comments` labels) are thin
+  callers of the reusable workflows in xcwds/xcwds, which hold the prompts, the setup and the
+  scheduled routines over both repos; see its `AGENTS.md` ("Agent workflows").
 - Always open a pull request for work you push (against `main`, linking the issues it addresses),
   unless the user explicitly says not to. Pushing a branch alone is not done.
 - Issue labels follow `.github/labels.md` (the same set in xcwds/xcwds; keep the two copies identical).

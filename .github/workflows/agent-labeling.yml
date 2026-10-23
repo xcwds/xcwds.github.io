@@ -1,0 +1,26 @@
+# The owner adding `refinement requested` or `answered in comments` to an issue here runs the
+# labeling prompt for that issue (xcwds.github.io#237), through xcwds/xcwds's agent-labeling.yml.
+# Events are per repo, so this thin caller listens here; the scheduled labeling of both repos runs
+# from xcwds/xcwds. Like there, nothing runs until the variable AGENT_LABELING is `on`, here too:
+# the called workflow reads this repo's variables.
+name: Agent labeling
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  labeling:
+    # The same filter as the called workflow's, so other labels start nothing.
+    if: >-
+      vars.AGENT_LABELING == 'on'
+      && github.event.sender.login == github.repository_owner
+      && github.event.issue.pull_request == null
+      && contains(fromJSON('["refinement requested","answered in comments"]'), github.event.label.name)
+    uses: xcwds/xcwds/.github/workflows/agent-labeling.yml@main
+    secrets:
+      AGENT_APP_PRIVATE_KEY: ${{ secrets.AGENT_APP_PRIVATE_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
