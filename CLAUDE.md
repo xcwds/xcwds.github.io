@@ -141,6 +141,8 @@ the plugins, being their own packages, import it with relative paths.
   `@xcwds/plugin-changelog` in `xcwds.config.ts`), numbering entries by the commit that added them to
   `main`, so CI and deploy check out full history. After an update the toast links to Settings →
   What's new, which badges entries newer than `app:settings:whats-new-seen`; a fresh install sees none.
+  Commit a new entry before `pnpm test:e2e`: an uncommitted one is numbered by the time it's read,
+  so the build and `e2e/update.test.ts` give it different ids and the What's new test fails.
   The update hands the version it left over in `sessionStorage` (`app:just-updated`, the key the app used
   before @xcwds, so updating from that version still shows What's new).
 - Feedback and app chrome: show confirmations with `toast()` from `src/lib/toast.svelte.ts` (the shell's
