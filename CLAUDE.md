@@ -79,7 +79,9 @@ the plugins, being their own packages, import it with relative paths.
   and `errors` do.
 - The site is an installable PWA: the build writes the manifest and icons (rendered from `icon.svg` at the
   repo root, the `brand.icon`), and `src/service-worker.ts` imports the generated worker, where
-  `@xcwds/plugin-offline` precaches every prerendered page for offline use. `@xcwds/plugin-share`'s `target`
+  `@xcwds/plugin-offline` precaches every prerendered page for offline use, except the pages of
+  apps that are off (`byApp`: turning an app off at `/apps` deletes its pages from the cache, turning
+  it on downloads them, and the Apps page says what each app keeps offline). `@xcwds/plugin-share`'s `target`
   makes the manifest's `share_target` send Android shares to `/utils/url-sanitizer`; the service worker
   moves the shared link from `?query` to the fragment, and the page reads it with `app.shared.listen`.
   Opened cold without the worker, that one request does reach the server with the query (on GitHub

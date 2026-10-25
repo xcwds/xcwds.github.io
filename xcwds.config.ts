@@ -119,7 +119,9 @@ export default defineConfig({
 				changelog: "What's new"
 			}
 		}),
-		offline(),
+		// Only the apps that are on are kept offline (xcwds/xcwds#163): turning one off at /apps
+		// deletes its pages from the offline copy, and turning it on downloads them.
+		offline({ byApp: true }),
 		update({ marker: 'app:just-updated' }),
 		changelog({ entries: loadChangelog(), storageKey: 'app:settings:whats-new-seen' }),
 		install()
