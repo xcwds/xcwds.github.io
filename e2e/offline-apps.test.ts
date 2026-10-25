@@ -77,4 +77,8 @@ test("an app's sub-pages leave the offline copy with it (Self-Control)", async (
 	);
 	for (const path of selfControl) await expect.poll(() => kept(page, path)).toBe(false);
 	expect(await kept(page, '/utils/coffee-timer')).toBe(true);
+
+	// Its sub-pages still open, and say it's off, as its hub does.
+	await gotoHydrated(page, '/utils/self-control/sos');
+	await expect(page.getByTestId('app-off')).toContainText('Self-Control');
 });
