@@ -63,3 +63,18 @@ test('turning an app off deletes its pages from the offline copy; on downloads t
 	await expect(page.locator('h1')).toHaveText(/Roast Chicken/i);
 	await context.setOffline(false);
 });
+
+test("an app's sub-pages leave the offline copy with it (Self-Control)", async ({ page }) => {
+	const selfControl = ['/utils/self-control', '/utils/self-control/sos'];
+	await gotoHydrated(page, '/apps');
+	await waitForController(page);
+	for (const path of selfControl) await expect.poll(() => kept(page, path)).toBe(true);
+
+	await toggle(page, 'Self-Control').click();
+	await expect(toggle(page, 'Self-Control')).toHaveAttribute('aria-checked', 'false');
+	await expect(card(page, 'Self-Control').getByTestId('app-offline')).toHaveText(
+		'Not kept offline'
+	);
+	for (const path of selfControl) await expect.poll(() => kept(page, path)).toBe(false);
+	expect(await kept(page, '/utils/coffee-timer')).toBe(true);
+});

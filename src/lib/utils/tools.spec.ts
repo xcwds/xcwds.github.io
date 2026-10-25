@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import type { App } from '@xcwds/core';
 import type { TestApp } from '@xcwds/testing';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
@@ -59,6 +59,21 @@ describe('apps (#223)', () => {
 		for (const tool of allTools()) expect(ids, tool.path).toContain(tool.app);
 		expect(APPS.filter((a) => a.default === false)).toEqual([]);
 		expect(APPS.find((a) => a.id === 'self-control')?.private).toBe(true);
+	});
+
+	it('know their tools in the service worker too, so byApp keeps only the apps that are on offline', () => {
+		// The worker sees only tools added by a `./worker` entry (xcwds/xcwds#163).
+		const plugins = new URL('../../plugins/', import.meta.url);
+		const withTool = readdirSync(plugins).filter((name) =>
+			existsSync(new URL(`${name}/tool.js`, plugins))
+		);
+		expect(withTool).toHaveLength(allTools().length);
+		for (const name of withTool) {
+			const pkg = JSON.parse(readFileSync(new URL(`${name}/package.json`, plugins), 'utf8'));
+			expect(pkg.exports['./worker'], name).toBe('./worker.ts');
+			const worker = readFileSync(new URL(`${name}/worker.ts`, plugins), 'utf8');
+			expect(worker, name).toContain('app.tools?.add(tool)');
+		}
 	});
 
 	it('each hide their marked items before first paint (app.css)', () => {
