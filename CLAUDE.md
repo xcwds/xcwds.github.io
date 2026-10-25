@@ -20,10 +20,12 @@ bump the ranges here. To try an unreleased change, add it to `overrides` in `pnp
 field, and reads only auth and registry keys from `.npmrc`). The app's own features are
 plugins in `src/plugins/<name>/` (linked packages): `index.js` is the build entry (plain JS, run by Node:
 routes, and tools via `tool.js`), `client.ts` the page entry (Vite: registers the plugin's saved data
-and settings fields in the app's namespace, `namespace: ''`). A page entry must not import a build
-entry that uses Node modules (`recipes` keeps its name in `name.js` for that reason). SvelteKit 3 has
-no `$lib`: app code imports `src/lib` as `#lib/<path>.js` (`imports` in `package.json`), and
-the plugins, being their own packages, import it with relative paths.
+and settings fields in the app's namespace, `namespace: ''`), and a tool's `worker.ts` the
+service-worker entry (adds the tool, so `@xcwds/plugin-offline`'s `byApp` knows its app). A page
+entry must not import a build entry that uses Node modules (`recipes` keeps its name in `name.js`
+for that reason). SvelteKit 3 has no `$lib`: app code imports `src/lib` as `#lib/<path>.js`
+(`imports` in `package.json`), and the plugins, being their own packages, import it with relative
+paths.
 
 - Recipes at `/recipes` are classic back-pocket recipes written here with structured, scalable
   ingredients — follow [docs/classic-recipes.md](docs/classic-recipes.md). Tracking issue: #49.
@@ -79,7 +81,9 @@ the plugins, being their own packages, import it with relative paths.
   and `errors` do.
 - The site is an installable PWA: the build writes the manifest and icons (rendered from `icon.svg` at the
   repo root, the `brand.icon`), and `src/service-worker.ts` imports the generated worker, where
-  `@xcwds/plugin-offline` precaches every prerendered page for offline use. `@xcwds/plugin-share`'s `target`
+  `@xcwds/plugin-offline` precaches every prerendered page for offline use, except the pages of
+  apps that are off (`byApp`: turning an app off at `/apps` deletes its pages from the cache, turning
+  it on downloads them, and the Apps page says what each app keeps offline). `@xcwds/plugin-share`'s `target`
   makes the manifest's `share_target` send Android shares to `/utils/url-sanitizer`; the service worker
   moves the shared link from `?query` to the fragment, and the page reads it with `app.shared.listen`.
   Opened cold without the worker, that one request does reach the server with the query (on GitHub

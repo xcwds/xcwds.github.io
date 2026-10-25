@@ -1,0 +1,2 @@
+- Only the apps you turn on are kept for offline use, so the app downloads less on install and on every update. Turning an app on downloads it again.
+- Apps shows what each app keeps offline, and about how much the app stores on this device.

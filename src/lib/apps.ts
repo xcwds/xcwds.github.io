@@ -56,6 +56,8 @@ export const APPS: AppGroup[] = [
 		emoji: '🧭',
 		blurb: 'Tools for building better habits.',
 		private: true,
+		// Its sub-pages, so they leave the offline copy with it.
+		routes: ['/utils/self-control'],
 		groups: ['self-control']
 	}
 ];
