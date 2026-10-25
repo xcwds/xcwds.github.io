@@ -22,9 +22,10 @@ plugins in `src/plugins/<name>/` (linked packages): `index.js` is the build entr
 routes, and tools via `tool.js`), `client.ts` the page entry (Vite: registers the plugin's saved data
 and settings fields in the app's namespace, `namespace: ''`), and a tool's `worker.ts` the
 service-worker entry (adds the tool, so `@xcwds/plugin-offline`'s `byApp` knows its app). A page
-entry must not import a build entry that uses Node modules (`recipes` keeps its name in `name.js` for that reason). SvelteKit 3 has
-no `$lib`: app code imports `src/lib` as `#lib/<path>.js` (`imports` in `package.json`), and
-the plugins, being their own packages, import it with relative paths.
+entry must not import a build entry that uses Node modules (`recipes` keeps its name in `name.js`
+for that reason). SvelteKit 3 has no `$lib`: app code imports `src/lib` as `#lib/<path>.js`
+(`imports` in `package.json`), and the plugins, being their own packages, import it with relative
+paths.
 
 - Recipes at `/recipes` are classic back-pocket recipes written here with structured, scalable
   ingredients — follow [docs/classic-recipes.md](docs/classic-recipes.md). Tracking issue: #49.
