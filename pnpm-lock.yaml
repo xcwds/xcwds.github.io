@@ -176,47 +176,47 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(@resvg/resvg-js@2.6.2)
       '@xcwds/plugin-blocks':
-        specifier: ^0.5.0
-        version: 0.5.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+        specifier: ^0.6.0
+        version: 0.6.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
       '@xcwds/plugin-camera':
-        specifier: ^0.4.0
-        version: 0.4.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+        specifier: ^0.5.0
+        version: 0.5.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
       '@xcwds/plugin-changelog':
-        specifier: ^0.7.0
-        version: 0.7.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+        specifier: ^0.8.0
+        version: 0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
       '@xcwds/plugin-install':
-        specifier: ^0.8.0
-        version: 0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
-      '@xcwds/plugin-offline':
-        specifier: ^0.7.0
-        version: 0.7.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
-      '@xcwds/plugin-qr':
-        specifier: ^0.4.0
-        version: 0.4.0(01286e2a34fc05e8faca4e6996e5250b)
-      '@xcwds/plugin-settings':
-        specifier: ^0.8.0
-        version: 0.8.0(002e5e9b2c6eee37b5839944824e2e62)
-      '@xcwds/plugin-share':
-        specifier: ^0.7.0
-        version: 0.7.0(002e5e9b2c6eee37b5839944824e2e62)
-      '@xcwds/plugin-shell':
-        specifier: ^0.7.0
-        version: 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
-      '@xcwds/plugin-theme':
-        specifier: ^0.7.0
-        version: 0.7.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
-      '@xcwds/plugin-timers':
-        specifier: ^0.7.0
-        version: 0.7.0(002e5e9b2c6eee37b5839944824e2e62)
-      '@xcwds/plugin-tools':
         specifier: ^0.9.0
-        version: 0.9.0(002e5e9b2c6eee37b5839944824e2e62)
+        version: 0.9.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/plugin-offline':
+        specifier: ^0.8.0
+        version: 0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/plugin-qr':
+        specifier: ^0.5.0
+        version: 0.5.0(4b49c69b95f54da5db28e2ac770eafea)
+      '@xcwds/plugin-settings':
+        specifier: ^0.9.0
+        version: 0.9.0(c2790ed0e476b013358a3ee9ca32ce26)
+      '@xcwds/plugin-share':
+        specifier: ^0.8.0
+        version: 0.8.0(c2790ed0e476b013358a3ee9ca32ce26)
+      '@xcwds/plugin-shell':
+        specifier: ^0.8.0
+        version: 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/plugin-theme':
+        specifier: ^0.8.0
+        version: 0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/plugin-timers':
+        specifier: ^0.8.0
+        version: 0.8.0(c2790ed0e476b013358a3ee9ca32ce26)
+      '@xcwds/plugin-tools':
+        specifier: ^0.10.0
+        version: 0.10.0(c2790ed0e476b013358a3ee9ca32ce26)
       '@xcwds/plugin-update':
-        specifier: ^0.7.0
-        version: 0.7.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+        specifier: ^0.8.0
+        version: 0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
       '@xcwds/sveltekit':
-        specifier: ^0.7.0
-        version: 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+        specifier: ^0.8.0
+        version: 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       tailwindcss:
         specifier: ^4.1.18
         version: 4.3.3
@@ -298,7 +298,7 @@ importers:
         version: 4.1.12(playwright@1.64.1)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))(vitest@4.1.12)
       '@xcwds/testing':
         specifier: ^0.5.0
-        version: 0.5.1(@playwright/test@1.64.1)(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))(vitest@4.1.12)
+        version: 0.5.2(@playwright/test@1.64.1)(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))(vitest@4.1.12)
       eslint:
         specifier: ^10.0.0
         version: 10.13.0(jiti@2.7.0)
@@ -1058,135 +1058,135 @@ packages:
       '@resvg/resvg-js':
         optional: true
 
-  '@xcwds/plugin-blocks@0.5.0':
-    resolution: {integrity: sha512-78i1mDpTHRxg6ZOCDDOSBFYyqH/hG3yDKYYq//JkU6/f2nIHbTva2YLVZopntPsnTunbEr/KyfMj3fkKBuk9RQ==}
+  '@xcwds/plugin-blocks@0.6.0':
+    resolution: {integrity: sha512-x7BvJ7PTopdjWHsVJ9WIJVD8UgPFkI6oED7uLWPAaPQyF7FsJlKZbBN90AgaxsXONWtsOdugSAe8JP/27aDJeA==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@sveltejs/kit': ^3.0.0
       '@xcwds/core': ^0.5.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/plugin-camera@0.4.0':
-    resolution: {integrity: sha512-v9aIITqVtmQ14Zs5dj4yKhYKKg/0qADc0KbPhr5dzuHgTb2aqJYRXoWsomoFl5L25oSj2AgknMYkeyUVDi16jQ==}
+  '@xcwds/plugin-camera@0.5.0':
+    resolution: {integrity: sha512-9vBj0IuJO9MwvlWx0oCEh9xkMSTRRGNAG/RbGKyhnBWXoBVz96BZ6H/cZXfPrZyJ/4+T+yOqP+FBkvz45Qxvkw==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@xcwds/core': ^0.5.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/plugin-changelog@0.7.0':
-    resolution: {integrity: sha512-tSFwFoFGqDtmm5Su0JfZxEitGtTS48+txamckthIxmFirX8+rmTnW2SpAdSqKYrqzUjPr4O5tr6KGfnLU+C+YQ==}
+  '@xcwds/plugin-changelog@0.8.0':
+    resolution: {integrity: sha512-eehfcZuS7khVf5RwA0I/YLQPG9K9qEEe7d5OY0fEaNEuZ/hIrDSFBiJpnlJ8mXj5kumC0tASmbWTMkn2A4Gmnw==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@xcwds/core': ^0.5.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/plugin-install@0.8.0':
-    resolution: {integrity: sha512-ar4rH0Ztkg0Lhk/5IcXHEQEupOZPPwJvXAtowy3u65U9R1SvihQ3rDpXRoBVGclZ8XX9ellgJ5yw/+m0bYUnJw==}
+  '@xcwds/plugin-install@0.9.0':
+    resolution: {integrity: sha512-BLPDpwUn3PZLBfAAVU0DgvPzz1RG8+jCOdLHLINHlmoBWqklEKnEP1hxFjHiu97mCRdyEaBNbxMdhtB/nhRdYg==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@xcwds/core': ^0.5.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/plugin-offline@0.7.0':
-    resolution: {integrity: sha512-6zeyX7EnNFIjo4F5t3oTEF+yAzUpqcKo+Z+mnqf2BLyizombntUXwCiDGHAnOD3RjJpUuZhcs5wGHMGk2ycrUQ==}
+  '@xcwds/plugin-offline@0.8.0':
+    resolution: {integrity: sha512-0JNNTzOe1hnwateRJRMKykPdxA0g5TTyhedzzyrXKvGcuFLYm/cifWRltsVnDCHJ2cOx/YS0+v+rF7HW0/38dQ==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@xcwds/core': ^0.5.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/plugin-qr@0.4.0':
-    resolution: {integrity: sha512-wUeQvHTqtLdpwjvrSEIejaPns1DIQqZ44yGMmHCoAxfH6XvtJgk1J4Kf6pDMfbipaLvUCzr5KybUrHlWvZifRw==}
+  '@xcwds/plugin-qr@0.5.0':
+    resolution: {integrity: sha512-V+3HSz9c519n9Budkv+sL8QgrI8qemb9sc9J9SesMvTjy9V3eHyjRi0qg8wLixyNAwFHeh0d8KE26nArnJw+aA==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@xcwds/core': ^0.5.0
-      '@xcwds/plugin-camera': ^0.4.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/plugin-camera': ^0.5.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/plugin-settings@0.8.0':
-    resolution: {integrity: sha512-lDu8LdB4lZ87JeA00U+SAO4y4L7iKPMS/n2v96Vh+B8urEfryAAw47a0IZt629mamJDkzrRKg968jNrbADj14w==}
+  '@xcwds/plugin-settings@0.9.0':
+    resolution: {integrity: sha512-VoeG1epyFDjOdAQ+sfYiwt/sMr6PDS4SlHQu00hTiQiSTxGuVdLp0Loe1ZOwusMfOQiRZgb9//wpX45AMbzY6A==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@sveltejs/kit': ^3.0.0
       '@xcwds/core': ^0.5.0
-      '@xcwds/plugin-shell': ^0.7.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/plugin-shell': ^0.8.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
     peerDependenciesMeta:
       '@xcwds/plugin-shell':
         optional: true
 
-  '@xcwds/plugin-share@0.7.0':
-    resolution: {integrity: sha512-1k3NrSxg+A0HKVLKMV4Wt+t2GJptV+w7WUSy+8M+lx4voMX+zhxr+ok84tb11l/CcYk/LlQtSxWZgAkyjiuaEw==}
+  '@xcwds/plugin-share@0.8.0':
+    resolution: {integrity: sha512-rD5AoaaRaSo73L5GcAPb0twfXmLaoDyu8d3gTVgtfh106x4obVDJaV1CphSLS0NTQZ0zdNl5TiyvXPCzcoqd2w==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@sveltejs/kit': ^3.0.0
       '@xcwds/core': ^0.5.0
-      '@xcwds/plugin-shell': ^0.7.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/plugin-shell': ^0.8.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
     peerDependenciesMeta:
       '@xcwds/plugin-shell':
         optional: true
 
-  '@xcwds/plugin-shell@0.7.0':
-    resolution: {integrity: sha512-TOzSYHBl2rqBENakzFtPG7X/L9e1u+TidBT735WNLCwMA+LYVXfZcOTncXJTUqf4+F6q5MBWZ9JA9Mkq3LUiUA==}
+  '@xcwds/plugin-shell@0.8.0':
+    resolution: {integrity: sha512-cd53trnj3/Al9Z3bjwmXhbTV5FVAu2CwZ833h+hV87aHS/oT+eIJuGZzAO5ofWkYryTA03jMeumIHsyAdo2gZQ==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@sveltejs/kit': ^3.0.0
       '@xcwds/core': ^0.5.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/plugin-theme@0.7.0':
-    resolution: {integrity: sha512-aSGEsRbV1MXVILiQ2EcV4UcRJpW5XxHKxJV+DhcpBJEg0dPQvYKZkT5361qq3VBmO13RihsCzOHM/gLoUiP5Aw==}
+  '@xcwds/plugin-theme@0.8.0':
+    resolution: {integrity: sha512-fs14TmwBZ5dV4Jj0pv7d3NpF2oOYXZaMfzZS96NhZF7/kPiUw0i/C2aYJxfFLLZx3Nq5OYf2rPDosHAznrRxbQ==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@xcwds/core': ^0.5.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/plugin-timers@0.7.0':
-    resolution: {integrity: sha512-YiV4cjWFcRF5OhYFxbn5MQAh3rDoOlIT14YTpqAnUdRivb+1DyvE3YRfaC14vuZnWBcTbEV0n/5Kngofr7aCdg==}
+  '@xcwds/plugin-timers@0.8.0':
+    resolution: {integrity: sha512-O0dqFrYcxPH9/pfRsmu+nfwzU+Wdf1WCkJmeeksskXVs5aaP1Sny5XlNGhNGLgprkQjF/E+9s4dOJaTAEc7A+w==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@sveltejs/kit': ^3.0.0
       '@xcwds/core': ^0.5.0
-      '@xcwds/plugin-shell': ^0.7.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/plugin-shell': ^0.8.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
     peerDependenciesMeta:
       '@xcwds/plugin-shell':
         optional: true
 
-  '@xcwds/plugin-tools@0.9.0':
-    resolution: {integrity: sha512-BYlKfQM8f/u8xsbQ18E4LBZs1uJ0aaqUbXkiDrlAyva378/U0jJwNyIHrpfj6qOSm06694aLxuRAbN1UTRQfRg==}
+  '@xcwds/plugin-tools@0.10.0':
+    resolution: {integrity: sha512-JCcC7WXCpPiYyqXt/ArjNit8Ysr//zUUdOxFNMmp9/dYKmFWjw2YFS3iKh6WwX1yDCFo0jii+V2yGdmQag/Tgw==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@sveltejs/kit': ^3.0.0
       '@xcwds/core': ^0.5.0
-      '@xcwds/plugin-shell': ^0.7.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/plugin-shell': ^0.8.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
     peerDependenciesMeta:
       '@xcwds/plugin-shell':
         optional: true
 
-  '@xcwds/plugin-update@0.7.0':
-    resolution: {integrity: sha512-KKyrt9js3sA82FXpF2YFJrHQnVT3sioEJ/MPRshz1AVh9JmvvKldKYFOHGwn806QrPLdk9ibFsmJ709tZobS4A==}
+  '@xcwds/plugin-update@0.8.0':
+    resolution: {integrity: sha512-hes8gAwC4vkhJBrxhH0/fQ92jkmpg4xSqEGPl+xPQMjG7DBieOlufsXlSzdT+4ECShHaCJCw8QTJkeufXaXypg==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@xcwds/core': ^0.5.0
-      '@xcwds/sveltekit': ^0.7.0
+      '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
-  '@xcwds/sveltekit@0.7.0':
-    resolution: {integrity: sha512-XK9iTwRX7cbzi4UrrkspVSr7srNA7zF8Odyq4Qsvokgmx8KtFOzcXl7ZmfAerG4NIM9uXd0aXg3CyVd5Y6hxnw==}
+  '@xcwds/sveltekit@0.8.0':
+    resolution: {integrity: sha512-GPNIFQcCxZi8xKbpyK6Pf5fi3/V3eGkWgPEh74MrxQEXfrISMlQubfWxqixPFqs1r4T0kxsTfIPA4o/sTV3Uqg==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@sveltejs/kit': ^3.0.0
@@ -1194,8 +1194,8 @@ packages:
       svelte: ^5.0.0
       vite: ^8.3.4
 
-  '@xcwds/testing@0.5.1':
-    resolution: {integrity: sha512-p1hnfti2FavipAj5vn5E6tLCE1YPJc6JsfwtemmpY0oAKlAcmW85sEBSQMLhmojbZrT+aNneRZQcybeRQiVKwg==}
+  '@xcwds/testing@0.5.2':
+    resolution: {integrity: sha512-QVpcbztHr4O6ZeoHPIhtDKLMv2yA6JPvL0Bq9Wjn5lmf0I9D22Vt5ku+VZneC0mfPbE1RjRxMuOS/9J7aTVeUQ==}
     engines: {node: '>=22.18'}
     peerDependencies:
       '@playwright/test': ^1.50.0
@@ -2629,101 +2629,101 @@ snapshots:
     optionalDependencies:
       '@resvg/resvg-js': 2.6.2
 
-  '@xcwds/plugin-blocks@0.5.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
+  '@xcwds/plugin-blocks@0.6.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
     dependencies:
       '@sveltejs/kit': 3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/plugin-camera@0.4.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
+  '@xcwds/plugin-camera@0.5.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
     dependencies:
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/plugin-changelog@0.7.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
+  '@xcwds/plugin-changelog@0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
     dependencies:
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/plugin-install@0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
+  '@xcwds/plugin-install@0.9.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
     dependencies:
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/plugin-offline@0.7.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
+  '@xcwds/plugin-offline@0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
     dependencies:
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/plugin-qr@0.4.0(01286e2a34fc05e8faca4e6996e5250b)':
+  '@xcwds/plugin-qr@0.5.0(4b49c69b95f54da5db28e2ac770eafea)':
     dependencies:
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/plugin-camera': 0.4.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/plugin-camera': 0.5.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       jsqr: 1.4.0
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/plugin-settings@0.8.0(002e5e9b2c6eee37b5839944824e2e62)':
+  '@xcwds/plugin-settings@0.9.0(c2790ed0e476b013358a3ee9ca32ce26)':
     dependencies:
       '@sveltejs/kit': 3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
     optionalDependencies:
-      '@xcwds/plugin-shell': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/plugin-shell': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
 
-  '@xcwds/plugin-share@0.7.0(002e5e9b2c6eee37b5839944824e2e62)':
+  '@xcwds/plugin-share@0.8.0(c2790ed0e476b013358a3ee9ca32ce26)':
     dependencies:
       '@sveltejs/kit': 3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
     optionalDependencies:
-      '@xcwds/plugin-shell': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/plugin-shell': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
 
-  '@xcwds/plugin-shell@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
+  '@xcwds/plugin-shell@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
     dependencies:
       '@sveltejs/kit': 3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/plugin-theme@0.7.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
+  '@xcwds/plugin-theme@0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
     dependencies:
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/plugin-timers@0.7.0(002e5e9b2c6eee37b5839944824e2e62)':
+  '@xcwds/plugin-timers@0.8.0(c2790ed0e476b013358a3ee9ca32ce26)':
     dependencies:
       '@sveltejs/kit': 3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
     optionalDependencies:
-      '@xcwds/plugin-shell': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/plugin-shell': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
 
-  '@xcwds/plugin-tools@0.9.0(002e5e9b2c6eee37b5839944824e2e62)':
+  '@xcwds/plugin-tools@0.10.0(c2790ed0e476b013358a3ee9ca32ce26)':
     dependencies:
       '@sveltejs/kit': 3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
     optionalDependencies:
-      '@xcwds/plugin-shell': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+      '@xcwds/plugin-shell': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
 
-  '@xcwds/plugin-update@0.7.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
+  '@xcwds/plugin-update@0.8.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))':
     dependencies:
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
 
-  '@xcwds/sveltekit@0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))':
+  '@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))':
     dependencies:
       '@sveltejs/adapter-static': 4.0.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))
       '@sveltejs/kit': 3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
@@ -2731,10 +2731,10 @@ snapshots:
       svelte: 5.57.2(@typescript-eslint/types@8.72.0)
       vite: 8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)
 
-  '@xcwds/testing@0.5.1(@playwright/test@1.64.1)(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))(vitest@4.1.12)':
+  '@xcwds/testing@0.5.2(@playwright/test@1.64.1)(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))(vitest@4.1.12)':
     dependencies:
       '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
-      '@xcwds/sveltekit': 0.7.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       vitest: 4.1.12(@types/node@24.19.2)(@vitest/browser-playwright@4.1.12)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
     optionalDependencies:
       '@playwright/test': 1.64.1
