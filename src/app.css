@@ -14,6 +14,7 @@
 @import '@xcwds/plugin-changelog/styles.css';
 @import '@xcwds/plugin-camera/styles.css';
 @import '@xcwds/plugin-qr/styles.css';
+@import '@xcwds/plugin-recorder/styles.css';
 @import '@xcwds/plugin-blocks/styles.css';
 /* The passcode lock's unlock screen, settings and the cover over private pages in the app switcher. */
 @import '@xcwds/plugin-lock/styles.css';
@@ -25,6 +26,7 @@
 :root[data-apps-off~='links'] [data-app='links'],
 :root[data-apps-off~='housework'] [data-app='housework'],
 :root[data-apps-off~='camera'] [data-app='camera'],
+:root[data-apps-off~='voice-memos'] [data-app='voice-memos'],
 :root[data-apps-off~='blocks'] [data-app='blocks'],
 :root[data-apps-off~='self-control'] [data-app='self-control'] {
 	display: none !important;

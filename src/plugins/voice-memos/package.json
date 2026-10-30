@@ -1,0 +1,12 @@
+{
+	"name": "xcwds-app-voice-memos",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Voice memos: recordings that stay on this device, out of cloud notes and recorder apps.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts",
+		"./worker": "./worker.ts"
+	}
+}
