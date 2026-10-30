@@ -1,0 +1,1 @@
+- New in Utils: Voice memos, for quick recordings that stay on this device instead of a cloud notes app. Play, rename, share or delete them, and turn the app off at Apps if you don't need it.

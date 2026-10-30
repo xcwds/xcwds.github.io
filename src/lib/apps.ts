@@ -42,6 +42,13 @@ export const APPS: AppGroup[] = [
 		groups: ['photos']
 	},
 	{
+		id: 'voice-memos',
+		name: 'Voice memos',
+		emoji: '🎙️',
+		blurb: 'Voice notes that stay on this device.',
+		groups: ['recordings']
+	},
+	{
 		id: 'blocks',
 		name: 'Your apps',
 		emoji: '🧩',

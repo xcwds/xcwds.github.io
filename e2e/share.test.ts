@@ -66,6 +66,9 @@ test('private tools have no Share button in the installed app (#148)', async ({ 
 	await gotoHydrated(page, '/utils/camera');
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Camera$/);
 	await expect(page.getByRole('button', { name: /^Share / })).toHaveCount(0);
+	await gotoHydrated(page, '/utils/voice-memos');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Voice memos$/);
+	await expect(page.getByRole('button', { name: /^Share / })).toHaveCount(0);
 });
 
 test('without a share sheet it copies the link instead (#89)', async ({ page, context }) => {

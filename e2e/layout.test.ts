@@ -121,6 +121,7 @@ test.describe('with the sidebar', () => {
 		'/utils/last-done',
 		'/utils/photo-cleaner',
 		'/utils/magnifier',
+		'/utils/voice-memos',
 		'/utils/level',
 		'/my-apps',
 		'/my-apps/edit',

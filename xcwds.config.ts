@@ -6,6 +6,7 @@ import changelog from '@xcwds/plugin-changelog';
 import install from '@xcwds/plugin-install';
 import lock from '@xcwds/plugin-lock';
 import qr from '@xcwds/plugin-qr';
+import recorder from '@xcwds/plugin-recorder';
 import offline from '@xcwds/plugin-offline';
 import settings from '@xcwds/plugin-settings';
 import share from '@xcwds/plugin-share';
@@ -30,6 +31,7 @@ import qrTool from 'xcwds-app-qr';
 import recipes from 'xcwds-app-recipes';
 import selfControl from 'xcwds-app-self-control';
 import urlSanitizer from 'xcwds-app-url-sanitizer';
+import voiceMemos from 'xcwds-app-voice-memos';
 import weightlifting from 'xcwds-app-weightlifting';
 import { APPS } from './src/lib/apps';
 import { BRAND, TAGLINE } from './src/lib/brand';
@@ -85,19 +87,23 @@ export default defineConfig({
 		cameraTool(),
 		photoCleaner(),
 		magnifier(),
+		voiceMemos(),
 		recipes(),
 		// Your apps (#224): apps people build from blocks, each one a tool in the `blocks` app.
 		blocks({ path: '/my-apps', app: 'blocks', templates: myAppsTemplates as AppDefinition[] }),
 		// A passcode lock for the private tools, with its unlock screen at /unlock, a cover in the app
 		// switcher and no spellcheck in their fields. Opt-in, from Settings → Privacy.
 		lock(),
-		// With a passcode set, the sensitive groups (Self-Control, Camera's photos, Your private
-		// apps) are encrypted with it and open only while unlocked; backups carry them encrypted.
+		// With a passcode set, the sensitive groups (Self-Control, Camera's photos, Voice memos'
+		// recordings, Your private apps) are encrypted with it and open only while unlocked;
+		// backups carry them encrypted.
 		vault(),
 		// The camera as `app.camera` (off while hidden) and photos kept in the app as `app.photos`.
 		camera(),
 		// QR codes made and read on the device; the QR tool scans through `app.camera`.
 		qr(),
+		// Voice memos' recorder as `app.recorder` and its recordings as `app.recordings`.
+		recorder(),
 		share({
 			target: '/utils/url-sanitizer',
 			// A link to one of your apps opens nothing on another device; Share design shares one.
@@ -122,6 +128,7 @@ export default defineConfig({
 				blocks: 'Your apps',
 				'blocks-private': 'Your private apps',
 				photos: 'Camera',
+				recordings: 'Voice memos',
 				// The passcode and wrong tries; clearing it clears the private data it locks too.
 				lock: 'Passcode lock',
 				settings: 'Settings',

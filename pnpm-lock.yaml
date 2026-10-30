@@ -196,6 +196,9 @@ importers:
       '@xcwds/plugin-qr':
         specifier: ^0.5.0
         version: 0.5.0(fa1cd6a569403766ac73c77060d64e27)
+      '@xcwds/plugin-recorder':
+        specifier: ^0.1.0
+        version: 0.1.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))
       '@xcwds/plugin-settings':
         specifier: ^0.9.0
         version: 0.9.0(b19585c43687b82929b65a037021cc26)
@@ -271,6 +274,9 @@ importers:
       xcwds-app-url-sanitizer:
         specifier: link:src/plugins/url-sanitizer
         version: link:src/plugins/url-sanitizer
+      xcwds-app-voice-memos:
+        specifier: link:src/plugins/voice-memos
+        version: link:src/plugins/voice-memos
       xcwds-app-weightlifting:
         specifier: link:src/plugins/weightlifting
         version: link:src/plugins/weightlifting
@@ -1118,6 +1124,14 @@ packages:
     peerDependencies:
       '@xcwds/core': ^0.5.0
       '@xcwds/plugin-camera': ^0.5.0
+      '@xcwds/sveltekit': ^0.8.0
+      svelte: ^5.0.0
+
+  '@xcwds/plugin-recorder@0.1.0':
+    resolution: {integrity: sha512-Z7tE0jboz70k47naj9zGXUc0ZCvABqiU/WhwX5diBKllKbE6P1MH2YoEHsyTGcbydhDwv1B8jXFZ25PL2kCh7Q==}
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@xcwds/core': ^0.5.0
       '@xcwds/sveltekit': ^0.8.0
       svelte: ^5.0.0
 
@@ -2691,6 +2705,12 @@ snapshots:
       '@xcwds/plugin-camera': 0.5.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))
       '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0))
       jsqr: 1.4.0
+      svelte: 5.57.3(@typescript-eslint/types@8.72.1)
+
+  '@xcwds/plugin-recorder@0.1.0(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(@xcwds/sveltekit@0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
+    dependencies:
+      '@xcwds/core': 0.5.0(@resvg/resvg-js@2.6.2)
+      '@xcwds/sveltekit': 0.8.0(@sveltejs/kit@3.1.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)))(@xcwds/core@0.5.0(@resvg/resvg-js@2.6.2))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0))
       svelte: 5.57.3(@typescript-eslint/types@8.72.1)
 
   '@xcwds/plugin-settings@0.9.0(b19585c43687b82929b65a037021cc26)':
