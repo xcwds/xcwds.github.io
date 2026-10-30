@@ -7,6 +7,7 @@ import install from '@xcwds/plugin-install';
 import lock from '@xcwds/plugin-lock';
 import qr from '@xcwds/plugin-qr';
 import recorder from '@xcwds/plugin-recorder';
+import scanner from '@xcwds/plugin-scanner';
 import offline from '@xcwds/plugin-offline';
 import settings from '@xcwds/plugin-settings';
 import share from '@xcwds/plugin-share';
@@ -29,6 +30,7 @@ import photoCleaner from 'xcwds-app-photo-cleaner';
 import pizzaDough from 'xcwds-app-pizza-dough';
 import qrTool from 'xcwds-app-qr';
 import recipes from 'xcwds-app-recipes';
+import scannerTool from 'xcwds-app-scanner';
 import selfControl from 'xcwds-app-self-control';
 import urlSanitizer from 'xcwds-app-url-sanitizer';
 import voiceMemos from 'xcwds-app-voice-memos';
@@ -87,6 +89,7 @@ export default defineConfig({
 		cameraTool(),
 		photoCleaner(),
 		magnifier(),
+		scannerTool(),
 		voiceMemos(),
 		recipes(),
 		// Your apps (#224): apps people build from blocks, each one a tool in the `blocks` app.
@@ -94,9 +97,9 @@ export default defineConfig({
 		// A passcode lock for the private tools, with its unlock screen at /unlock, a cover in the app
 		// switcher and no spellcheck in their fields. Opt-in, from Settings → Privacy.
 		lock(),
-		// With a passcode set, the sensitive groups (Self-Control, Camera's photos, Voice memos'
-		// recordings, Your private apps) are encrypted with it and open only while unlocked;
-		// backups carry them encrypted.
+		// With a passcode set, the sensitive groups (Self-Control, Camera's photos, the Document
+		// scanner's pages, Voice memos' recordings, Your private apps) are encrypted with it and open
+		// only while unlocked; backups carry them encrypted.
 		vault(),
 		// The camera as `app.camera` (off while hidden) and photos kept in the app as `app.photos`.
 		camera(),
@@ -104,6 +107,8 @@ export default defineConfig({
 		qr(),
 		// Voice memos' recorder as `app.recorder` and its recordings as `app.recordings`.
 		recorder(),
+		// The Document scanner's crop and pages as `app.scanner`; it takes photos through `app.camera`.
+		scanner(),
 		share({
 			target: '/utils/url-sanitizer',
 			// A link to one of your apps opens nothing on another device; Share design shares one.
@@ -128,6 +133,7 @@ export default defineConfig({
 				blocks: 'Your apps',
 				'blocks-private': 'Your private apps',
 				photos: 'Camera',
+				scanner: 'Document scanner',
 				recordings: 'Voice memos',
 				// The passcode and wrong tries; clearing it clears the private data it locks too.
 				lock: 'Passcode lock',

@@ -1,0 +1,12 @@
+{
+	"name": "xcwds-app-scanner",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Document scanner: paper to a PDF on the device, without a cloud scanning app.",
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./client": "./client.ts",
+		"./worker": "./worker.ts"
+	}
+}
