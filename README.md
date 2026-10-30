@@ -44,6 +44,9 @@ pnpm install
 pnpm dev
 ```
 
+Or open the repo in its dev container (`.devcontainer/`, e.g. VS Code's "Reopen in Container"): it has
+the Node version from `.tool-versions`, pnpm and Playwright's Chromium, isolated from your machine.
+
 Before pushing: `pnpm check && pnpm lint && pnpm test:unit --run --project server && pnpm build`.
 Agent notes live in [CLAUDE.md](CLAUDE.md).
 
