@@ -176,9 +176,11 @@ test('Settings lists the scan under Document scanner, out of backups, and cleari
 	await scanPage(page, 'Original');
 
 	await gotoHydrated(page, '/settings');
+	// A passcode would encrypt it, as the page's note says.
+	await expect(page.getByTestId('lock-encryption')).toContainText('Document scanner');
 	const clear = page.getByRole('button', { name: 'Clear Document scanner' });
 	const group = page.getByRole('listitem').filter({ has: clear });
-	await expect(group.getByTestId('files-note')).toHaveText([/^Scanned pages: 1 file, /]);
+	await expect(group.getByTestId('files-note')).toHaveText([/^1 file, /]);
 	await expect(group.getByTestId('backup-note')).toHaveText('Not in backups');
 	await clear.click();
 	await expect(group.getByTestId('files-note')).toHaveCount(0);
