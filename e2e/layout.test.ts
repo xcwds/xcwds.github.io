@@ -124,7 +124,8 @@ test.describe('with the sidebar', () => {
 		'/utils/level',
 		'/my-apps',
 		'/my-apps/edit',
-		'/my-apps/import'
+		'/my-apps/import',
+		'/unlock'
 	]) {
 		test(`the header lines up with the page on ${path}`, async ({ page }) => {
 			await gotoHydrated(page, path);
@@ -176,7 +177,8 @@ for (const [name, viewport] of Object.entries(viewports)) {
 			'/utils/weightlifting',
 			'/my-apps',
 			'/my-apps/edit',
-			'/my-apps/import'
+			'/my-apps/import',
+			'/unlock'
 		]) {
 			await gotoHydrated(page, path);
 			const overflow = await page.evaluate(

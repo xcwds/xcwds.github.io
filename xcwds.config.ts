@@ -4,6 +4,7 @@ import blocks from '@xcwds/plugin-blocks';
 import type { AppDefinition } from '@xcwds/plugin-blocks/model';
 import changelog from '@xcwds/plugin-changelog';
 import install from '@xcwds/plugin-install';
+import lock from '@xcwds/plugin-lock';
 import qr from '@xcwds/plugin-qr';
 import offline from '@xcwds/plugin-offline';
 import settings from '@xcwds/plugin-settings';
@@ -13,6 +14,7 @@ import theme from '@xcwds/plugin-theme';
 import timers from '@xcwds/plugin-timers';
 import tools from '@xcwds/plugin-tools';
 import update from '@xcwds/plugin-update';
+import vault from '@xcwds/plugin-vault';
 import coffeeTimer from 'xcwds-app-coffee-timer';
 import cookingTimer from 'xcwds-app-cooking-timer';
 import app from 'xcwds-app';
@@ -86,6 +88,12 @@ export default defineConfig({
 		recipes(),
 		// Your apps (#224): apps people build from blocks, each one a tool in the `blocks` app.
 		blocks({ path: '/my-apps', app: 'blocks', templates: myAppsTemplates as AppDefinition[] }),
+		// A passcode lock for the private tools, with its unlock screen at /unlock, a cover in the app
+		// switcher and no spellcheck in their fields. Opt-in, from Settings → Privacy.
+		lock(),
+		// With a passcode set, the sensitive groups (Self-Control, Camera's photos, Your private
+		// apps) are encrypted with it and open only while unlocked; backups carry them encrypted.
+		vault(),
 		// The camera as `app.camera` (off while hidden) and photos kept in the app as `app.photos`.
 		camera(),
 		// QR codes made and read on the device; the QR tool scans through `app.camera`.

@@ -1,0 +1,1 @@
+- Lock private tools with a passcode; their data is then encrypted on this device. Turn it on in Settings → Privacy.

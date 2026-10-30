@@ -282,6 +282,9 @@ for (const [name, viewport] of [
 					await p.getByRole('button', { name: 'New set' }).click();
 				}
 			],
+			// The passcode lock (#263): its setup form, and the unlock screen.
+			['/settings', (p) => p.getByRole('button', { name: 'Set a passcode' }).click()],
+			['/unlock'],
 			['/no-such-page'],
 			[porkChopsPath]
 		];
