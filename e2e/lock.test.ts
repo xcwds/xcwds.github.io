@@ -192,6 +192,9 @@ test('turning the lock off writes the data back as plaintext', async ({ page }) 
 	const lock = await setUpLock(page);
 	await expect.poll(() => stored(page)).not.toContain(HABIT);
 
+	// Your data names the lock's group.
+	await expect(page.getByRole('button', { name: /^Clear Passcode lock/ })).toBeVisible();
+
 	await lock.getByRole('button', { name: 'Turn off' }).click();
 	await lock.getByLabel('Current passcode').fill(CODE);
 	await page.getByTestId('lock-form').getByRole('button', { name: 'Turn off' }).click();

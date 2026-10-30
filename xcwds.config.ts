@@ -122,6 +122,8 @@ export default defineConfig({
 				blocks: 'Your apps',
 				'blocks-private': 'Your private apps',
 				photos: 'Camera',
+				// The passcode and wrong tries; clearing it clears the private data it locks too.
+				lock: 'Passcode lock',
 				settings: 'Settings',
 				tools: 'Home shortcuts',
 				changelog: "What's new"
