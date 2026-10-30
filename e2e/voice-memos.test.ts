@@ -111,3 +111,79 @@ test('Settings lists recordings under Voice memos, out of backups, and clearing 
 	await gotoHydrated(page, '/utils/voice-memos');
 	await expect(page.getByTestId('recordings')).toContainText('No recordings yet.');
 });
+
+/** Everything the app keeps on the device, as text: localStorage and every IndexedDB record. */
+const stored = (page: Page) =>
+	page.evaluate(async () => {
+		const parts = [JSON.stringify({ ...localStorage })];
+		for (const { name } of await indexedDB.databases()) {
+			if (!name) continue;
+			const db = await new Promise<IDBDatabase>((resolve, reject) => {
+				const r = indexedDB.open(name);
+				r.onsuccess = () => resolve(r.result);
+				r.onerror = () => reject(r.error);
+			});
+			for (const store of db.objectStoreNames) {
+				const rows = await new Promise<unknown[]>((resolve, reject) => {
+					const r = db.transaction(store).objectStore(store).getAll();
+					r.onsuccess = () => resolve(r.result);
+					r.onerror = () => reject(r.error);
+				});
+				for (const row of rows) {
+					parts.push(JSON.stringify(row));
+					for (const value of Object.values(row as object))
+						if (value instanceof Blob) parts.push(await value.text());
+				}
+			}
+			db.close();
+		}
+		return parts.join('\n');
+	});
+
+test('with a passcode, Voice memos opens on /unlock and its recordings are encrypted', async ({
+	page
+}) => {
+	const NAME = 'Dentist on Tuesday';
+	const CODE = '246810';
+	await gotoHydrated(page, '/utils/voice-memos');
+	await record(page);
+	const items = page.getByRole('list', { name: 'Recordings' }).getByRole('listitem');
+	await items
+		.first()
+		.getByRole('button', { name: /^Rename / })
+		.click();
+	await items.first().getByLabel('Name').fill(NAME);
+	await items.first().getByRole('button', { name: 'Save name' }).click();
+	await expect(items.first()).toContainText(NAME);
+	expect(await stored(page)).toContain(NAME);
+
+	await gotoHydrated(page, '/settings');
+	await expect(page.getByTestId('lock-encryption')).toContainText('Voice memos');
+	const lock = page.getByTestId('passcode-lock');
+	await lock.getByRole('button', { name: 'Set a passcode' }).click();
+	await lock.getByLabel('Passcode', { exact: true }).fill(CODE);
+	await lock.getByLabel('Same again').fill(CODE);
+	await lock.getByRole('button', { name: 'Save passcode' }).click();
+	await expect(page.getByTestId('lock-status')).toHaveText('The passcode lock is on and unlocked.');
+	// Sealed as soon as the passcode is set.
+	await expect.poll(() => stored(page)).not.toContain(NAME);
+
+	// Once a passcode is set every load starts locked; open the tool through the app's links.
+	await page.reload();
+	await page.locator('html[data-hydrated]').waitFor({ state: 'attached' });
+	await page.getByRole('link', { name: /Utils/ }).first().click();
+	await page
+		.getByRole('link', { name: /Voice memos/ })
+		.first()
+		.click();
+	await expect(page).toHaveURL(/\/unlock$/);
+	expect(await stored(page)).not.toContain(NAME);
+
+	const screen = page.getByTestId('unlock');
+	await screen.getByLabel('Passcode').fill(CODE);
+	await screen.getByRole('button', { name: 'Unlock' }).click();
+	await expect(page).toHaveURL(/\/utils\/voice-memos$/);
+	await expect(items.first()).toContainText(NAME);
+	// Open in memory only: still sealed on the device.
+	expect(await stored(page)).not.toContain(NAME);
+});
