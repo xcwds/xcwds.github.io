@@ -65,7 +65,8 @@
 						The scan stays out of your gallery, your cloud backup and this app's backups.
 					</li>
 					<li>
-						The PDF and images carry no location, device details or dates, only what's on the page.
+						The PDF and images carry no location, device details or dates inside them, only what's
+						on the page. Their names say when the scan was made.
 					</li>
 					<li>
 						Sharing or saving a scan hands it to wherever it goes, which may keep or back it up.
@@ -78,6 +79,7 @@
 				</ul>
 			</details>
 		</div>
+		<!-- No Retake while a photo is being cropped: it would turn that photo's Add page into a Replace. -->
 		<Pages
 			bind:paper={
 				() => paper,
@@ -86,7 +88,7 @@
 					chosen = true;
 				}
 			}
-			onRetake={(id) => (retake = id)}
+			onRetake={photo ? undefined : (id) => (retake = id)}
 		/>
 	</div>
 </main>

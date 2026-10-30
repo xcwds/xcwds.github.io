@@ -134,6 +134,12 @@ test('retakes a page in its place', async ({ page }) => {
 	await gotoHydrated(page, '/utils/scanner');
 	await scanPage(page, 'Original');
 	await scanPage(page, 'Greyscale');
+	// Not while a new photo is being cropped: that photo would replace a page instead of being added.
+	await takePhoto(page);
+	await expect(page.getByRole('button', { name: /^Retake page / })).toHaveCount(0);
+	await page.getByRole('button', { name: 'Cancel' }).click();
+	await expect(page.getByTestId('scan-page')).toHaveCount(2);
+
 	await page.getByRole('button', { name: 'Retake page 1' }).click();
 	await expect(page.getByTestId('retaking')).toBeVisible();
 	await scanPage(page, 'Black & white', 'Replace page');
