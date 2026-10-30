@@ -49,7 +49,9 @@ test('says what stays private, and stays out of Recently used', async ({ page })
 	await gotoHydrated(page, '/utils/camera');
 	const note = page.getByTestId('camera-note');
 	await note.getByText('What stays private').click();
-	await expect(note).toContainText("Photos aren't encrypted on this device yet");
+	await expect(note).toContainText(
+		'With a passcode set in Settings → Privacy, the Camera opens only after unlocking and its photos are encrypted on this device.'
+	);
 
 	await gotoHydrated(page, '/utils/coffee-timer');
 	await gotoHydrated(page, '/utils/camera');
