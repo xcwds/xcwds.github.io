@@ -311,6 +311,13 @@ function entry<T>(
 	};
 }
 
+/**
+ * Marks an entry as personal data (#263): its group is sensitive, so with a passcode set
+ * `@xcwds/plugin-vault` keeps the group encrypted, and a forgotten passcode clears it. A flag
+ * only: keys and saved shapes stay the same, so it needs no migration.
+ */
+const sensitive = <T>(e: Entry<T>): Entry<T> => ({ ...e, sensitive: true });
+
 /** What the app's own plugins save (each registers its own with `registerEntries`). */
 export const entries = {
 	coffeeDuration: entry<number>(
@@ -351,35 +358,33 @@ export const entries = {
 		'Exercise muscle groups',
 		parseMuscles
 	),
-	// Self-Control (#146) is private: its own group, so it can be cleared on its own.
-	selfControlHabits: entry<Habit[]>('self-control:habits', 'Self-Control habits', parseHabits),
-	selfControlPrefs: entry<SelfControlPrefs>(
-		'self-control:prefs',
-		'Self-Control preferences',
-		parsePrefs
+	// Self-Control (#146) is private: its own group, so it can be cleared on its own, and sensitive.
+	selfControlHabits: sensitive(
+		entry<Habit[]>('self-control:habits', 'Self-Control habits', parseHabits)
 	),
-	selfControlLog: entry<UrgeEntry[]>('self-control:log', 'Self-Control urge log', parseLog),
+	selfControlPrefs: sensitive(
+		entry<SelfControlPrefs>('self-control:prefs', 'Self-Control preferences', parsePrefs)
+	),
+	selfControlLog: sensitive(
+		entry<UrgeEntry[]>('self-control:log', 'Self-Control urge log', parseLog)
+	),
 	// The Urge SOS session in progress (#149), so reopening the app returns to it.
-	selfControlSos: entry<SosSession>(
-		'self-control:sos',
-		'Self-Control session in progress',
-		parseSession
+	selfControlSos: sensitive(
+		entry<SosSession>('self-control:sos', 'Self-Control session in progress', parseSession)
 	),
 	// Your reasons and notes to yourself (#150).
-	selfControlWhy: entry<Why>('self-control:why', 'Self-Control reasons', parseWhy),
+	selfControlWhy: sensitive(entry<Why>('self-control:why', 'Self-Control reasons', parseWhy)),
 	// The Decision Seesaw per habit (#151).
-	selfControlSeesaw: entry<Seesaw>('self-control:seesaw', 'Self-Control seesaws', parseSeesaw),
+	selfControlSeesaw: sensitive(
+		entry<Seesaw>('self-control:seesaw', 'Self-Control seesaws', parseSeesaw)
+	),
 	// Environment checklists and if-then plans per habit (#152).
-	selfControlPlan: entry<Environment>(
-		'self-control:plan',
-		'Self-Control environment and plans',
-		parseEnvironment
+	selfControlPlan: sensitive(
+		entry<Environment>('self-control:plan', 'Self-Control environment and plans', parseEnvironment)
 	),
 	// Weekly review reflections, by week (#153).
-	selfControlReview: entry<Reflections>(
-		'self-control:review',
-		'Self-Control weekly reflections',
-		parseReflections
+	selfControlReview: sensitive(
+		entry<Reflections>('self-control:review', 'Self-Control weekly reflections', parseReflections)
 	),
 	// Last done (#218): the things you track, and when you did each.
 	lastDoneItems: entry<LastDoneItem[]>('last-done:items', 'Last done things', parseLastDoneItems),
@@ -425,7 +430,9 @@ export function registerEntries(storage: StorageScope, list: Entry<unknown>[]): 
 			key: e.key,
 			label: e.label,
 			parse: e.parse,
-			group: e.group
+			group: e.group,
+			backup: e.backup,
+			sensitive: e.sensitive
 		});
 }
 

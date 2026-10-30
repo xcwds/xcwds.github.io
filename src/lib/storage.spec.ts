@@ -6,6 +6,9 @@ import type { App, StorageAdapter } from '@xcwds/core';
 import app from 'xcwds-app';
 import coffeeTimer from 'xcwds-app-coffee-timer';
 import cookingTimer from 'xcwds-app-cooking-timer';
+import lastDone from 'xcwds-app-last-done';
+import level from 'xcwds-app-level';
+import selfControl from 'xcwds-app-self-control';
 import weightlifting from 'xcwds-app-weightlifting';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -403,6 +406,49 @@ describe('groups and clear', () => {
 		expect(read(entries.coffeeDuration)).toBe(1000);
 		clear();
 		expect(read(entries.coffeeDuration)).toBeUndefined();
+	});
+
+	it("marks Self-Control's group sensitive, and only it, for the lock and vault (#263)", async () => {
+		current = await buildTestApp(
+			{
+				brand: { name: 'xcwds' },
+				storage: { appName: BACKUP_APP },
+				plugins: [
+					app(),
+					tools({ path: '/utils', title: 'Utils', storageKey: KEYS.homeShortcuts, apps: APPS }),
+					coffeeTimer(),
+					weightlifting(),
+					lastDone(),
+					level(),
+					selfControl()
+				]
+			},
+			{ storage: store, import: (id) => import(/* @vite-ignore */ id), logLevel: 'silent' }
+		);
+		const sensitive = groups().filter((g) => g.sensitive);
+		expect(sensitive.map((g) => g.id)).toEqual(['self-control']);
+		expect(sensitive[0]!.entries.every((e) => e.sensitive)).toBe(true);
+		expect(sensitive[0]!.entries).toHaveLength(8);
+	});
+});
+
+describe('level calibration', () => {
+	it("stays out of backups: it's per phone", async () => {
+		current = await buildTestApp(
+			{
+				brand: { name: 'xcwds' },
+				storage: { appName: BACKUP_APP },
+				plugins: [
+					app(),
+					tools({ path: '/utils', title: 'Utils', storageKey: KEYS.homeShortcuts, apps: APPS }),
+					level()
+				]
+			},
+			{ storage: store, import: (id) => import(/* @vite-ignore */ id), logLevel: 'silent' }
+		);
+		expect(entryFor(entries.levelCalibration.key).backup).toBe(false);
+		expect(write(entries.levelCalibration, { flat: { x: 1, y: -1 }, edge: 2 })).toBe(true);
+		expect(exportData().data).toEqual({});
 	});
 });
 

@@ -39,7 +39,8 @@
 			<li>Your phone still processes the picture the way its camera always does.</li>
 			<li>Sharing a photo hands it to wherever you share it, which may keep or back it up.</li>
 			<li>
-				Photos aren't encrypted on this device yet, so anyone who can open this app here can see
+				With a passcode set in Settings → Privacy, the Camera opens only after unlocking and its
+				photos are encrypted on this device. Without one, anyone who can open this app here can see
 				them.
 			</li>
 		</ul>
