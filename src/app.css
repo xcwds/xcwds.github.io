@@ -15,6 +15,7 @@
 @import '@xcwds/plugin-camera/styles.css';
 @import '@xcwds/plugin-qr/styles.css';
 @import '@xcwds/plugin-recorder/styles.css';
+@import '@xcwds/plugin-scanner/styles.css';
 @import '@xcwds/plugin-blocks/styles.css';
 /* The passcode lock's unlock screen, settings and the cover over private pages in the app switcher. */
 @import '@xcwds/plugin-lock/styles.css';

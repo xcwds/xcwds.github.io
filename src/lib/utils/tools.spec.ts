@@ -32,6 +32,7 @@ describe('tools', () => {
 			'/utils/camera',
 			'/utils/photo-cleaner',
 			'/utils/magnifier',
+			'/utils/scanner',
 			'/utils/voice-memos'
 		]);
 	});

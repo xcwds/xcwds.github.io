@@ -1,0 +1,1 @@
+- New in Utils: Document scanner, to turn paper into a PDF on this device instead of a cloud scanning app. Straighten each page, make it greyscale or black and white, reorder or retake pages, and share or save the PDF.
