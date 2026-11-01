@@ -20,7 +20,7 @@ jobs:
       && github.event.sender.login == github.repository_owner
       && github.event.issue.pull_request == null
       && contains(fromJSON('["refinement requested","answered in comments"]'), github.event.label.name)
-    uses: xcwds/xcwds/.github/workflows/agent-labeling.yml@main
+    uses: xcwds/xcwds/.github/workflows/agent-labeling.yml@ad94f275ae336b7c9ad07e7e53e6a87a2f5a58ea # main
     secrets:
       AGENT_APP_PRIVATE_KEY: ${{ secrets.AGENT_APP_PRIVATE_KEY }}
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
