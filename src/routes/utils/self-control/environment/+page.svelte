@@ -190,8 +190,11 @@
 							type="button"
 							class={toggle(current.id === h.id)}
 							aria-pressed={current.id === h.id}
-							onclick={() => pick(h.id)}>{h.emoji} {h.name}</button
+							onclick={() => pick(h.id)}
 						>
+							{h.emoji}
+							{h.name}
+						</button>
 					{/each}
 				</div>
 			</fieldset>
@@ -204,8 +207,8 @@
 					{#each plan.plans as p (p.id)}
 						<li class="{card} flex flex-col gap-2 text-sm" data-testid="plan">
 							<p class="break-words">
-								{#if p.starred}<span aria-hidden="true">⭐ </span><span class="sr-only"
-										>Starred:
+								{#if p.starred}<span aria-hidden="true">⭐ </span><span class="sr-only">
+										Starred:
 									</span>{/if}If <strong>{p.cue}</strong>, then I will <strong>{p.action}</strong>.
 							</p>
 							<div class="grid grid-cols-2 gap-2">
@@ -214,14 +217,18 @@
 									class={button}
 									aria-pressed={p.starred}
 									aria-label="Star: {planText(p)}"
-									onclick={() => star(p)}>{p.starred ? '★ Starred' : '☆ Star'}</button
+									onclick={() => star(p)}
 								>
+									{p.starred ? '★ Starred' : '☆ Star'}
+								</button>
 								<button
 									type="button"
 									class="{button} text-red-700 dark:text-red-400"
 									aria-label="Delete: {planText(p)}"
-									onclick={() => deletePlan(p)}>Delete</button
+									onclick={() => deletePlan(p)}
 								>
+									Delete
+								</button>
 							</div>
 						</li>
 					{/each}
@@ -247,8 +254,10 @@
 								type="button"
 								class={toggle(cueDraft === chip)}
 								aria-pressed={cueDraft === chip}
-								onclick={() => (cueDraft = chip)}>{chip}</button
+								onclick={() => (cueDraft = chip)}
 							>
+								{chip}
+							</button>
 						{/each}
 					</div>
 				{/if}
@@ -274,8 +283,10 @@
 							type="button"
 							class={toggle(actionDraft === asAction(chip))}
 							aria-pressed={actionDraft === asAction(chip)}
-							onclick={() => (actionDraft = asAction(chip))}>{chip}</button
+							onclick={() => (actionDraft = asAction(chip))}
 						>
+							{chip}
+						</button>
 					{/each}
 				</div>
 				{#if planErrors.action}
@@ -304,8 +315,9 @@
 	{/if}
 
 	<details class="{card} text-sm">
-		<summary class="flex min-h-11 cursor-pointer items-center font-semibold">How this works</summary
-		>
+		<summary class="flex min-h-11 cursor-pointer items-center font-semibold">
+			How this works
+		</summary>
 		<div class="mt-2 flex flex-col gap-2 text-gray-700 dark:text-gray-300">
 			<p>
 				Changing the situation is easier than resisting in it: a cue you never see can't set off the

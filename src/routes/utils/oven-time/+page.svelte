@@ -123,9 +123,9 @@
 			says, then using the recipe time.
 		</p>
 		<p>
-			Classic recipes with this built in are in <a class="underline" href={resolve('/recipes')}
-				>Recipes</a
-			>.
+			Classic recipes with this built in are in <a class="underline" href={resolve('/recipes')}>
+				Recipes
+			</a>.
 		</p>
 	</div>
 

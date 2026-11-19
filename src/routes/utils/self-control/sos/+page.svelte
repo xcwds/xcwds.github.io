@@ -226,9 +226,9 @@
 				{surfPrompt(now - session.startedAt)}
 			</p>
 			{#if rating === undefined}
-				<button type="button" class={button} onclick={() => (rating = session?.last ?? 5)}
-					>Rate it now</button
-				>
+				<button type="button" class={button} onclick={() => (rating = session?.last ?? 5)}>
+					Rate it now
+				</button>
 			{:else}
 				<div class="{card} flex flex-col gap-3">
 					<label class="flex flex-col gap-2">
@@ -260,8 +260,10 @@
 							nameDraft = name ?? '';
 							nameError = undefined;
 							editingName = true;
-						}}>Change</button
+						}}
 					>
+						Change
+					</button>
 				</p>
 			{:else if session.technique === 'friend'}
 				<div class="{card} flex flex-col gap-2" data-testid="your-name">
@@ -346,9 +348,9 @@
 				<div class="grid grid-cols-3 gap-2">
 					<button type="button" class={primary} onclick={() => save('rode-out')}>Yes</button>
 					<button type="button" class={button} onclick={() => save('partly')}>Partly</button>
-					<button type="button" class={button} onclick={() => (gaveIn = true)}
-						>{kind === 'start' ? 'Skipped it' : 'Gave in'}</button
-					>
+					<button type="button" class={button} onclick={() => (gaveIn = true)}>
+						{kind === 'start' ? 'Skipped it' : 'Gave in'}
+					</button>
 				</div>
 			{:else}
 				<div class="{card} flex flex-col gap-3" data-testid="gave-in">
@@ -381,8 +383,10 @@
 			{#if doneId}
 				<a
 					href="{resolve('/utils/self-control/cues' as '/')}#edit={encodeURIComponent(doneId)}"
-					class="{button} text-center">Add what set it off</a
+					class="{button} text-center"
 				>
+					Add what set it off
+				</a>
 			{/if}
 			<a href={resolve('/utils/self-control')} class="{button} text-center">Done</a>
 		</section>
@@ -396,15 +400,20 @@
 						type="button"
 						class={toggle(habit === undefined)}
 						aria-pressed={habit === undefined}
-						onclick={() => (habit = undefined)}>Just a craving</button
+						onclick={() => (habit = undefined)}
 					>
+						Just a craving
+					</button>
 					{#each activeHabits(habits) as h (h.id)}
 						<button
 							type="button"
 							class={toggle(habit === h.id)}
 							aria-pressed={habit === h.id}
-							onclick={() => (habit = h.id)}>{h.emoji} {h.name}</button
+							onclick={() => (habit = h.id)}
 						>
+							{h.emoji}
+							{h.name}
+						</button>
 					{/each}
 				</div>
 			</fieldset>
@@ -420,8 +429,10 @@
 							type="button"
 							class={toggle(technique === t)}
 							aria-pressed={technique === t}
-							onclick={() => (technique = t)}>{TECHNIQUE_LABELS[t]}</button
+							onclick={() => (technique = t)}
 						>
+							{TECHNIQUE_LABELS[t]}
+						</button>
 					{/each}
 				</div>
 			</fieldset>
@@ -434,15 +445,17 @@
 								type="button"
 								class={toggle(minutes === m)}
 								aria-pressed={minutes === m}
-								onclick={() => (minutes = m)}>{m} min</button
+								onclick={() => (minutes = m)}
 							>
+								{m} min
+							</button>
 						{/each}
 					</div>
 				</fieldset>
 			{/if}
-			<button type="button" class={primary} onclick={start}
-				>{technique === 'surf' ? 'Start surfing' : 'Start'}</button
-			>
+			<button type="button" class={primary} onclick={start}>
+				{technique === 'surf' ? 'Start surfing' : 'Start'}
+			</button>
 			<p class="text-sm text-gray-600 dark:text-gray-400">
 				{technique === 'surf'
 					? "You'll watch the urge rise and fall instead of acting on it, then note how it went."

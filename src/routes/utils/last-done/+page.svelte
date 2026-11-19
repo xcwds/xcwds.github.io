@@ -321,17 +321,17 @@
 			data-testid="undo-row"
 		>
 			<span class="min-w-0 break-words">{undo.message}</span>
-			<button type="button" class="{button} shrink-0" bind:this={undoButton} onclick={undoLast}
-				>Undo</button
-			>
+			<button type="button" class="{button} shrink-0" bind:this={undoButton} onclick={undoLast}>
+				Undo
+			</button>
 		</div>
 		{@const offered = undo.calendar && statuses.find((s) => s.item.id === undo?.calendar)}
 		{#if offered && offered.due}
 			<div class="flex flex-wrap items-center gap-2 text-sm" data-testid="calendar-offer">
 				<span>Next due {dueLabel(offered.due, now)}.</span>
-				<button type="button" class={button} onclick={() => addToCalendar(offered)}
-					>Add the new due date</button
-				>
+				<button type="button" class={button} onclick={() => addToCalendar(offered)}>
+					Add the new due date
+				</button>
 			</div>
 		{/if}
 	{/if}
@@ -343,8 +343,10 @@
 			{#if s.overdue}
 				<span
 					class="rounded-full bg-amber-200 px-2 text-xs font-semibold text-amber-900 dark:bg-amber-800 dark:text-amber-100"
-					data-testid="overdue">Overdue</span
+					data-testid="overdue"
 				>
+					Overdue
+				</span>
 			{/if}
 			<span class="text-gray-600 dark:text-gray-400">Due {dueLabel(s.due, now)}</span>
 		</span>
@@ -359,8 +361,10 @@
 		{@const g = gaps(s.times)}
 		<a
 			href={resolve('/utils/last-done')}
-			class="inline-flex min-h-11 items-center self-start text-sm underline">All things</a
+			class="inline-flex min-h-11 items-center self-start text-sm underline"
 		>
+			All things
+		</a>
 		<section class="{card} flex flex-col gap-3" aria-labelledby="thing-name">
 			{#if editing}
 				<ItemForm
@@ -372,8 +376,10 @@
 					<button
 						type="button"
 						class="{button} text-red-700 dark:text-red-400"
-						onclick={() => remove(s.item)}>Delete…</button
+						onclick={() => remove(s.item)}
 					>
+						Delete…
+					</button>
 				</ItemForm>
 			{:else}
 				<div class="flex items-start justify-between gap-3">
@@ -393,8 +399,10 @@
 						type="button"
 						class="{button} self-start text-sm"
 						data-testid="add-to-calendar"
-						onclick={() => addToCalendar(s)}>Add to calendar</button
+						onclick={() => addToCalendar(s)}
 					>
+						Add to calendar
+					</button>
 				{/if}
 				{#if s.item.notes}
 					<p class="text-sm whitespace-pre-line text-gray-600 dark:text-gray-400">
@@ -410,12 +418,16 @@
 					/>
 				{:else}
 					<div class="flex flex-wrap gap-2">
-						<button type="button" class="{primary} px-6" onclick={() => logDone(s.item, new Date())}
-							>Done</button
+						<button
+							type="button"
+							class="{primary} px-6"
+							onclick={() => logDone(s.item, new Date())}
 						>
-						<button type="button" class={button} onclick={() => (earlier = s.item.id)}
-							>Done earlier…</button
-						>
+							Done
+						</button>
+						<button type="button" class={button} onclick={() => (earlier = s.item.id)}>
+							Done earlier…
+						</button>
 					</div>
 				{/if}
 			{/if}
@@ -476,14 +488,18 @@
 												type="button"
 												class="{button} text-sm"
 												aria-label="Change {when(new Date(entry.at))}"
-												onclick={() => (earlier = entry.id)}>Change</button
+												onclick={() => (earlier = entry.id)}
 											>
+												Change
+											</button>
 											<button
 												type="button"
 												class="{button} text-sm"
 												aria-label="Remove {when(new Date(entry.at))}"
-												onclick={() => deleteEntry(entry)}>Remove</button
+												onclick={() => deleteEntry(entry)}
 											>
+												Remove
+											</button>
 										</span>
 									</div>
 								{/if}
@@ -497,8 +513,10 @@
 		<p>That thing isn't here any more.</p>
 		<a
 			href={resolve('/utils/last-done')}
-			class="inline-flex min-h-11 items-center self-start underline">All things</a
+			class="inline-flex min-h-11 items-center self-start underline"
 		>
+			All things
+		</a>
 	{:else}
 		{#if adding}
 			<section class="{card} flex flex-col gap-3" aria-labelledby="add-heading">
@@ -552,8 +570,8 @@
 					<p data-testid="since">
 						{s.last ? agoLabel(s.last, now) : 'Not done yet'}
 						{#if usualLine(s)}<span class="text-sm text-gray-600 dark:text-gray-400">
-								· {usualLine(s)}</span
-							>{/if}
+								· {usualLine(s)}
+							</span>{/if}
 					</p>
 					{@render dueLine(s)}
 					{#if earlier === s.item.id}
@@ -569,14 +587,18 @@
 								type="button"
 								class="{primary} flex-1"
 								aria-label="Done: {s.item.name}"
-								onclick={() => logDone(s.item, new Date())}>Done</button
+								onclick={() => logDone(s.item, new Date())}
 							>
+								Done
+							</button>
 							<button
 								type="button"
 								class={button}
 								aria-label="Done earlier: {s.item.name}"
-								onclick={() => (earlier = s.item.id)}>Earlier…</button
+								onclick={() => (earlier = s.item.id)}
 							>
+								Earlier…
+							</button>
 						</div>
 					{/if}
 				</li>

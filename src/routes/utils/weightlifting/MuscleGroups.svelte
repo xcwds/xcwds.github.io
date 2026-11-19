@@ -95,8 +95,9 @@
 			>
 				<span class="font-semibold">{g.label}</span><span class="sr-only"> · </span><span
 					class="text-xs {open === g.group ? '' : 'text-gray-600 dark:text-gray-400'}"
-					>{ago(g.last)}</span
 				>
+					{ago(g.last)}
+				</span>
 			</button>
 		{/each}
 	</div>
@@ -145,8 +146,10 @@
 									type="button"
 									class={toggle(chosen.includes(g.id))}
 									aria-pressed={chosen.includes(g.id)}
-									onclick={() => pick(name, g.id)}>{g.label}</button
+									onclick={() => pick(name, g.id)}
 								>
+									{g.label}
+								</button>
 							{/each}
 						</div>
 						<button
@@ -154,8 +157,10 @@
 							class="{button} self-start text-sm"
 							disabled={chosen.length === 0}
 							aria-label="Save groups for {name}"
-							onclick={() => save(name)}>Save</button
+							onclick={() => save(name)}
 						>
+							Save
+						</button>
 					</li>
 				{/each}
 			</ul>

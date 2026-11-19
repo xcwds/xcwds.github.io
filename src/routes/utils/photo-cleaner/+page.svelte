@@ -161,9 +161,9 @@
 				data-testid="photo-file"
 				onchange={(e) => add(e.currentTarget.files)}
 			/>
-			<button type="button" class="{primary} min-h-11 text-lg" onclick={() => picker?.click()}
-				>Choose photos</button
-			>
+			<button type="button" class="{primary} min-h-11 text-lg" onclick={() => picker?.click()}>
+				Choose photos
+			</button>
 			<label class="flex flex-col gap-1 text-sm">
 				<span>Size of the clean copy</span>
 				<select
@@ -175,14 +175,14 @@
 						<option value={i}>{s.label}</option>
 					{/each}
 				</select>
-				<span class="text-gray-600 dark:text-gray-400"
-					>Smaller copies are quicker to send. Photos are never made bigger.</span
-				>
+				<span class="text-gray-600 dark:text-gray-400">
+					Smaller copies are quicker to send. Photos are never made bigger.
+				</span>
 			</label>
 			<details class="{card} text-sm" data-testid="photo-cleaner-note">
-				<summary class="flex min-h-11 cursor-pointer items-center font-semibold"
-					>What gets removed</summary
-				>
+				<summary class="flex min-h-11 cursor-pointer items-center font-semibold">
+					What gets removed
+				</summary>
 				<ul class="mt-2 flex list-disc flex-col gap-2 pl-5 text-gray-700 dark:text-gray-300">
 					<li>
 						The clean copy is redrawn from the photo's pixels alone, so nothing hidden in the file
@@ -215,8 +215,9 @@
 						class="{primary} min-h-11"
 						disabled={working}
 						onclick={() => send(done)}
-						>{canShare ? 'Share all' : 'Download all'} ({done.length})</button
 					>
+						{canShare ? 'Share all' : 'Download all'} ({done.length})
+					</button>
 				{/if}
 				<ul class="flex flex-col gap-3">
 					{#each items as item (item.id)}
@@ -262,16 +263,18 @@
 							{/if}
 							<div class="grid grid-cols-2 gap-2">
 								{#if item.status === 'ok'}
-									<button type="button" class="{primary} min-h-11" onclick={() => send([item])}
-										>{canShare ? 'Share' : 'Download'}</button
-									>
+									<button type="button" class="{primary} min-h-11" onclick={() => send([item])}>
+										{canShare ? 'Share' : 'Download'}
+									</button>
 								{/if}
 								<button
 									type="button"
 									class="{button} min-h-11 {item.status === 'ok' ? '' : 'col-span-2'}"
 									aria-label="Remove {item.original.name}"
-									onclick={() => remove(item.id)}>Remove</button
+									onclick={() => remove(item.id)}
 								>
+									Remove
+								</button>
 							</div>
 						</li>
 					{/each}

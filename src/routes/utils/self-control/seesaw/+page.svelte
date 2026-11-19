@@ -95,8 +95,11 @@
 							type="button"
 							class={toggle(current.id === h.id)}
 							aria-pressed={current.id === h.id}
-							onclick={() => (picked = h.id)}>{h.emoji} {h.name}</button
+							onclick={() => (picked = h.id)}
 						>
+							{h.emoji}
+							{h.name}
+						</button>
 					{/each}
 				</div>
 			</fieldset>
@@ -107,9 +110,9 @@
 				<g class="beam" style="transform: rotate({balance.angle}deg)">
 					<rect x="10" y="40" width="200" height="6" rx="3" class="fill-gray-500" />
 					<text x="40" y="30" text-anchor="middle" class="fill-current text-[11px]">Giving in</text>
-					<text x="180" y="30" text-anchor="middle" class="fill-current text-[11px]"
-						>Holding off</text
-					>
+					<text x="180" y="30" text-anchor="middle" class="fill-current text-[11px]">
+						Holding off
+					</text>
 				</g>
 				<polygon points="110,46 96,80 124,80" class="fill-blue-600" />
 			</svg>

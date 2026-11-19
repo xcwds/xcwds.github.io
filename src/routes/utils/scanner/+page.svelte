@@ -49,16 +49,18 @@
 						<button
 							type="button"
 							class="min-h-11 rounded-xl bg-(--xcwds-shell-card) px-4 font-medium hover:not-disabled:bg-(--xcwds-shell-hover-bg) active:bg-(--xcwds-shell-hover-bg)"
-							onclick={() => (retake = undefined)}>Cancel retake</button
+							onclick={() => (retake = undefined)}
 						>
+							Cancel retake
+						</button>
 					</p>
 				{/if}
 				<Camera onCapture={(p: Photo) => void (photo = p.blob)} />
 			{/if}
 			<details class="{card} text-sm" data-testid="scanner-note">
-				<summary class="flex min-h-11 cursor-pointer items-center font-semibold"
-					>What stays private</summary
-				>
+				<summary class="flex min-h-11 cursor-pointer items-center font-semibold">
+					What stays private
+				</summary>
 				<ul class="mt-2 flex list-disc flex-col gap-2 pl-5 text-gray-700 dark:text-gray-300">
 					<li>
 						Pages are straightened and made into a PDF on this device, and nothing is sent anywhere.

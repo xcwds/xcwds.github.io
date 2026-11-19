@@ -161,19 +161,25 @@
 						class="size-11 rounded-full bg-white/70 text-xl hover:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:bg-gray-700"
 						aria-label="Fewer {base.unit}"
 						disabled={target <= stepSize}
-						onclick={() => stepTarget(-1)}>−</button
+						onclick={() => stepTarget(-1)}
 					>
+						−
+					</button>
 					<output
 						class="min-w-28 text-center font-semibold tabular-nums"
 						aria-live="polite"
-						data-testid="servings-target">{formatYield(target, base)}</output
+						data-testid="servings-target"
 					>
+						{formatYield(target, base)}
+					</output>
 					<button
 						type="button"
 						class="size-11 rounded-full bg-white/70 text-xl hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
 						aria-label="More {base.unit}"
-						onclick={() => stepTarget(1)}>+</button
+						onclick={() => stepTarget(1)}
 					>
+						+
+					</button>
 					{#if changed}
 						<button
 							type="button"
@@ -195,8 +201,9 @@
 							class="min-h-11 rounded-md border border-gray-300 bg-white px-3 text-base text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
 						>
 							{#each PANS as pan (pan.id)}
-								<option value={pan.id}>{pan.label}{pan.id === recipe.pan ? ' · recipe' : ''}</option
-								>
+								<option value={pan.id}>
+									{pan.label}{pan.id === recipe.pan ? ' · recipe' : ''}
+								</option>
 							{/each}
 						</select>
 					</label>
@@ -231,8 +238,9 @@
 			<ul class="list-disc pl-6" data-testid="ingredients">
 				{#each ingredients as ingredient, i (i)}
 					<li>
-						{#if ingredient.quantity}<strong class="font-semibold">{ingredient.quantity}</strong
-							>{/if}{ingredient.quantity ? ' ' : ''}{ingredient.text}
+						{#if ingredient.quantity}<strong class="font-semibold">
+								{ingredient.quantity}
+							</strong>{/if}{ingredient.quantity ? ' ' : ''}{ingredient.text}
 					</li>
 				{/each}
 			</ul>

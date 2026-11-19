@@ -100,21 +100,27 @@
 								class={small}
 								aria-label="Move {tool.name} up"
 								disabled={i === 0}
-								onclick={() => movePin(tool.path, -1)}>↑</button
+								onclick={() => movePin(tool.path, -1)}
 							>
+								↑
+							</button>
 							<button
 								type="button"
 								class={small}
 								aria-label="Move {tool.name} down"
 								disabled={i === pinned.length - 1}
-								onclick={() => movePin(tool.path, 1)}>↓</button
+								onclick={() => movePin(tool.path, 1)}
 							>
+								↓
+							</button>
 							<button
 								type="button"
 								class={small}
 								aria-label="Unpin {tool.name}"
-								onclick={() => togglePin(tool.path)}>✕</button
+								onclick={() => togglePin(tool.path)}
 							>
+								✕
+							</button>
 						{/if}
 					</li>
 				{/each}
@@ -156,9 +162,9 @@
 					>
 						<span aria-hidden="true" class="text-3xl">{section.emoji}</span>
 						<span class="flex flex-col">
-							<span class="text-lg font-medium text-gray-900 dark:text-gray-100"
-								>{section.name}</span
-							>
+							<span class="text-lg font-medium text-gray-900 dark:text-gray-100">
+								{section.name}
+							</span>
 							<span class="text-sm text-gray-600 dark:text-gray-400">{section.blurb}</span>
 						</span>
 					</a>
@@ -171,7 +177,8 @@
 		<a
 			href={resolve('/apps')}
 			class="inline-flex min-h-11 items-center underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100"
-			>Choose apps</a
-		> to keep only the ones you use on Home.
+		>
+			Choose apps
+		</a> to keep only the ones you use on Home.
 	</p>
 </main>

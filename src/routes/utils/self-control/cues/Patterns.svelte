@@ -43,9 +43,9 @@
 							style="width: {(counts[i]! / max) * 100}%"
 						></span>
 					</span>
-					<span class="text-right tabular-nums"
-						>{counts[i]}<span class="sr-only">{counts[i] === 1 ? ' urge' : ' urges'}</span></span
-					>
+					<span class="text-right tabular-nums">
+						{counts[i]}<span class="sr-only">{counts[i] === 1 ? ' urge' : ' urges'}</span>
+					</span>
 				</li>
 			{/each}
 		</ul>
@@ -72,18 +72,20 @@
 						<ul class="flex flex-col gap-1">
 							{#each stats as stat (stat.cue)}
 								<li class="flex items-center gap-2">
-									<span class="min-w-0 flex-1"
-										><strong>{stat.cue}</strong>: {percent(stat.urges)} of urges, gave in {stat.gaveIn}
-										of {stat.urges}</span
-									>
+									<span class="min-w-0 flex-1">
+										<strong>{stat.cue}</strong>: {percent(stat.urges)} of urges, gave in {stat.gaveIn}
+										of {stat.urges}
+									</span>
 									{#if habit}
 										<a
 											class="{button} shrink-0"
 											href="{resolve(
 												'/utils/self-control/environment' as '/'
 											)}#habit={encodeURIComponent(habit)}&cue={encodeURIComponent(stat.cue)}"
-											aria-label="Plan for this: {stat.cue}">Plan for this</a
+											aria-label="Plan for this: {stat.cue}"
 										>
+											Plan for this
+										</a>
 									{/if}
 								</li>
 							{/each}

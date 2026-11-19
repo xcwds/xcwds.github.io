@@ -112,8 +112,10 @@
 			type="button"
 			class="{button} min-h-11 self-start"
 			disabled={reading}
-			onclick={() => picker?.click()}>{reading ? 'Reading…' : 'Scan from an image'}</button
+			onclick={() => picker?.click()}
 		>
+			{reading ? 'Reading…' : 'Scan from an image'}
+		</button>
 		{#if error}
 			<p class="text-sm text-red-700 dark:text-red-400" role="alert">{error}</p>
 		{:else if found === null}
@@ -136,8 +138,9 @@
 					<p class="text-base break-all" data-testid="qr-link">{cleaned.link}</p>
 					{#if cleaned.removed || cleaned.via}
 						<details class="text-sm">
-							<summary class="flex min-h-11 cursor-pointer items-center">What the code said</summary
-							>
+							<summary class="flex min-h-11 cursor-pointer items-center">
+								What the code said
+							</summary>
 							<p class="break-all text-gray-600 dark:text-gray-400">{found.text}</p>
 						</details>
 					{/if}
@@ -146,17 +149,21 @@
 							href={cleaned.link}
 							target="_blank"
 							rel="noopener noreferrer external"
-							class="{primary} flex min-h-11 items-center justify-center">Open</a
+							class="{primary} flex min-h-11 items-center justify-center"
 						>
+							Open
+						</a>
 						<button
 							type="button"
 							class="{button} min-h-11"
-							onclick={() => copy(cleaned!.link, 'Link copied.')}>Copy</button
+							onclick={() => copy(cleaned!.link, 'Link copied.')}
 						>
+							Copy
+						</button>
 						{#if canShare}
-							<button type="button" class="{button} min-h-11" onclick={() => share(cleaned!.link)}
-								>Share</button
-							>
+							<button type="button" class="{button} min-h-11" onclick={() => share(cleaned!.link)}>
+								Share
+							</button>
 						{/if}
 					</div>
 				{:else if found.kind === 'wifi' && found.wifi}
@@ -171,8 +178,10 @@
 						<button
 							type="button"
 							class="{button} min-h-11 self-start"
-							onclick={() => copy(found!.wifi!.password, 'Password copied.')}>Copy password</button
+							onclick={() => copy(found!.wifi!.password, 'Password copied.')}
 						>
+							Copy password
+						</button>
 					{/if}
 				{:else}
 					{#if found.kind === 'contact'}
@@ -184,8 +193,10 @@
 					<button
 						type="button"
 						class="{button} min-h-11 self-start"
-						onclick={() => copy(found!.text, 'Copied.')}>Copy</button
+						onclick={() => copy(found!.text, 'Copied.')}
 					>
+						Copy
+					</button>
 				{/if}
 			</div>
 		{/if}
@@ -208,12 +219,12 @@
 			<QrCode value={text} class="w-64 max-w-full self-center rounded-xl" />
 			{#if fits}
 				<div class="flex gap-2 self-center">
-					<button type="button" class="{button} min-h-11" onclick={() => download('svg')}
-						>Download SVG</button
-					>
-					<button type="button" class="{button} min-h-11" onclick={() => download('png')}
-						>Download PNG</button
-					>
+					<button type="button" class="{button} min-h-11" onclick={() => download('svg')}>
+						Download SVG
+					</button>
+					<button type="button" class="{button} min-h-11" onclick={() => download('png')}>
+						Download PNG
+					</button>
 				</div>
 			{/if}
 		{/if}

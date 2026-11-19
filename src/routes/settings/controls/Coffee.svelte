@@ -28,18 +28,22 @@
 				class={button}
 				aria-label="15 seconds shorter"
 				disabled={settings.coffeeDefaultSeconds <= COFFEE_SECONDS.min}
-				onclick={() => adjust(-15)}>−15s</button
+				onclick={() => adjust(-15)}
 			>
-			<span class="w-14 text-center text-lg tabular-nums" data-testid="coffee-default"
-				>{formatDuration(settings.coffeeDefaultSeconds * 1000)}</span
-			>
+				−15s
+			</button>
+			<span class="w-14 text-center text-lg tabular-nums" data-testid="coffee-default">
+				{formatDuration(settings.coffeeDefaultSeconds * 1000)}
+			</span>
 			<button
 				type="button"
 				class={button}
 				aria-label="15 seconds longer"
 				disabled={settings.coffeeDefaultSeconds >= COFFEE_SECONDS.max}
-				onclick={() => adjust(15)}>+15s</button
+				onclick={() => adjust(15)}
 			>
+				+15s
+			</button>
 		</div>
 	</div>
 	<p class="text-sm text-gray-600 dark:text-gray-400">

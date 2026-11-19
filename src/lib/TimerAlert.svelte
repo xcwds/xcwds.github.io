@@ -24,7 +24,9 @@
 		<a
 			href={resolve('/utils/coffee-timer')}
 			class="{action} flex items-center underline"
-			aria-label="Open Coffee Timer">Open</a
+			aria-label="Open Coffee Timer"
 		>
+			Open
+		</a>
 	</div>
 {/if}

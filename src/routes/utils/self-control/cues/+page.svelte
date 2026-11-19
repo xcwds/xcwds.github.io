@@ -202,15 +202,20 @@
 					type="button"
 					class={toggle(filter === undefined)}
 					aria-pressed={filter === undefined}
-					onclick={() => (filter = undefined)}>Every urge</button
+					onclick={() => (filter = undefined)}
 				>
+					Every urge
+				</button>
 				{#each active as h (h.id)}
 					<button
 						type="button"
 						class={toggle(filter === h.id)}
 						aria-pressed={filter === h.id}
-						onclick={() => (filter = h.id)}>{h.emoji} {h.name}</button
+						onclick={() => (filter = h.id)}
 					>
+						{h.emoji}
+						{h.name}
+					</button>
 				{/each}
 			</div>
 		</fieldset>
@@ -240,8 +245,10 @@
 							<button
 								type="button"
 								class="{button} text-red-700 dark:text-red-400"
-								onclick={() => remove(entry.id)}>Delete</button
+								onclick={() => remove(entry.id)}
 							>
+								Delete
+							</button>
 						</UrgeForm>
 					{:else}
 						<div class="flex items-start gap-2">
@@ -267,8 +274,10 @@
 								type="button"
 								class={button}
 								aria-label="Edit the urge from {when(entry.at)}"
-								onclick={() => (editing = { id: entry.id, cues: false })}>Edit</button
+								onclick={() => (editing = { id: entry.id, cues: false })}
 							>
+								Edit
+							</button>
 						</div>
 					{/if}
 				</li>
@@ -280,8 +289,9 @@
 	</section>
 
 	<details class="{card} text-sm">
-		<summary class="flex min-h-11 cursor-pointer items-center font-semibold">How this works</summary
-		>
+		<summary class="flex min-h-11 cursor-pointer items-center font-semibold">
+			How this works
+		</summary>
 		<p class="mt-2 text-gray-700 dark:text-gray-300">
 			Noticing your patterns is itself a way to change them: writing down each urge makes the next
 			one easier to catch. Log for a week before judging what you see. Everything stays on this

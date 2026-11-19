@@ -48,8 +48,9 @@
 						<a
 							href="#{sectionId(section)}"
 							class="flex min-h-11 items-center rounded-lg px-3 text-sm hover:bg-white/60 dark:hover:bg-gray-800"
-							>{section.heading}</a
 						>
+							{section.heading}
+						</a>
 					</li>
 				{/each}
 			</ul>

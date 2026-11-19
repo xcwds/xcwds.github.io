@@ -124,8 +124,10 @@
 	<a
 		href={resolve('/utils/self-control/sos' as '/')}
 		class="{primary} py-4 text-center text-lg"
-		data-testid="sos-button">🌊 I have an urge right now</a
+		data-testid="sos-button"
 	>
+		🌊 I have an urge right now
+	</a>
 	<section aria-labelledby="habits-heading" class="flex flex-col gap-3">
 		<h2 id="habits-heading" class="text-lg font-semibold">Your habits</h2>
 		{#if active.length === 0 && adding === undefined}
@@ -147,8 +149,10 @@
 							<button
 								type="button"
 								class="{button} text-red-700 dark:text-red-400"
-								onclick={() => remove(habit)}>Delete habit</button
+								onclick={() => remove(habit)}
 							>
+								Delete habit
+							</button>
 						</HabitForm>
 					{:else}
 						<div class="flex items-center gap-3">
@@ -163,14 +167,18 @@
 								type="button"
 								class={button}
 								aria-label="Edit {habit.name}"
-								onclick={() => (editing = habit.id)}>Edit</button
+								onclick={() => (editing = habit.id)}
 							>
+								Edit
+							</button>
 							<button
 								type="button"
 								class={button}
 								aria-label="Archive {habit.name}"
-								onclick={() => setArchived(habit, true)}>Archive</button
+								onclick={() => setArchived(habit, true)}
 							>
+								Archive
+							</button>
 						</div>
 					{/if}
 				</li>
@@ -184,20 +192,22 @@
 				<p class="text-sm">What do you want to work on?</p>
 				<div class="grid grid-cols-2 gap-2 text-sm">
 					{#each STARTERS as starter (starter.name)}
-						<button type="button" class={button} onclick={() => (adding = { ...starter })}
-							>{starter.emoji} {starter.name}</button
-						>
+						<button type="button" class={button} onclick={() => (adding = { ...starter })}>
+							{starter.emoji}
+							{starter.name}
+						</button>
 					{/each}
 					<button
 						type="button"
 						class="{button} col-span-2"
 						onclick={() => (adding = { name: '', emoji: DEFAULT_EMOJI, kind: 'stop' })}
-						>Something else</button
 					>
+						Something else
+					</button>
 				</div>
-				<button type="button" class="{button} text-sm" onclick={() => (adding = undefined)}
-					>Cancel</button
-				>
+				<button type="button" class="{button} text-sm" onclick={() => (adding = undefined)}>
+					Cancel
+				</button>
 			</div>
 		{:else}
 			<div class={card}>
@@ -212,9 +222,9 @@
 
 		{#if archived.length}
 			<details class="text-sm" data-testid="archived">
-				<summary class="flex min-h-11 cursor-pointer items-center"
-					>Archived ({archived.length})</summary
-				>
+				<summary class="flex min-h-11 cursor-pointer items-center">
+					Archived ({archived.length})
+				</summary>
 				<ul class="mt-2 flex flex-col gap-2">
 					{#each archived as habit (habit.id)}
 						<li class="{card} flex flex-col gap-2" data-testid="archived-habit">
@@ -227,14 +237,18 @@
 									type="button"
 									class={button}
 									aria-label="Restore {habit.name}"
-									onclick={() => setArchived(habit, false)}>Restore</button
+									onclick={() => setArchived(habit, false)}
 								>
+									Restore
+								</button>
 								<button
 									type="button"
 									class="{button} text-red-700 dark:text-red-400"
 									aria-label="Delete {habit.name}"
-									onclick={() => remove(habit)}>Delete</button
+									onclick={() => remove(habit)}
 								>
+									Delete
+								</button>
 							</div>
 						</li>
 					{/each}
@@ -261,9 +275,9 @@
 	{/if}
 
 	<details bind:open={noteOpen} class="{card} text-sm" data-testid="self-control-note">
-		<summary class="flex min-h-11 cursor-pointer items-center font-semibold"
-			>These are habit tools, not therapy</summary
-		>
+		<summary class="flex min-h-11 cursor-pointer items-center font-semibold">
+			These are habit tools, not therapy
+		</summary>
 		<div class="mt-2 flex flex-col gap-2 text-gray-700 dark:text-gray-300">
 			<p>
 				They help with everyday cravings and habits. If an urge is about alcohol, drugs, gambling or
@@ -272,23 +286,27 @@
 			<ul class="flex flex-col gap-1">
 				<li>
 					US: call or text <a class="underline" href="tel:988">988</a>, the
-					<a class="underline" href="https://988lifeline.org" rel="noreferrer" target="_blank"
-						>Suicide &amp; Crisis Lifeline</a
-					>, or
+					<a class="underline" href="https://988lifeline.org" rel="noreferrer" target="_blank">
+						Suicide &amp; Crisis Lifeline
+					</a>, or
 					<a
 						class="underline"
 						href="https://www.samhsa.gov/find-help/helplines/national-helpline"
 						rel="noreferrer"
-						target="_blank">SAMHSA's National Helpline</a
-					> (1-800-662-4357).
+						target="_blank"
+					>
+						SAMHSA's National Helpline
+					</a> (1-800-662-4357).
 				</li>
 				<li>
 					Elsewhere: <a
 						class="underline"
 						href="https://findahelpline.com"
 						rel="noreferrer"
-						target="_blank">findahelpline.com</a
-					>.
+						target="_blank"
+					>
+						findahelpline.com
+					</a>.
 				</li>
 			</ul>
 			<p>
