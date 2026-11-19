@@ -18,10 +18,14 @@
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -- href() resolves every link -->
 {#each parseInline(text) as part, i (i)}{#if part.kind === 'text'}{#if part.bold}<strong
-				class="font-semibold">{part.text}</strong
-			>{:else}{part.text}{/if}{:else}<a
+				class="font-semibold"
+			>
+				{part.text}
+			</strong>{:else}{part.text}{/if}{:else}<a
 			href={href(part)}
 			rel={part.kind === 'external' ? 'external noopener' : undefined}
-			class="text-blue-700 underline dark:text-blue-300">{part.text}</a
-		>{/if}{/each}
+			class="text-blue-700 underline dark:text-blue-300"
+		>
+			{part.text}
+		</a>{/if}{/each}
 <!-- eslint-enable svelte/no-navigation-without-resolve -->

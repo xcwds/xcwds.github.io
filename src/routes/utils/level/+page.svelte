@@ -159,14 +159,18 @@
 			type="button"
 			class="{toggle(tab === 'level')} min-h-11"
 			aria-pressed={tab === 'level'}
-			onclick={() => (tab = 'level')}>Level</button
+			onclick={() => (tab = 'level')}
 		>
+			Level
+		</button>
 		<button
 			type="button"
 			class="{toggle(tab === 'compass')} min-h-11"
 			aria-pressed={tab === 'compass'}
-			onclick={() => (tab = 'compass')}>Compass</button
+			onclick={() => (tab = 'compass')}
 		>
+			Compass
+		</button>
 	</div>
 
 	{#if sensor === 'ask'}
@@ -246,12 +250,12 @@
 					: 'Lying flat: the bubble floats to the higher side. Stand the phone on an edge for a straight level.'}
 			</p>
 			<div class="grid w-full grid-cols-2 gap-2">
-				<button type="button" class="{button} min-h-11" disabled={!up} onclick={setZero}
-					>Calibrate</button
-				>
-				<button type="button" class="{button} min-h-11" disabled={!calibration} onclick={reset}
-					>Reset</button
-				>
+				<button type="button" class="{button} min-h-11" disabled={!up} onclick={setZero}>
+					Calibrate
+				</button>
+				<button type="button" class="{button} min-h-11" disabled={!calibration} onclick={reset}>
+					Reset
+				</button>
 			</div>
 			<p class="text-sm text-gray-600 dark:text-gray-400">
 				Calibrate makes the way the phone is resting now read 0°, for a case that rocks. It's kept

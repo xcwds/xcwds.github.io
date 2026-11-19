@@ -90,26 +90,28 @@
 										if (!onTick(row.id, input.checked)) input.checked = !input.checked;
 									}}
 								/>
-								<span class="break-words"
-									>{row.text}{#if row.match}<span class="sr-only">
-											(helps with {cue})</span
-										>{/if}</span
-								>
+								<span class="break-words">
+									{row.text}{#if row.match}<span class="sr-only"> (helps with {cue})</span>{/if}
+								</span>
 							</label>
 							{#if row.custom}
 								<button
 									type="button"
 									class="{button} shrink-0 text-red-700 dark:text-red-400"
 									aria-label="Delete: {row.text}"
-									onclick={() => onDelete(row.id)}>Delete</button
+									onclick={() => onDelete(row.id)}
 								>
+									Delete
+								</button>
 							{:else}
 								<button
 									type="button"
 									class="{button} shrink-0"
 									aria-label="Not for me: {row.text}"
-									onclick={() => onHide(row.id, true)}>Not for me</button
+									onclick={() => onHide(row.id, true)}
 								>
+									Not for me
+								</button>
 							{/if}
 						</li>
 					{/each}
@@ -146,9 +148,9 @@
 
 	{#if hidden.length}
 		<details class="text-sm" data-testid="hidden-items">
-			<summary class="flex min-h-11 cursor-pointer items-center"
-				>Not for me ({hidden.length})</summary
-			>
+			<summary class="flex min-h-11 cursor-pointer items-center">
+				Not for me ({hidden.length})
+			</summary>
 			<ul class="mt-2 flex flex-col gap-2">
 				{#each hidden as row (row.id)}
 					<li class="{card} flex items-center gap-2">
@@ -157,8 +159,10 @@
 							type="button"
 							class="{button} shrink-0"
 							aria-label="Restore: {row.text}"
-							onclick={() => onHide(row.id, false)}>Restore</button
+							onclick={() => onHide(row.id, false)}
 						>
+							Restore
+						</button>
 					</li>
 				{/each}
 			</ul>

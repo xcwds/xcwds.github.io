@@ -14,8 +14,9 @@
 		<a
 			href={resolve('/apps')}
 			class="inline-flex min-h-11 items-center underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100"
-			>Choose apps</a
-		> to show only the tools you use.
+		>
+			Choose apps
+		</a> to show only the tools you use.
 	</p>
 	{#if appIsOn('blocks')}
 		<!-- Your apps (#224): the ones you've made show in the list below, too. -->
@@ -28,9 +29,9 @@
 			<span aria-hidden="true" class="text-2xl">🧩</span>
 			<span class="flex flex-col">
 				<span class="font-medium text-gray-900 dark:text-gray-100">Your apps</span>
-				<span class="text-sm text-gray-600 dark:text-gray-400"
-					>Build your own checklists, counters and logs, or start from a template.</span
-				>
+				<span class="text-sm text-gray-600 dark:text-gray-400">
+					Build your own checklists, counters and logs, or start from a template.
+				</span>
 			</span>
 		</a>
 	{/if}

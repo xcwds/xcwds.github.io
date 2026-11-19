@@ -57,7 +57,9 @@
 		</ul>
 		<a
 			class="flex min-h-11 items-center self-end px-2 text-sm underline"
-			href={resolve('/utils/cooking-timer')}>All timers</a
+			href={resolve('/utils/cooking-timer')}
 		>
+			All timers
+		</a>
 	</section>
 {/if}

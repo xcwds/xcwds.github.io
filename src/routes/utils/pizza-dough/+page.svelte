@@ -134,9 +134,9 @@
 	<p class="text-sm text-gray-600 dark:text-gray-400">
 		Weights are in grams. Percentages are baker's percentages (relative to flour weight). The
 		built-in defaults match the
-		<a class="underline" href={resolve('/recipes/[slug]', { slug: 'pizza-dough' })}
-			>pizza dough recipe</a
-		>.
+		<a class="underline" href={resolve('/recipes/[slug]', { slug: 'pizza-dough' })}>
+			pizza dough recipe
+		</a>.
 	</p>
 
 	<GuideLinks slugs={toolGuides('/utils/pizza-dough')} />

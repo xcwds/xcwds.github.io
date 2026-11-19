@@ -60,8 +60,9 @@
 </script>
 
 <details class="rounded-lg bg-white/70 dark:bg-gray-900" data-testid="oven-panel" bind:open>
-	<summary class="cursor-pointer px-4 py-3 font-medium">Cooking at a different temperature?</summary
-	>
+	<summary class="cursor-pointer px-4 py-3 font-medium">
+		Cooking at a different temperature?
+	</summary>
 	<div class="flex flex-col gap-3 px-4 pb-4">
 		<p class="text-sm">
 			{timeScale === 1 ? 'The recipe says' : 'For your pan, about'}

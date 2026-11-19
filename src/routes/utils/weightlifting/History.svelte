@@ -65,8 +65,10 @@
 			<button
 				type="button"
 				class="{button} text-sm"
-				onclick={() => copy(historyToText(history), 'All workouts copied.')}>Copy all</button
+				onclick={() => copy(historyToText(history), 'All workouts copied.')}
 			>
+				Copy all
+			</button>
 		</div>
 		<ul class="flex flex-col gap-3">
 			{#each history as entry (entry.id)}
@@ -74,9 +76,9 @@
 					<details>
 						<summary class="cursor-pointer">
 							<span class="font-semibold">{entry.workout.date}</span>
-							<span class="text-sm text-gray-600 dark:text-gray-400"
-								>· {workoutSummary(entry.workout)}</span
-							>
+							<span class="text-sm text-gray-600 dark:text-gray-400">
+								· {workoutSummary(entry.workout)}
+							</span>
 						</summary>
 						<pre
 							class="mt-2 overflow-x-auto font-sans text-sm whitespace-pre-wrap"
@@ -86,22 +88,28 @@
 						<button
 							type="button"
 							class={button}
-							onclick={() => copy(workoutToText(entry.workout), 'Workout copied.')}>Copy</button
+							onclick={() => copy(workoutToText(entry.workout), 'Workout copied.')}
 						>
+							Copy
+						</button>
 						{#if canShare}
 							<button
 								type="button"
 								class={button}
-								onclick={() => share(workoutToText(entry.workout))}>Share</button
+								onclick={() => share(workoutToText(entry.workout))}
 							>
+								Share
+							</button>
 						{/if}
 						<button type="button" class={button} onclick={() => onRepeat(entry)}>Repeat</button>
 						<button
 							type="button"
 							class={button}
 							aria-label="Delete workout from {entry.workout.date}"
-							onclick={() => remove(entry)}>Delete</button
+							onclick={() => remove(entry)}
 						>
+							Delete
+						</button>
 					</div>
 				</li>
 			{/each}

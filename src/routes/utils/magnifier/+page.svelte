@@ -201,8 +201,10 @@
 						type="button"
 						class="min-h-12 rounded-xl bg-white px-5 text-lg font-medium text-black hover:not-disabled:bg-gray-200 active:bg-gray-200"
 						disabled={status === undefined}
-						onclick={() => camera.start()}>Turn on camera</button
+						onclick={() => camera.start()}
 					>
+						Turn on camera
+					</button>
 				{:else}
 					<p>This browser can't use the camera.</p>
 				{/if}
@@ -220,33 +222,37 @@
 				<button
 					type="button"
 					class="{primary} min-h-12 text-lg {live ? '' : 'col-span-2'}"
-					onclick={unfreeze}>Unfreeze</button
+					onclick={unfreeze}
 				>
+					Unfreeze
+				</button>
 			{:else}
-				<button type="button" class="{primary} min-h-12 text-lg" disabled={!ready} onclick={freeze}
-					>Freeze</button
-				>
+				<button type="button" class="{primary} min-h-12 text-lg" disabled={!ready} onclick={freeze}>
+					Freeze
+				</button>
 			{/if}
 			{#if live}
-				<button type="button" class="{button} min-h-12 text-lg" onclick={() => camera?.stop()}
-					>Turn off</button
-				>
+				<button type="button" class="{button} min-h-12 text-lg" onclick={() => camera?.stop()}>
+					Turn off
+				</button>
 			{/if}
 			{#if caps.torch}
 				<button
 					type="button"
 					class="{toggle(caps.torchOn)} col-span-2 min-h-12 text-lg"
 					aria-pressed={caps.torchOn}
-					onclick={() => camera?.setTorch(!caps.torchOn)}>Light</button
+					onclick={() => camera?.setTorch(!caps.torchOn)}
 				>
+					Light
+				</button>
 			{/if}
 		</div>
 
 		{#if frozen}
 			<div class="flex flex-col gap-1">
-				<label for="{uid}-zoom" class="font-medium"
-					>Zoom <span class="tabular-nums">{frozenZoom.toFixed(1)}×</span></label
-				>
+				<label for="{uid}-zoom" class="font-medium">
+					Zoom <span class="tabular-nums">{frozenZoom.toFixed(1)}×</span>
+				</label>
 				<input
 					id="{uid}-zoom"
 					aria-describedby="{uid}-hint"
@@ -264,10 +270,10 @@
 			</div>
 		{:else if zoom}
 			<div class="flex flex-col gap-1">
-				<label for="{uid}-zoom" class="font-medium"
-					>{zoom.kind === 'digital' ? 'Digital zoom' : 'Zoom'}
-					<span class="tabular-nums">{zoom.value.toFixed(1)}×</span></label
-				>
+				<label for="{uid}-zoom" class="font-medium">
+					{zoom.kind === 'digital' ? 'Digital zoom' : 'Zoom'}
+					<span class="tabular-nums">{zoom.value.toFixed(1)}×</span>
+				</label>
 				<input
 					id="{uid}-zoom"
 					aria-describedby={zoom.kind === 'digital' ? `${uid}-hint` : undefined}
@@ -293,8 +299,10 @@
 					type="button"
 					class="{toggle(view === v.id)} min-h-11"
 					aria-pressed={view === v.id}
-					onclick={() => (view = v.id)}>{v.label}</button
+					onclick={() => (view = v.id)}
 				>
+					{v.label}
+				</button>
 			{/each}
 		</div>
 	{/if}

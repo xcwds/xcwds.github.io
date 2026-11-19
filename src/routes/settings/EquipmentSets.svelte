@@ -301,8 +301,10 @@
 						aria-pressed={on}
 						aria-label="{plate} {set.unit} fits"
 						class={toggleClass(on)}
-						onclick={() => toggleFit(set, bar, plate)}>{plate}</button
+						onclick={() => toggleFit(set, bar, plate)}
 					>
+						{plate}
+					</button>
 				{/each}
 			</div>
 		</div>

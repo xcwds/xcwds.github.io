@@ -128,14 +128,18 @@
 			type="button"
 			class="{toggle(mode === 'package')} min-h-11"
 			aria-pressed={mode === 'package'}
-			onclick={() => (mode = 'package')}>The package</button
+			onclick={() => (mode = 'package')}
 		>
+			The package
+		</button>
 		<button
 			type="button"
 			class="{toggle(mode === 'food')} min-h-11"
 			aria-pressed={mode === 'food'}
-			onclick={() => (mode = 'food')}>A food</button
+			onclick={() => (mode = 'food')}
 		>
+			A food
+		</button>
 	</div>
 
 	<form class="flex flex-col gap-4" onsubmit={(e) => e.preventDefault()}>
@@ -157,8 +161,10 @@
 								type="button"
 								class="{toggle(foodState.id === st.id)} min-h-11"
 								aria-pressed={foodState.id === st.id}
-								onclick={() => (stateId = st.id)}>{st.label}</button
+								onclick={() => (stateId = st.id)}
 							>
+								{st.label}
+							</button>
 						{/each}
 					</div>
 				{/if}
@@ -169,8 +175,10 @@
 							class="size-11 rounded-full bg-white/70 text-xl hover:not-disabled:bg-white active:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700"
 							aria-label="Less"
 							disabled={amount <= 1}
-							onclick={() => (amount = Math.max(1, amount - 1))}>−</button
+							onclick={() => (amount = Math.max(1, amount - 1))}
 						>
+							−
+						</button>
 						<p class="flex-1 text-center" aria-live="polite" data-testid="microwave-amount">
 							<span class="text-lg font-semibold tabular-nums">{amount}</span>
 							{amount === 1 ? food.unit.one : food.unit.other}
@@ -183,8 +191,10 @@
 							class="size-11 rounded-full bg-white/70 text-xl hover:not-disabled:bg-white active:bg-white disabled:opacity-40 dark:bg-gray-800 dark:hover:not-disabled:bg-gray-700 dark:active:bg-gray-700"
 							aria-label="More"
 							disabled={amount >= food.max}
-							onclick={() => (amount = Math.min(food.max, amount + 1))}>+</button
+							onclick={() => (amount = Math.min(food.max, amount + 1))}
 						>
+							+
+						</button>
 					</div>
 				{:else}
 					<p class="text-sm text-gray-600 dark:text-gray-400">

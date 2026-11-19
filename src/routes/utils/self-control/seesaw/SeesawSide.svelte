@@ -83,14 +83,16 @@
 							{/if}
 							<div class="grid grid-cols-3 gap-2">
 								<button type="submit" class={primary}>Save</button>
-								<button type="button" class={button} onclick={() => (editing = undefined)}
-									>Cancel</button
-								>
+								<button type="button" class={button} onclick={() => (editing = undefined)}>
+									Cancel
+								</button>
 								<button
 									type="button"
 									class="{button} text-red-700 dark:text-red-400"
-									onclick={() => onRemove(item.id) && (editing = undefined)}>Delete</button
+									onclick={() => onRemove(item.id) && (editing = undefined)}
 								>
+									Delete
+								</button>
 							</div>
 						</form>
 					{:else}
@@ -104,8 +106,10 @@
 									editing = item.id;
 									editText = item.text;
 									editError = undefined;
-								}}>Edit</button
+								}}
 							>
+								Edit
+							</button>
 						</div>
 						<div class="grid grid-cols-3 gap-2" role="group" aria-label="How much: {item.text}">
 							{#each WEIGHTS as w (w.value)}
@@ -113,8 +117,10 @@
 									type="button"
 									class={toggle(item.weight === w.value)}
 									aria-pressed={item.weight === w.value}
-									onclick={() => onChange(item.id, { weight: w.value })}>{w.label}</button
+									onclick={() => onChange(item.id, { weight: w.value })}
 								>
+									{w.label}
+								</button>
 							{/each}
 						</div>
 					{/if}
@@ -141,8 +147,10 @@
 					type="button"
 					class={toggle(weight === w.value)}
 					aria-pressed={weight === w.value}
-					onclick={() => (weight = w.value)}>{w.label}</button
+					onclick={() => (weight = w.value)}
 				>
+					{w.label}
+				</button>
 			{/each}
 		</div>
 		{#if error}

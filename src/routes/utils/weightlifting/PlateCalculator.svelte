@@ -190,8 +190,10 @@
 					role="radio"
 					aria-checked={unit === u}
 					class={toggle(unit === u)}
-					onclick={() => setUnit(u)}>{u === 'lb' ? 'Pounds (lb)' : 'Kilograms (kg)'}</button
+					onclick={() => setUnit(u)}
 				>
+					{u === 'lb' ? 'Pounds (lb)' : 'Kilograms (kg)'}
+				</button>
 			{/each}
 		</div>
 	{/if}
@@ -298,8 +300,10 @@
 								{#if owned(inventory, plate) !== Infinity}
 									<span
 										class="block text-xs font-normal text-gray-600 dark:text-gray-400"
-										data-testid="left-{plate}">{left(plate)} left</span
+										data-testid="left-{plate}"
 									>
+										{left(plate)} left
+									</span>
 								{/if}
 							</th>
 							{#each symmetric || oneSided ? [0] : [0, 1] as side (side)}
@@ -314,12 +318,16 @@
 											aria-label="Remove {label}"
 											class="{button} size-11 p-0 text-xl"
 											disabled={!sides[side][plate]}
-											onclick={() => change(side, plate, -1)}>−</button
+											onclick={() => change(side, plate, -1)}
 										>
+											−
+										</button>
 										<span
 											class="w-6 text-center text-lg tabular-nums"
-											data-testid="count-{plate}-{side}">{sides[side][plate] ?? 0}</span
+											data-testid="count-{plate}-{side}"
 										>
+											{sides[side][plate] ?? 0}
+										</span>
 										<button
 											type="button"
 											aria-label="Add {label}"
@@ -332,8 +340,10 @@
 												bothSides,
 												inventory
 											)}
-											onclick={() => change(side, plate, 1)}>+</button
+											onclick={() => change(side, plate, 1)}
 										>
+											+
+										</button>
 									</div>
 								</td>
 							{/each}
@@ -353,11 +363,9 @@
 	{:else}
 		<div class="{card} flex flex-col gap-3">
 			<label class="flex flex-col gap-1 text-sm">
-				<span
-					>{equipment.count === 2
-						? `Total for both dumbbells (${unit})`
-						: `Target weight (${unit})`}</span
-				>
+				<span>
+					{equipment.count === 2 ? `Total for both dumbbells (${unit})` : `Target weight (${unit})`}
+				</span>
 				<input
 					type="number"
 					inputmode="decimal"

@@ -187,9 +187,9 @@
 			<span>Date</span>
 			<input bind:value={workout.date} class={field} />
 		</label>
-		<button type="button" class="{button} self-end" disabled={!hasContent} onclick={finishWorkout}
-			>Finish workout</button
-		>
+		<button type="button" class="{button} self-end" disabled={!hasContent} onclick={finishWorkout}>
+			Finish workout
+		</button>
 	</div>
 
 	{#if unitsDiffer}
@@ -206,9 +206,9 @@
 			data-testid="undo-row"
 		>
 			<span class="min-w-0 break-words">{label} removed.</span>
-			<button type="button" class="{button} shrink-0" bind:this={undoButton} onclick={undo}
-				>Undo</button
-			>
+			<button type="button" class="{button} shrink-0" bind:this={undoButton} onclick={undo}>
+				Undo
+			</button>
 		</div>
 	{/snippet}
 
@@ -229,8 +229,10 @@
 					aria-label="Remove {exercise.name || `exercise ${e + 1}`}"
 					class="{button} shrink-0"
 					data-remove="exercise-{exercise.id}"
-					onclick={() => removeExercise(e)}>✕</button
+					onclick={() => removeExercise(e)}
 				>
+					✕
+				</button>
 			</div>
 			<table class="w-full text-sm">
 				<thead class="text-gray-600 dark:text-gray-400">
@@ -273,8 +275,10 @@
 									aria-label="Remove set {i + 1}"
 									class="{button} px-2 py-1"
 									data-remove="set-{set.id}"
-									onclick={() => removeSet(exercise, i)}>✕</button
+									onclick={() => removeSet(exercise, i)}
 								>
+									✕
+								</button>
 							</td>
 						</tr>
 					{/each}
@@ -316,8 +320,10 @@
 				type="button"
 				class="{primary} py-3 text-lg"
 				disabled={!workout.exercises.length}
-				onclick={share}>Share</button
+				onclick={share}
 			>
+				Share
+			</button>
 		{/if}
 	</div>
 

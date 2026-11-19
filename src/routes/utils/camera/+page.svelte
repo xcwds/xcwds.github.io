@@ -28,9 +28,9 @@
 		<p class="text-sm text-red-700 dark:text-red-400" role="alert">{error}</p>
 	{/if}
 	<details class="{card} text-sm" data-testid="camera-note">
-		<summary class="flex min-h-11 cursor-pointer items-center font-semibold"
-			>What stays private</summary
-		>
+		<summary class="flex min-h-11 cursor-pointer items-center font-semibold">
+			What stays private
+		</summary>
 		<ul class="mt-2 flex list-disc flex-col gap-2 pl-5 text-gray-700 dark:text-gray-300">
 			<li>
 				Photos taken or added here carry no location or device details, and nothing is sent

@@ -17,9 +17,9 @@
 		On iPhone, recording stops if you leave the app; what was recorded so far is saved.
 	</p>
 	<details class="{card} text-sm" data-testid="voice-memos-note">
-		<summary class="flex min-h-11 cursor-pointer items-center font-semibold"
-			>What stays private</summary
-		>
+		<summary class="flex min-h-11 cursor-pointer items-center font-semibold">
+			What stays private
+		</summary>
 		<ul class="mt-2 flex list-disc flex-col gap-2 pl-5 text-gray-700 dark:text-gray-300">
 			<li>
 				The microphone is on only while you record, and nothing is sent anywhere. Recordings stay

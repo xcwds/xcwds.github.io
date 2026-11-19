@@ -108,9 +108,9 @@
 			<nav
 				class="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm text-[#8a6a52] underline decoration-dotted"
 			>
-				<span>Recipes</span><span>About Me (Long)</span><span>About Me (Longer)</span><span
-					>Tyler Saga, Pt. 1–6</span
-				><span>Shop My Cardigans</span>
+				<span>Recipes</span><span>About Me (Long)</span><span>About Me (Longer)</span><span>
+					Tyler Saga, Pt. 1–6
+				</span><span>Shop My Cardigans</span>
 			</nav>
 		</div>
 	</header>
@@ -136,8 +136,10 @@
 				<a
 					href="#top"
 					class="inline-block rounded-full bg-[#b5541f] px-6 py-3 font-semibold text-white shadow-md transition hover:bg-[#93421a]"
-					onclick={(e) => e.preventDefault()}>⬇️ JUMP TO RECIPE</a
+					onclick={(e) => e.preventDefault()}
 				>
+					⬇️ JUMP TO RECIPE
+				</a>
 				<p class="mt-1 text-sm italic text-[#8a6a52]">(this link does not work)</p>
 			</div>
 
@@ -202,9 +204,11 @@
 				When I went off to college, I forgot about Nana Birdie’s orchard. I forgot about cider. I
 				lived on ramen, regret, and a sophomore-year relationship with a man named Tyler who played
 				the didgeridoo “semi-professionally.” I won’t get into the whole Tyler situation here (<span
-					class="aff">Part 1 of 6 of that saga is linked in my sidebar</span
-				>), but I will say this: Tyler did not believe in seasoning meat. Tyler believed meat should
-				“speak for itself.”
+					class="aff"
+				>
+					Part 1 of 6 of that saga is linked in my sidebar
+				</span>), but I will say this: Tyler did not believe in seasoning meat. Tyler believed meat
+				should “speak for itself.”
 			</p>
 			<p>Tyler’s pork chops did not speak. They screamed. Silently. Into the void.</p>
 
@@ -298,10 +302,10 @@
 			<aside class="ad">
 				<span class="ad-label">Advertisement</span>
 				🔪
-				<em
-					>This recipe is brought to you by ChopMaster 9000, the only knife that remembers your
-					birthday. Use code NANABIRDIE for free shipping on orders over $400.</em
-				>
+				<em>
+					This recipe is brought to you by ChopMaster 9000, the only knife that remembers your
+					birthday. Use code NANABIRDIE for free shipping on orders over $400.
+				</em>
 			</aside>
 
 			<h2>Step-by-Step Photos</h2>
@@ -391,9 +395,9 @@
 					<li>
 						<p>
 							<strong>{c.name}</strong>
-							<span class="text-[#d9932b]" aria-label="{c.stars} out of 5 stars"
-								>{stars(c.stars)}</span
-							>
+							<span class="text-[#d9932b]" aria-label="{c.stars} out of 5 stars">
+								{stars(c.stars)}
+							</span>
 						</p>
 						<p class="mt-1">{c.text}</p>
 						{#if c.reply}

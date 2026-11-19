@@ -80,13 +80,17 @@
 		<button
 			type="button"
 			class="{action} bg-white/50 hover:not-disabled:bg-white/60 active:bg-white/60"
-			onclick={() => (ended = false)}>Dismiss</button
+			onclick={() => (ended = false)}
 		>
+			Dismiss
+		</button>
 		<a
 			href={resolve(SOS)}
 			class="{action} flex items-center underline"
 			aria-label="Open timer"
-			onclick={() => (ended = false)}>Open</a
+			onclick={() => (ended = false)}
 		>
+			Open
+		</a>
 	</div>
 {/if}

@@ -163,15 +163,20 @@
 					type="button"
 					class={toggle(filter === undefined)}
 					aria-pressed={filter === undefined}
-					onclick={() => (filter = undefined)}>Every urge</button
+					onclick={() => (filter = undefined)}
 				>
+					Every urge
+				</button>
 				{#each active as h (h.id)}
 					<button
 						type="button"
 						class={toggle(filter === h.id)}
 						aria-pressed={filter === h.id}
-						onclick={() => (filter = h.id)}>{h.emoji} {h.name}</button
+						onclick={() => (filter = h.id)}
 					>
+						{h.emoji}
+						{h.name}
+					</button>
 				{/each}
 			</div>
 		</fieldset>
@@ -203,9 +208,9 @@
 				<p class="rounded-xl bg-blue-50 p-3 dark:bg-blue-950" data-testid="hard-week">
 					A tough week happens, and logging it honestly is part of the work. Changing what's around
 					you can make next week easier:
-					<a class="underline" href={resolve('/utils/self-control/environment' as '/')}
-						>try the Environment Designer</a
-					>.
+					<a class="underline" href={resolve('/utils/self-control/environment' as '/')}>
+						try the Environment Designer
+					</a>.
 				</p>
 			{/if}
 		</section>
@@ -283,8 +288,9 @@
 								<a
 									class="{button} self-start"
 									href="{resolve('/utils/self-control/environment' as '/')}#{planHash(cues[0]!)}"
-									>Make a plan</a
 								>
+									Make a plan
+								</a>
 							{/if}
 						</li>
 					{/each}
@@ -327,9 +333,9 @@
 						/>
 					{/if}
 					{#if bar.i % 3 === 2 || bar.i === WEEKS - 1}
-						<text x={bar.i * 20 + 10} y="115" text-anchor="middle" class="fill-current text-[8px]"
-							>{shortDate(bar.start)}</text
-						>
+						<text x={bar.i * 20 + 10} y="115" text-anchor="middle" class="fill-current text-[8px]">
+							{shortDate(bar.start)}
+						</text>
 					{/if}
 				{/each}
 			</svg>

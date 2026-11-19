@@ -152,15 +152,20 @@
 					type="button"
 					class={toggle(current === undefined)}
 					aria-pressed={current === undefined}
-					onclick={() => pick(undefined)}>In general</button
+					onclick={() => pick(undefined)}
 				>
+					In general
+				</button>
 				{#each active as h (h.id)}
 					<button
 						type="button"
 						class={toggle(current?.id === h.id)}
 						aria-pressed={current?.id === h.id}
-						onclick={() => pick(h.id)}>{h.emoji} {h.name}</button
+						onclick={() => pick(h.id)}
 					>
+						{h.emoji}
+						{h.name}
+					</button>
 				{/each}
 			</div>
 		</fieldset>
@@ -202,20 +207,22 @@
 							{/if}
 							<div class="grid grid-cols-3 gap-2 text-sm">
 								<button type="submit" class={primary}>Save</button>
-								<button type="button" class={button} onclick={() => (editing = undefined)}
-									>Cancel</button
-								>
+								<button type="button" class={button} onclick={() => (editing = undefined)}>
+									Cancel
+								</button>
 								<button
 									type="button"
 									class="{button} text-red-700 dark:text-red-400"
-									onclick={() => remove(reason)}>Delete</button
+									onclick={() => remove(reason)}
 								>
+									Delete
+								</button>
 							</div>
 						</form>
 					{:else}
 						<p class="break-words">
-							{#if reason.starred}<span aria-hidden="true">⭐</span><span class="sr-only"
-									>Starred:
+							{#if reason.starred}<span aria-hidden="true">⭐</span><span class="sr-only">
+									Starred:
 								</span>{/if}
 							{reason.text}
 						</p>
@@ -225,28 +232,36 @@
 								class={button}
 								aria-pressed={reason.starred}
 								aria-label="Star: {reason.text}"
-								onclick={() => star(reason)}>{reason.starred ? '★' : '☆'}</button
+								onclick={() => star(reason)}
 							>
+								{reason.starred ? '★' : '☆'}
+							</button>
 							<button
 								type="button"
 								class={button}
 								aria-label="Move up: {reason.text}"
 								disabled={i === 0}
-								onclick={() => move(reason, -1)}>↑</button
+								onclick={() => move(reason, -1)}
 							>
+								↑
+							</button>
 							<button
 								type="button"
 								class={button}
 								aria-label="Move down: {reason.text}"
 								disabled={i === reasons.length - 1}
-								onclick={() => move(reason, 1)}>↓</button
+								onclick={() => move(reason, 1)}
 							>
+								↓
+							</button>
 							<button
 								type="button"
 								class={button}
 								aria-label="Edit: {reason.text}"
-								onclick={() => startEdit(reason)}>Edit</button
+								onclick={() => startEdit(reason)}
 							>
+								Edit
+							</button>
 						</div>
 					{/if}
 				</li>
@@ -282,9 +297,9 @@
 		>
 			<h2 id="note-heading" class="text-lg font-semibold">A note to your future self</h2>
 			<label class="flex flex-col gap-1">
-				<span class="text-sm text-gray-600 dark:text-gray-400"
-					>Urge SOS shows it as "A note from you" when this habit's urge hits.</span
-				>
+				<span class="text-sm text-gray-600 dark:text-gray-400">
+					Urge SOS shows it as "A note from you" when this habit's urge hits.
+				</span>
 				<textarea
 					class="{field} min-h-24"
 					bind:value={note}

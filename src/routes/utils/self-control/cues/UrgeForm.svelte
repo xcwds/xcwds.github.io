@@ -122,15 +122,20 @@
 					type="button"
 					class={toggle(habit === undefined)}
 					aria-pressed={habit === undefined}
-					onclick={() => (habit = undefined)}>Just a craving</button
+					onclick={() => (habit = undefined)}
 				>
+					Just a craving
+				</button>
 				{#each habits as h (h.id)}
 					<button
 						type="button"
 						class={toggle(habit === h.id)}
 						aria-pressed={habit === h.id}
-						onclick={() => (habit = h.id)}>{h.emoji} {h.name}</button
+						onclick={() => (habit = h.id)}
 					>
+						{h.emoji}
+						{h.name}
+					</button>
 				{/each}
 			</div>
 		</fieldset>
@@ -152,8 +157,10 @@
 					onclick={() => {
 						outcome = value as Outcome;
 						errors.outcome = undefined;
-					}}>{label}</button
+					}}
 				>
+					{label}
+				</button>
 			{/each}
 		</div>
 		{#if errors.outcome}
@@ -178,9 +185,9 @@
 	{/if}
 
 	<details open={cuesOpen} class="flex flex-col gap-3" data-testid="cue-fields">
-		<summary class="flex min-h-11 cursor-pointer items-center text-sm font-semibold"
-			>What was going on? (optional)</summary
-		>
+		<summary class="flex min-h-11 cursor-pointer items-center text-sm font-semibold">
+			What was going on? (optional)
+		</summary>
 		<div class="mt-2 flex flex-col gap-4">
 			{#each CUE_FIELDS as f (f)}
 				<fieldset class="flex flex-col gap-2" data-testid="cue-{f}">
@@ -191,8 +198,10 @@
 								type="button"
 								class={toggle(picked(f, chip))}
 								aria-pressed={picked(f, chip)}
-								onclick={() => flip(f, chip)}>{chip}</button
+								onclick={() => flip(f, chip)}
 							>
+								{chip}
+							</button>
 						{/each}
 					</div>
 					<div class="flex gap-2 text-sm">
@@ -215,8 +224,10 @@
 							type="button"
 							class="{button} shrink-0"
 							aria-label="Add your own: {CUE_LABELS[f]}"
-							onclick={() => addOwn(f)}>+ Add</button
+							onclick={() => addOwn(f)}
 						>
+							+ Add
+						</button>
 					</div>
 					{#if ownError[f]}
 						<p id="{id}-{f}-error" role="alert" class="text-sm text-red-700 dark:text-red-400">

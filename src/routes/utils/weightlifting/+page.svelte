@@ -132,10 +132,11 @@
 						? '@[50rem]:hidden'
 						: ''}"
 					onclick={() => (tab = t.id)}
-					>{t.label}{#if t.id === 'plates'}<span class="hidden @[50rem]:inline"
-							>&nbsp;&amp; Workout</span
-						>{/if}</button
 				>
+					{t.label}{#if t.id === 'plates'}<span class="hidden @[50rem]:inline">
+							&nbsp;&amp; Workout
+						</span>{/if}
+				</button>
 			{/each}
 		</div>
 
